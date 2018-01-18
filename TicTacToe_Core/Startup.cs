@@ -24,6 +24,7 @@ namespace TicTacToe_Core
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddCors();
             services.AddSignalR();
         }
 
@@ -34,8 +35,8 @@ namespace TicTacToe_Core
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseSignalR();
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+            app.UseSignalR(routes => routes.MapHub<Chat>("chat"));
             app.UseMvc();
         }
     }

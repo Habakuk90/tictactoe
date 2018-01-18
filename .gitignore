@@ -3,3 +3,5 @@ TicTacToe_Core/bin/
 TicTacToe_Core/obj/Debug/
 TicTacToe_Core/obj/
 TicTacToe_Core/node_modules
+signalRConnection/node_modules/
+signalRConnection/.vscode/
