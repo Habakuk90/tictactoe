@@ -1,1 +1,5 @@
 /TicTacToe_Core/.vs
+TicTacToe_Core/bin/
+TicTacToe_Core/obj/TicTacToe_Core.csproj.nuget.cache
+TicTacToe_Core/obj/Debug/
+TicTacToe_Core/obj/
