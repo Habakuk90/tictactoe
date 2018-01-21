@@ -12,7 +12,7 @@
     connection.start()
         // .then(() => connection.invoke('recordHit', getMessage()));
         .then(function () {
-            $('.box__inner').click(function () {
+            $('.box__inner').on('click touchstart', function () {
                 var that = this;
                 connection.invoke('recordHit', randomColor(), that.id);
             });
