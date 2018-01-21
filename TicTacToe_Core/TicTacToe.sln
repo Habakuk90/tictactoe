@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "TicTacToe", "..\", "{9F807BDC-1057-4428-AE5B-FF7FF6CFD1B6}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "tictactoe", "..\", "{9F807BDC-1057-4428-AE5B-FF7FF6CFD1B6}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_60922"
@@ -24,7 +24,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "TicTacToe", "..\", "{9F807B
 		SlnRelativePath = "..\..\TicTacToe\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToe_Core", "TicTacToe_Core.csproj", "{31E00525-CD6F-4CB8-980C-700A19D3120F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe_Core", "TicTacToe_Core.csproj", "{31E00525-CD6F-4CB8-980C-700A19D3120F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

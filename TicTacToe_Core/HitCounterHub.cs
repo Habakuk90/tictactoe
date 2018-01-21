@@ -10,11 +10,11 @@ namespace TicTacToe_Core
     {
         private static int _hitCounter = 0;
 
-        public void RecordHit(string message)
+        public void RecordHit(string message, string id)
         {
             _hitCounter += 1;
 
-            this.Clients.All.InvokeAsync("Hit", message);
+            this.Clients.All.InvokeAsync("Hit", message, id);
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
