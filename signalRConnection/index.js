@@ -1,9 +1,23 @@
-let connection = new signalR.HubConnection("http://localhost:64645/chat")
-debugger;
+(function () {
 
-connection.on('send', data => {
-    console.log(data);
-});
+    let connection = new signalR.HubConnection("http://localhost:64645/hitCounter")
 
-connection.start()
-    .then(() => connection.invoke('send', 'Hello'));
+    connection.on('Hit', data => {
+        console.log(data);
+        $('#counter').text(data)
+    });
+
+    connection.start()
+        // .then(() => connection.invoke('recordHit', getMessage()));
+        .then(function () {
+            $('#button').click(function () {
+                connection.invoke('recordHit', getMessage());
+            });
+        });
+
+    function getMessage() {
+        var text = $('#input').val();
+
+        return text;
+    }
+})();

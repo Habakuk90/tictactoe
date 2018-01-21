@@ -36,7 +36,7 @@ namespace TicTacToe_Core
                 app.UseDeveloperExceptionPage();
             }
             app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-            app.UseSignalR(routes => routes.MapHub<Chat>("chat"));
+            app.UseSignalR(routes => routes.MapHub<HitCounterHub>("hitCounter"));
             app.UseMvc();
         }
     }
