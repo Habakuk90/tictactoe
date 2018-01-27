@@ -5,6 +5,8 @@
 .wrapper {
     height: 100%;
     width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
     border: solid 1px black;
     display:flex;
     flex-direction: row;

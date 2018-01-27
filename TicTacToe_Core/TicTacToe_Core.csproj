@@ -18,4 +18,9 @@
     <None Include="C:\Program Files\dotnet\sdk\1.1.0\Sdks\Microsoft.NET.Sdk\build\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TicTacToe\Models\" />
+    <Folder Include="Views\" />
+  </ItemGroup>
+
 </Project>
