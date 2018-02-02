@@ -7,3 +7,5 @@ signalRConnection/node_modules/
 signalRConnection/.vscode/
 WebApplication1/obj/
 WebApplication1/bin/
+app/packages/
+app/.vs/

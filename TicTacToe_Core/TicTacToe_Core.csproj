@@ -5,6 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\**" />
+    <Content Remove="Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicTacToe\Pages\Authoritazion\Login.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- <PackageReference Include="Gray.Microsoft.AspNetCore.Signalr.Server" Version="0.2.0-alpha1" /> -->
     <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
@@ -16,11 +27,6 @@
 
   <ItemGroup>
     <None Include="C:\Program Files\dotnet\sdk\1.1.0\Sdks\Microsoft.NET.Sdk\build\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="TicTacToe\Models\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>
