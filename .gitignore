@@ -9,3 +9,11 @@ WebApplication1/obj/
 WebApplication1/bin/
 app/packages/
 app/.vs/
+app/TicTacToe.Web/wwwroot/lib/
+app/TicTacToe.Web/obj/Debug/
+app/TicTacToe.Web/bin/
+app/TicTacToe.Web/obj/
+app/TicTacToe.Logic/obj/
+app/TicTacToe.Logic/bin/
+Docu/
+app/TicTacToe.Web/wwwroot/

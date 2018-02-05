@@ -1,0 +1,70 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicTacToe\Authorization\Controllers\**" />
+    <Compile Remove="TicTacToe\Authorization\Models\**" />
+    <Compile Remove="TicTacToe\Authorization\Repository\**" />
+    <Compile Remove="TicTacToe\Authorization\Views\**" />
+    <Compile Remove="Views\**" />
+    <Content Remove="TicTacToe\Authorization\Controllers\**" />
+    <Content Remove="TicTacToe\Authorization\Models\**" />
+    <Content Remove="TicTacToe\Authorization\Repository\**" />
+    <Content Remove="TicTacToe\Authorization\Views\**" />
+    <Content Remove="Views\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Controllers\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Models\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Repository\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="TicTacToe\Authorization\Controllers\**" />
+    <None Remove="TicTacToe\Authorization\Models\**" />
+    <None Remove="TicTacToe\Authorization\Repository\**" />
+    <None Remove="TicTacToe\Authorization\Views\**" />
+    <None Remove="Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicTacToe\Pages\Authoritazion\Login.cshtml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="TicTacToe\Authorization\Controllers\AuthorizationController.cs" />
+    <Compile Include="TicTacToe\Authorization\Models\UserModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Gray.Microsoft.AspNetCore.Signalr.Server" Version="0.2.0-alpha1" /> -->
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-alpha2-final" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Program Files\dotnet\sdk\1.1.0\Sdks\Microsoft.NET.Sdk\build\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
+    <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
+    <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TicTacToe.Logic\TicTacToe.Logic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
