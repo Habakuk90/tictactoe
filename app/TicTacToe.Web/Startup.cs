@@ -8,11 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TicTacToe.TicTacToe.Data;
+using TicTacToe.Web.TicTacToe.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
-using TicTacToe.TicTacToe.Authorization.Models;
+using TicTacToe.Web.TicTacToe.Authorization.Models;
 
 namespace TicTacToe
 {

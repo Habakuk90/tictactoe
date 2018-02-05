@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicTacToe.TicTacToe.Authorization.Models;
+using TicTacToe.Web.TicTacToe.Authorization.Models;
 
-namespace TicTacToe.TicTacToe.Authorization.Repository
+namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
     public class UserManagement : IUserManagement, IDisposable
     {

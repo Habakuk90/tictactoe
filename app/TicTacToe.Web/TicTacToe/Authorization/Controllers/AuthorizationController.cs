@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicTacToe.TicTacToe.Authorization.Models;
-using TicTacToe.TicTacToe.Authorization.Repository;
+using TicTacToe.Web.TicTacToe.Authorization.Models;
+using TicTacToe.Web.TicTacToe.Authorization.Repository;
 
-namespace TicTacToe.TicTacToe.Authorization.Controllers
+namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
 {
     public class LoginController : Controller
     {
