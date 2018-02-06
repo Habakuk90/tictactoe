@@ -9,10 +9,10 @@ using TicTacToe.Web.TicTacToe.Authorization.Repository;
 
 namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
 {
-    public class LoginController : Controller
+    public class AuthorizationController : Controller
     {
         private IUserManagement userManagement;
-        public LoginController(UserManager<UserModel> userManager,
+        public AuthorizationController(UserManager<UserModel> userManager,
             SignInManager<UserModel> signInManager)
         {
             this.userManagement = new UserManagement(signInManager, userManager);
@@ -22,12 +22,19 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         public IActionResult Login(string returnUrl = null)
         {
 
-            return View("~/TicTacToe/Authoritazion/Views/Login.cshtml");
+            return View("~/TicTacToe/Authorization/Views/Login.cshtml");
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel user)
         {
+            //var loginData = new LoginModel
+            //{
+            //    User = new UserModel { UserName = userName, SecurityStamp = Guid.NewGuid().ToString() },
+            //    Password = password,
+                
+            //};
+
             var result = await userManagement.LoginUser(user);
 
             if (result.Succeeded)
@@ -35,7 +42,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
                 return LocalRedirect("/");
             }
             
-            return RedirectToRoute("/Login");
+            return LocalRedirect("/Register");
         }
 
         /// <summary>

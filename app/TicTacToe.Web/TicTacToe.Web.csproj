@@ -50,6 +50,7 @@
 
   <ItemGroup>
     <None Include="C:\Program Files\dotnet\sdk\1.1.0\Sdks\Microsoft.NET.Sdk\build\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
+    <None Include="TicTacToe.sln" />
     <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
   </ItemGroup>
