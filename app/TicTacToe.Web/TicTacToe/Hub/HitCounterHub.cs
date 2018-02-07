@@ -13,7 +13,7 @@ namespace TicTacToe
         public void RecordHit(string message, string id)
         {
             _hitCounter += 1;
-
+            
             this.Clients.All.InvokeAsync("Hit", message, id);
         }
 
