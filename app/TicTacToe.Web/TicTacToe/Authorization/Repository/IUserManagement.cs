@@ -9,7 +9,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
     interface IUserManagement
     {
-        Task<SignInResult> LoginUser(LoginModel user);
-        Task<IdentityResult> RegisterUser(LoginModel user);
+        Task<SignInResult> LoginUser(UserModel user);
+        Task<IdentityResult> RegisterUser(UserModel user);
     }
 }

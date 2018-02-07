@@ -12,8 +12,8 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
     public class AuthorizationController : Controller
     {
         private IUserManagement userManagement;
-        public AuthorizationController(UserManager<UserModel> userManager,
-            SignInManager<UserModel> signInManager)
+        public AuthorizationController(UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             this.userManagement = new UserManagement(signInManager, userManager);
         }
@@ -26,21 +26,22 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel user)
+        public async Task<IActionResult> Login(string userName,string email, string password)
         {
-            //var loginData = new LoginModel
-            //{
-            //    User = new UserModel { UserName = userName, SecurityStamp = Guid.NewGuid().ToString() },
-            //    Password = password,
-                
-            //};
+            
+                UserModel loginData = new UserModel
+                {
+                    Identity = new IdentityUser { UserName = userName, SecurityStamp = Guid.NewGuid().ToString(), Email = email },
+                    Password = password,
+                    
+                };
 
-            var result = await userManagement.LoginUser(user);
+                var result = await userManagement.LoginUser(loginData);
 
-            if (result.Succeeded)
-            {
-                return LocalRedirect("/");
-            }
+                if (result.Succeeded)
+                {
+                    return LocalRedirect("/");
+                }
             
             return LocalRedirect("/Register");
         }
@@ -66,9 +67,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string userName, string password)
         {
-            var registerData = new LoginModel
+            var registerData = new UserModel
             {
-                User = new UserModel { UserName = userName},
+                Identity = new IdentityUser { UserName = userName },
                 Password = password
             };
             var result = await userManagement.RegisterUser(registerData);

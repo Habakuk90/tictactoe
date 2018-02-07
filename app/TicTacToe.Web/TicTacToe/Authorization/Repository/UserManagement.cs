@@ -9,27 +9,35 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
     public class UserManagement : IUserManagement, IDisposable
     {
-        private readonly SignInManager<UserModel> _signInManager;
-        private readonly UserManager<UserModel> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserManagement(SignInManager<UserModel> signInManager, UserManager<UserModel> userManager)
+        public UserManagement(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
         }
 
-        public async Task<IdentityResult> RegisterUser(LoginModel user)
+        public async Task<IdentityResult> RegisterUser(UserModel user)
         {
-            var result = await _userManager.CreateAsync(user.User, user.Password);
+            var result = await _userManager.CreateAsync(user.Identity, user.Password);
             return result;
         }
 
-        public async Task<SignInResult> LoginUser(LoginModel user)
+        public async Task<SignInResult> LoginUser(UserModel user)
         {
+            SignInResult result = new SignInResult();
 
-            var result = await _signInManager.PasswordSignInAsync(user.User, user.Password,true, lockoutOnFailure: true);
+            if (user != null && user.Identity != null && user.Identity.UserName != null)
+            {
+                IdentityUser signedUser = await _userManager.FindByNameAsync(user.Identity.UserName);
+                result = await _signInManager.PasswordSignInAsync(signedUser.UserName, user.Password, true, lockoutOnFailure: true);
+                return result;
+            }
             return result;
         }
+
+
 
         public void Dispose()
         {

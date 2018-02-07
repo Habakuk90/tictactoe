@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Web.TicTacToe.Authorization.Models
 {
-    public class UserModel : IdentityUser
+    public class UserModel 
     {
-    }
-
-    public class LoginModel
-    {
-        public UserModel User { get; set; }
+        public IdentityUser Identity { get; set; }
         public string Password { get; set; }
+        public string ConnectionId { get; set; }
     }
 }
