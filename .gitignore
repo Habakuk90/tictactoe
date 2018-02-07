@@ -5,8 +5,6 @@ TicTacToe_Core/obj/
 TicTacToe_Core/node_modules
 signalRConnection/node_modules/
 signalRConnection/.vscode/
-WebApplication1/obj/
-WebApplication1/bin/
 app/packages/
 app/.vs/
 app/TicTacToe.Web/wwwroot/lib/
@@ -16,4 +14,3 @@ app/TicTacToe.Web/obj/
 app/TicTacToe.Logic/obj/
 app/TicTacToe.Logic/bin/
 Docu/
-app/TicTacToe.Web/wwwroot/

@@ -54,7 +54,6 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         [Route("/Register")]
         public IActionResult Register(string returnUrl = null)
         {
-
             return View("~/TicTacToe/Authorization/Views/Register.cshtml");
         }
 
@@ -86,6 +85,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
             return LocalRedirect("/Register");
         }
 
+        [Route("/Logout")]
         public IActionResult Logout()
         {
             userManagement.LogoutUser();
