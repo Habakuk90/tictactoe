@@ -11,5 +11,6 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
     {
         Task<SignInResult> LoginUser(UserModel user);
         Task<IdentityResult> RegisterUser(UserModel user);
+        void LogoutUser();
     }
 }

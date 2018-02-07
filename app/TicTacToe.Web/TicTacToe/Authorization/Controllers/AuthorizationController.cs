@@ -84,7 +84,12 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
             }
 
             return LocalRedirect("/Register");
+        }
 
+        public IActionResult Logout()
+        {
+            userManagement.LogoutUser();
+            return LocalRedirect("/"); // [Home]
         }
     }
 }

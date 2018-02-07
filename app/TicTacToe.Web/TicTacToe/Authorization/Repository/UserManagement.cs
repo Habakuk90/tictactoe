@@ -37,11 +37,17 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             return result;
         }
 
-
+        
 
         public void Dispose()
         {
 
+        }
+
+        public async void LogoutUser()
+        {
+            await _signInManager.SignOutAsync();
+            //logger implementieren irgendwann
         }
     }
 }
