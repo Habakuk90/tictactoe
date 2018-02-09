@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using TicTacToe.Web.TicTacToe.Authorization.Models;
+using TicTacToe.Web.TicTacToe.Hubs;
 
 namespace TicTacToe
 {
@@ -68,7 +69,7 @@ namespace TicTacToe
                                           .AllowAnyMethod()
                                           .AllowAnyHeader());
 
-            app.UseSignalR(routes => routes.MapHub<HitCounterHub>("hitCounter"));
+            app.UseSignalR(routes => routes.MapHub<GameHub>("game"));
 
             app.UseMvc(routes => routes.MapRoute(
                     name: "default",

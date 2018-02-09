@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="TicTacToe\Authorization\Controllers\AuthorizationController.cs" />
     <Compile Include="TicTacToe\Authorization\Models\UserModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\ConnectionMapping.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
     <Compile Include="TicTacToe\Game\Controllers\GamesController.cs" />
@@ -74,10 +75,6 @@
     <None Include="TicTacToe.sln" />
     <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\TicTacToe.Logic\TicTacToe.Logic.csproj" />
   </ItemGroup>
 
   <ItemGroup>
