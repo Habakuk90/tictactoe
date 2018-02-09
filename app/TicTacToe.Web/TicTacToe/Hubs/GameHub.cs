@@ -9,6 +9,9 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 {
     public class GameHub : Hub
     {
+        private readonly static ConnectionMapping<string> _connections =
+            new ConnectionMapping<string>();
+
         public void Send(string userId, string message)
         {
             string name = Context.User.Identity.Name;
@@ -19,8 +22,6 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var nonConUser = Context.User;
         }
 
-        private readonly static ConnectionMapping<string> _connections =
-            new ConnectionMapping<string>();
         
         public void Hit(string color, string containerId)
         {
@@ -30,9 +31,14 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         public override Task OnConnectedAsync()
         {
             string name = Context.User.Identity.Name;
-
-            _connections.Add(name, Context.ConnectionId);
-
+            if (!String.IsNullOrEmpty(name))
+            {
+                _connections.Add(name, Context.ConnectionId);
+            }
+            else
+            {
+                Console.WriteLine("name empty");
+            }
             return base.OnConnectedAsync();
         }
 

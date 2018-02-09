@@ -26,23 +26,25 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string userName,string email, string password)
+        public async Task<IActionResult> Login(string userName, string email, string password)
         {
-            
-                UserModel loginData = new UserModel
-                {
-                    Identity = new IdentityUser { UserName = userName, SecurityStamp = Guid.NewGuid().ToString(), Email = email },
-                    Password = password,
-                    
-                };
 
-                var result = await userManagement.LoginUser(loginData);
+            UserModel loginData = new UserModel
+            {
+                Identity = new IdentityUser { UserName = userName, SecurityStamp = Guid.NewGuid().ToString(), Email = email },
+                Password = password,
 
-                if (result.Succeeded)
-                {
-                    return LocalRedirect("/");
-                }
-            
+            };
+
+            var result = await userManagement.LoginUser(loginData);
+
+            if (result.Succeeded)
+            {
+                
+                Console.WriteLine("User Logged in...");
+                return LocalRedirect("/");
+            }
+
             return LocalRedirect("/Register");
         }
 

@@ -1,6 +1,6 @@
 (function () {
     // [TODO] localhost ersetzen
-    let connection = new signalR.HubConnection("https://localhost:44312/game") // "hitCounter" name des Hubs "HitCounterHub"; MapRoute UseSignalR Startup.cs
+    let connection = new signalR.HubConnection("/game/") // "hitCounter" name des Hubs "HitCounterHub"; MapRoute UseSignalR Startup.cs
 
     connection.on('Hit', function (color,id) { // "Hit" invoke vom Server
         console.log(color);                     // DoStuff(); color, id Parameter werden vom Server invoked
