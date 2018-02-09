@@ -86,4 +86,8 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TicTacToe\Authorization\Styles\" />
+  </ItemGroup>
+
 </Project>
