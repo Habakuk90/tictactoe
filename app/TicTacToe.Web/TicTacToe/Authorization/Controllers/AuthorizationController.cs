@@ -12,12 +12,23 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
     public class AuthorizationController : Controller
     {
         private IUserManagement userManagement;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userManager"></param>
+        /// <param name="signInManager"></param>
         public AuthorizationController(UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
         {
             this.userManagement = new UserManagement(signInManager, userManager);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="returnUrl"></param>
+        /// <returns></returns>
         [Route("/Login")]
         public IActionResult Login(string returnUrl = null)
         {
@@ -25,6 +36,13 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
             return View("~/TicTacToe/Authorization/Views/Login.cshtml");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Login(string userName, string email, string password)
         {
@@ -87,6 +105,10 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
             return LocalRedirect("/Register");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [Route("/Logout")]
         public IActionResult Logout()
         {

@@ -49,7 +49,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="TicTacToe\Game\Views\tictactoe.html" />
+    <Content Include="TicTacToe\Game\Views\Tictactoe.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -68,6 +68,7 @@
     <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Shared\_AuthorizationLayout.cshtml" />
+    <None Include="TicTacToe\Game\Views\Shared\_GamesLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,19 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script src="~/vendor/signalr-client-1.0.0-alpha2-final.js"></script>
+    <script src="~/vendor/jquery.min.js"></script>
+    <script src="/js/hub.js"></script>
+    <link href="~/css/main.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/tictactoe.css">
+
+</head>
+<body>
+    <div class="form-container">
+        @RenderBody()
+    </div>
+</body>
+</html>

@@ -11,7 +11,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
     {
         private readonly static ConnectionMapping<string> _connections =
             new ConnectionMapping<string>();
-
+        
         public void Send(string userId, string message)
         {
             string name = Context.User.Identity.Name;
@@ -28,6 +28,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.All.InvokeAsync("Hit", color, containerId);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override Task OnConnectedAsync()
         {
             string name = Context.User.Identity.Name;
@@ -41,7 +45,12 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             }
             return base.OnConnectedAsync();
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
             string name = Context.User.Identity.Name;

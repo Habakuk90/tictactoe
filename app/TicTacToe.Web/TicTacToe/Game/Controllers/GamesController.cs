@@ -13,7 +13,7 @@ namespace TicTacToe.Web.TicTacToe.Game.Controllers
         public IActionResult TicTacToe()
         {
 
-            return View("~/TicTacToe/Game/Views/tictactoe.html");
+            return View("~/TicTacToe/Game/Views/Tictactoe.cshtml");
         }
     }
 }

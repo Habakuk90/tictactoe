@@ -10,6 +10,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         private readonly Dictionary<T, HashSet<string>> _connections =
             new Dictionary<T, HashSet<string>>();
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int Count
         {
             get
@@ -18,6 +21,11 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="connectionId"></param>
         public void Add(T key, string connectionId)
         {
             lock (_connections)
@@ -36,6 +44,11 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         public IEnumerable<string> GetConnections(T key)
         {
             HashSet<string> connections;
@@ -47,6 +60,11 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             return Enumerable.Empty<string>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="connectionId"></param>
         public void Remove(T key, string connectionId)
         {
             lock (_connections)

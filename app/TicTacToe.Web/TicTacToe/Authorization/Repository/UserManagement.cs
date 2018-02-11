@@ -12,18 +12,33 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="signInManager"></param>
+        /// <param name="userManager"></param>
         public UserManagement(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
         {
             _signInManager = signInManager;
             _userManager = userManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<IdentityResult> RegisterUser(UserModel user)
         {
             var result = await _userManager.CreateAsync(user.Identity, user.Password);
             return result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public async Task<SignInResult> LoginUser(UserModel user)
         {
             SignInResult result = new SignInResult();
@@ -44,6 +59,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public async void LogoutUser()
         {
             await _signInManager.SignOutAsync();
