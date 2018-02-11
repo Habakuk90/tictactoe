@@ -13,7 +13,6 @@
     <Compile Remove="TicTacToe\Game\Models\**" />
     <Compile Remove="TicTacToe\Game\Repository\**" />
     <Compile Remove="TicTacToe\Game\Views\**" />
-    <Compile Remove="Views\**" />
     <Content Remove="TicTacToe\Authorization\Controllers\**" />
     <Content Remove="TicTacToe\Authorization\Models\**" />
     <Content Remove="TicTacToe\Authorization\Repository\**" />
@@ -22,7 +21,6 @@
     <Content Remove="TicTacToe\Game\Models\**" />
     <Content Remove="TicTacToe\Game\Repository\**" />
     <Content Remove="TicTacToe\Game\Views\**" />
-    <Content Remove="Views\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Controllers\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Repository\**" />
@@ -31,7 +29,6 @@
     <EmbeddedResource Remove="TicTacToe\Game\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Repository\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Views\**" />
-    <EmbeddedResource Remove="Views\**" />
     <None Remove="TicTacToe\Authorization\Controllers\**" />
     <None Remove="TicTacToe\Authorization\Models\**" />
     <None Remove="TicTacToe\Authorization\Repository\**" />
@@ -40,11 +37,6 @@
     <None Remove="TicTacToe\Game\Models\**" />
     <None Remove="TicTacToe\Game\Repository\**" />
     <None Remove="TicTacToe\Game\Views\**" />
-    <None Remove="Views\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="TicTacToe\Pages\Authoritazion\Login.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,6 +67,7 @@
     <None Include="TicTacToe.sln" />
     <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
+    <None Include="TicTacToe\Authorization\Views\Shared\_AuthorizationLayout.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,10 +2,13 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    Layout = "~/TicTacToe/Authorization/Views/Shared/_AuthorizationLayout.cshtml";
+    ViewBag.Title = "Login";
 }
-<form action="/Authorization/Login" method="post">
-    <input type="text" name="UserName" value="User" />
-    <input type="email" name="Email" value="a@a.com" />
-    <input type="password" name="Password" value="Password123!" />
-    <button type="submit">Submit</button>
+<form class="authorization-form" action="/Authorization/Login" method="post">
+    <div class="authorization-form__container">
+        <input type="text" name="UserName" value="User" />
+        <input type="password" name="Password" placeholder="Password" />
+        <button type="submit">Submit</button>
+    </div>
 </form>

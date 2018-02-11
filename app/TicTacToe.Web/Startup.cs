@@ -41,6 +41,7 @@ namespace TicTacToe
             {
                 //options.Conventions.AuthorizeFolder("/Account/Manage");
                 options.Conventions.AuthorizePage("/Logout");
+                //options.Conventions.
             });
 
 
