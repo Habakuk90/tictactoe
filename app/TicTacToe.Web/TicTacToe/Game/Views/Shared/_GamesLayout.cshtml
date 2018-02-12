@@ -12,8 +12,11 @@
 
 </head>
 <body>
+    @Html.Partial("~/TicTacToe/Views/Shared/_Navigation.cshtml")
     <div class="form-container">
         @RenderBody()
     </div>
+
+    <script src="~/js/main.js"></script>
 </body>
 </html>
