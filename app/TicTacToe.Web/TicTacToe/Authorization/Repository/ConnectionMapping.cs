@@ -11,7 +11,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             new Dictionary<T, HashSet<string>>();
 
         /// <summary>
-        /// 
+        /// Get Count of alive Connections
         /// </summary>
         public int Count
         {
@@ -22,9 +22,10 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Adds Connections dependent on given key, creates Connections if new
+        /// User
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">User String</param>
         /// <param name="connectionId"></param>
         public void Add(T key, string connectionId)
         {
@@ -45,9 +46,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Gets all Connection for given key in Connections
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">User String</param>
         /// <returns></returns>
         public IEnumerable<string> GetConnections(T key)
         {
@@ -61,9 +62,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Removes Connection for given key
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key">User String</param>
         /// <param name="connectionId"></param>
         public void Remove(T key, string connectionId)
         {

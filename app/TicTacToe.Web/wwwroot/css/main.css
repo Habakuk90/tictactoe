@@ -4,10 +4,29 @@
     padding: 0;
 }
 
+/* Grid */
+
+body {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-areas: "header" "body" "footer"
+}
+
+footer {
+    grid-area: footer;
+}
+
+.body-content {
+    grid-area: body;
+}
+
+/* Grid END */
+
 /* Navigation */
 nav {
     display: flex;
     flex-direction: row;
+    grid-area: header;
 }
 
 .nav-list__container, .nav-list__container--user {
@@ -31,6 +50,28 @@ nav {
     background-color: lightgray;
 }
 
+/* Navigation END */
+
+/* Footer */
+
+/* Footer END */
+
+/* Sections */
+section {
+    min-height: 80vh;
+}
+/* Sections END */
+
+/* Buttons */
+.button {
+
+}
+
+.button-game {
+
+}
+
+/* Buttons END */
 
 .form-container{
     height: 500px;

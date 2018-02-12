@@ -11,23 +11,29 @@ namespace TicTacToe.Web.TicTacToe.Hubs
     {
         private readonly static ConnectionMapping<string> _connections =
             new ConnectionMapping<string>();
-        
-        public void Send(string userId, string message)
-        {
-            string name = Context.User.Identity.Name;
 
-            Clients.Client(userId).InvokeAsync("SendUser", _connections.GetConnections(name)); // Client(userId); SignalR Websocket Connection Id, Client
-            Clients.User(name).InvokeAsync("SendUser", _connections.GetConnections(name)); // User(name); Identity User 
-            var conUser = Context.Connection.User;
-            var nonConUser = Context.User;
+        private readonly static HashSet<string> _userOnline = new HashSet<string>();
+
+        public Dictionary<string,string> Matchup = new Dictionary<string, string>();
+        //[TODO] map two player against each other on connection to "game"
+
+        /// <summary>
+        /// Sets Tile after Play for current Player and his Enemy 
+        /// </summary>
+        /// <param name="tileId">ID of the Tile in grid</param>
+        public void SetPlayTicTacToe(string tileId)
+        {
+            string playerName = Context.User.Identity.Name;
+            string enemyName = "";
+            Clients.User(playerName).InvokeAsync("setPlay", tileId);
+            Clients.User(enemyName).InvokeAsync("setPlay", tileId);
         }
 
-        
-        public void Hit(string color, string containerId)
+        public void GetConnectedUser()
         {
-            Clients.All.InvokeAsync("Hit", color, containerId);
+            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());            
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
@@ -38,6 +44,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             if (!String.IsNullOrEmpty(name))
             {
                 _connections.Add(name, Context.ConnectionId);
+                _userOnline.Add(name);
+                GetConnectedUser();
+
+                //Clients.All.InvokeAsync("SetConnectedUser", GetConnectedUser());
             }
             else
             {
@@ -45,7 +55,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             }
             return base.OnConnectedAsync();
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -56,6 +66,9 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             string name = Context.User.Identity.Name;
 
             _connections.Remove(name, Context.ConnectionId);
+            _userOnline.Remove(name);
+            GetConnectedUser();
+            //Clients.All.InvokeAsync("SetConnectedUser", GetConnectedUser());
 
             return base.OnDisconnectedAsync(exception);
         }

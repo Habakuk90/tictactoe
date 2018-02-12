@@ -15,3 +15,4 @@ app/TicTacToe.Logic/obj/
 app/TicTacToe.Logic/bin/
 Docu/
 app/TicTacToe.Web/.vscode/
+app/TicTacToe.Web/TicTacToe.Web.csproj.user

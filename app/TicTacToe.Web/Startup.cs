@@ -33,14 +33,29 @@ namespace TicTacToe
                 options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequiredLength = 7;
+            })
                     .AddEntityFrameworkStores<AppDbContext>()
                     .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/login";
+                options.ReturnUrlParameter = "RedirectUrl";
+                options.AccessDeniedPath = "/authorization/accessdenied";
+                options.LogoutPath = "/Logout";
+            });
 
             services.AddMvc().AddRazorPagesOptions(options =>
             {
                 //options.Conventions.AuthorizeFolder("/Account/Manage");
                 options.Conventions.AuthorizePage("/Logout");
+                
                 //options.Conventions.
             });
 

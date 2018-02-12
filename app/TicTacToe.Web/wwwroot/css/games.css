@@ -1,0 +1,44 @@
+﻿section.game {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Games Section */
+
+.game__container {}
+
+.game-list__container {
+    list-style: none;
+}
+
+.game-list__item {}
+
+.game-linkfield {
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.game-linkfield.selected {
+    background-color: lightgray;
+}
+
+/* Games Section END */
+
+/* Enemy Section */
+
+.enemy__container {}
+
+.enemy-list__container {
+    list-style: none;
+}
+
+.enemy-list__item {}
+
+.enemy-list__item.selected {
+    background-color: lightgray;
+}
+/* Enemy Section END */

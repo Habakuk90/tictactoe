@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicTacToe.Web.TicTacToe.Authorization.Models;
-
+//[TODO] Password Reset for User
 namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
     public class UserManagement : IUserManagement, IDisposable
@@ -13,7 +13,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         private readonly UserManager<IdentityUser> _userManager;
 
         /// <summary>
-        /// 
+        /// Set SignInManager and UserManager through Dependency Injection
         /// </summary>
         /// <param name="signInManager"></param>
         /// <param name="userManager"></param>
@@ -24,7 +24,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Register User with UserManager
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Login User with SignInManager
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
-        /// 
+        /// Logs Out User with SignInManager
         /// </summary>
         public async void LogoutUser()
         {

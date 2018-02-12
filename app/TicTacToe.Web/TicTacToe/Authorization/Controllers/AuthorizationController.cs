@@ -14,7 +14,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         private IUserManagement userManagement;
 
         /// <summary>
-        /// 
+        /// Define UserManager and SignInManager through DI
         /// </summary>
         /// <param name="userManager"></param>
         /// <param name="signInManager"></param>
@@ -25,28 +25,27 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Login Action
         /// </summary>
         /// <param name="returnUrl"></param>
-        /// <returns></returns>
+        /// <returns>View</returns>
         [Route("/Login")]
-        public IActionResult Login(string returnUrl = null)
+        public IActionResult Login()
         {
 
             return View("~/TicTacToe/Authorization/Views/Login.cshtml");
         }
 
         /// <summary>
-        /// 
+        /// Login User for Website
         /// </summary>
         /// <param name="userName"></param>
         /// <param name="email"></param>
         /// <param name="password"></param>
-        /// <returns></returns>
+        /// <returns>Redirect dependet on Success of Post</returns>
         [HttpPost]
         public async Task<IActionResult> Login(string userName, string email, string password)
         {
-
             UserModel loginData = new UserModel
             {
                 Identity = new IdentityUser { UserName = userName, SecurityStamp = Guid.NewGuid().ToString(), Email = email },
@@ -70,7 +69,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         /// Register Route GET
         /// </summary>
         /// <param name="returnUrl"></param>
-        /// <returns></returns>
+        /// <returns>View</returns>
         [Route("/Register")]
         public IActionResult Register(string returnUrl = null)
         {
@@ -106,7 +105,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Logs the user out
         /// </summary>
         /// <returns></returns>
         [Route("/Logout")]

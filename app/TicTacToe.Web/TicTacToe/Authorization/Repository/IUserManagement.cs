@@ -10,19 +10,19 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
     interface IUserManagement
     {
         /// <summary>
-        /// 
+        /// Loggs in User
         /// </summary>
         /// <param name="user"></param>
-        /// <returns></returns>
+        /// <returns>Task<SignInResult></returns>
         Task<SignInResult> LoginUser(UserModel user);
         /// <summary>
-        /// 
+        /// Register User
         /// </summary>
         /// <param name="user"></param>
-        /// <returns></returns>
+        /// <returns>Task<SignInResult></returns>
         Task<IdentityResult> RegisterUser(UserModel user);
         /// <summary>
-        /// 
+        /// Logout User
         /// </summary>
         void LogoutUser();
     }

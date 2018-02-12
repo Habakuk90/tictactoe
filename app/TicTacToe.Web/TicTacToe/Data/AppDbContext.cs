@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TicTacToe.Web.TicTacToe.Authorization.Models;
-
+//[TODO] add Migration
 namespace TicTacToe.Web.TicTacToe.Data
 {
     public class AppDbContext : IdentityDbContext<IdentityUser>

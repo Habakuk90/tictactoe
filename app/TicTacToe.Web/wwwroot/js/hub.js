@@ -1,25 +1,48 @@
-(function () {
+(function ($) {
     // [TODO] localhost ersetzen
     let connection = new signalR.HubConnection("/game/") // "hitCounter" name des Hubs "HitCounterHub"; MapRoute UseSignalR Startup.cs
 
-    connection.on('Hit', function (color,id) { // "Hit" invoke vom Server
-        console.log(color);                     // DoStuff(); color, id Parameter werden vom Server invoked
+    connection.on('randomColor', function (tileId) { // "Hit" invoke vom Server
         setRandomColor(color, id);
     });
 
-    connection.on('SendUser', function (a, b) {
-        console.log(a, b);
+    connection.on('setPlay', function(tileId) {
+        console.log(tileId);
+    });
+
+    connection.on('MatchupCreated', function (enemyName) {
+        console.log('Matchup Created for you vs.' + enemyName);
+    });
+
+    connection.on('SetConnectedUser', (user) => {
+        $('.enemy-list__container').empty();
+        
+        var listUser = '';
+        $.each(user, function (index, value) {
+
+            listUser += '<li class="enemy-list__item">' + value + '</li>'
+        });
+
+        $('.enemy-list__container').append(listUser);
+        $('.enemy-list__item').on('click', function () {
+            $(this).addClass("selected");
+        });
     });
 
     connection.start()
         .then(function () {
-            
+            connection.invoke('GetConnectedUser')
             $('.box__inner').on('click touchstart', function () {
                 var that = this;
-                connection.invoke('Hit', randomColor(), that.id); // recordHit invoke vom Client an Server Funktion; parameter kommen in der server Methode an 
+                connection.invoke('SetPlayTicTacToe', that.id); // recordHit invoke vom Client an Server Funktion; parameter kommen in der server Methode an 
             });
 
-            connection.invoke('send', connection.connection.connectionId, "wusasumba");
+            $('.button.button-start').on('click', function (e, a) {
+                var enemyName = $('.enemy-list__item.selected').text();
+                var link = $('.game-linkfield.selected').data('link');
+                var pathname = link + '?enemyName=' + enemyName
+                location.href = location.origin + pathname;
+            });
         });
 
     function getMessage() {
@@ -40,4 +63,4 @@
     function setRandomColor(color, id) {
         $('#'+id).css('background-color', color);
     }
-})();
+})(jQuery);
