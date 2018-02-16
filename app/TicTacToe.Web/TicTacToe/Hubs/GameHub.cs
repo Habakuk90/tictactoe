@@ -29,6 +29,15 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             //Groups.AddAsync(playerConnections, "Room1");
             Clients.User(playerName).InvokeAsync("setPlay", tileId, "Matchup vs. " + enemyName);
             Clients.User(enemyName).InvokeAsync("setPlay", tileId, "Matchup vs. " + playerName);
+            Clients.User(enemyName).InvokeAsync("challenge", String.Format("Du wurdest von {0} herausgefordert", playerName));
+        }
+
+        public void SetMatchup(string enemyName)
+        {
+            var playerName = Context.User.Identity.Name;
+
+            Clients.User(enemyName).InvokeAsync("challenge", String.Format("Du wurdest von {0} herausgefordert", playerName));
+
         }
 
         public void GetConnectedUser()

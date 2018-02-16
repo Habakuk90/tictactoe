@@ -7,6 +7,10 @@
         console.log(tileId);
     });
 
+    connection.on('challenge', function (message) {
+        openModal(message);
+    });
+
     connection.on('SetConnectedUser', (user) => {
         $('.enemy-list__container').empty();
 
@@ -26,21 +30,23 @@
     connection.start()
         .then(function () {
             connection.invoke('GetConnectedUser')
-            $('.box__inner').on('click touchstart', function () {
-                var that = this;
-                var url = new URL(location.href);
-
-                var enemyName = url.searchParams.get(enemyName);
-                connection.invoke('SetPlayTicTacToe', that.id, enemyName); // recordHit invoke vom Client an Server Funktion; parameter kommen in der server Methode an 
-            });
-
+            
             $('.button.button-start').on('click', function (e, a) {
                 var enemyName = $('.enemy-list__item.selected').text();
-                var link = $('.game-linkfield.selected').data('link');
-                var pathname = link + '?enemyName=' + enemyName
-                location.href = location.origin + pathname;
+                var gameLink = $('.game-linkfield.selected').data('link');
+                
+                //location.href = location.origin + gameLink;
+                connection.invoke("SetMatchup", enemyName);
             });
         });
+
+    function openModal(message) {
+        var $challengeContainer = $('.challenge');
+        var $mainContainer = $('#main');
+        $mainContainer.addClass('faded');
+        $challengeContainer.addClass('active');
+        $challengeContainer.find('.challenge__header').text(message);
+    }
 
     function getMessage() {
         var text = $('#input').val();
