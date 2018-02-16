@@ -21,17 +21,19 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// Sets Tile after Play for current Player and his Enemy 
         /// </summary>
         /// <param name="tileId">ID of the Tile in grid</param>
-        public void SetPlayTicTacToe(string tileId)
+        public void SetPlayTicTacToe(string tileId, string enemyName)
         {
             string playerName = Context.User.Identity.Name;
-            string enemyName = "";
-            Clients.User(playerName).InvokeAsync("setPlay", tileId);
-            Clients.User(enemyName).InvokeAsync("setPlay", tileId);
+            var playerConnections = _connections.GetConnections(playerName);
+            var enemyConnections = _connections.GetConnections(enemyName);
+            //Groups.AddAsync(playerConnections, "Room1");
+            Clients.User(playerName).InvokeAsync("setPlay", tileId, "Matchup vs. " + enemyName);
+            Clients.User(enemyName).InvokeAsync("setPlay", tileId, "Matchup vs. " + playerName);
         }
 
         public void GetConnectedUser()
         {
-            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());            
+            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());
         }
         
         /// <summary>

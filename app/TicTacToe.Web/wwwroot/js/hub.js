@@ -2,29 +2,23 @@
     // [TODO] localhost ersetzen
     let connection = new signalR.HubConnection("/game/") // "hitCounter" name des Hubs "HitCounterHub"; MapRoute UseSignalR Startup.cs
 
-    connection.on('randomColor', function (tileId) { // "Hit" invoke vom Server
-        setRandomColor(color, id);
-    });
 
-    connection.on('setPlay', function(tileId) {
+    connection.on('setPlay', function (tileId) {
         console.log(tileId);
-    });
-
-    connection.on('MatchupCreated', function (enemyName) {
-        console.log('Matchup Created for you vs.' + enemyName);
     });
 
     connection.on('SetConnectedUser', (user) => {
         $('.enemy-list__container').empty();
-        
+
         var listUser = '';
         $.each(user, function (index, value) {
-
             listUser += '<li class="enemy-list__item">' + value + '</li>'
         });
 
         $('.enemy-list__container').append(listUser);
         $('.enemy-list__item').on('click', function () {
+
+            $('.enemy-list__item.selected').removeClass('selected');
             $(this).addClass("selected");
         });
     });
@@ -34,7 +28,10 @@
             connection.invoke('GetConnectedUser')
             $('.box__inner').on('click touchstart', function () {
                 var that = this;
-                connection.invoke('SetPlayTicTacToe', that.id); // recordHit invoke vom Client an Server Funktion; parameter kommen in der server Methode an 
+                var url = new URL(location.href);
+
+                var enemyName = url.searchParams.get(enemyName);
+                connection.invoke('SetPlayTicTacToe', that.id, enemyName); // recordHit invoke vom Client an Server Funktion; parameter kommen in der server Methode an 
             });
 
             $('.button.button-start').on('click', function (e, a) {
@@ -61,6 +58,6 @@
     }
 
     function setRandomColor(color, id) {
-        $('#'+id).css('background-color', color);
+        $('#' + id).css('background-color', color);
     }
 })(jQuery);
