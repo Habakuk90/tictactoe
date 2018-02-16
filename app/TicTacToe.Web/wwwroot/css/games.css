@@ -61,11 +61,21 @@ section.challenge.active {
     
 }
 .challenge__container {
+    position: relative;
     min-width: 500px;
     min-height: 300px;
     align-self: center;
     background-color: white;
     border: solid 1px black;
+
+}
+
+.challenge__close-button {
+    position: absolute;
+    padding: 5px;
+    right: 0;
+    top: 0;
+    cursor: pointer;
 }
 
 /* Matchup Popup END */

@@ -37,6 +37,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var playerName = Context.User.Identity.Name;
 
             Clients.User(enemyName).InvokeAsync("challenge", String.Format("Du wurdest von {0} herausgefordert", playerName));
+            Clients.User(playerName).InvokeAsync("challenge", String.Format("Warte auf bestätigung von {0}", enemyName));
 
         }
 

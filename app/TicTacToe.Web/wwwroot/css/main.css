@@ -3,11 +3,13 @@
     margin: 0;
     padding: 0;
 }
-#main {}
 
-#main.faded {
-    opacity: 0.5;
+#main {
 }
+
+    #main.faded {
+        opacity: 0.5;
+    }
 /* Grid */
 
 body {
@@ -34,7 +36,7 @@ nav {
 }
 
 .nav-list__container, .nav-list__container--user {
-    display:flex;
+    display: flex;
     flex: 1;
     list-style: none;
 }
@@ -50,9 +52,9 @@ nav {
     cursor: pointer;
 }
 
-.nav-list__item:hover, .nav-list__item--user:hover {
-    background-color: lightgray;
-}
+    .nav-list__item:hover, .nav-list__item--user:hover {
+        background-color: lightgray;
+    }
 
 /* Navigation END */
 
@@ -68,15 +70,44 @@ section {
 
 /* Buttons */
 .button {
+    border: none;
+    padding: 10px;
+    min-width: 100px;
+    border-radius: 4px;
+}
 
+
+
+.button-accept {
+    background-color: green;
+}
+
+.button-accept:active {
+    background-color: darkseagreen;
+}
+
+.button-decline {
+    background-color: red;
+}
+
+.button-decline:active {
+    background-color: lightcoral;
 }
 
 .button-game {
+    background-color: green;
+}
 
+.button-start {
+    background-color: orange;
+}
+
+.button-start:active {
+    background-color: lightsalmon;
 }
 
 /* Buttons END */
 
-.form-container{
+.form-container {
     height: 500px;
 }

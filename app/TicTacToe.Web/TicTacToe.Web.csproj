@@ -70,7 +70,7 @@
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Shared\_AuthorizationLayout.cshtml" />
     <None Include="TicTacToe\Game\Views\Index.cshtml" />
-    <None Include="TicTacToe\Game\Views\Shared\challengeModal.cshtml" />
+    <None Include="TicTacToe\Game\Views\Shared\ChallengeModal.cshtml" />
     <None Include="TicTacToe\Game\Views\Shared\_GamesLayout.cshtml" />
   </ItemGroup>
 
