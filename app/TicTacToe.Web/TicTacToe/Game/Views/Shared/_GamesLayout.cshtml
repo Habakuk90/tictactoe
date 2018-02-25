@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     <script src="~/vendor/signalr-client-1.0.0-alpha2-final.js"></script>
+    @*<script src="https://cdn.jsdelivr.net/npm/vue"></script>*@
+
     <script src="~/vendor/jquery.min.js"></script>
-    <script src="/js/hub.js"></script>
+    <script src="~/vendor/vue.js"></script>
+    <script scr="~/js/tictactoe.js"></script>
+
     <link href="~/css/main.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/tictactoe.css">
     <link rel="stylesheet" href="~/css/games.css">
@@ -16,9 +20,9 @@
 <body>
     <div id="main">
         @Html.Partial("~/TicTacToe/Views/Shared/_Navigation.cshtml")
-        <div class="form-container">
+        <section class="game">
             @RenderBody()
-        </div>
+        </section>
     </div>
     @Html.Partial("~/TicTacToe/Game/Views/Shared/ChallengeModal.cshtml")
 

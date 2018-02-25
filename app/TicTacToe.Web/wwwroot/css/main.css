@@ -108,6 +108,6 @@ section {
 
 /* Buttons END */
 
-.form-container {
+section.game {
     height: 500px;
 }
