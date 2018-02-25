@@ -18,14 +18,24 @@
 
 .box__inner {
     background-color: #b9b9b9;
-    margin: 1px;
     flex-grow: 1;
+    border: 1px solid black;
 }
 
 .cross {
-    background-color: green;
+    background: url("/lib/icons/access-denied.svg") no-repeat 50% 50%;
 }
 
 .circle {
-    background-color: red;
+    background: url("/lib/icons/circle-outline.svg") no-repeat 50% 50%;
+}
+
+.circle, .cross {
+    background-size: contain;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.circle:active,
+.cross:active {
+    opacity: 0.3;
 }
