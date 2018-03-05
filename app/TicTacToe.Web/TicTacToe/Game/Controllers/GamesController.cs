@@ -8,7 +8,7 @@ using TicTacToe.Web.TicTacToe.Data;
 
 namespace TicTacToe.Web.TicTacToe.Game.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class GamesController : Controller
     {
         private readonly AppDbContext _context;

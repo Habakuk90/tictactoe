@@ -37,9 +37,12 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.All.InvokeAsync("tileChange", tileId);
         }
 
-        public void GetConnectedUser()
+        public void GetConnectedUser(string conId)
         {
-            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());
+            var currentUser = _connections.GetUserByConnection(conId);
+            Clients.All.InvokeAsync
+                ("SetConnectedUser", _userOnline.ToList(), currentUser);
+            
         }
         
         /// <summary>
@@ -53,9 +56,6 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             {
                 _connections.Add(name, Context.ConnectionId);
                 _userOnline.Add(name);
-                GetConnectedUser();
-
-                //Clients.All.InvokeAsync("SetConnectedUser", GetConnectedUser());
             }
             else
             {
@@ -75,9 +75,6 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
             _connections.Remove(name, Context.ConnectionId);
             _userOnline.Remove(name);
-            GetConnectedUser();
-            //Clients.All.InvokeAsync("SetConnectedUser", GetConnectedUser());
-
             return base.OnDisconnectedAsync(exception);
         }
     }

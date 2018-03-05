@@ -61,6 +61,20 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             return Enumerable.Empty<string>();
         }
 
+        public string GetUserByConnection(string conId)
+        {
+            foreach (var key in _connections.Keys)
+            {
+                var connection = GetConnections(key);
+                var userFound = connection.Any(con => con == conId);
+                if(userFound)
+                {
+                    return key.ToString();
+                }
+            }
+            return string.Empty;
+        }
+
         /// <summary>
         /// Removes Connection for given key
         /// </summary>

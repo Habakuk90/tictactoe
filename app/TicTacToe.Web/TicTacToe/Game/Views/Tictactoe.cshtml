@@ -5,7 +5,7 @@
 
 <div class="wrapper">
 
-    <div v-for="box in boxes2" class="box" >
+    <div v-for="box in boxes2" v-bind:key="box" class="box" >
         <div class="box__inner" 
              v-bind:class="box.state" 
              v-on:click="changeField($event, box.id)">
@@ -110,16 +110,17 @@
             that.connection.on('tileChange', function (tileId) {
                 if (that.boxes2[tileId].state != null) {
                     console.log("Cant be changed");
-                    return;
                 }
-
-                that.boxes2[tileId].state = "cross";
-
+                if (that.boxes2[tileId].state === "cross") {
+                    that.boxes2[tileId].state = "circle";
+                }
+                else {
+                    that.boxes2[tileId].state = "cross";
+                }
             });
         },
         methods: {
             changeField: function (event, id) {
-               
                 var that = this;
                 that.connection.invoke('TileClicked', id);
             }
