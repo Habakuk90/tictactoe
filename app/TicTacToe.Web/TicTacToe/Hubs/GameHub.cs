@@ -26,10 +26,6 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             string playerName = Context.User.Identity.Name;
             var playerConnections = _connections.GetConnections(playerName);
             var enemyConnections = _connections.GetConnections(enemyName);
-            //Groups.AddAsync(playerConnections, "Room1");
-            Clients.User(playerName).InvokeAsync("setPlay", tileId, "Matchup vs. " + enemyName);
-            Clients.User(enemyName).InvokeAsync("setPlay", tileId, "Matchup vs. " + playerName);
-            Clients.User(playerName).InvokeAsync("challenge", String.Format("Du wurdest von {0} herausgefordert", playerName));
         }
         
         public void TileClicked(string tileId)
@@ -37,11 +33,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.All.InvokeAsync("tileChange", tileId);
         }
 
-        public void GetConnectedUser(string conId)
+        public void GetConnectedUser()
         {
-            var currentUser = _connections.GetUserByConnection(conId);
             Clients.All.InvokeAsync
-                ("SetConnectedUser", _userOnline.ToList(), currentUser);
+                ("SetConnectedUser", _userOnline.ToList());
             
         }
         
@@ -56,6 +51,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             {
                 _connections.Add(name, Context.ConnectionId);
                 _userOnline.Add(name);
+                GetConnectedUser();
             }
             else
             {
@@ -75,6 +71,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
             _connections.Remove(name, Context.ConnectionId);
             _userOnline.Remove(name);
+            GetConnectedUser();
             return base.OnDisconnectedAsync(exception);
         }
     }

@@ -11,8 +11,6 @@ namespace TicTacToe.Web.TicTacToe.Game.Controllers
     //[Authorize]
     public class GamesController : Controller
     {
-        private readonly AppDbContext _context;
-
         public IActionResult Index()
         {
             

@@ -29,7 +29,7 @@
         el: 'section.game',
         data: {
             userOnline: '',
-            currentUser: '',
+            currentUser: "@Context.User.Identity.Name",
             connection: null
         },
         created: function () {
@@ -43,12 +43,10 @@
                         that.connection.connection.connectionId;
 
                     that.connection
-                        .invoke('GetConnectedUser', that.currentUserId);
+                        .invoke('GetConnectedUser');
                 });
-            that.connection.on('SetConnectedUser', function (userOnline, currentUser) {
-                debugger;
+            that.connection.on('SetConnectedUser', function (userOnline) {
                 that.userOnline = userOnline;
-                that.currentUserId = $.get('/Games/GetCurrentUserById?conId=' + that.connection.connection.connectionId);
             });
         },
         methods: {
