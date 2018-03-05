@@ -16,7 +16,10 @@
 <div class="enemy__container">
     <h2>Choose your Enemy</h2>
     <ul class="enemy-list__container">
-        <li v-for="user in userOnline" v-show="user !== currentUser" v-bind:key="user" class="enemy-list__item">
+        <li class="enemy-list__item" 
+            v-for="user in userOnline" v-if="user !== currentUser"
+            v-bind:key="user" v-on:click="selectEnemy($event,user, 1)">
+            
             {{user}}
         </li>
     </ul>
@@ -26,9 +29,9 @@
 
 <script>
     var gameVue = new Vue({
-        el: 'section.game',
+        el: '.enemy-list__container',
         data: {
-            userOnline: '',
+            userOnline: [],
             currentUser: "@Context.User.Identity.Name",
             connection: null
         },
@@ -50,6 +53,11 @@
             });
         },
         methods: {
+            selectEnemy: function(event, user, v) {
+                $(event.target).parent().find('.selected').removeClass('selected');
+                $(event.target).toggleClass('selected');
+
+            }
         }
     })
 </script>
