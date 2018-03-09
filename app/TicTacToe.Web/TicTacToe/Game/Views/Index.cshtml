@@ -18,22 +18,22 @@
     <ul class="enemy-list__container">
         <li class="enemy-list__item" 
             v-for="user in userOnline" v-if="user !== currentUser"
-            v-bind:key="user" v-on:click="selectEnemy($event,user, 1)">
-            
+            v-bind:key="user" v-on:click="selectEnemy($event, user)">
             {{user}}
         </li>
     </ul>
 </div>
 
-<button class="button button-start">Go!</button>
+<button class="button button-start" v-on:click="challengeEnemy">Go!</button>
 
 <script>
     var gameVue = new Vue({
-        el: '.enemy-list__container',
+        el: 'section.game',
         data: {
             userOnline: [],
-            currentUser: "@Context.User.Identity.Name",
-            connection: null
+            currentUser: '@Context.User.Identity.Name',
+            connection: null,
+            selectedEnemy: ''
         },
         created: function () {
             this.connection = new signalR.HubConnection("/game/")
@@ -53,11 +53,16 @@
             });
         },
         methods: {
-            selectEnemy: function(event, user, v) {
+            selectEnemy: function (event, user) {
+                var that = this;
+                that.selectedEnemy = user;
                 $(event.target).parent().find('.selected').removeClass('selected');
                 $(event.target).toggleClass('selected');
-
+            },
+            challengeEnemy: function () {
+                var that = this;
+                that.connection.invoke('Challenge', that.selectedEnemy);
             }
         }
-    })
+    });
 </script>

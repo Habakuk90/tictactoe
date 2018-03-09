@@ -35,9 +35,17 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         public void GetConnectedUser()
         {
-            Clients.All.InvokeAsync
-                ("SetConnectedUser", _userOnline.ToList());
+            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());
             
+        }
+
+        /// <summary>
+        /// Invoke for challenged Enemy
+        /// </summary>
+        /// <param name="selectedEnemy"></param>
+        public void Challenge(string selectedEnemy)
+        {
+            Clients.User(selectedEnemy).InvokeAsync("challenged");
         }
         
         /// <summary>

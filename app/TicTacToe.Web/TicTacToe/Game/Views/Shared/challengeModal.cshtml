@@ -3,9 +3,38 @@
         <h1 class="challenge__header"></h1>
         <span class="challenge__close-button">X</span>
         <div class="button-wrapper">
-            <button class="button button-accept">Accept</button>
+            <button class="button button-accept" :click="closeModal">Accept</button>
             <button class="button button-decline">Decline</button>
         </div>
     </div>
-    
+
 </section>
+
+
+<script>
+    var challengeModal = new Vue({
+        el: '.challenge__container',
+        data: {
+            $modal: $('section.challenge')
+        },
+        created: function () {
+            this.connection = new signalR.HubConnection("/game/")
+        },
+        mounted: function () {
+            var that = this;
+            that.connection.start();
+            that.connection.on('Challenged', function () {
+                var that = this;
+                $('section.challenge').addClass('active');
+            });
+
+        },
+        methods: {
+            closeModal: function () {
+                var that = this;
+                $('section.challenge').removeClass('active');
+
+            }
+        }
+    });
+</script>
