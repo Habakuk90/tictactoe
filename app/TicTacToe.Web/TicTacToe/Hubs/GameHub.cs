@@ -17,16 +17,6 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         public Dictionary<string,string> Matchup = new Dictionary<string, string>();
         //[TODO] map two player against each other on connection to "game"
 
-        /// <summary>
-        /// Sets Tile after Play for current Player and his Enemy 
-        /// </summary>
-        /// <param name="tileId">ID of the Tile in grid</param>
-        public void SetPlayTicTacToe(string tileId, string enemyName)
-        {
-            string playerName = Context.User.Identity.Name;
-            var playerConnections = _connections.GetConnections(playerName);
-            var enemyConnections = _connections.GetConnections(enemyName);
-        }
         
         public void TileClicked(string tileId)
         {
@@ -35,12 +25,11 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         public void GetConnectedUser()
         {
-            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());
-            
+            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());            
         }
 
         /// <summary>
-        /// Invoke for challenged Enemy
+        /// Invoke open Modal for challenged Enemy
         /// </summary>
         /// <param name="selectedEnemy"></param>
         public void Challenge(string selectedEnemy)
@@ -49,6 +38,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.User(selectedEnemy).InvokeAsync("challenged", challenger);
         }
 
+        /// <summary>
+        /// Invoke Modal Answer to challenger
+        /// </summary>
+        /// <param name="challenger"></param>
         public void AcceptedChallenge(string challenger)
         {
             Clients.User(challenger).InvokeAsync("Accepted");
