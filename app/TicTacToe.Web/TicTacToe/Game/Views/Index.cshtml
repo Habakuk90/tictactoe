@@ -51,6 +51,9 @@
             that.connection.on('SetConnectedUser', function (userOnline) {
                 that.userOnline = userOnline;
             });
+            that.connection.on('Accepted', function () {
+                debugger;
+            });
         },
         methods: {
             selectEnemy: function (event, user) {

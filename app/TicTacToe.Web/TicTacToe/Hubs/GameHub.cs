@@ -45,7 +45,13 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// <param name="selectedEnemy"></param>
         public void Challenge(string selectedEnemy)
         {
-            Clients.User(selectedEnemy).InvokeAsync("challenged");
+            var challenger = Context.User.Identity.Name;
+            Clients.User(selectedEnemy).InvokeAsync("challenged", challenger);
+        }
+
+        public void AcceptedChallenge(string challenger)
+        {
+            Clients.User(challenger).InvokeAsync("Accepted");
         }
         
         /// <summary>
