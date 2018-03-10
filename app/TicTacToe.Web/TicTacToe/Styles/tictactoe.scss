@@ -1,7 +1,4 @@
-﻿* {
-    box-sizing: border-box;
-}
-
+﻿
 .wrapper {
     height: 100%;
     width: 100%;
@@ -28,14 +25,15 @@
 
 .circle {
     background: url("/lib/icons/circle-outline.svg") no-repeat 50% 50%;
+
+
 }
 
 .circle, .cross {
     background-size: contain;
     transition: opacity 0.2s ease-in-out;
-}
 
-.circle:active,
-.cross:active {
-    opacity: 0.3;
+    &:active {
+        opacity: 0.3;
+    }
 }

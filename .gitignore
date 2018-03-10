@@ -18,3 +18,4 @@ app/TicTacToe.Web/.vscode/
 app/TicTacToe.Web/TicTacToe.Web.csproj.user
 app/TicTacToe.Web/node_modules/
 app/TicTacToe.Logic/TicTacToe.Logic.csproj.user
+app/TicTacToe.Web/wwwroot/css/main.css

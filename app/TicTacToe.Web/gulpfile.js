@@ -8,7 +8,7 @@ const concat = require('gulp-concat');
 const sourcemaps = require('gulp-sourcemaps');
 const log = util.log;
 
-const input = ['.././TicTacToe.Web/TicTacToe/**/*.scss'];
+const inputScss = ['.././TicTacToe.Web/TicTacToe/**/*.scss'];
 const output = './wwwroot/css/';
 const inputJs = ['./TAMOIL/Extranet/Scripts/Helpers/**/*.js', './TAMOIL/Extranet/Modules/**/*.js'];
 const outputJs = './TicTacToe.Web/wwwroot/js';
@@ -18,8 +18,8 @@ const thirdPartyJs = [];
 
 
 gulp.task('sass', function () {
-    console.log(input);
-    return gulp.src(input)
+    console.log(inputScss);
+    return gulp.src(inputScss)
         .pipe(util.env.env === 'prod' ? util.noop() : sourcemaps.init())
         .pipe(sass())
         .pipe(autoprefixer({
@@ -27,9 +27,9 @@ gulp.task('sass', function () {
             cascade: false
         }))
         .pipe(util.env.env === 'prod' ? cleanCSS() : sourcemaps.write())
+        .pipe(concat('main.css'))
         .pipe(gulp.dest(output));
 });
-
 
 gulp.task('js', function () {
     return gulp.src(inputJs)
@@ -39,30 +39,34 @@ gulp.task('js', function () {
         .pipe(gulp.dest(outputJs));
 });
 
-gulp.task('thirdpartyjs', function () {
-    return gulp.src(thirdPartyJs)
-        .pipe(util.env.env === 'prod' ? util.noop() : sourcemaps.init())
-        .pipe(concat('thirdparty.js'))
-        .pipe(util.env.env === 'prod' ? util.noop() : sourcemaps.write())
-        .pipe(gulp.dest(outputJs));
-});
-
 gulp.task('watch', function () {
     return gulp
-        .watch(inputSassWatch, ['sass'])
-        .on('change', function (event) {
-            console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-        });
-});
-
-gulp.task('watchJs', function () {
-    return gulp
-        .watch(inputJs, ['js'])
+        .watch(inputScss, ['sass'])
         .on('change', function (event) {
             console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
         });
 });
 
 
-gulp.task('default', ['build', 'watch', 'watchJs']);
-gulp.task('build', ['sass', 'js', 'thirdpartyjs']);
+// warum 2 watches?
+// gulp.task('watchJs', function () {
+//     return gulp
+//         .watch(inputJs, ['js'])
+//         .on('change', function (event) {
+//             console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+//         });
+// });
+
+//mayber later or use Webpack
+// gulp.task('thirdpartyjs', function () {
+//     return gulp.src(thirdPartyJs)
+//         .pipe(util.env.env === 'prod' ? util.noop() : sourcemaps.init())
+//         .pipe(concat('thirdparty.js'))
+//         .pipe(util.env.env === 'prod' ? util.noop() : sourcemaps.write())
+//         .pipe(gulp.dest(outputJs));
+// });
+
+
+
+gulp.task('default', ['build', 'watch']);
+gulp.task('build', ['sass']);

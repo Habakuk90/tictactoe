@@ -1,0 +1,38 @@
+﻿
+/* Buttons */
+.button {
+    border: none;
+    padding: 10px;
+    min-width: 100px;
+    border-radius: 4px;
+}
+
+.button-accept {
+    background-color: green;
+}
+
+.button-accept:active {
+    background-color: darkseagreen;
+}
+
+.button-decline {
+    background-color: red;
+}
+
+.button-decline:active {
+    background-color: lightcoral;
+}
+
+.button-game {
+    background-color: green;
+}
+
+.button-start {
+    background-color: orange;
+}
+
+.button-start:active {
+    background-color: lightsalmon;
+}
+
+/* Buttons END */
