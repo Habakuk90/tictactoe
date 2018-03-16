@@ -1,25 +1,33 @@
-﻿.authorization-form {
-    width: 50%;
-    margin: 0 auto;
+﻿section.authorization {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 
-    &__container {
-        display: flex;
-        flex-direction: column;
+    .authorization-form {
 
-        input {
-            padding: 10px;
-            /* margin-bottom: 5px; */
-        }
 
-        input:last-of-type {
-            /* border-top: none; */
-            margin-bottom: 5px;
-            margin-top: 4px;
-        }
+        &__container {
+            display: flex;
+            flex-direction: column;
+            min-width: 270px;
+            max-width: 450px;
+            padding: 5px 10px 10px 10px;
+            border-radius: 3px 3px 3px 3px;
+            border: 1px solid rgba(0,0,0,0.2);
 
-        // [Todo] button auslagern in button.scss
-        button {
-            padding: 5px;
+            input {
+                padding: 10px;
+                border: none;
+                border-bottom-width: medium;
+                border-bottom-style: none;
+                border-bottom-color: currentcolor;
+                border-bottom: 1px solid rgba(0,0,0,0.2);
+            }
+
+            input:last-of-type {
+                margin-bottom: 5px;
+            }
         }
     }
 }

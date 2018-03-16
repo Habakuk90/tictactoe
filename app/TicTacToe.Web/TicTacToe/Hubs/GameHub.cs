@@ -35,7 +35,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         public void Challenge(string selectedEnemy)
         {
             var challenger = Context.User.Identity.Name;
+            Groups.AddAsync(selectedEnemy, "room");
+            Groups.AddAsync(challenger, "room");
             Clients.User(selectedEnemy).InvokeAsync("challenged", challenger);
+            Clients.User(challenger).InvokeAsync("waiting");
         }
 
         /// <summary>

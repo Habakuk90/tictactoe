@@ -32,8 +32,8 @@
         data: {
             userOnline: [],
             currentUser: '@Context.User.Identity.Name',
-            connection: null,
-            selectedEnemy: ''
+            selectedEnemy: '',
+            you: null
         },
         created: function () {
             this.connection = new signalR.HubConnection("/game/")
@@ -41,18 +41,19 @@
         mounted: function () {
             var that = this;
             that.connection.start()
+                // Init Get Connected User 
                 .then(() => {
-                    that.currentUserId =
-                        that.connection.connection.connectionId;
-
                     that.connection
                         .invoke('GetConnectedUser');
                 });
+
+            // Sets Connected User by getting list of online User in Hub
             that.connection.on('SetConnectedUser', function (userOnline) {
                 that.userOnline = userOnline;
             });
+            // Enemy accepted your challenge
             that.connection.on('Accepted', function () {
-                debugger;
+                console.log(that.selectedEnemy + 'has accepted');
             });
         },
         methods: {
@@ -65,6 +66,10 @@
             challengeEnemy: function () {
                 var that = this;
                 that.connection.invoke('Challenge', that.selectedEnemy);
+            },
+            youFunction: function () {
+
+
             }
         }
     });

@@ -1,6 +1,6 @@
 ﻿<section class="challenge">
-    <div class="challenge__container">
-        <h1 class="challenge__header"></h1>
+    <div class="challenge__container" v-if="modals.challengeModal.active">
+        <h1 class="challenge__header" v-if="challenger">{{challenger}} hat dich herausgefordert!</h1>
         <span class="challenge__close-button">X</span>
         <div class="button-wrapper">
             <button class="button button-accept" v-on:click="accept">Accept</button>
@@ -8,14 +8,27 @@
         </div>
     </div>
 
+    <div class="waiting__container" v-if="modals.waitingModal.active">
+        <h1>Waiting for your Enemy to React</h1>
+        ...
+    </div>
 </section>
+
 
 
 <script>
     var challengeModal = new Vue({
         el: '.challenge__container',
         data: {
-            challenger: ''
+            challenger: '',
+            modals: {
+                waitingModal: {
+                    active: false
+                },
+                challengeModal: {
+                    active: false
+                }
+            }
         },
         created: function () {
             this.connection = new signalR.HubConnection("/game/")
@@ -23,11 +36,18 @@
         mounted: function () {
             var that = this;
             that.connection.start();
-            that.connection.on('Challenged', function (challenger) {
-                var that = this;
-                that.challenger = challenger
+
+            //open you got challenged Modal
+            that.connection.on('challenged', function (challenger) {
+                that.challenger = challenger;
+                that.modals.challengeModal.active = true;
                 $('section.challenge').addClass('active');
                 
+            });
+            //open waiting for enemy Modal
+            that.connection.on('waiting', function () {
+                that.modals.waitingModal.active = true;
+                $('section.challenge').addClass('active');
             });
 
         },
@@ -39,7 +59,10 @@
             },
             accept: function () {
                 var that = this;
-                that.connection.invoke('AcceptedChallenge', that.connection.challenger)
+                that.connection.invoke('AcceptedChallenge', that.challenger);
+            },
+            decline: function () {
+
 
             }
         }
