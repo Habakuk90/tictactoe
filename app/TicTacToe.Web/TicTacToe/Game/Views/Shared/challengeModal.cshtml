@@ -23,6 +23,7 @@
             <h1 class="modal__header">Waiting for your Enemy to React</h1>
             <div class="waiting__text">
                 <span>{{modals.waitingModal.waitingMessage}}</span>
+                <button v-on:click="gameStart" v-if="modals.waitingModal.waitingMessage">go</button>
                 <div v-if="!modals.waitingModal.waitingMessage" class="waiting__spinner">
                     <div class="waiting__spinner--dot dot1"></div>
                     <div class="waiting__spinner--dot dot2"></div>
@@ -75,6 +76,11 @@
             that.connection.on('Response', function (enemy, action) {
                 that.modals.waitingModal.waitingMessage = enemy + " has " + action;
             });
+
+            // Enemy reacted to your challenge
+            that.connection.on('GoToGame', function (url) {
+                window.location.href = url;
+            });
         },
         methods: {
             closeModal: function () {
@@ -93,6 +99,10 @@
                 var action = $(event.target).data().action;
                 that.connection.invoke('ChallengeResponse', that.challenger, action);
 
+            },
+            gameStart: function () {
+                var that = this;
+                that.connection.invoke('GameStart', that.connection.connection.connectionId);
             }
         }
     });

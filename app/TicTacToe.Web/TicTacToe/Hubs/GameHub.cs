@@ -14,7 +14,8 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         private readonly static HashSet<string> _userOnline = new HashSet<string>();
 
-        public Dictionary<string,string> Matchup = new Dictionary<string, string>();
+
+
         //[TODO] map two player against each other on connection to "game"
 
         
@@ -48,7 +49,21 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// <param name="response"></param>
         public void ChallengeResponse(string challenger, string response)
         {
+            if (response == "declined")
+            {
+                return;
+            }
+            Groups.AddAsync(Context.ConnectionId, "tictactoeRoom");
+
             Clients.User(challenger).InvokeAsync("Response", challenger, response);
+        }
+
+        public void GameStart(string conId)
+        {
+            var url = "/games/tictactoe";
+            Groups.AddAsync(conId, "tictactoeRoom");
+
+            Clients.Group("tictactoeRoom").InvokeAsync("GoToGame", url);
         }
 
         /// <summary>
