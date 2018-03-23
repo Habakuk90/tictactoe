@@ -1,29 +1,50 @@
 ﻿<section class="challenge">
-    <div class="challenge__container" v-if="modals.challengeModal.active">
-        <h1 class="challenge__header" v-if="challenger">{{challenger}} hat dich herausgefordert!</h1>
-        <span class="challenge__close-button">X</span>
-        <div class="button-wrapper">
-            <button class="button button-accept" v-on:click="accept">Accept</button>
-            <button class="button button-decline" v-on:click="decline">Decline</button>
+
+    <div class="modal__container">
+        <div class="challenge__container" v-if="modals.challengeModal.active">
+            <h1 class="modal__header" v-if="challenger">{{challenger}} hat dich herausgefordert!</h1>
+            <span class="challenge__close-button">X</span>
+            <div class="button-wrapper">
+                <button class="button button--big button__accept"
+                        v-on:click="accept($event)"
+                        data-action="accepted">
+                    Accept
+                </button>
+
+                <button class="button button--big button__decline"
+                        v-on:click="decline($event)"
+                        data-action="declined">
+                    Decline
+                </button>
+            </div>
+        </div>
+
+        <div class="waiting__container" v-if="modals.waitingModal.active">
+            <h1 class="modal__header">Waiting for your Enemy to React</h1>
+            <div class="waiting__text">
+                <span>{{modals.waitingModal.waitingMessage}}</span>
+                <div v-if="!modals.waitingModal.waitingMessage" class="waiting__spinner">
+                    <div class="waiting__spinner--dot dot1"></div>
+                    <div class="waiting__spinner--dot dot2"></div>
+                    <div class="waiting__spinner--dot dot3"></div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="waiting__container" v-if="modals.waitingModal.active">
-        <h1>Waiting for your Enemy to React</h1>
-        ...
-    </div>
 </section>
 
 
 
 <script>
     var challengeModal = new Vue({
-        el: '.challenge__container',
+        el: 'section.challenge',
         data: {
             challenger: '',
             modals: {
                 waitingModal: {
-                    active: false
+                    active: false,
+                    waitingMessage: null
                 },
                 challengeModal: {
                     active: false
@@ -42,7 +63,7 @@
                 that.challenger = challenger;
                 that.modals.challengeModal.active = true;
                 $('section.challenge').addClass('active');
-                
+
             });
             //open waiting for enemy Modal
             that.connection.on('waiting', function () {
@@ -50,6 +71,10 @@
                 $('section.challenge').addClass('active');
             });
 
+            // Enemy reacted to your challenge
+            that.connection.on('Response', function (enemy, action) {
+                that.modals.waitingModal.waitingMessage = enemy + " has " + action;
+            });
         },
         methods: {
             closeModal: function () {
@@ -57,12 +82,16 @@
                 $('section.challenge').removeClass('active');
 
             },
-            accept: function () {
+            accept: function (event) {
                 var that = this;
-                that.connection.invoke('AcceptedChallenge', that.challenger);
-            },
-            decline: function () {
+                var action = $(event.target).data().action;
+                that.connection.invoke('ChallengeResponse', that.challenger, action);
 
+            },
+            decline: function (event) {
+                var that = this;
+                var action = $(event.target).data().action;
+                that.connection.invoke('ChallengeResponse', that.challenger, action);
 
             }
         }

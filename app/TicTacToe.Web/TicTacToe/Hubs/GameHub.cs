@@ -42,14 +42,15 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// Invoke Modal Answer to challenger
+        /// Invoke Modal to challenger and invoke Response to enemy
         /// </summary>
         /// <param name="challenger"></param>
-        public void AcceptedChallenge(string challenger)
+        /// <param name="response"></param>
+        public void ChallengeResponse(string challenger, string response)
         {
-            Clients.User(challenger).InvokeAsync("Accepted");
+            Clients.User(challenger).InvokeAsync("Response", challenger, response);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>

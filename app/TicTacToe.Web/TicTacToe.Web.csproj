@@ -72,6 +72,7 @@
     <None Include="TicTacToe\Game\Views\Index.cshtml" />
     <None Include="TicTacToe\Game\Views\Shared\ChallengeModal.cshtml" />
     <None Include="TicTacToe\Game\Views\Shared\_GamesLayout.cshtml" />
+    <None Include="wwwroot\lib\images\games\TicTacToe_thumbnail.JPG" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +86,7 @@
 
   <ItemGroup>
     <Folder Include="TicTacToe\Authorization\Styles\" />
+    <Folder Include="TicTacToe\Images\" />
   </ItemGroup>
 
 </Project>

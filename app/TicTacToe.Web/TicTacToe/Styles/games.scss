@@ -16,15 +16,21 @@
     }
 
     &-linkfield {
-        width: 100px;
-        height: 100px;
+        width: 230px;
+        height: 200px;
         margin: 10px;
         padding: 5px;
         text-align: center;
         cursor: pointer;
+        background-image: url(/lib/images/games/TicTacToe_thumbnail.jpg);
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        opacity: 0.7;
+        transition: opacity ease-in-out 0.2s;
 
         &.selected {
-            background-color: lightgray;
+            opacity: 1;
+            border: solid 1px red;
         }
     }
 }
@@ -64,17 +70,26 @@ section.challenge {
 section.challenge.active {
     display: flex;
     justify-content: center;
-    
+}
+
+.modal {
+    &__container {
+        position: relative;
+        width: 500px;
+        height: 300px;
+        align-self: center;
+        background-color: white;
+        border: solid 1px black;
+    }
+
+    &__header {
+        padding: 10px;
+        margin-top: 15px;
+    }
 }
 
 .challenge {
     &__container {
-        position: relative;
-        min-width: 500px;
-        min-height: 300px;
-        align-self: center;
-        background-color: white;
-        border: solid 1px black;
     }
 
     &__close-button {
@@ -86,5 +101,46 @@ section.challenge.active {
     }
 }
 
+.waiting {
+    &__container {
+    }
 
+    &__text {
+        text-align: center;
+        font-size: 18px;
+        margin-top: 15px;
+    }
+    //spinner animation from http://tobiasahlin.com/spinkit/
+    &__spinner {
+        margin: 15px auto 0;
+        width: 70px;
+
+        &--dot {
+            width: 18px;
+            height: 18px;
+            background-color: #333;
+            border-radius: 100%;
+            display: inline-block;
+            animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+        }
+
+        .dot1 {
+            animation-delay: -0.32s;
+        }
+
+        .dot2 {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes sk-bouncedelay {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+
+            40% {
+                transform: scale(1.0);
+            }
+        }
+    }
+}
 /* Challenge Section END */

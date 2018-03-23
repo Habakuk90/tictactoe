@@ -5,34 +5,58 @@
     padding: 10px;
     min-width: 100px;
     border-radius: 4px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 12px;
+    color: white;
+
+    &--big {
+        width: 200px;
+    }
+
+    &__accept {
+        background-color: rgba(0, 128, 0, 0.6);
+
+        &:active {
+            background-color: darkseagreen;
+        }
+    }
+
+    &__decline {
+        background-color: rgba(255, 0, 0, 0.7);
+
+        &:active {
+            background-color: lightcoral;
+        }
+    }
+
+    &__game {
+        background-color: green;
+    }
+
+    &__start {
+        background-color: orange;
+
+        &:active {
+            background-color: lightsalmon;
+        }
+    }
+
+    &__submit {
+        align-self: flex-end;
+        width: 80px;
+        background-color: rgb(0, 120, 215);
+        color: white;
+        
+        &:active {
+            background-color: rgb(16,110,190);
+        }
+    }
 }
 
-.button-accept {
-    background-color: green;
-}
-
-.button-accept:active {
-    background-color: darkseagreen;
-}
-
-.button-decline {
-    background-color: red;
-}
-
-.button-decline:active {
-    background-color: lightcoral;
-}
-
-.button-game {
-    background-color: green;
-}
-
-.button-start {
-    background-color: orange;
-}
-
-.button-start:active {
-    background-color: lightsalmon;
+.button-wrapper {
+    text-align:center;
+    margin-top: 20px;
 }
 
 /* Buttons END */
