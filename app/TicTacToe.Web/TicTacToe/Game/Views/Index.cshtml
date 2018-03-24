@@ -62,6 +62,7 @@
             });
             that.connection.on('Challenged', function (challenger) {
                 that.challenger = challenger;
+                debugger;
                 //that.modals.challengeModal.active = true;
                 $('section.challenge').addClass('active');
 
@@ -69,6 +70,8 @@
             //open waiting for enemy Modal
             that.connection.on('waiting', function () {
                 //that.modals.waitingModal.active = true;
+                debugger;
+
                 $('section.challenge').addClass('active');
             });
 
