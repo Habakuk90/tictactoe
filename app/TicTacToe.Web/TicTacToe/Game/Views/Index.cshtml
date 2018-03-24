@@ -60,6 +60,27 @@
             that.connection.on('SetConnectedUser', function (userOnline) {
                 that.userOnline = userOnline;
             });
+            that.connection.on('Challenged', function (challenger) {
+                that.challenger = challenger;
+                //that.modals.challengeModal.active = true;
+                $('section.challenge').addClass('active');
+
+            });
+            //open waiting for enemy Modal
+            that.connection.on('waiting', function () {
+                //that.modals.waitingModal.active = true;
+                $('section.challenge').addClass('active');
+            });
+
+            // Enemy reacted to your challenge
+            that.connection.on('Response', function (enemy, action) {
+                that.modals.waitingModal.waitingMessage = enemy + " has " + action;
+            });
+
+            // Enemy reacted to your challenge
+            that.connection.on('GoToGame', function (url) {
+                window.location.href = url;
+            });
         },
         methods: {
             selectEnemy: function (event, user) {

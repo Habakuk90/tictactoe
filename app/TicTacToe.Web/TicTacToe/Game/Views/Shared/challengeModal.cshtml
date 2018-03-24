@@ -57,11 +57,11 @@
         },
         mounted: function () {
             var that = this;
-            that.connection.start();
-
+            //that.connection.start();
             //open you got challenged Modal
-            that.connection.on('challenged', function (challenger) {
+            that.connection.on('Challenged', function (challenger) {
                 that.challenger = challenger;
+                debugger;
                 that.modals.challengeModal.active = true;
                 $('section.challenge').addClass('active');
 

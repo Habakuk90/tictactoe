@@ -21,12 +21,12 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         
         public void TileClicked(string tileId)
         {
-            Clients.All.InvokeAsync("tileChange", tileId);
+            Clients.All.SendAsync("tileChange", tileId);
         }
 
         public void GetConnectedUser()
         {
-            Clients.All.InvokeAsync("SetConnectedUser", _userOnline.ToList());            
+            Clients.All.SendAsync("SetConnectedUser", _userOnline.ToList());            
         }
 
         /// <summary>
@@ -38,8 +38,10 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var challenger = Context.User.Identity.Name;
             Groups.AddAsync(selectedEnemy, "room");
             Groups.AddAsync(challenger, "room");
-            Clients.User(selectedEnemy).InvokeAsync("challenged", challenger);
-            Clients.User(challenger).InvokeAsync("waiting");
+            Clients.User(selectedEnemy).SendAsync("Challenged", challenger);
+            Clients.User(challenger).SendAsync("Waiting");
+            Clients.Caller.SendAsync("waiting");
+            
         }
 
         /// <summary>
@@ -55,7 +57,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             }
             Groups.AddAsync(Context.ConnectionId, "tictactoeRoom");
 
-            Clients.User(challenger).InvokeAsync("Response", challenger, response);
+            Clients.User(challenger).SendAsync("Response", challenger, response);
         }
 
         public void GameStart(string conId)
@@ -63,7 +65,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var url = "/games/tictactoe";
             Groups.AddAsync(conId, "tictactoeRoom");
 
-            Clients.Group("tictactoeRoom").InvokeAsync("GoToGame", url);
+            Clients.Group("tictactoeRoom").SendAsync("GoToGame", url);
         }
 
         /// <summary>
