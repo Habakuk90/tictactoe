@@ -1,0 +1,52 @@
+
+<div class="game__container">
+    <h2>Choose game</h2>
+    <ul class="game-list__container">
+        <li class="game-list__item">
+            <div class="game-linkfield">
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+<div class="enemy__container">
+    <h2>Choose Player</h2>
+    <ul class="enemy-list__container">
+        <ng-template ngFor let-user [ngForOf]="users">
+            <li class="enemy-list__item" 
+                *ngIf="user !== currentUser" (click)="selectPlayer($event, user)"
+                [class.selected]="user === selectedPlayer">
+                {{user}}
+
+
+
+
+            </li>
+        </ng-template>
+    </ul>
+</div>
+<button class="button button__start" (click)="challengeEnemy()">Go!</button>
+
+<!--<div class="game__container">
+    <h2>Choose your game</h2>
+    <ul class="game-list__container">
+        <li class="game-list__item" v-for="game in games">
+            <div class="game-linkfield" v-bind:class="game.thumbnailClass" data-link="{{game.url}}">
+            </div>
+        </li>
+    </ul>
+</div>
+
+<div class="enemy__container">
+    <h2>Choose your Enemy</h2>
+    <ul class="enemy-list__container">
+        <li class="enemy-list__item"
+            v-for="user in userOnline" v-if="user !== currentUser"
+            v-bind:key="user" v-on:click="selectEnemy($event, user)">
+            {{user}}
+        </li>
+    </ul>
+</div>-->
+
+

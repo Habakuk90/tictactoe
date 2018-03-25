@@ -9,7 +9,7 @@ using TicTacToe.Web.TicTacToe.Data;
 namespace TicTacToe.Web.TicTacToe.Game.Controllers
 {
     //[Authorize]
-    public class GamesController : Controller
+    public class Games2Controller : Controller
     {
         public IActionResult Index()
         {

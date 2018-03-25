@@ -34,14 +34,17 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// Invoke open Modal for challenged Enemy
         /// </summary>
         /// <param name="selectedEnemy"></param>
-        public void Challenge(string selectedEnemy)
+        public void Challenge(string selectedPlayer)
         {
-            var challenger = Context.User.Identity.Name;
-            Groups.AddAsync(selectedEnemy, "room");
-            Groups.AddAsync(challenger, "room");
-            Clients.User(selectedEnemy).SendAsync("Challenged", challenger);
-            Clients.User(challenger).SendAsync("Waiting");
-            Clients.Caller.SendAsync("waiting");
+            var currentUserName = Context.User.Identity.Name;
+
+            // Clients.User => quick workaround with all ids
+            var selectedPlayerIdList = _connections.GetConnections(selectedPlayer).ToList();
+            Clients.Clients(selectedPlayerIdList)
+                .SendAsync("Challenged", currentUserName);
+
+            Clients.User(currentUserName).SendAsync("Challenged", currentUserName);
+            Clients.Caller.SendAsync("Waiting");
             
         }
 

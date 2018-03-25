@@ -57,7 +57,7 @@
     <Compile Include="TicTacToe\Authorization\Repository\ConnectionMapping.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
-    <Compile Include="TicTacToe\Game\Controllers\GamesController.cs" />
+    <Compile Include="TicTacToe\Game\Controllers\Games2Controller.cs" />
     <Compile Include="TicTacToe\Game\Models\UserGameModel.cs" />
   </ItemGroup>
 
