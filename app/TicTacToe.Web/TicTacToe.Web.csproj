@@ -13,9 +13,11 @@
     <Compile Remove="TicTacToe\Authorization\Repository\**" />
     <Compile Remove="TicTacToe\Authorization\Views\**" />
     <Compile Remove="TicTacToe\Game\Controllers\**" />
+    <Compile Remove="TicTacToe\Game\dist\**" />
     <Compile Remove="TicTacToe\Game\Models\**" />
     <Compile Remove="TicTacToe\Game\Repository\**" />
     <Compile Remove="TicTacToe\Game\Views\**" />
+    <Compile Remove="wwwroot\dist\**" />
     <Content Remove="TicTacToe\Authorization\Controllers\**" />
     <Content Remove="TicTacToe\Authorization\Models\**" />
     <Content Remove="TicTacToe\Authorization\Repository\**" />
@@ -26,22 +28,27 @@
     <Content Remove="TicTacToe\Game\Views\**" />
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="TicTacToe\Game\**" />
+    <Content Remove="wwwroot\dist\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Controllers\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Repository\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Views\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Controllers\**" />
+    <EmbeddedResource Remove="TicTacToe\Game\dist\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Repository\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Views\**" />
+    <EmbeddedResource Remove="wwwroot\dist\**" />
     <None Remove="TicTacToe\Authorization\Controllers\**" />
     <None Remove="TicTacToe\Authorization\Models\**" />
     <None Remove="TicTacToe\Authorization\Repository\**" />
     <None Remove="TicTacToe\Authorization\Views\**" />
     <None Remove="TicTacToe\Game\Controllers\**" />
+    <None Remove="TicTacToe\Game\dist\**" />
     <None Remove="TicTacToe\Game\Models\**" />
     <None Remove="TicTacToe\Game\Repository\**" />
     <None Remove="TicTacToe\Game\Views\**" />
+    <None Remove="wwwroot\dist\**" />
   </ItemGroup>
 
   <ItemGroup>
