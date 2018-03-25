@@ -6,7 +6,8 @@
     @*[TODO] Render styles and scripts dynamically (RenderSection)*@
     <link href="~/css/main.css" rel="stylesheet" />
     <script src="~/vendor/jquery.min.js"></script>
-    
+    <base href="~/" />
+
     <title>@ViewData["Title"] - Game</title>
 </head>
 <body>
@@ -16,6 +17,11 @@
         <hr />
     </div>
     @Html.Partial("~/TicTacToe/Views/Shared/_Footer.cshtml")
+
+
     <script src="~/js/main.js"></script>
+    <script src="~/dist/vendor.js"></script>
+    <script src="~/dist/main-client.js"></script>
+    @RenderSection("scripts", required: false)
 </body>
 </html>

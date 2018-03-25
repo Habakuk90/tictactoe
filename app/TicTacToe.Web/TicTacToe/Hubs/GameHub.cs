@@ -26,7 +26,8 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         public void GetConnectedUser()
         {
-            Clients.All.SendAsync("SetConnectedUser", _userOnline.ToList());            
+            var currentUser = Context.User.Identity.Name;
+            Clients.All.SendAsync("SetConnectedUser", currentUser, _userOnline.ToList());            
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using TicTacToe.Web.TicTacToe.Authorization.Models;
 using TicTacToe.Web.TicTacToe.Hubs;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 
 namespace TicTacToe
 {
@@ -33,7 +34,8 @@ namespace TicTacToe
                 options
                     .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options => {
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireUppercase = true;
@@ -55,7 +57,7 @@ namespace TicTacToe
             {
                 //options.Conventions.AuthorizeFolder("/Account/Manage");
                 options.Conventions.AuthorizePage("/Logout");
-                
+
                 //options.Conventions.
             });
 
@@ -72,6 +74,10 @@ namespace TicTacToe
             {
                 app.UseBrowserLink();
                 app.UseDeveloperExceptionPage();
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
+                {
+                    HotModuleReplacement = true
+                });
             }
             else
             {
@@ -87,9 +93,16 @@ namespace TicTacToe
 
             app.UseSignalR(routes => routes.MapHub<GameHub>("/game"));
 
-            app.UseMvc(routes => routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}"));
+            app.UseMvc(routes =>
+                {
+                    routes.MapRoute(
+                      name: "default",
+                      template: "{controller=Home}/{action=Index}/{id?}");
+
+                    routes.MapSpaFallbackRoute(
+                        name: "spa-fallback",
+                        defaults: new { controller = "Home", action = "Index" });
+                });
         }
     }
 }
