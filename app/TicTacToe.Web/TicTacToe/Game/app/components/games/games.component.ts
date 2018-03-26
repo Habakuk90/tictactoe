@@ -46,8 +46,8 @@ export class GamesComponent {
                 that.activeModal = 'waiting';
             });
 
-            that.connection.on('GoToGame', function (url, roomName, challengerUser) {
-                that.router.navigate([url], { queryParams: { roomName: roomName, starter: challengerUser }});
+            that.connection.on('GoToGame', function (url, roomName) {
+                that.router.navigate([url], { queryParams: { roomName: roomName }});
             });
     }
 

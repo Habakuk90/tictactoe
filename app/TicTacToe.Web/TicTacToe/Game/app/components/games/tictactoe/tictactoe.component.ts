@@ -51,8 +51,7 @@ export class TicTacToeComponent {
 
     ngOnInit() {
         var that = this;
-        //that.connection.invoke('DecideTurn');
-
+        that.connection.invoke('DecideTurn', this.roomName);
         that.connection.on('tileChange', function (tileId) {
             let clickedTile = that.boxes.filter(x => x.id === tileId)[0];
             console.log(clickedTile, tileId)
@@ -66,9 +65,15 @@ export class TicTacToeComponent {
                 clickedTile.state = "cross";
             }
         });
+
+        that.connection.on('SetSequence', function (bool) {
+            debugger;
+            that.turn = bool;
+        });
     }
 
     changeField(event: Event, tileId: string) {
+        if (!this.turn) { return };
         this.connection.invoke('TileClicked', tileId);
     }
 

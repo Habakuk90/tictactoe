@@ -56,6 +56,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         public void ChallengeResponse(string challenger, string response)
         {
             Groups.AddAsync(Context.ConnectionId, "tictactoeRoom");
+            _connections.AddGroup("tictactoeRoom", Context.ConnectionId);
             var currentUser = Context.User.Identity.Name;
             var challengerIdList = _connections.GetConnections(challenger).ToList();
 
@@ -64,16 +65,31 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         public void GameStart()
         {
-            var goFirstUser = Context.User.Identity.Name; 
             var conId = Context.ConnectionId;
             var url = "/games/tictactoe";
             var roomName = "tictactoeRoom";
 
             Groups.AddAsync(conId, roomName);
+            _connections.AddGroup("tictactoeRoom", Context.ConnectionId);
 
-            Clients.Group(roomName).SendAsync("GoToGame", url, roomName, goFirstUser);
+            Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
         }
+        public void DecideTurn(string roomName)
+        {
+            Random random = new Random();
+            var flip = (random.Next(0, 2));
+            var groupConnections = _connections.GetGroups(roomName);
 
+           
+
+            var firstId = groupConnections.ToList()[flip];
+            var secondId = groupConnections.FirstOrDefault(x => x != firstId);
+
+            Clients.Client(firstId).SendAsync("SetSequence", true);
+            Clients.Client(secondId).SendAsync("SetSequence", false);
+
+
+        }
         /// <summary>
         /// 
         /// </summary>

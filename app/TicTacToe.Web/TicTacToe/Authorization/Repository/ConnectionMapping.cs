@@ -10,6 +10,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         private readonly Dictionary<T, HashSet<string>> _connections =
             new Dictionary<T, HashSet<string>>();
 
+        private readonly Dictionary<T, HashSet<string>> _groups =
+            new Dictionary<T, HashSet<string>>();
+
         /// <summary>
         /// Get Count of alive Connections
         /// </summary>
@@ -43,6 +46,56 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
                     connections.Add(connectionId);
                 }
             }
+        }
+
+        public void AddGroup(T key, string connectionId)
+        {
+            lock(_groups)
+            {
+                HashSet<string> groups;
+                if (!_groups.TryGetValue(key, out groups))
+                {
+                    groups = new HashSet<string>();
+                    _groups.Add(key, groups);
+                }
+
+                lock (groups)
+                {
+                    groups.Add(connectionId);
+                }
+            }
+        }
+        public void RemoveGroups(T key, string connectionId)
+        {
+            lock (_groups)
+            {
+                HashSet<string> groups;
+                if (!_connections.TryGetValue(key, out groups))
+                {
+                    return;
+                }
+
+                lock (groups)
+                {
+                    groups.Remove(connectionId);
+
+                    if (groups.Count == 0)
+                    {
+                        _groups.Remove(key);
+                    }
+                }
+            }
+        }
+
+        public IEnumerable<string> GetGroups(T key)
+        {
+            HashSet<string> groups;
+            if (_groups.TryGetValue(key, out groups))
+            {
+                return groups;
+            }
+
+            return Enumerable.Empty<string>();
         }
 
         /// <summary>
