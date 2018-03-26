@@ -8,13 +8,15 @@ import { AppComponent } from './components/app/app.component';
 import { GameModalComponent } from './components/gameModal/gameModal.component';
 import { HomeComponent } from './components/home/home.component';
 import { GamesComponent } from './components/games/games.component';
+import { TicTacToeComponent } from './components/games/tictactoe/tictactoe.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         GameModalComponent,
         GamesComponent,
-        HomeComponent
+        HomeComponent,
+        TicTacToeComponent
     ],
     imports: [
         CommonModule,
@@ -24,6 +26,7 @@ import { GamesComponent } from './components/games/games.component';
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'games', component: GamesComponent },
+            { path: 'games/tictactoe', component: TicTacToeComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

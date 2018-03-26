@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import { ConnectionService } from '.././services/connectionService.service';
+import { Router } from '@angular/router';
 @Component({
     selector: 'games',
     templateUrl: './games.component.html',
@@ -11,11 +12,16 @@ import { ConnectionService } from '.././services/connectionService.service';
 export class GamesComponent {
     private currentUser: string;
     private users: Array<string>;
-    private selectedPlayer: string; 
+    private selectedPlayer: string;
     private challengerUser: string;
     private activeModal: string;
     private games: Array<Game> = [];
     public connection: HubConnection;
+
+    constructor(private connectionService: ConnectionService, private router: Router) {
+        this.connection = connectionService.getConnection();
+    }
+
     ngOnInit() {
         var tictactoeGame: Game = {
             title: 'Tic Tac Toe',
@@ -43,6 +49,13 @@ export class GamesComponent {
                 that.activeModal = 'waiting';
             });
 
+            that.connection.on('GoToGame', function (url, roomName) {
+                console.log('goto' + url);
+                that.router.navigate([url], { queryParams: { roomName: roomName } });
+                
+            });
+
+
         });
     }
 
@@ -57,9 +70,7 @@ export class GamesComponent {
         var target = event.target || event.srcElement || event.currentTarget;
         this.selectedPlayer = user;
     }
-    constructor(private connectionService: ConnectionService) {
-        this.connection = connectionService.getConnection();
-    }
+
 }
 
 

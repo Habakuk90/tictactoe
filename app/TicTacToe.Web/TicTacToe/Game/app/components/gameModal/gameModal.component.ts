@@ -30,4 +30,9 @@ export class GameModalComponent {
         that.connection.invoke('ChallengeResponse', that.challengerUser, action);
 
     };
+
+    gameStart() {
+        var that = this;
+        that.connection.invoke('GameStart');
+    }
 }

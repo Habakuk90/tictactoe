@@ -59,15 +59,18 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var currentUser = Context.User.Identity.Name;
             var challengerIdList = _connections.GetConnections(challenger).ToList();
 
-            Clients.Clients(challengerIdList).SendAsync("Response", challenger, response);
+            Clients.Clients(challengerIdList).SendAsync("Response", currentUser, response);
         }
 
-        public void GameStart(string conId)
+        public void GameStart()
         {
+            var conId = Context.ConnectionId;
             var url = "/games/tictactoe";
-            Groups.AddAsync(conId, "tictactoeRoom");
+            var roomName = "tictactoeRoom";
 
-            Clients.Group("tictactoeRoom").SendAsync("GoToGame", url);
+            Groups.AddAsync(conId, roomName);
+
+            Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
         }
 
         /// <summary>
