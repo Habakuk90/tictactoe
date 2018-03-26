@@ -64,13 +64,14 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
         public void GameStart()
         {
+            var goFirstUser = Context.User.Identity.Name; 
             var conId = Context.ConnectionId;
             var url = "/games/tictactoe";
             var roomName = "tictactoeRoom";
 
             Groups.AddAsync(conId, roomName);
 
-            Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
+            Clients.Group(roomName).SendAsync("GoToGame", url, roomName, goFirstUser);
         }
 
         /// <summary>

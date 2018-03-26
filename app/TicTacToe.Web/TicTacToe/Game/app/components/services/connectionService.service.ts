@@ -1,17 +1,20 @@
 ﻿import { HubConnection } from '@aspnet/signalr';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class ConnectionService {
     public connection: HubConnection;
 
     constructor() {
-        this.connection = new HubConnection('/game');
     }
 
     getConnection() {
         return this.connection;
     }
 
-    connectionStart() {
-        return this.connection.start();
+    startConnection() {
+        this.connection = new HubConnection('/game');
+        this.connection.start();
     }
+
 }

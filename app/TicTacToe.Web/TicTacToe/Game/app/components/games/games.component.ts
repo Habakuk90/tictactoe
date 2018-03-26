@@ -4,8 +4,7 @@ import { ConnectionService } from '.././services/connectionService.service';
 import { Router } from '@angular/router';
 @Component({
     selector: 'games',
-    templateUrl: './games.component.html',
-    providers: [ConnectionService]
+    templateUrl: './games.component.html'
 })
 
 
@@ -19,7 +18,7 @@ export class GamesComponent {
     public connection: HubConnection;
 
     constructor(private connectionService: ConnectionService, private router: Router) {
-        this.connection = connectionService.getConnection();
+        this.connection = connectionService.connection;
     }
 
     ngOnInit() {
@@ -30,8 +29,6 @@ export class GamesComponent {
         };
 
         this.games.push(tictactoeGame);
-
-        this.connection.start().then(() => {
             let that = this;
             this.connection.invoke('GetConnectedUser');
             this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
@@ -49,14 +46,9 @@ export class GamesComponent {
                 that.activeModal = 'waiting';
             });
 
-            that.connection.on('GoToGame', function (url, roomName) {
-                console.log('goto' + url);
-                that.router.navigate([url], { queryParams: { roomName: roomName } });
-                
+            that.connection.on('GoToGame', function (url, roomName, challengerUser) {
+                that.router.navigate([url], { queryParams: { roomName: roomName, starter: challengerUser }});
             });
-
-
-        });
     }
 
 

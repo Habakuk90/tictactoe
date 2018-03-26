@@ -1,0 +1,13 @@
+
+<div class="wrapper">
+    <ng-template ngFor let-box [ngForOf]="boxes">
+        <div class="box">
+            <div class="box__inner"
+                 [ngClass]="box.state"
+                 (click)="changeField($event, box.id)"
+                 id="{{box.id}}">
+
+            </div>
+        </div>
+    </ng-template>
+</div>

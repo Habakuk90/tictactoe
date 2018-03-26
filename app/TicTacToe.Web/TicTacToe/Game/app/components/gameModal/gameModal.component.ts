@@ -10,7 +10,7 @@ import { HubConnection } from '@aspnet/signalr';
 export class GameModalComponent {
     @Input() activeModal: string;
     @Input() challengerUser: string;
-    @Input() connection: HubConnection
+    connection: HubConnection;
     ngOnInit() {
         var that = this;
         // Enemy reacted to your challenge
@@ -30,6 +30,10 @@ export class GameModalComponent {
         that.connection.invoke('ChallengeResponse', that.challengerUser, action);
 
     };
+
+    constructor(private connectionService: ConnectionService) {
+        this.connection = connectionService.connection;
+    }
 
     gameStart() {
         var that = this;

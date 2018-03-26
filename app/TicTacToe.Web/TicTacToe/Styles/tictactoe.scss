@@ -11,6 +11,7 @@
 .box {
     width: 33.33333%;
     display: flex;
+    min-height: 200px;
 }
 
 .box__inner {
