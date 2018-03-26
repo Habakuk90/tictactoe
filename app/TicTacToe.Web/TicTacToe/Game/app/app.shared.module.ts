@@ -5,14 +5,14 @@ import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './components/app/app.component';
-import { NavMenuComponent } from './components/navmenu/navmenu.component';
+import { GameModalComponent } from './components/gameModal/gameModal.component';
 import { HomeComponent } from './components/home/home.component';
 import { GamesComponent } from './components/games/games.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        // NavMenuComponent,
+        GameModalComponent,
         GamesComponent,
         HomeComponent
     ],

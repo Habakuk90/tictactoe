@@ -61,16 +61,17 @@
 
 /* Challenge Section */
 
-section.challenge {
+game-modal.challenge {
     position: fixed;
     width: 100%;
     height: 100%;
     z-index: 9999;
     /* background-color: white; */
     display: none;
+    top:0;
 }
 
-section.challenge.active {
+game-modal.challenge.active {
     display: flex;
     justify-content: center;
 }

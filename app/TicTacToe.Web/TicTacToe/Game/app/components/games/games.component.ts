@@ -1,4 +1,4 @@
-import { Component, Injectable } from '@angular/core';
+import { Component } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import { ConnectionService } from '.././services/connectionService.service';
 @Component({
@@ -6,14 +6,25 @@ import { ConnectionService } from '.././services/connectionService.service';
     templateUrl: './games.component.html',
     providers: [ConnectionService]
 })
+
+
 export class GamesComponent {
     private currentUser: string;
-    private selectedPlayer: string;
-
     private users: Array<string>;
-
+    private selectedPlayer: string; 
+    private challengerUser: string;
+    private activeModal: string;
+    private games: Array<Game> = [];
     public connection: HubConnection;
     ngOnInit() {
+        var tictactoeGame: Game = {
+            title: 'Tic Tac Toe',
+            thumbnailClass: 'tictactoe__thumbnail',
+            url: 'games/tictactoe'
+        };
+
+        this.games.push(tictactoeGame);
+
         this.connection.start().then(() => {
             let that = this;
             this.connection.invoke('GetConnectedUser');
@@ -23,17 +34,13 @@ export class GamesComponent {
                 that.users = userOnline;
             });
             this.connection.on('challenged', function (challenger) {
-                debugger;
-                //that.modals.challengeModal.active = true;
-                //$('section.challenge').addClass('active');
+                that.activeModal = 'challenged';
+                that.challengerUser = challenger
 
             });
             //open waiting for enemy Modal
             this.connection.on('waiting', function () {
-                //that.modals.waitingModal.active = true;
-                debugger;
-
-                //$('section.challenge').addClass('active');
+                that.activeModal = 'waiting';
             });
 
         });
@@ -52,52 +59,12 @@ export class GamesComponent {
     }
     constructor(private connectionService: ConnectionService) {
         this.connection = connectionService.getConnection();
-
     }
 }
 
 
-    //games: {
-    //    tictactoe: {
-    //        title: 'Tic Tac Toe',
-    //        thumbnailClass: 'tictactoe__thumbnail',
-    //        url: 'games/tictactoe'
-    //    }
-    //};
-
-        //     that.connection.start()
-        //         // Init Get Connected User 
-        //         .then(() => {
-        //             that.connection
-        //                 .invoke('GetConnectedUser');
-        //         });
-
-        //     // Sets Connected User by getting list of online User in Hub
-        //     that.connection.on('SetConnectedUser', function (userOnline) {
-        //         that.userOnline = userOnline;
-        //     });
-        //     that.connection.on('Challenged', function (challenger) {
-        //         that.challenger = challenger;
-        //         debugger;
-        //         //that.modals.challengeModal.active = true;
-        //         $('section.challenge').addClass('active');
-
-        //     });
-        //     //open waiting for enemy Modal
-        //     that.connection.on('waiting', function () {
-        //         //that.modals.waitingModal.active = true;
-        //         debugger;
-
-        //         $('section.challenge').addClass('active');
-        //     });
-
-        //     // Enemy reacted to your challenge
-        //     that.connection.on('Response', function (enemy, action) {
-        //         that.modals.waitingModal.waitingMessage = enemy + " has " + action;
-        //     });
-
-        //     // Enemy reacted to your challenge
-        //     that.connection.on('GoToGame', function (url) {
-        //         window.location.href = url;
-        //     });
-        // },
+interface Game {
+    title: string,
+    thumbnailClass: string,
+    url: string
+}

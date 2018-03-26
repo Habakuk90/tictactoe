@@ -12,9 +12,7 @@
     <Compile Remove="TicTacToe\Authorization\Models\**" />
     <Compile Remove="TicTacToe\Authorization\Repository\**" />
     <Compile Remove="TicTacToe\Authorization\Views\**" />
-    <Compile Remove="TicTacToe\Game\Controllers\**" />
     <Compile Remove="TicTacToe\Game\dist\**" />
-    <Compile Remove="TicTacToe\Game\Models\**" />
     <Compile Remove="TicTacToe\Game\Repository\**" />
     <Compile Remove="TicTacToe\Game\Views\**" />
     <Compile Remove="wwwroot\dist\**" />
@@ -22,8 +20,6 @@
     <Content Remove="TicTacToe\Authorization\Models\**" />
     <Content Remove="TicTacToe\Authorization\Repository\**" />
     <Content Remove="TicTacToe\Authorization\Views\**" />
-    <Content Remove="TicTacToe\Game\Controllers\**" />
-    <Content Remove="TicTacToe\Game\Models\**" />
     <Content Remove="TicTacToe\Game\Repository\**" />
     <Content Remove="TicTacToe\Game\Views\**" />
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
@@ -33,9 +29,7 @@
     <EmbeddedResource Remove="TicTacToe\Authorization\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Repository\**" />
     <EmbeddedResource Remove="TicTacToe\Authorization\Views\**" />
-    <EmbeddedResource Remove="TicTacToe\Game\Controllers\**" />
     <EmbeddedResource Remove="TicTacToe\Game\dist\**" />
-    <EmbeddedResource Remove="TicTacToe\Game\Models\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Repository\**" />
     <EmbeddedResource Remove="TicTacToe\Game\Views\**" />
     <EmbeddedResource Remove="wwwroot\dist\**" />
@@ -43,9 +37,7 @@
     <None Remove="TicTacToe\Authorization\Models\**" />
     <None Remove="TicTacToe\Authorization\Repository\**" />
     <None Remove="TicTacToe\Authorization\Views\**" />
-    <None Remove="TicTacToe\Game\Controllers\**" />
     <None Remove="TicTacToe\Game\dist\**" />
-    <None Remove="TicTacToe\Game\Models\**" />
     <None Remove="TicTacToe\Game\Repository\**" />
     <None Remove="TicTacToe\Game\Views\**" />
     <None Remove="wwwroot\dist\**" />
@@ -57,8 +49,6 @@
     <Compile Include="TicTacToe\Authorization\Repository\ConnectionMapping.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
-    <Compile Include="TicTacToe\Game\Controllers\Games2Controller.cs" />
-    <Compile Include="TicTacToe\Game\Models\UserGameModel.cs" />
   </ItemGroup>
 
   <ItemGroup>

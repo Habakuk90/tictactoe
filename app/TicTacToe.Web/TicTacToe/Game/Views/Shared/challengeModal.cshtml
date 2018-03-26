@@ -61,7 +61,6 @@
             //open you got challenged Modal
             that.connection.on('Challenged', function (challenger) {
                 that.challenger = challenger;
-                debugger;
                 that.modals.challengeModal.active = true;
                 $('section.challenge').addClass('active');
 

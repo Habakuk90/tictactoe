@@ -55,13 +55,11 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// <param name="response"></param>
         public void ChallengeResponse(string challenger, string response)
         {
-            if (response == "declined")
-            {
-                return;
-            }
             Groups.AddAsync(Context.ConnectionId, "tictactoeRoom");
+            var currentUser = Context.User.Identity.Name;
+            var challengerIdList = _connections.GetConnections(challenger).ToList();
 
-            Clients.User(challenger).SendAsync("Response", challenger, response);
+            Clients.Clients(challengerIdList).SendAsync("Response", challenger, response);
         }
 
         public void GameStart(string conId)

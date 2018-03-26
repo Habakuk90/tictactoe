@@ -10,4 +10,8 @@ export class ConnectionService {
     getConnection() {
         return this.connection;
     }
+
+    connectionStart() {
+        return this.connection.start();
+    }
 }
