@@ -13,12 +13,13 @@ export class GamesComponent {
     private users: Array<string>;
     private selectedPlayer: string;
     private challengerUser: string;
-    private activeModal: string;
+    private isModalActive: string;
     private games: Array<Game> = [];
     public connection: HubConnection;
-
     constructor(private connectionService: ConnectionService, private router: Router) {
         this.connection = connectionService.connection;
+
+        this.isModalActive = '';
     }
 
     ngOnInit() {
@@ -29,26 +30,26 @@ export class GamesComponent {
         };
 
         this.games.push(tictactoeGame);
-            let that = this;
-            this.connection.invoke('GetConnectedUser');
-            this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
-                if (!that.currentUser)
-                    that.currentUser = currentUser;
-                that.users = userOnline;
-            });
-            this.connection.on('challenged', function (challenger) {
-                that.activeModal = 'challenged';
-                that.challengerUser = challenger
+        let that = this;
+        this.connection.invoke('GetConnectedUser');
+        this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
+            if (!that.currentUser)
+                that.currentUser = currentUser;
+            that.users = userOnline;
+        });
+        this.connection.on('challenged', function (challenger) {
+            that.isModalActive = 'challenged';
+            that.challengerUser = challenger
 
-            });
-            //open waiting for enemy Modal
-            this.connection.on('waiting', function () {
-                that.activeModal = 'waiting';
-            });
+        });
+        //open waiting for enemy Modal
+        this.connection.on('waiting', function () {
+            that.isModalActive = 'waiting';
+        });
 
-            that.connection.on('GoToGame', function (url, roomName) {
-                that.router.navigate([url], { queryParams: { roomName: roomName }});
-            });
+        that.connection.on('GoToGame', function (url, roomName) {
+            that.router.navigate([url], { queryParams: { roomName: roomName } });
+        });
     }
 
 

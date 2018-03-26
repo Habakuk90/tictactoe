@@ -29,8 +29,8 @@
     </ul>
 </div>
 <button class="button button__start" (click)="challengeEnemy()">Go!</button>
-<game-modal class="challenge" [class.active]="activeModal" 
-            [activeModal]="activeModal" [challengerUser]="challengerUser"
+<game-modal class="challenge" [class.active]="isModalActive" 
+            [isModalActive]="isModalActive" [challengerUser]="challengerUser"
             
             >
 </game-modal>

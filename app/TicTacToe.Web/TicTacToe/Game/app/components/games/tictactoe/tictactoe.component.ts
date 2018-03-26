@@ -9,7 +9,7 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./tictactoe.component.css'],
 })
 export class TicTacToeComponent {
-    public turn = false;
+    public turn: boolean;
     public boxes: Box[] = [
         {
             id: '1-1',
@@ -51,8 +51,13 @@ export class TicTacToeComponent {
 
     ngOnInit() {
         var that = this;
-        that.connection.invoke('DecideTurn', this.roomName);
+        //that.connection.invoke('DecideTurn', this.roomName);
         that.connection.on('tileChange', function (tileId) {
+
+            if (!that.turn) {
+                return;
+            }
+
             let clickedTile = that.boxes.filter(x => x.id === tileId)[0];
             console.log(clickedTile, tileId)
             if (clickedTile.state != null) {
@@ -66,15 +71,17 @@ export class TicTacToeComponent {
             }
         });
 
-        that.connection.on('SetSequence', function (bool) {
+        that.connection.on('SwitchTurn', function () {
             debugger;
-            that.turn = bool;
+            console.log('***before*** SetSequence', that.turn);
+            that.turn = !that.turn;
+            console.log('***after*** SetSequence', that.turn);
+
         });
     }
 
     changeField(event: Event, tileId: string) {
-        if (!this.turn) { return };
-        this.connection.invoke('TileClicked', tileId);
+        this.connection.invoke('TileClicked', this.roomName);
     }
 
 

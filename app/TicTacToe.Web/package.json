@@ -10,15 +10,6 @@
     "gulp-clean-css": "^3.9.3"
   },
   "devDependencies": {
-    "@aspnet/signalr": "^1.0.0-preview1-update1",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^5.0.0",
-    "gulp-clean-css": "^3.9.3",
-    "gulp-concat": "^2.6.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglifyjs": "^0.6.2",
-    "gulp-util": "^3.0.8",
     "@angular/animations": "4.2.5",
     "@angular/common": "4.2.5",
     "@angular/compiler": "4.2.5",
@@ -30,6 +21,7 @@
     "@angular/platform-browser-dynamic": "4.2.5",
     "@angular/platform-server": "4.2.5",
     "@angular/router": "4.2.5",
+    "@aspnet/signalr": "^1.0.0-preview1-update1",
     "@ngtools/webpack": "1.5.0",
     "@types/chai": "4.0.1",
     "@types/jasmine": "2.5.53",
@@ -48,6 +40,14 @@
     "expose-loader": "0.7.3",
     "extract-text-webpack-plugin": "2.1.2",
     "file-loader": "0.11.2",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-clean-css": "^3.9.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglifyjs": "^0.6.2",
+    "gulp-util": "^3.0.8",
     "html-loader": "0.4.5",
     "isomorphic-fetch": "2.2.1",
     "jasmine-core": "2.6.4",
@@ -75,7 +75,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "gulp watch",
-    "webpack" : "webpack"
+    "webpack": "webpack"
   },
   "author": "",
   "license": "ISC"

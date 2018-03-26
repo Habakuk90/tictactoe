@@ -19,9 +19,12 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         //[TODO] map two player against each other on connection to "game"
 
         
-        public void TileClicked(string tileId)
+        public void TileClicked(string roomName)
         {
-            Clients.All.SendAsync("tileChange", tileId);
+            var groupConnections = _connections.GetGroups(roomName).ToList();
+            Clients.Group(roomName).SendAsync("SwitchTurn");
+            //var secondId = groupConnections.FirstOrDefault(x => x != Context.ConnectionId);
+            //Clients.Client(secondId).SendAsync("SetSequence");
         }
 
         public void GetConnectedUser()
@@ -63,33 +66,18 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.Clients(challengerIdList).SendAsync("Response", currentUser, response);
         }
 
-        public void GameStart()
+        public async void GameStart()
         {
             var conId = Context.ConnectionId;
             var url = "/games/tictactoe";
             var roomName = "tictactoeRoom";
 
-            Groups.AddAsync(conId, roomName);
+            await Groups.AddAsync(conId, roomName);
             _connections.AddGroup("tictactoeRoom", Context.ConnectionId);
-
-            Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
-        }
-        public void DecideTurn(string roomName)
-        {
-            Random random = new Random();
-            var flip = (random.Next(0, 2));
-            var groupConnections = _connections.GetGroups(roomName);
-
-           
-
-            var firstId = groupConnections.ToList()[flip];
-            var secondId = groupConnections.FirstOrDefault(x => x != firstId);
-
-            Clients.Client(firstId).SendAsync("SetSequence", true);
-            Clients.Client(secondId).SendAsync("SetSequence", false);
-
+            await Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
 
         }
+
         /// <summary>
         /// 
         /// </summary>

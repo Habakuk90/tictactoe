@@ -8,7 +8,7 @@ import { HubConnection } from '@aspnet/signalr';
     styleUrls: ['./gameModal.component.css']
 })
 export class GameModalComponent {
-    @Input() activeModal: string;
+    @Input() isModalActive: string;
     @Input() challengerUser: string;
     connection: HubConnection;
     ngOnInit() {
