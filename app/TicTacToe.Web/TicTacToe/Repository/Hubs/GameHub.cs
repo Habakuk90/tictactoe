@@ -13,18 +13,14 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             new ConnectionMapping<string>();
 
         private readonly static HashSet<string> _userOnline = new HashSet<string>();
-
-
+        
 
         //[TODO] map two player against each other on connection to "game"
 
         
         public void TileClicked(string roomName)
         {
-            var groupConnections = _connections.GetGroups(roomName).ToList();
             Clients.Group(roomName).SendAsync("SwitchTurn");
-            //var secondId = groupConnections.FirstOrDefault(x => x != Context.ConnectionId);
-            //Clients.Client(secondId).SendAsync("SetSequence");
         }
 
         public void GetConnectedUser()
@@ -34,20 +30,20 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// Invoke open Modal for challenged Enemy
+        /// 
         /// </summary>
-        /// <param name="selectedEnemy"></param>
-        public void Challenge(string selectedPlayer)
+        /// <param name="selectedPlayer"></param>
+        public void ChallengePlayer(string selectedPlayer)
         {
             var currentUserName = Context.User.Identity.Name;
 
             // Clients.User => quick workaround with all ids
             var selectedPlayerIdList = _connections.GetConnections(selectedPlayer).ToList();
             Clients.Clients(selectedPlayerIdList)
-                .SendAsync("Challenged", currentUserName);
+                .SendAsync("OpenChallengedModal", currentUserName, Context.ConnectionId);
 
-            Clients.User(currentUserName).SendAsync("Challenged", currentUserName);
-            Clients.Caller.SendAsync("Waiting");
+
+            Clients.Caller.SendAsync("OpenWaitingModal");
             
         }
 
@@ -56,28 +52,28 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// </summary>
         /// <param name="challenger"></param>
         /// <param name="response"></param>
-        public void ChallengeResponse(string challenger, string response)
+        public void ChallengeResponse(string challenger, string challengerConnectionId, string response)
         {
-            Groups.AddAsync(Context.ConnectionId, "tictactoeRoom");
-            _connections.AddGroup("tictactoeRoom", Context.ConnectionId);
+            var gameName = "tictactoe";
+            var roomName = gameName + Context.ConnectionId;
             var currentUser = Context.User.Identity.Name;
             var challengerIdList = _connections.GetConnections(challenger).ToList();
+            var url = "/games/" + gameName;
 
-            Clients.Clients(challengerIdList).SendAsync("Response", currentUser, response);
+            //create Room
+            _connections.AddGroup(gameName, Context.ConnectionId);
+
+            roomName = _connections.GetGroupByConId(Context.ConnectionId);
+            Groups.AddAsync(Context.ConnectionId, roomName);
+            Groups.AddAsync(challengerConnectionId, roomName);
+
+            //invoke Response to use who challenged currentUser
+            Clients.Client(challengerConnectionId).SendAsync("Response", currentUser, response);
+
+            //invoke Go to Game to group
+            Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
         }
-
-        public async void GameStart()
-        {
-            var conId = Context.ConnectionId;
-            var url = "/games/tictactoe";
-            var roomName = "tictactoeRoom";
-
-            await Groups.AddAsync(conId, roomName);
-            _connections.AddGroup("tictactoeRoom", Context.ConnectionId);
-            await Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
-
-        }
-
+        
         /// <summary>
         /// 
         /// </summary>

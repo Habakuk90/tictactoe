@@ -5,6 +5,23 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
+
+    public class Group
+    {
+        public Group(string id, string gameName)
+        {
+            Id = id;
+            GameName = gameName;
+        }
+
+        public string Id { get; set; }
+        public string RoomName { get { return GameName + Id; } }
+
+        public string GameName { get; set; }
+
+        public HashSet<string> UserIds { get; set; }
+
+    }
     public class ConnectionMapping<T>
     {
         private readonly Dictionary<T, HashSet<string>> _connections =
@@ -12,6 +29,8 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 
         private readonly Dictionary<T, HashSet<string>> _groups =
             new Dictionary<T, HashSet<string>>();
+
+        private readonly List<Group> groupList = new List<Group>();
 
         /// <summary>
         /// Get Count of alive Connections
@@ -48,56 +67,56 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key">RoomName</param>
+        /// <param name="connectionId"></param>
         public void AddGroup(T key, string connectionId)
         {
-            lock(_groups)
-            {
-                HashSet<string> groups;
-                if (!_groups.TryGetValue(key, out groups))
-                {
-                    groups = new HashSet<string>();
-                    _groups.Add(key, groups);
-                }
+            //lock (groupList)
+            //{
 
-                lock (groups)
+            if (groupList.Any(x => x.RoomName == key.ToString()))
+            {
+                groupList
+                    .Where(y => y.RoomName == key.ToString())
+                    .Select(x => x.UserIds.Add(connectionId));
+            }
+            else
+            {
+                var newGroup = new Group(connectionId, key.ToString())
                 {
-                    groups.Add(connectionId);
-                }
+                    UserIds = new HashSet<string>()
+                };
+                newGroup.UserIds.Add(connectionId);
+
+                groupList.Add(newGroup);
             }
         }
-        public void RemoveGroups(T key, string connectionId)
+        public void RemoveGroup(T key, string connectionId)
         {
-            lock (_groups)
+            lock (groupList)
             {
-                HashSet<string> groups;
-                if (!_connections.TryGetValue(key, out groups))
-                {
-                    return;
-                }
-
-                lock (groups)
-                {
-                    groups.Remove(connectionId);
-
-                    if (groups.Count == 0)
-                    {
-                        _groups.Remove(key);
-                    }
-                }
+                var groupToRemove = groupList.FirstOrDefault(x => x.RoomName == key.ToString());
+                groupList.Remove(groupToRemove);
             }
         }
 
-        public IEnumerable<string> GetGroups(T key)
+        public string GetGroupByConId(string connectionId)
         {
-            HashSet<string> groups;
-            if (_groups.TryGetValue(key, out groups))
+            var groupName = string.Empty;
+
+            foreach (var group in groupList)
             {
-                return groups;
+                if(group.UserIds.Any(x => x == connectionId))
+                {
+                    groupName = group.RoomName;
+                }
             }
-
-            return Enumerable.Empty<string>();
+            return groupName;
         }
-
+        
         /// <summary>
         /// Gets all Connection for given key in Connections
         /// </summary>
@@ -120,7 +139,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
             {
                 var connection = GetConnections(key);
                 var userFound = connection.Any(con => con == conId);
-                if(userFound)
+                if (userFound)
                 {
                     return key.ToString();
                 }

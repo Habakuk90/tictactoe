@@ -12,7 +12,10 @@ export class GamesComponent {
     private currentUser: string;
     private users: Array<string>;
     private selectedPlayer: string;
-    private challengerUser: string;
+    private challengerUser = {
+        name: '',
+        connectionId: ''
+    };
     private isModalActive: string;
     private games: Array<Game> = [];
     public connection: HubConnection;
@@ -37,13 +40,14 @@ export class GamesComponent {
                 that.currentUser = currentUser;
             that.users = userOnline;
         });
-        this.connection.on('challenged', function (challenger) {
+        this.connection.on('OpenChallengedModal', function (challengerUsername, challengerConnectionId) {
             that.isModalActive = 'challenged';
-            that.challengerUser = challenger
+            that.challengerUser.name = challengerUsername;
+            that.challengerUser.connectionId = challengerConnectionId;
 
         });
         //open waiting for enemy Modal
-        this.connection.on('waiting', function () {
+        this.connection.on('OpenWaitingModal', function () {
             that.isModalActive = 'waiting';
         });
 
@@ -53,9 +57,9 @@ export class GamesComponent {
     }
 
 
-    challengeEnemy() {
+    challengePlayer() {
         var that = this;
-        that.connection.invoke('Challenge', that.selectedPlayer);
+        that.connection.invoke('ChallengePlayer', that.selectedPlayer);
     }
 
 

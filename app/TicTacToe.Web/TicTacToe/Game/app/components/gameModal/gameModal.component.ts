@@ -9,7 +9,7 @@ import { HubConnection } from '@aspnet/signalr';
 })
 export class GameModalComponent {
     @Input() isModalActive: string;
-    @Input() challengerUser: string;
+    @Input() challengerUser: any;
     connection: HubConnection;
     ngOnInit() {
         var that = this;
@@ -21,13 +21,13 @@ export class GameModalComponent {
     accept(event: Event) {
         var that = this;
         var action = 'accepted';
-        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
+        that.connection.invoke('ChallengeResponse', that.challengerUser.name, that.challengerUser.connectionId, action);
 
     };
     decline(event: Event) {
         var that = this;
         var action = 'declined';
-        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
+        that.connection.invoke('ChallengeResponse', that.challengerUser.name, that.challengerUser.connectionId, action);
 
     };
 
