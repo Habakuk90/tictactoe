@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-import { ConnectionService } from '../services/connectionService.service';
+import { GameHubConnection } from '../services/gameHubConnection.service';
 
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.css'],
-    providers: [ConnectionService]
+    providers: [GameHubConnection]
 })
 export class AppComponent {
-    constructor(connectionService: ConnectionService) {
+    constructor(connectionService: GameHubConnection) {
         connectionService.startConnection();
     }
 

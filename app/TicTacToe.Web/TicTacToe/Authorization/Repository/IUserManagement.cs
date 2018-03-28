@@ -14,13 +14,13 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         /// </summary>
         /// <param name="user"></param>
         /// <returns>Task<SignInResult></returns>
-        Task<SignInResult> LoginUser(UserModel user);
+        Task<SignInResult> LoginUser(LoginModel user);
         /// <summary>
         /// Register User
         /// </summary>
         /// <param name="user"></param>
         /// <returns>Task<SignInResult></returns>
-        Task<IdentityResult> RegisterUser(UserModel user);
+        Task<IdentityResult> RegisterUser(RegisterModel user);
         /// <summary>
         /// Logout User
         /// </summary>

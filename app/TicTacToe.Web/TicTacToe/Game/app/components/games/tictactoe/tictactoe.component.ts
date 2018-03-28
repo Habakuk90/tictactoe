@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ConnectionService } from '../../services/connectionService.service';
+import { GameHubConnection } from '../../services/gameHubConnection.service';
 import { HubConnection } from '@aspnet/signalr';
 import { ActivatedRoute } from '@angular/router';
 
@@ -43,7 +43,7 @@ export class TicTacToeComponent {
     private roomName: string;
     
 
-    constructor(connectionService: ConnectionService, activeRoute: ActivatedRoute) {
+    constructor(connectionService: GameHubConnection, activeRoute: ActivatedRoute) {
         this.connection = connectionService.connection;
 
         this.roomName = activeRoute.snapshot.queryParams['roomName'];

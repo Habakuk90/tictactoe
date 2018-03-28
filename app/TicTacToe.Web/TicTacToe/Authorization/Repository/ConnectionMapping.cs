@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicTacToe.Web.TicTacToe.Game.Models;
 
 namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 {
@@ -24,8 +25,8 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
     }
     public class ConnectionMapping<T>
     {
-        private readonly Dictionary<T, HashSet<string>> _connections =
-            new Dictionary<T, HashSet<string>>();
+        private readonly Dictionary<GameUserModel, HashSet<string>> _userConnections =
+            new Dictionary<GameUserModel, HashSet<string>>();
 
         private readonly Dictionary<T, HashSet<string>> _groups =
             new Dictionary<T, HashSet<string>>();
@@ -39,7 +40,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         {
             get
             {
-                return _connections.Count;
+                return _userConnections.Count;
             }
         }
 
@@ -49,15 +50,15 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         /// </summary>
         /// <param name="key">User String</param>
         /// <param name="connectionId"></param>
-        public void Add(T key, string connectionId)
+        public void Add(GameUserModel userModel, string connectionId)
         {
-            lock (_connections)
+            lock (_userConnections)
             {
                 HashSet<string> connections;
-                if (!_connections.TryGetValue(key, out connections))
+                if (!_userConnections.TryGetValue(userModel, out connections))
                 {
                     connections = new HashSet<string>();
-                    _connections.Add(key, connections);
+                    _userConnections.Add(userModel, connections);
                 }
 
                 lock (connections)
@@ -68,28 +69,86 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         }
 
         /// <summary>
+        /// Gets all Connection for given key in Connections
+        /// </summary>
+        /// <param name="key">User String</param>
+        /// <returns></returns>
+        public IEnumerable<string> GetConnections(GameUserModel key)
+        {
+            HashSet<string> connections;
+            if (_userConnections.TryGetValue(key, out connections))
+            {
+                return connections;
+            }
+
+            return Enumerable.Empty<string>();
+        }
+
+        public string GetUserByConnection(string conId)
+        {
+            foreach (var key in _userConnections.Keys)
+            {
+                var connection = GetConnections(key);
+                var userFound = connection.Any(con => con == conId);
+                if (userFound)
+                {
+                    return key.ToString();
+                }
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Removes Connection for given key
+        /// </summary>
+        /// <param name="key">User String</param>
+        /// <param name="connectionId"></param>
+        public void Remove(GameUserModel key, string connectionId)
+        {
+            lock (_userConnections)
+            {
+                HashSet<string> connections;
+                if (!_userConnections.TryGetValue(key, out connections))
+                {
+                    return;
+                }
+
+                lock (connections)
+                {
+                    connections.Remove(connectionId);
+
+                    if (connections.Count == 0)
+                    {
+                        _userConnections.Remove(key);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// 
         /// </summary>
-        /// <param name="key">RoomName</param>
-        /// <param name="connectionId"></param>
-        public void AddGroup(T key, string connectionId)
+        /// <param name="userModel">RoomName</param>
+        /// <param name="groupName"></param>
+        public void AddGroup(T userModel, string groupName)
         {
             //lock (groupList)
             //{
 
-            if (groupList.Any(x => x.RoomName == key.ToString()))
+            if (groupList.Any(x => x.RoomName == userModel.ToString()))
             {
                 groupList
-                    .Where(y => y.RoomName == key.ToString())
-                    .Select(x => x.UserIds.Add(connectionId));
+                    .Where(y => y.RoomName == userModel.ToString())
+                    .Select(x => x.UserIds.Add(groupName));
             }
             else
             {
-                var newGroup = new Group(connectionId, key.ToString())
+                var newGroup = new Group(groupName, userModel.ToString())
                 {
                     UserIds = new HashSet<string>()
                 };
-                newGroup.UserIds.Add(connectionId);
+                newGroup.UserIds.Add(groupName);
 
                 groupList.Add(newGroup);
             }
@@ -109,69 +168,13 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
 
             foreach (var group in groupList)
             {
-                if(group.UserIds.Any(x => x == connectionId))
+                if (group.UserIds.Any(x => x == connectionId))
                 {
                     groupName = group.RoomName;
                 }
             }
             return groupName;
         }
-        
-        /// <summary>
-        /// Gets all Connection for given key in Connections
-        /// </summary>
-        /// <param name="key">User String</param>
-        /// <returns></returns>
-        public IEnumerable<string> GetConnections(T key)
-        {
-            HashSet<string> connections;
-            if (_connections.TryGetValue(key, out connections))
-            {
-                return connections;
-            }
 
-            return Enumerable.Empty<string>();
-        }
-
-        public string GetUserByConnection(string conId)
-        {
-            foreach (var key in _connections.Keys)
-            {
-                var connection = GetConnections(key);
-                var userFound = connection.Any(con => con == conId);
-                if (userFound)
-                {
-                    return key.ToString();
-                }
-            }
-            return string.Empty;
-        }
-
-        /// <summary>
-        /// Removes Connection for given key
-        /// </summary>
-        /// <param name="key">User String</param>
-        /// <param name="connectionId"></param>
-        public void Remove(T key, string connectionId)
-        {
-            lock (_connections)
-            {
-                HashSet<string> connections;
-                if (!_connections.TryGetValue(key, out connections))
-                {
-                    return;
-                }
-
-                lock (connections)
-                {
-                    connections.Remove(connectionId);
-
-                    if (connections.Count == 0)
-                    {
-                        _connections.Remove(key);
-                    }
-                }
-            }
-        }
     }
 }

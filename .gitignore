@@ -22,3 +22,4 @@ app/TicTacToe.Web/wwwroot/css/main.css
 app/TicTacToe.Web/wwwroot/dist/
 app/TicTacToe.Web/TicTacToe/Game/dist/
 app/TicTacToe.Web/.node-version
+app/TicTacToe.Web/npm-debug.log

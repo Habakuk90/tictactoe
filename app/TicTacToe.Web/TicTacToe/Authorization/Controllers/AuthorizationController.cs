@@ -44,9 +44,9 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         /// <param name="password"></param>
         /// <returns>Redirect dependet on Success of Post</returns>
         [HttpPost]
-        public async Task<IActionResult> Login(string userName, string email, string password)
+        public async Task<IActionResult> Login(string userName, string password, string email)
         {
-            UserModel loginData = new UserModel
+            LoginModel loginData = new LoginModel
             {
                 Identity = new IdentityUser { UserName = userName, SecurityStamp = Guid.NewGuid().ToString(), Email = email },
                 Password = password,
@@ -85,7 +85,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(string userName, string password)
         {
-            var registerData = new UserModel
+            var registerData = new RegisterModel
             {
                 Identity = new IdentityUser { UserName = userName },
                 Password = password

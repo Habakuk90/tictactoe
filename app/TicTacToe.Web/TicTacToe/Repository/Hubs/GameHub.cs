@@ -4,20 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TicTacToe.Web.TicTacToe.Authorization.Repository;
+using TicTacToe.Web.TicTacToe.Game.Models;
 
 namespace TicTacToe.Web.TicTacToe.Hubs
 {
     public class GameHub : Hub
     {
-        private readonly static ConnectionMapping<string> _connections =
-            new ConnectionMapping<string>();
+        private readonly static ConnectionMapping<GameUserModel> _connections =
+            new ConnectionMapping<GameUserModel>();
 
         private readonly static HashSet<string> _userOnline = new HashSet<string>();
-        
 
+
+        private GameUserModel _userModel = new GameUserModel();
         //[TODO] map two player against each other on connection to "game"
 
-        
         public void TileClicked(string roomName)
         {
             Clients.Group(roomName).SendAsync("SwitchTurn");
@@ -26,14 +27,13 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         public void GetConnectedUser()
         {
             var currentUser = Context.User.Identity.Name;
-            Clients.All.SendAsync("SetConnectedUser", currentUser, _userOnline.ToList());            
+            Clients.All.SendAsync("SetConnectedUser", currentUser, _userOnline.ToList());
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="selectedPlayer"></param>
-        public void ChallengePlayer(string selectedPlayer)
+        public void ChallengePlayer(GameUserModel selectedPlayer)
         {
             var currentUserName = Context.User.Identity.Name;
 
@@ -44,53 +44,63 @@ namespace TicTacToe.Web.TicTacToe.Hubs
 
 
             Clients.Caller.SendAsync("OpenWaitingModal");
-            
+
         }
 
         /// <summary>
         /// Invoke Modal to challenger and invoke Response to enemy
         /// </summary>
-        /// <param name="challenger"></param>
+        /// <param name="enemy">enemy</param>
         /// <param name="response"></param>
-        public void ChallengeResponse(string challenger, string challengerConnectionId, string response)
+        public void ChallengeResponse(GameUserModel enemy, string response)
         {
+            GameUserModel currentUser = new GameUserModel
+            {
+                Name = Context.User.Identity.Name,
+                CurrentConnectionId = Context.ConnectionId
+            };
+
+            var challengerCurrentId = enemy.CurrentConnectionId;
+
+
             var gameName = "tictactoe";
             var roomName = gameName + Context.ConnectionId;
-            var currentUser = Context.User.Identity.Name;
-            var challengerIdList = _connections.GetConnections(challenger).ToList();
+            var challengerIdList = _connections.GetConnections(enemy).ToList();
             var url = "/games/" + gameName;
 
             //create Room
-            _connections.AddGroup(gameName, Context.ConnectionId);
+            _connections.AddGroup(enemy, gameName);
 
             roomName = _connections.GetGroupByConId(Context.ConnectionId);
             Groups.AddAsync(Context.ConnectionId, roomName);
-            Groups.AddAsync(challengerConnectionId, roomName);
+            Groups.AddAsync(enemy.CurrentConnectionId, roomName);
 
             //invoke Response to use who challenged currentUser
-            Clients.Client(challengerConnectionId).SendAsync("Response", currentUser, response);
+            Clients.Client(challengerCurrentId).SendAsync("Response", currentUser, response);
 
             //invoke Go to Game to group
             Clients.Group(roomName).SendAsync("GoToGame", url, roomName);
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
         public override Task OnConnectedAsync()
         {
-            string name = Context.User.Identity.Name;
-            if (!String.IsNullOrEmpty(name))
+            _userModel.Name = Context.User.Identity.Name;
+            _userModel.CurrentConnectionId = Context.ConnectionId;
+            if (_userModel != null)
             {
-                _connections.Add(name, Context.ConnectionId);
-                _userOnline.Add(name);
+                _connections.Add(_userModel, Context.ConnectionId);
+                _userOnline.Add(_userModel.Name);
                 GetConnectedUser();
             }
             else
             {
                 Console.WriteLine("name empty");
             }
+            
             return base.OnConnectedAsync();
         }
 
@@ -101,10 +111,8 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         /// <returns></returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            string name = Context.User.Identity.Name;
-
-            _connections.Remove(name, Context.ConnectionId);
-            _userOnline.Remove(name);
+            _connections.Remove(_userModel, Context.ConnectionId);
+            _userOnline.Remove(_userModel.Name);
             GetConnectedUser();
             return base.OnDisconnectedAsync(exception);
         }

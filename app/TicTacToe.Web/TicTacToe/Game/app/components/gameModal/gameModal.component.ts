@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ConnectionService } from '../services/connectionService.service';
+import { GameHubConnection } from '../services/gameHubConnection.service';
 import { HubConnection } from '@aspnet/signalr';
 
 @Component({
@@ -21,7 +21,7 @@ export class GameModalComponent {
     accept(event: Event) {
         var that = this;
         var action = 'accepted';
-        that.connection.invoke('ChallengeResponse', that.challengerUser.name, that.challengerUser.connectionId, action);
+        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
 
     };
     decline(event: Event) {
@@ -31,7 +31,7 @@ export class GameModalComponent {
 
     };
 
-    constructor(private connectionService: ConnectionService) {
+    constructor(private connectionService: GameHubConnection) {
         this.connection = connectionService.connection;
     }
 

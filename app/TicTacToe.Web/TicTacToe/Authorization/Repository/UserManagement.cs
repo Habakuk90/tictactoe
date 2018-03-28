@@ -28,7 +28,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<IdentityResult> RegisterUser(UserModel user)
+        public async Task<IdentityResult> RegisterUser(RegisterModel user)
         {
             var result = await _userManager.CreateAsync(user.Identity, user.Password);
             return result;
@@ -39,7 +39,7 @@ namespace TicTacToe.Web.TicTacToe.Authorization.Repository
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<SignInResult> LoginUser(UserModel user)
+        public async Task<SignInResult> LoginUser(LoginModel user)
         {
             SignInResult result = new SignInResult();
 

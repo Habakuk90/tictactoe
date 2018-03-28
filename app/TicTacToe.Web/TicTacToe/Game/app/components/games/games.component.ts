@@ -1,25 +1,24 @@
 import { Component } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
-import { ConnectionService } from '.././services/connectionService.service';
+import { GameHubConnection } from '.././services/gameHubConnection.service';
 import { Router } from '@angular/router';
 @Component({
     selector: 'games',
     templateUrl: './games.component.html'
 })
 
-
 export class GamesComponent {
     private currentUser: string;
     private users: Array<string>;
     private selectedPlayer: string;
-    private challengerUser = {
-        name: '',
+    private challengerUser: any = {
+        userName: '',
         connectionId: ''
     };
     private isModalActive: string;
     private games: Array<Game> = [];
     public connection: HubConnection;
-    constructor(private connectionService: ConnectionService, private router: Router) {
+    constructor(private connectionService: GameHubConnection, private router: Router) {
         this.connection = connectionService.connection;
 
         this.isModalActive = '';
@@ -42,7 +41,7 @@ export class GamesComponent {
         });
         this.connection.on('OpenChallengedModal', function (challengerUsername, challengerConnectionId) {
             that.isModalActive = 'challenged';
-            that.challengerUser.name = challengerUsername;
+            that.challengerUser.userName = challengerUsername;
             that.challengerUser.connectionId = challengerConnectionId;
 
         });

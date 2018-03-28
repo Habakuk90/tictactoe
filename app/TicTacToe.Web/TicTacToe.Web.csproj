@@ -44,8 +44,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="TicTacToe\Repository\Hubs\GameHubContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="TicTacToe\Authorization\Controllers\AuthorizationController.cs" />
-    <Compile Include="TicTacToe\Authorization\Models\UserModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Models\LoginModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Models\RegisterModel.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\ConnectionMapping.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
     <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
@@ -72,6 +77,7 @@
     <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
     <None Include="TicTacToe\Authorization\Views\Shared\_AuthorizationLayout.cshtml" />
+    <None Include="TicTacToe\Game\app\components\services\gameHubConnection.service.ts" />
     <None Include="TicTacToe\Game\Views\Index.cshtml" />
     <None Include="wwwroot\lib\images\games\TicTacToe_thumbnail.JPG" />
   </ItemGroup>
