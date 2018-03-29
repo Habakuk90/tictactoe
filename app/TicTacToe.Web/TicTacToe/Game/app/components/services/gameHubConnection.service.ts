@@ -6,7 +6,7 @@ export class GameHubConnection {
     public connection: HubConnection;
 
     constructor() {
-        let connection = new Connection(new HubConnection('/game'));
+        let connection = new HubConnection('/game');
     }
 
     getConnection() {
@@ -17,16 +17,4 @@ export class GameHubConnection {
         this.connection = new HubConnection('/game');
         this.connection.start();
     }
-}
-
-class Connection {
-    connection: HubConnection;
-    constructor(connection: HubConnection) {
-        this.connection = connection;
-    }
-    public startConnection() {
-        //this.connection = new HubConnection('/game');
-        this.connection.start();
-    }
-    
 }

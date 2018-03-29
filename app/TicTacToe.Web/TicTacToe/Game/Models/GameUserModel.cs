@@ -16,5 +16,17 @@ namespace TicTacToe.Web.TicTacToe.Game.Models
         public string CurrentConnectionId { get; set; }
 
         public ConnectionMapping<string> Connections { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is GameUserModel)) return false;
+
+            return ((GameUserModel)obj).Name == this.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return (this.Name).GetHashCode();
+        }
     }
 }

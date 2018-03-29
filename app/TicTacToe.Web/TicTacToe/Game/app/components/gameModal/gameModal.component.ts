@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { GameHubConnection } from '../services/gameHubConnection.service';
 import { HubConnection } from '@aspnet/signalr';
+import { IGameUser } from '../services/gameUser.model';
 
 @Component({
     selector: 'game-modal',
@@ -9,8 +10,13 @@ import { HubConnection } from '@aspnet/signalr';
 })
 export class GameModalComponent {
     @Input() isModalActive: string;
-    @Input() challengerUser: any;
+    @Input() challengerUser: IGameUser;
     connection: HubConnection;
+
+    constructor(private connectionService: GameHubConnection) {
+        this.connection = connectionService.connection;
+    }
+
     ngOnInit() {
         var that = this;
         // Enemy reacted to your challenge
@@ -27,13 +33,9 @@ export class GameModalComponent {
     decline(event: Event) {
         var that = this;
         var action = 'declined';
-        that.connection.invoke('ChallengeResponse', that.challengerUser.name, that.challengerUser.connectionId, action);
+        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
 
     };
-
-    constructor(private connectionService: GameHubConnection) {
-        this.connection = connectionService.connection;
-    }
 
     gameStart() {
         var that = this;

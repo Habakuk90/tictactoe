@@ -1,19 +1,24 @@
 import { Component } from '@angular/core';
 import { HubConnection } from '@aspnet/signalr';
 import { GameHubConnection } from '.././services/gameHubConnection.service';
+
 import { Router } from '@angular/router';
+import { IGameUser } from '../services/gameUser.model';
 @Component({
     selector: 'games',
     templateUrl: './games.component.html'
 })
 
 export class GamesComponent {
-    private currentUser: string;
+    private currentUserName: string;
     private users: Array<string>;
-    private selectedPlayer: string;
-    private challengerUser: any = {
-        userName: '',
-        connectionId: ''
+    private selectedPlayer: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };
+    private challengerUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
     };
     private isModalActive: string;
     private games: Array<Game> = [];
@@ -35,15 +40,13 @@ export class GamesComponent {
         let that = this;
         this.connection.invoke('GetConnectedUser');
         this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
-            if (!that.currentUser)
-                that.currentUser = currentUser;
+            if (!that.currentUserName)
+                that.currentUserName = currentUser.name;
             that.users = userOnline;
         });
-        this.connection.on('OpenChallengedModal', function (challengerUsername, challengerConnectionId) {
+        this.connection.on('OpenChallengedModal', function (challengerUser) {
             that.isModalActive = 'challenged';
-            that.challengerUser.userName = challengerUsername;
-            that.challengerUser.connectionId = challengerConnectionId;
-
+            that.challengerUser = challengerUser;
         });
         //open waiting for enemy Modal
         this.connection.on('OpenWaitingModal', function () {
@@ -64,7 +67,7 @@ export class GamesComponent {
 
     private selectPlayer(event: Event, user: string) {
         var target = event.target || event.srcElement || event.currentTarget;
-        this.selectedPlayer = user;
+        this.selectedPlayer.name = user;
     }
 
 }
