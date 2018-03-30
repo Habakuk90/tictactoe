@@ -1,9 +1,3 @@
-
-    <ul class="nav-list__container">
-        <li class="nav-list__item" data-link="/home">Home</li>
-        <li class="nav-list__item" [routerLink]="['/games']">Games</li>
-    </ul>
-
 <div class="game__container">
     <h2>Choose game</h2>
     <ul class="game-list__container">
@@ -14,7 +8,6 @@
             </li>
         </ng-template>
     </ul>
-
 </div>
 
 <div class="enemy__container">
@@ -25,10 +18,6 @@
                 *ngIf="user.name !== currentUser.name" (click)="selectPlayer($event, user)"
                 [class.selected]="user.name === selectedPlayer.name">
                 {{user.name}}
-
-
-
-
             </li>
         </ng-template>
     </ul>
