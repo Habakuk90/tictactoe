@@ -1,7 +1,4 @@
-import { Component, Input } from '@angular/core';
-import { GameHubConnection } from '../services/gameHubConnection.service';
-import { HubConnection } from '@aspnet/signalr';
-import { IGameUser } from '../services/gameUser.model';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 
 @Component({
     selector: 'game-modal',
@@ -10,31 +7,13 @@ import { IGameUser } from '../services/gameUser.model';
 })
 export class GameModalComponent {
     @Input() isModalActive: string;
-    @Input() enemyUser: IGameUser;
-    connection: HubConnection;
-
-    constructor(private connectionService: GameHubConnection) {
-        this.connection = connectionService.connection;
-    }
-
-    ngOnInit() {
-        var that = this;
-    }
+    @Input() enemyUserName: string;
+    @Output() response: EventEmitter<string> = new EventEmitter<string>();
+    
     accept(event: Event) {
-        var that = this;
-        var action = 'accepted';
-        that.connection.invoke('ChallengeResponse', that.enemyUser, action);
-
+        this.response.emit('accepted');
     };
     decline(event: Event) {
-        var that = this;
-        var action = 'declined';
-        that.connection.invoke('ChallengeResponse', that.enemyUser, action);
-
+        this.response.emit('declined');
     };
-
-    gameStart() {
-        var that = this;
-        that.connection.invoke('GameStart');
-    }
 }

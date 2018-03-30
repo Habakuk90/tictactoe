@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { GameHubConnection } from '../../services/gameHubConnection.service';
 import { HubConnection } from '@aspnet/signalr';
 import { ActivatedRoute } from '@angular/router';
+import { IGameUser } from "../../services/gameUser.model";
 
 @Component({
     selector: 'tictactoe',
@@ -9,7 +10,11 @@ import { ActivatedRoute } from '@angular/router';
     styleUrls: ['./tictactoe.component.css'],
 })
 export class TicTacToeComponent {
+    @Input() enemyUser: IGameUser;
+    @Input() currentUser: IGameUser;
     public turn: boolean;
+    //enemyUser: IGameUser;
+    selfTileState: string = 'circle';
     public boxes: Box[] = [
         {
             id: '1-1',
@@ -82,11 +87,10 @@ export class TicTacToeComponent {
                 that.gameTile = 'circle';
             }
         });
-        // Enemy reacted to your challenge
+        // init()
         this.connection.on('ChallengeAccepted', function (enemy) {
             that.turn = true;
-
-            console.log(enemy);
+            that.selfTileState = 'cross';
         });
     }
 

@@ -1,5 +1,4 @@
-
-<div class="wrapper">
+<div class="tile-wrapper" [class.not-your-turn]="!turn">
     <ng-template ngFor let-box [ngForOf]="boxes">
         <div class="box">
             <div class="box__inner"
@@ -12,4 +11,16 @@
     </ng-template>
 </div>
 
-{{turn}}
+<div class="player-info">
+    Your Color: {{currentUser.name}}
+    your enemy : {{enemyUser.name}}
+    <div class="box--single">
+        <div class="box__inner"
+             [ngClass]="selfTileState">
+
+        </div>
+    </div>
+</div>
+
+
+

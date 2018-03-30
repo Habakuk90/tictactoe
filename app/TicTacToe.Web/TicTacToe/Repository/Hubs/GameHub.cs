@@ -49,9 +49,9 @@ namespace TicTacToe.Web.TicTacToe.Hubs
                 .GetConnections(selectedPlayer).ToList();
 
             Clients.Clients(selectedPlayerIdList)
-                .SendAsync("OpenChallengedModal", currentUser, false);
+                .SendAsync("OpenChallengedModal", currentUser);
             //call self
-            Clients.Caller.SendAsync("OpenWaitingModal", true);
+            Clients.Caller.SendAsync("OpenWaitingModal", selectedPlayer);
 
         }
 
@@ -139,7 +139,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             {
                 RoomName = gameName + currentUser.CurrentConnectionId,
             };
-            var url = "/games/tictactoe";
+            var url = "/games";
 
             
             _connections.AddGroup(currentUser, room.RoomName);

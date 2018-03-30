@@ -1,10 +1,12 @@
 ﻿import { HubConnection } from '@aspnet/signalr';
 import { Injectable } from '@angular/core';
+import { IGameUser } from "./gameUser.model";
 
 @Injectable()
 export class GameHubConnection {
     public connection: HubConnection;
-
+    public enemyUser: IGameUser;
+    public currentUser: IGameUser;
     constructor() {
         let connection = new HubConnection('/game');
     }

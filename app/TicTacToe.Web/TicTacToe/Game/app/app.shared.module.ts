@@ -26,7 +26,7 @@ import { TicTacToeComponent } from './components/games/tictactoe/tictactoe.compo
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'games', component: GamesComponent },
-            { path: 'games/tictactoe', component: TicTacToeComponent },
+            //{ path: 'games/tictactoe', component: TicTacToeComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

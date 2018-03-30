@@ -1,40 +1,56 @@
 ﻿
-.wrapper {
+.tile-wrapper {
     height: 100%;
     width: 100%;
-    border: solid 1px black;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    
+    &.not-your-turn {
+        opacity: 0.5;
+        pointer-events:none;
+    }
 }
 
 .box {
     width: 33.33333%;
     display: flex;
     min-height: 200px;
-}
 
-.box__inner {
-    background-color: #b9b9b9;
-    flex-grow: 1;
-    border: 1px solid black;
-}
+    &__inner {
+        background-color: #b9b9b9;
+        flex-grow: 1;
+        border: 1px solid black;
+        height: 100%;
 
-.cross {
-    background: url("/lib/icons/access-denied.svg") no-repeat 50% 50%;
-    background-color: white;
-}
+        &.cross {
+            background: url("/lib/icons/access-denied.svg") no-repeat 50% 50%;
+            background-color: white;
+        }
 
-.circle {
-    background: url("/lib/icons/circle-outline.svg") no-repeat 50% 50%;
-    background-color: black;
-}
+        &.circle {
+            background: url("/lib/icons/circle-outline.svg") no-repeat 50% 50%;
+            background-color: black;
+        }
 
-.circle, .cross {
-    background-size: contain;
-    transition: opacity 0.2s ease-in-out;
+        &.circle, &.cross {
+            background-size: contain;
+            transition: opacity 0.2s ease-in-out;
 
-    &:active {
-        opacity: 0.3;
+            &:active {
+                opacity: 0.3;
+            }
+        }
+    }
+
+    &--single {
+        width: 50px;
+        height: 50px;
+        margin: 15px auto 0 auto;
     }
 }
+
+.player-info {
+
+}
+
