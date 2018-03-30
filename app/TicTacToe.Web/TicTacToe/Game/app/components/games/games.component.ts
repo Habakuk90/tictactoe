@@ -10,13 +10,16 @@ import { IGameUser } from '../services/gameUser.model';
 })
 
 export class GamesComponent {
-    private currentUserName: string;
+    private currentUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };
     private users: Array<string>;
     private selectedPlayer: IGameUser = {
         name: '',
         currentConnectionId: ''
     };
-    private challengerUser: IGameUser = {
+    private enemyUser: IGameUser = {
         name: '',
         currentConnectionId: ''
     };
@@ -40,13 +43,13 @@ export class GamesComponent {
         let that = this;
         this.connection.invoke('GetConnectedUser');
         this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
-            if (!that.currentUserName)
-                that.currentUserName = currentUser.name;
+            if (!that.currentUser || !that.currentUser.name)
+                that.currentUser.name = currentUser.name;
             that.users = userOnline;
         });
-        this.connection.on('OpenChallengedModal', function (challengerUser) {
+        this.connection.on('OpenChallengedModal', function (enemyUser) {
             that.isModalActive = 'challenged';
-            that.challengerUser = challengerUser;
+            that.enemyUser = enemyUser;
         });
         //open waiting for enemy Modal
         this.connection.on('OpenWaitingModal', function () {
@@ -65,9 +68,9 @@ export class GamesComponent {
     }
 
 
-    private selectPlayer(event: Event, user: string) {
+    private selectPlayer(event: Event, user: IGameUser) {
         var target = event.target || event.srcElement || event.currentTarget;
-        this.selectedPlayer.name = user;
+        this.selectedPlayer.name = user.name;
     }
 
 }

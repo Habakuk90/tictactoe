@@ -1,4 +1,4 @@
 ﻿export interface IGameUser {
-    name: string,
-    currentConnectionId: string
+    name: string;
+    currentConnectionId: string;
 }

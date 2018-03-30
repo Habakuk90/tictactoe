@@ -17,9 +17,9 @@
     <ul class="enemy-list__container">
         <ng-template ngFor let-user [ngForOf]="users">
             <li class="enemy-list__item"
-                *ngIf="user !== currentUserName" (click)="selectPlayer($event, user)"
-                [class.selected]="user === selectedPlayer.name">
-                {{user}}
+                *ngIf="user.name !== currentUser.name" (click)="selectPlayer($event, user)"
+                [class.selected]="user.name === selectedPlayer.name">
+                {{user.name}}
 
 
 
@@ -30,6 +30,6 @@
 </div>
 <button class="button button__start" (click)="challengePlayer()">Go!</button>
 <game-modal class="challenge" [class.active]="isModalActive" 
-            [isModalActive]="isModalActive" [challengerUser]="challengerUser"
+            [isModalActive]="isModalActive" [enemyUser]="enemyUser"
             >
 </game-modal>

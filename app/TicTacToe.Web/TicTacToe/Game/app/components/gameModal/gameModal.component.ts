@@ -10,7 +10,7 @@ import { IGameUser } from '../services/gameUser.model';
 })
 export class GameModalComponent {
     @Input() isModalActive: string;
-    @Input() challengerUser: IGameUser;
+    @Input() enemyUser: IGameUser;
     connection: HubConnection;
 
     constructor(private connectionService: GameHubConnection) {
@@ -27,13 +27,13 @@ export class GameModalComponent {
     accept(event: Event) {
         var that = this;
         var action = 'accepted';
-        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
+        that.connection.invoke('ChallengeResponse', that.enemyUser, action);
 
     };
     decline(event: Event) {
         var that = this;
         var action = 'declined';
-        that.connection.invoke('ChallengeResponse', that.challengerUser, action);
+        that.connection.invoke('ChallengeResponse', that.enemyUser, action);
 
     };
 

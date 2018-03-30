@@ -13,7 +13,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         private readonly static ConnectionMapping<GameUserModel> _connections =
             new ConnectionMapping<GameUserModel>();
 
-        private readonly static HashSet<string> _userOnline = new HashSet<string>();
+        private readonly static HashSet<GameUserModel> _userOnline = new HashSet<GameUserModel>();
 
         private readonly static HashSet<GameUserModel> _userModelOnline = new HashSet<GameUserModel>();
 
@@ -92,7 +92,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             if (currentUser != null)
             {
                 _connections.Add(currentUser, Context.ConnectionId);
-                _userOnline.Add(currentUser.Name);
+                _userOnline.Add(currentUser);
                 GetConnectedUser();
             }
             else
@@ -112,7 +112,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
         {
             var currentUser = SetCurrentUser();
             _connections.Remove(currentUser, Context.ConnectionId);
-            _userOnline.Remove(currentUser.Name);
+            _userOnline.Remove(currentUser);
             GetConnectedUser();
             return base.OnDisconnectedAsync(exception);
         }
