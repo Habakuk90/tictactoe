@@ -13,75 +13,91 @@ export class TicTacToeComponent {
     public boxes: Box[] = [
         {
             id: '1-1',
+            locked: false
         },
         {
             id: '1-2',
+            locked: false
         },
         {
             id: '1-3',
+            locked: false
         },
         {
             id: '2-1',
+            locked: false
         },
         {
             id: '2-2',
+            locked: false
         },
         {
             id: '2-3',
+            locked: false
         },
         {
             id: '3-1',
+            locked: false
         },
         {
             id: '3-2',
+            locked: false
         },
         {
             id: '3-3',
+            locked: false
         }
     ];
+    id1: string;
+    id2: string;
     private connection: HubConnection;
     private roomName: string;
-    
+    gameTile = 'circle';
 
     constructor(connectionService: GameHubConnection, activeRoute: ActivatedRoute) {
         this.connection = connectionService.connection;
-
+        this.id1 = activeRoute.snapshot.queryParams['id1'];
+        this.id2 = activeRoute.snapshot.queryParams['id2'];
         this.roomName = activeRoute.snapshot.queryParams['roomName'];
+
     }
 
     ngOnInit() {
         var that = this;
         //that.connection.invoke('DecideTurn', this.roomName);
-        that.connection.on('tileChange', function (tileId) {
-
-            if (!that.turn) {
-                return;
-            }
-
-            let clickedTile = that.boxes.filter(x => x.id === tileId)[0];
-            console.log(clickedTile, tileId)
-            if (clickedTile.state != null) {
-                console.log("Cant be changed");
-            }
-            if (clickedTile.state === "cross") {
-                clickedTile.state = "circle";
-            }
-            else {
-                clickedTile.state = "cross";
-            }
+        that.connection.on('TileChange', function (tileId) {
+            that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
+            that.boxes.filter(x => x.id === tileId)[0].locked = true;
         });
 
         that.connection.on('SwitchTurn', function () {
-            debugger;
             console.log('***before*** SetSequence', that.turn);
             that.turn = !that.turn;
             console.log('***after*** SetSequence', that.turn);
 
+
+            if (that.gameTile === 'circle')
+                that.gameTile = 'cross';
+            else {
+                that.gameTile = 'circle';
+            }
+        });
+        // Enemy reacted to your challenge
+        this.connection.on('ChallengeAccepted', function (enemy) {
+            that.turn = true;
+
+            console.log(enemy);
         });
     }
 
     changeField(event: Event, tileId: string) {
-        this.connection.invoke('TileClicked', this.roomName);
+        if (!this.turn || 
+            this.boxes.filter(x => x.id === tileId)[0].locked === true)
+        {
+            return;
+        }
+        
+        this.connection.invoke('TileClicked', this.roomName, this.id1, this.id2, tileId);
     }
 
 
@@ -91,4 +107,5 @@ export class TicTacToeComponent {
 interface Box {
     id: string,
     state?: string,
+    locked: boolean
 }

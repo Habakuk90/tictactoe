@@ -19,10 +19,6 @@ export class GameModalComponent {
 
     ngOnInit() {
         var that = this;
-        // Enemy reacted to your challenge
-        this.connection.on('Response', function (enemy, action) {
-            console.log(enemy, action);
-        });
     }
     accept(event: Event) {
         var that = this;

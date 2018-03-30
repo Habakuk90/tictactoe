@@ -12,9 +12,9 @@ import { IGameUser } from '../services/gameUser.model';
 export class GamesComponent {
     private currentUser: IGameUser = {
         name: '',
-        currentConnectionId: ''
+        currentConnectionId: '',
     };
-    private users: Array<string>;
+    private users: Array<IGameUser>;
     private selectedPlayer: IGameUser = {
         name: '',
         currentConnectionId: ''
@@ -47,17 +47,19 @@ export class GamesComponent {
                 that.currentUser.name = currentUser.name;
             that.users = userOnline;
         });
-        this.connection.on('OpenChallengedModal', function (enemyUser) {
+        this.connection.on('OpenChallengedModal', function (enemyUser, isTurn) {
             that.isModalActive = 'challenged';
             that.enemyUser = enemyUser;
+            that.enemyUser.isTurn = isTurn;
+            
         });
         //open waiting for enemy Modal
         this.connection.on('OpenWaitingModal', function () {
             that.isModalActive = 'waiting';
         });
 
-        that.connection.on('GoToGame', function (url, roomName) {
-            that.router.navigate([url], { queryParams: { roomName: roomName } });
+        that.connection.on('GoToGame', function (url, roomName, id1, id2) {
+            that.router.navigate([url], { queryParams: { roomName: roomName, id1: id1, id2: id2 } });
         });
     }
 

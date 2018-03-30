@@ -17,6 +17,7 @@ namespace TicTacToe.Web.TicTacToe.Game.Models
 
         public ConnectionMapping<string> Connections { get; set; }
 
+        //For TryGetValue method in Dictionary
         public override bool Equals(object obj)
         {
             if (obj == null || !(obj is GameUserModel)) return false;
