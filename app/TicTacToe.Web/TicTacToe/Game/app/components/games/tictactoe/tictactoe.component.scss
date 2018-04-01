@@ -24,13 +24,11 @@ tictactoe {
         height: 100%;
 
         &.cross {
-            background: url("/lib/icons/access-denied.svg") no-repeat 50% 50%;
-            background-color: #b9b9b9;
+            background: url("/lib/icons/letter-x.svg") no-repeat 50% 50%;
         }
 
         &.circle {
-            background: url("/lib/icons/circle-outline.svg") no-repeat 50% 50%;
-            background-color: black;
+            background: url("/lib/icons/circle.svg") no-repeat 50% 50%;
         }
 
         &.circle, &.cross {
