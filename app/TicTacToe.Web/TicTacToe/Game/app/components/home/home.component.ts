@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { GameHubConnection } from "../services/gameHubConnection.service";
 import { Router } from "@angular/router";
 import { IGameUser } from "../services/gameUser.model";
-import { HubConnection } from "@aspnet/signalr/dist/esm";
 
 @Component({
     selector: 'home',
@@ -10,7 +9,6 @@ import { HubConnection } from "@aspnet/signalr/dist/esm";
 })
 export class HomeComponent {
     private games: Array<Game> = [];
-    public connection: HubConnection;
     private users: Array<IGameUser>;
     private currentUser: IGameUser = {
         name: '',
@@ -27,7 +25,6 @@ export class HomeComponent {
     private isModalActive: string;
 
     constructor(private connectionService: GameHubConnection, private router: Router) {
-        this.connection = connectionService.connection;
     }
     ngOnInit() {
         var tictactoeGame: Game = {
@@ -38,24 +35,24 @@ export class HomeComponent {
 
         this.games.push(tictactoeGame);
         let that = this;
-        this.connection.invoke('GetConnectedUser');
-        this.connection.on('SetConnectedUser', function (currentUser, userOnline) {
+
+        this.connectionService.connection.on('SetConnectedUser', function (currentUser, userOnline) {
             if (!that.currentUser || !that.currentUser.name)
                 that.currentUser.name = currentUser.name;
             that.users = userOnline;
         });
-        this.connection.on('OpenChallengedModal', function (enemyUser, isTurn) {
+        this.connectionService.connection.on('OpenChallengedModal', function (enemyUser, isTurn) {
             that.isModalActive = 'challenged';
             that.enemyUser = enemyUser;
 
 
         });
         //open waiting for enemy Modal
-        this.connection.on('OpenWaitingModal', function (enemyUser) {
+        this.connectionService.connection.on('OpenWaitingModal', function (enemyUser) {
             that.isModalActive = 'waiting';
             that.enemyUser = enemyUser;
         });
-        that.connection.on('GoToGame', function (url, roomName, id1, id2) {
+        this.connectionService.connection.on('GoToGame', function (url, roomName, id1, id2) {
             that.router.navigate([url], { queryParams: { roomName: roomName, id1: id1, id2: id2 } });
             that.connectionService.currentUser = that.currentUser;
             that.connectionService.enemyUser = that.enemyUser;
@@ -68,12 +65,11 @@ export class HomeComponent {
     }
 
     onChallengeResponse(e: Event) {
-        this.connection.invoke('ChallengeResponse', this.enemyUser, e);
+        this.connectionService.connection.invoke('ChallengeResponse', this.enemyUser, e);
     }
 
     challengePlayer() {
-        var that = this;
-        that.connection.invoke('ChallengePlayer', that.selectedPlayer);
+        this.connectionService.connection.invoke('ChallengePlayer', this.selectedPlayer);
     }
 }
 interface Game {
