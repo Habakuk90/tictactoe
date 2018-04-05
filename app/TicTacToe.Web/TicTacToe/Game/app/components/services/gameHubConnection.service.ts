@@ -8,7 +8,6 @@ export class GameHubConnection {
     public enemyUser: IGameUser;
     public currentUser: IGameUser;
     constructor() {
-        let connection = new HubConnection('/game');
     }
 
     getConnection() {
@@ -16,7 +15,10 @@ export class GameHubConnection {
     }
 
     startConnection() {
+        var that = this;
         this.connection = new HubConnection('/game');
-        this.connection.start();
+        this.connection.start().then(() => {
+            this.connection.invoke('GetConnectedUser');
+        });
     }
 }
