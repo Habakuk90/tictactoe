@@ -24,3 +24,4 @@ app/TicTacToe.Web/TicTacToe.Web.csproj.user
 app/TicTacToe.Web/npm-debug.log
 app/TicTacToe.Web/obj/
 app/.vs/
+.gitignore.orig
