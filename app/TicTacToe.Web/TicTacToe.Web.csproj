@@ -1,0 +1,135 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicTacToe\Authorization\Controllers\**" />
+    <Compile Remove="TicTacToe\Authorization\Models\**" />
+    <Compile Remove="TicTacToe\Authorization\Repository\**" />
+    <Compile Remove="TicTacToe\Authorization\Views\**" />
+    <Compile Remove="TicTacToe\Game\dist\**" />
+    <Compile Remove="TicTacToe\Game\Repository\**" />
+    <Compile Remove="TicTacToe\Game\Views\**" />
+    <Compile Remove="wwwroot\dist\**" />
+    <Content Remove="TicTacToe\Authorization\Controllers\**" />
+    <Content Remove="TicTacToe\Authorization\Models\**" />
+    <Content Remove="TicTacToe\Authorization\Repository\**" />
+    <Content Remove="TicTacToe\Authorization\Views\**" />
+    <Content Remove="TicTacToe\Game\Repository\**" />
+    <Content Remove="TicTacToe\Game\Views\**" />
+    <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
+    <Content Remove="TicTacToe\Game\**" />
+    <Content Remove="wwwroot\dist\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Controllers\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Models\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Repository\**" />
+    <EmbeddedResource Remove="TicTacToe\Authorization\Views\**" />
+    <EmbeddedResource Remove="TicTacToe\Game\dist\**" />
+    <EmbeddedResource Remove="TicTacToe\Game\Repository\**" />
+    <EmbeddedResource Remove="TicTacToe\Game\Views\**" />
+    <EmbeddedResource Remove="wwwroot\dist\**" />
+    <None Remove="TicTacToe\Authorization\Controllers\**" />
+    <None Remove="TicTacToe\Authorization\Models\**" />
+    <None Remove="TicTacToe\Authorization\Repository\**" />
+    <None Remove="TicTacToe\Authorization\Views\**" />
+    <None Remove="TicTacToe\Game\dist\**" />
+    <None Remove="TicTacToe\Game\Repository\**" />
+    <None Remove="TicTacToe\Game\Views\**" />
+    <None Remove="wwwroot\dist\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TicTacToe\Repository\Hubs\GameHubContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="TicTacToe\Authorization\Controllers\AuthorizationController.cs" />
+    <Compile Include="TicTacToe\Authorization\Models\LoginModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Models\RegisterModel.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\ConnectionMapping.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\IUserManagement.cs" />
+    <Compile Include="TicTacToe\Authorization\Repository\UserManagement.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="webpack.config.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="Gray.Microsoft.AspNetCore.Signalr.Server" Version="0.2.0-alpha1" /> -->
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.0-preview1-final" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.6" />
+    <PackageReference Include="Webpack" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Program Files\dotnet\sdk\1.1.0\Sdks\Microsoft.NET.Sdk\build\Microsoft.NET.TargetFrameworkInference.targets" Link="Microsoft.NET.TargetFrameworkInference.targets" />
+    <None Include="TicTacToe.sln" />
+    <None Include="TicTacToe\Authorization\Views\Login.cshtml" />
+    <None Include="TicTacToe\Authorization\Views\Register.cshtml" />
+    <None Include="TicTacToe\Authorization\Views\Shared\_AuthorizationLayout.cshtml" />
+    <None Include="TicTacToe\Game\app\components\services\gameHubConnection.service.ts" />
+    <None Include="TicTacToe\Game\Views\Index.cshtml" />
+    <None Include="wwwroot\lib\images\games\TicTacToe_thumbnail.JPG" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TicTacToe\Authorization\Styles\" />
+    <Folder Include="TicTacToe\Game\Views\Shared\" />
+    <Folder Include="TicTacToe\Images\" />
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <Target Name="DebugRunWebpack" BeforeTargets="Build">
+
+  <!-- <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') "> -->
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+
+    <!-- In development, the dist files won't exist on the first run or when cloning to
+         a different machine, so rebuild them if not already present. -->
+    <Message Importance="high" Text="Performing first-run Webpack build..." />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+    <Exec Command="npm install" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
+    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="wwwroot\dist\**; TicTacToe\Game\dist\**" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties package_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+
+</Project>
