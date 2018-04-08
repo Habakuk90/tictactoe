@@ -91,7 +91,7 @@ namespace TicTacToe
                                           .AllowAnyMethod()
                                           .AllowAnyHeader());
 
-            app.UseSignalR(routes => routes.MapHub<GameHub>("/game"));
+            app.UseSignalR(routes => routes.MapHub<GameHub>("/signalR"));
 
             app.UseMvc(routes =>
                 {

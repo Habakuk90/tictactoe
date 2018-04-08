@@ -17,6 +17,7 @@ namespace TicTacToe.Web.TicTacToe.Game.Models
 
         public ConnectionMapping<string> Connections { get; set; }
 
+        private UserStatus Status { get; set; }
         //For TryGetValue method in Dictionary
         public override bool Equals(object obj)
         {
@@ -29,5 +30,14 @@ namespace TicTacToe.Web.TicTacToe.Game.Models
         {
             return (this.Name).GetHashCode();
         }
+    }
+
+    public enum UserStatus
+    {
+        Online,
+        Offline,
+        InGame,
+        Busy,
+        Attention
     }
 }

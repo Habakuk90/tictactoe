@@ -16,7 +16,7 @@ export class GameHubConnection {
 
     startConnection():Promise<void> {
         var that = this;
-        this.connection = new HubConnection('/game');
+        this.connection = new HubConnection('/signalR');
         return this.connection.start();
     }
 }
