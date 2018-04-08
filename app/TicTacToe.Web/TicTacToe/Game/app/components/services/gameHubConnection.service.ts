@@ -14,11 +14,9 @@ export class GameHubConnection {
         return this.connection;
     }
 
-    startConnection() {
+    startConnection():Promise<void> {
         var that = this;
         this.connection = new HubConnection('/game');
-        this.connection.start().then(() => {
-            this.connection.invoke('GetConnectedUser');
-        });
+        return this.connection.start();
     }
 }

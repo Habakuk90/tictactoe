@@ -1,15 +1,15 @@
 ﻿<nav>
-    <ul class="nav-list__container">
-        <li class="nav-list__item" data-link="/home">Home</li>
-        <li class="nav-list__item" data-link="/games">Games</li>
-    </ul>
-
     <ul class="nav-list__container--user">
-        <li class="nav-list__item--user" data-link="/login">Login</li>
-        <li class="nav-list__item--user" data-link="/register">Register</li>
+
         @if (!String.IsNullOrEmpty(Context.User.Identity.Name))
         {
-            <li class="nav-list__item--user" data-link="/logout">Logout @Context.User.Identity.Name</li>
+            <li class="nav-list__item--user" data-link="/home"><a href="/home">home</a></li>
+            <li class="nav-list__item--user" data-link="/logout"><a href="/logout">Logout @Context.User.Identity.Name </a></li>
+        }
+        else  
+        {
+        <li class="nav-list__item--user" data-link="/login"><a href="/login">Login</a></li>
+        <li class="nav-list__item--user" data-link="/register"><a href="/register">Register</a></li>
         }
     </ul>
 </nav>

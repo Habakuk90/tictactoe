@@ -20,6 +20,11 @@ nav {
     padding: 10px;
     text-align: center;
     cursor: pointer;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
 }
 
 .nav-list__item:hover, .nav-list__item--user:hover {

@@ -27,15 +27,10 @@ export class HomeComponent {
     constructor(private connectionService: GameHubConnection, private router: Router) {
     }
     ngOnInit() {
-        var tictactoeGame: Game = {
-            title: 'Tic Tac Toe',
-            thumbnailClass: 'tictactoe__thumbnail',
-            url: 'games/tictactoe'
-        };
-
-        this.games.push(tictactoeGame);
         let that = this;
-
+        that.addGames();
+            this.connectionService.connection.invoke('GetAllUser')
+            .then(userOnline => this.users = userOnline);
         this.connectionService.connection.on('SetConnectedUser', function (currentUser, userOnline) {
             if (!that.currentUser || !that.currentUser.name)
                 that.currentUser.name = currentUser.name;
@@ -70,6 +65,24 @@ export class HomeComponent {
 
     challengePlayer() {
         this.connectionService.connection.invoke('ChallengePlayer', this.selectedPlayer);
+    }
+
+
+    addGames() {
+        var tictactoeGame: Game = {
+            title: 'Tic Tac Toe',
+            thumbnailClass: 'tictactoe__thumbnail',
+            url: 'games/tictactoe'
+        };
+        var rps: Game = {
+            title: 'Rock Paper Scissors',
+            thumbnailClass: 'rps_thumbnail',
+            url: 'games/rps'
+        }
+
+        this.games.push(tictactoeGame);
+        this.games.push(rps);
+
     }
 }
 interface Game {

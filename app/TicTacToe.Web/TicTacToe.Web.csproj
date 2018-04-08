@@ -95,6 +95,7 @@
     <Folder Include="TicTacToe\Authorization\Styles\" />
     <Folder Include="TicTacToe\Game\Views\Shared\" />
     <Folder Include="TicTacToe\Images\" />
+    <Folder Include="wwwroot\js\" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build">

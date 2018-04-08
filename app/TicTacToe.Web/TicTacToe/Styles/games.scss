@@ -1,35 +1,53 @@
-﻿section.game {
-    display: flex;
-    flex-direction: column;
-}
-
+﻿@import '_variables.scss';
 /* Games Section */
+home {
+    display:block;
 
+}
 .game {
+    &__container {
+        text-align: center;
+    }
+
     &-list {
         &__container {
             list-style: none;
+            display: flex;
+            justify-content: center;
         }
 
         &__item {
+            border-radius: 10px 10px 10px 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+            width: 325px;
+            height: 200px;
+            margin: 10px;
+            padding: 5px;
+            text-align: center;
+            cursor: pointer;
+
+            &:active {
+                border: 3px solid #47d173;
+                box-shadow: 0px 0px 0px 0px rgba(0,0,0,0.75);
+                border-radius: 0;
+            }
         }
     }
 
     &-linkfield {
-        width: 325px;
-        height: 200px;
-        margin: 10px;
-        padding: 5px;
-        text-align: center;
-        cursor: pointer;
+        height: 100%;
         background-size: 100% 100%;
         background-repeat: no-repeat;
         opacity: 0.7;
         transition: opacity ease-in-out 0.2s;
-        
+
 
         &.tictactoe__thumbnail {
             background-image: url(/lib/images/TicTacToe_thumbnail.png);
+        }
+
+        &.rps_thumbnail {
+            background-image: url(/lib/images/rps_thumbnail.png);
         }
 
         &.selected {
@@ -44,15 +62,50 @@
 /* Enemy Section */
 
 .enemy {
+
+    &__container {
+        text-align: center;
+        list-style: none;
+        margin: 0 auto;
+        width: 300px;
+        background: $color-blue;
+        padding: 20px;
+        border-radius: 5px;
+        color: white;
+        display: flex;
+        flex-direction: column;
+
+        button {
+            align-self: flex-end;
+            margin-top: 20px;
+        }
+    }
+
     &-list {
         &__container {
             list-style: none;
+            border-radius: 5px;
+            color: white;
         }
 
         &__item {
+            text-align: left;
+            padding: 5px 15px;
+            margin: 8px 0 0 0;
+            border: 3px solid white;
+            border-radius: 3px;
+            font-size: 18px;
+            font-weight: bolder;
+            transition: all ease-in-out 0.3s;
+            cursor: context-menu;
 
             &.selected {
-                background-color: lightgray;
+                background-color: white;
+                color: black;
+            }
+
+            &:first-child {
+                /*margin: 0;*/
             }
         }
     }
@@ -69,7 +122,7 @@ game-modal.challenge {
     z-index: 9999;
     /* background-color: white; */
     display: none;
-    top:0;
+    top: 0;
 }
 
 game-modal.challenge.active {
@@ -85,6 +138,7 @@ game-modal.challenge.active {
         align-self: center;
         background-color: white;
         border: solid 1px black;
+        text-align: center;
     }
 
     &__header {

@@ -31,11 +31,11 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             Clients.Group(room).SendAsync("TileChange", tileId);
         }
 
-        public void GetConnectedUser()
+        public IEnumerable<GameUserModel> GetAllUser()
         {
-            var currentUser = SetCurrentUser();
-            Clients.All.SendAsync("SetConnectedUser", currentUser, _userOnline.ToList());
+            return _userOnline.ToList();
         }
+
         /// <summary>
         /// Player selected enemy and send Request
         /// </summary>
@@ -84,7 +84,8 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             {
                 _connections.Add(currentUser, Context.ConnectionId);
                 _userOnline.Add(currentUser);
-                GetConnectedUser();
+                Clients.All.SendAsync("SetConnectedUser",
+                    currentUser, _userOnline.ToList());
             }
             else
             {
@@ -104,7 +105,8 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var currentUser = SetCurrentUser();
             _connections.Remove(currentUser, Context.ConnectionId);
             _userOnline.Remove(currentUser);
-            GetConnectedUser();
+            Clients.All.SendAsync("SetConnectedUser",
+                    currentUser, _userOnline.ToList());
             return base.OnDisconnectedAsync(exception);
         }
 
