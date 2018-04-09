@@ -1,0 +1,34 @@
+﻿/* Navigation */
+nav {
+    display: flex;
+    flex-direction: row;
+    grid-area: header;
+}
+
+.nav-list__container, .nav-list__container--user {
+    display: flex;
+    flex: 1;
+    list-style: none;
+}
+
+.nav-list__container--user {
+    justify-content: flex-end;
+}
+
+.nav-list__item, .nav-list__item--user {
+    min-width: 80px;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+
+    a {
+        text-decoration: none;
+        color: black;
+    }
+}
+
+.nav-list__item:hover, .nav-list__item--user:hover {
+    background-color: lightgray;
+}
+
+/* Navigation END */
