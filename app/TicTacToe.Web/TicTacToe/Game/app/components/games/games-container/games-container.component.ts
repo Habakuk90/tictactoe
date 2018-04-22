@@ -7,6 +7,12 @@ import { IGameUser } from "../../services/gameUser.model";
 })
 
 export class GamesContainerComponent {
-    @Input() enemyUser: IGameUser;
-    @Input() currentUser: IGameUser;
+    @Input() enemyUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };;
+    @Input() currentUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };;
 }

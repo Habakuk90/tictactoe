@@ -18,7 +18,7 @@ export class GamesComponent {
         name: '',
         currentConnectionId: ''
     };
-    private users: Array<IGameUser>;
+    private users: Array<IGameUser> = [];
 
     constructor(private connectionService: GameHubConnection) {
         this.currentUser = connectionService.currentUser;

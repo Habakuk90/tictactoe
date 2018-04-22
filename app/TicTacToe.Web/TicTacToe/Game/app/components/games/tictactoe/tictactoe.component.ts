@@ -10,9 +10,15 @@ import { IGameUser } from "../../services/gameUser.model";
     styleUrls: ['./tictactoe.component.css'],
 })
 export class TicTacToeComponent {
-    @Input() enemyUser: IGameUser;
-    @Input() currentUser: IGameUser;
-    public turn: boolean;
+    @Input() enemyUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };;
+    @Input() currentUser: IGameUser = {
+        name: '',
+        currentConnectionId: ''
+    };;
+    public turn: boolean = false;
     //enemyUser: IGameUser;
     selfTileState: string = 'circle';
     public boxes: Box[] = [
@@ -76,11 +82,8 @@ export class TicTacToeComponent {
         });
 
         that.connection.on('SwitchTurn', function () {
-            console.log('***before*** SetSequence', that.turn);
             that.turn = !that.turn;
-            console.log('***after*** SetSequence', that.turn);
-
-
+            
             if (that.gameTile === 'circle')
                 that.gameTile = 'cross';
             else {
