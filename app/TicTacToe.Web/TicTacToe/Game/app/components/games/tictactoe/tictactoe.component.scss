@@ -61,8 +61,6 @@ $border-tictactoe: 5px solid black;
 @for $i from 1 through $grid-columns {
     @for $j from 1 through $grid-rows {
         #\3#{$i}-#{$j} {
-            @debug #{$i}-#{$j};
-
             @if $i == 1 or $i == 2 {
                 border-bottom: $border-tictactoe;
             }

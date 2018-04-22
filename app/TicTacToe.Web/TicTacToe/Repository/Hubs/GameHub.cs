@@ -105,6 +105,7 @@ namespace TicTacToe.Web.TicTacToe.Hubs
             var currentUser = SetCurrentUser();
             _connections.Remove(currentUser, Context.ConnectionId);
             _userOnline.Remove(currentUser);
+            // [TODO] need to send _userOnline?
             Clients.All.SendAsync("SetConnectedUser",
                     currentUser, _userOnline.ToList());
             return base.OnDisconnectedAsync(exception);

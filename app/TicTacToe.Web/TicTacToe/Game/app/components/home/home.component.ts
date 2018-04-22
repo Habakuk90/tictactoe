@@ -29,24 +29,25 @@ export class HomeComponent {
     ngOnInit() {
         let that = this;
         that.addGames();
-            this.connectionService.connection.invoke('GetAllUser')
+        this.connectionService.connection.invoke('GetAllUser')
             .then(userOnline => this.users = userOnline);
         this.connectionService.connection.on('SetConnectedUser', function (currentUser, userOnline) {
             if (!that.currentUser || !that.currentUser.name)
                 that.currentUser.name = currentUser.name;
+            // [TODO] GetAllOnlineUser no need for SetConnectedUser?
             that.users = userOnline;
         });
-        this.connectionService.connection.on('OpenChallengedModal', function (enemyUser, isTurn) {
+        this.connectionService.connection.on('OpenChallengedModal', function (enemyUser) {
             that.isModalActive = 'challenged';
             that.enemyUser = enemyUser;
-
-
         });
+
         //open waiting for enemy Modal
         this.connectionService.connection.on('OpenWaitingModal', function (enemyUser) {
             that.isModalActive = 'waiting';
             that.enemyUser = enemyUser;
         });
+
         this.connectionService.connection.on('GoToGame', function (url, roomName, id1, id2) {
             that.router.navigate([url], { queryParams: { roomName: roomName, id1: id1, id2: id2 } });
             that.connectionService.currentUser = that.currentUser;

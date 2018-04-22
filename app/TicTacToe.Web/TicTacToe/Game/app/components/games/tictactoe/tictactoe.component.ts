@@ -75,7 +75,6 @@ export class TicTacToeComponent {
 
     ngOnInit() {
         var that = this;
-        //that.connection.invoke('DecideTurn', this.roomName);
         that.connection.on('TileChange', function (tileId) {
             that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
             that.boxes.filter(x => x.id === tileId)[0].locked = true;

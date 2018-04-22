@@ -17,7 +17,7 @@ export class GameHubConnection {
     constructor() {
     }
 
-    getConnection() {
+    getConnection() : HubConnection {
         return this.connection;
     }
 
