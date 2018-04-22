@@ -9,7 +9,7 @@ import { IGameUser } from "../services/gameUser.model";
 })
 export class HomeComponent {
     private games: Array<Game> = [];
-    private users: Array<IGameUser>;
+    private users: Array<IGameUser> = [];
     private currentUser: IGameUser = {
         name: '',
         currentConnectionId: '',
@@ -22,7 +22,7 @@ export class HomeComponent {
         name: '',
         currentConnectionId: ''
     };
-    private isModalActive: string;
+    private isModalActive: string = '';
 
     constructor(private connectionService: GameHubConnection, private router: Router) {
     }
