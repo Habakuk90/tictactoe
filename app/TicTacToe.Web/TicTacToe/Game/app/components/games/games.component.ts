@@ -10,15 +10,15 @@ import { IGameUser } from '../services/gameUser.model';
 })
 
 export class GamesComponent {
-    private currentUser: IGameUser = {
+    currentUser: IGameUser = {
         name: '',
         currentConnectionId: '',
     };
-    private enemyUser: IGameUser = {
+    enemyUser: IGameUser = {
         name: '',
         currentConnectionId: ''
     };
-    private users: Array<IGameUser> = [];
+    users: Array<IGameUser> = [];
 
     constructor(private connectionService: GameHubConnection) {
         this.currentUser = connectionService.currentUser;

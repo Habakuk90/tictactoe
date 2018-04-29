@@ -8,21 +8,22 @@ import { IGameUser } from "../services/gameUser.model";
     templateUrl: './home.component.html'
 })
 export class HomeComponent {
-    private games: Array<Game> = [];
-    private users: Array<IGameUser> = [];
-    private currentUser: IGameUser = {
+    games: Array<Game> = [];
+    users: Array<IGameUser> = [];
+    currentUser: IGameUser = {
         name: '',
         currentConnectionId: '',
     };
-    private selectedPlayer: IGameUser = {
+    selectedPlayer: IGameUser = {
         name: '',
         currentConnectionId: ''
     };
-    private enemyUser: IGameUser = {
+    enemyUser: IGameUser = {
         name: '',
         currentConnectionId: ''
     };
-    private isModalActive: string = '';
+    isModalActive: string = '';
+
 
     constructor(private connectionService: GameHubConnection, private router: Router) {
     }
