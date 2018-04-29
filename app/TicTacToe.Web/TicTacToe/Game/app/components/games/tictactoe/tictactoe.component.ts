@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { GameHubConnection } from '../../services/gameHubConnection.service';
 import { HubConnection } from '@aspnet/signalr';
 import { ActivatedRoute } from '@angular/router';
-import { IGameUser } from "../../services/gameUser.model";
+import { IGameUser } from '../../models/gameUser.model';
 
 @Component({
     selector: 'tictactoe',

@@ -1,8 +1,8 @@
-<div class="game__container">
+<div *ngIf="!isGameSelected" class="game__container">
     <h2>Which game do you want to play</h2>
     <ul class="game-list__container">
         <ng-template ngFor let-game [ngForOf]="games">
-            <li class="game-list__item">
+            <li class="game-list__item" (click)="selectGame($event, game)">
                 <div class="game-linkfield" [ngClass]="game.thumbnailClass">
                 </div>
             </li>
@@ -10,7 +10,7 @@
     </ul>
 </div>
 
-<div class="enemy__container">
+<div *ngIf="isGameSelected" class="enemy__container">
     <h2>See who's online</h2>
     <ul class="enemy-list__container">
         <ng-template ngFor let-user [ngForOf]="users">

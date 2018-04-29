@@ -1,6 +1,6 @@
 ﻿import { HubConnection } from '@aspnet/signalr';
 import { Injectable } from '@angular/core';
-import { IGameUser } from "./gameUser.model";
+import { IGameUser } from '../models/gameUser.model';
 //[TODO] Set Connection when app ready / remove the error
 // failed to connect when not in connection state
 @Injectable()

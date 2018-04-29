@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { GameHubConnection } from "../services/gameHubConnection.service";
 import { Router } from "@angular/router";
-import { IGameUser } from "../services/gameUser.model";
-
+import { IGameUser } from '../models/gameUser.model';
+import { IGame } from '../models/game.model';
 @Component({
     selector: 'home',
     templateUrl: './home.component.html'
 })
 export class HomeComponent {
-    games: Array<Game> = [];
+    games: Array<IGame> = [];
     users: Array<IGameUser> = [];
     currentUser: IGameUser = {
         name: '',
@@ -23,7 +23,7 @@ export class HomeComponent {
         currentConnectionId: ''
     };
     isModalActive: string = '';
-
+    isGameSelected: boolean = false;
 
     constructor(private connectionService: GameHubConnection, private router: Router) {
     }
@@ -69,14 +69,17 @@ export class HomeComponent {
         this.connectionService.connection.invoke('ChallengePlayer', this.selectedPlayer);
     }
 
+    selectGame(e: Event, game: IGame) {
+        this.currentUser.selectedGame = game;
+    }
 
     addGames() {
-        var tictactoeGame: Game = {
+        var tictactoeGame: IGame = {
             title: 'Tic Tac Toe',
             thumbnailClass: 'tictactoe__thumbnail',
             url: 'games/tictactoe'
         };
-        var rps: Game = {
+        var rps: IGame = {
             title: 'Rock Paper Scissors',
             thumbnailClass: 'rps_thumbnail',
             url: 'games/rps'
@@ -86,9 +89,4 @@ export class HomeComponent {
         this.games.push(rps);
 
     }
-}
-interface Game {
-    title: string,
-    thumbnailClass: string,
-    url: string
 }

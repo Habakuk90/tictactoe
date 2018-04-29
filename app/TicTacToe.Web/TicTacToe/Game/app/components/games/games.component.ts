@@ -3,7 +3,7 @@ import { HubConnection } from '@aspnet/signalr';
 import { GameHubConnection } from '.././services/gameHubConnection.service';
 
 import { Router } from '@angular/router';
-import { IGameUser } from '../services/gameUser.model';
+import { IGameUser } from '../models/gameUser.model';
 @Component({
     selector: 'games',
     templateUrl: './games.component.html'

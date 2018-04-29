@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IGameUser } from "../../services/gameUser.model";
+import { IGameUser } from '../../models/gameUser.model';
 
 @Component({
     selector: 'games-container',
