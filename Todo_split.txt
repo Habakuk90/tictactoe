@@ -1,0 +1,8 @@
+[TODO for da split]
+- split two git repositorys
+- move Authentication to app
+- enable cors
+- create new angular cli based angular app
+- Set up Authentication and Api only for ASP.NET Core app 
+
+clean up shit
