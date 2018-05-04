@@ -61,8 +61,16 @@ namespace TicTacToe
                 //options.Conventions.
             });
 
+            services.AddCors(options => options.AddPolicy("AppPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+                           .WithOrigins("http://localhost:4200");
+                }
+                
+                ));
 
-            services.AddCors();
+
             services.AddSignalR();
         }
 
@@ -86,10 +94,7 @@ namespace TicTacToe
             app.UseAuthentication();
 
             app.UseStaticFiles();
-
-            app.UseCors(builder => builder.AllowAnyOrigin()
-                                          .AllowAnyMethod()
-                                          .AllowAnyHeader());
+            app.UseCors("AppPolicy");
 
             app.UseSignalR(routes => routes.MapHub<GameHub>("/signalR"));
 
