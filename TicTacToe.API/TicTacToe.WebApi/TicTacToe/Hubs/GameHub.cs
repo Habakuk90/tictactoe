@@ -9,7 +9,7 @@ using TicTacToe.WebApi.TicTacToe.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class GameHub : Hub
     {
         private readonly static ConnectionMapping<GameUserModel> _connections =
@@ -36,6 +36,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public IEnumerable<GameUserModel> GetAllUser()
         {
             return _userOnline.ToList();
+        }
+
+        public string Send(string message)
+        {
+            return message;
         }
 
         /// <summary>
@@ -81,18 +86,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns></returns>
         public override Task OnConnectedAsync()
         {
-            var currentUser = SetCurrentUser();
-            if (currentUser != null || currentUser.Name != null)
-            {
-                _connections.Add(currentUser, Context.ConnectionId);
-                _userOnline.Add(currentUser);
-                Clients.All.SendAsync("SetConnectedUser",
-                    currentUser, _userOnline.ToList());
-            }
-            else
-            {
-                Console.WriteLine("user Empty");
-            }
+            //var currentUser = SetCurrentUser();
+            //if (currentUser != null || currentUser.Name != null)
+            //{
+            //    _connections.Add(currentUser, Context.ConnectionId);
+            //    _userOnline.Add(currentUser);
+            //    Clients.All.SendAsync("SetConnectedUser",
+            //        currentUser, _userOnline.ToList());
+            //}
+            //else
+            //{
+            //    Console.WriteLine("user Empty");
+            //}
 
             return base.OnConnectedAsync();
         }

@@ -7,7 +7,7 @@ import { ConfigService } from '../utils/config.service';
 import { Observable } from 'rxjs';
 import { UserRegistration } from '../models/user.registration.inteface';
 import { map, catchError } from 'rxjs/operators';
-import { BaseService } from './baser.service';
+import { BaseService } from './base.service';
 
 @Injectable()
 export class UserService extends BaseService {

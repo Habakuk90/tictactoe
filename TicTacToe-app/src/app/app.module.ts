@@ -6,6 +6,8 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { routing } from './app.routing';
 import { AccountModule } from './account/account.module';
+import { HubConnectionService } from './shared/services/hubconnection.service';
+import { ConfigService } from './shared/utils/config.service';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,7 @@ import { AccountModule } from './account/account.module';
     routing,
     AccountModule
   ],
-  providers: [],
+  providers: [ConfigService, HubConnectionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
