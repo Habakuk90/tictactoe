@@ -11,7 +11,6 @@ import { BaseService } from './base.service';
 
 @Injectable()
 export class UserService extends BaseService {
-
   baseUrl: String = '';
 
   private loggedIn = false;
@@ -25,11 +24,13 @@ export class UserService extends BaseService {
   }
 
   register(userName: string, password: string) {
-    const body = JSON.stringify({ userName, password });
     let headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers = headers.set('Content-Type', 'application/json');
 
-    return this.http.post(this.baseUrl + '/accounts', body, {headers: headers})
+    return this.http.post(this.baseUrl + '/Account/RegisterUser',
+        JSON.stringify({ userName, password }),
+        {headers: headers, responseType: 'text'}
+      )
       .pipe(
         map(res => res),
         catchError(this.handleError)
@@ -40,8 +41,7 @@ export class UserService extends BaseService {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
 
-    return this.http
-      .post(
+    return this.http.post(
         this.baseUrl + '/Account/LoginUser',
         JSON.stringify({ userName, password }),
         { headers: headers, responseType: 'text' }
@@ -56,5 +56,18 @@ export class UserService extends BaseService {
 
   isLoggedIn() {
     return this.loggedIn;
+  }
+
+  getUserName() {
+    let headers = new HttpHeaders();
+    headers = headers.set('Content-Type', 'application/json');
+
+    const authToken = localStorage.getItem('auth_token');
+    headers = headers.set('Authorization', `Bearer ${authToken}`);
+
+    return this.http.get(
+      this.baseUrl + '/values/getUserName',
+      {headers: headers}
+    ).pipe(map(res => res));
   }
 }

@@ -1,12 +1,17 @@
 <!-- [TODO] Validation text fields -->
 <section class="authorization">
-  <form class="authorization-form" action="/Authorization/Register" method="post">
+  <form #form="ngForm" (ngSubmit)="register(form)" class="authorization-form">
     <div class="authorization-form__container">
-      <input type="text" name="UserName" value="User" />
-      <input type="password" name="Password" placeholder="Password" />
-      <input type="password" name="PasswordConfirm" placeholder="Confirm Password" />
+      <input type="text" name="userName" value="User"
+      ngModel required />
+      <input type="password" name="password" placeholder="Password" required
+      ngModel />
+      <input type="password" name="passwordConfirm" placeholder="Confirm Password"
+      required ngModel />
 
-      <button class="button button__submit" type="submit">Register</button>
+      <button class="button button__submit" type="submit" [disabled]="form.invalid">
+        Register
+      </button>
     </div>
   </form>
 </section>

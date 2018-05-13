@@ -1,21 +1,21 @@
 <header>
   <nav>
     <ul class="nav-list__container">
-
       <li class="nav-list__item" routerLink="">
         Home
       </li>
-      <li class="nav-list__item" routerLink="/logout">
-        Logout
-      </li>
 
-      <li class="nav-list__item" routerLink="/login">
-        Login
+      <li *ngIf="isLoggedIn; else auth" class="nav-list__item" (click)="logout()">
+        Logout {{userName}}
       </li>
-      <li class="nav-list__item" routerLink="/register">
-        Register
-      </li>
-
+      <ng-template #auth>
+        <li class="nav-list__item" routerLink="/login">
+          Login
+        </li>
+        <li class="nav-list__item" routerLink="/register">
+          Register
+        </li>
+      </ng-template>
     </ul>
   </nav>
 </header>

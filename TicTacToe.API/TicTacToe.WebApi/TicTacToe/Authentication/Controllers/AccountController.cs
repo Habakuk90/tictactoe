@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
         private readonly SignInManager<IdentityUser> _signInManager;
@@ -39,7 +39,7 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<object> RegisterUser(RegisterModel registerModel)
+        public async Task<object> RegisterUser([FromBody]RegisterModel registerModel)
         {
             var user = new IdentityUser
             {
