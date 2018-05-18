@@ -22,7 +22,6 @@ export class LoginFormComponent {
         .subscribe(
         result => {
           if (result) {
-            localStorage.setItem('auth_token', result);
             this.router.navigate(['']);
           }
         });

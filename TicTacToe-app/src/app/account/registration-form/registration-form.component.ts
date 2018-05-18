@@ -18,7 +18,6 @@ export class RegistrationFormComponent {
         .subscribe(
         result => {
           if (result) {
-            localStorage.setItem('auth_token', result.toString());
             this.router.navigate(['']);
           }
         }, error => console.log(error));
