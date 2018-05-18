@@ -23,6 +23,7 @@ export class LoginFormComponent {
         result => {
           if (result) {
             this.router.navigate(['']);
+            this.userService.currentUserName = value.userName;
           }
         });
         // , error => this.errors = error);

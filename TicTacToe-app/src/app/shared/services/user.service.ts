@@ -9,6 +9,7 @@ import { UserRegistration } from '../models/user.registration.inteface';
 import { map, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
+import { HubConnectionService } from './hubconnection.service';
 
 @Injectable()
 export class UserService extends BaseService {
@@ -17,7 +18,10 @@ export class UserService extends BaseService {
   private _isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn = this._isLoggedInSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, configService: ConfigService) {
+  currentUserName = '';
+
+  constructor(private http: HttpClient, private router: Router,
+              configService: ConfigService, private connectionService: HubConnectionService) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
@@ -34,7 +38,6 @@ export class UserService extends BaseService {
         {headers: headers, responseType: 'text'}
       )
       .pipe(
-        map(res => res),
         map(res => {
           localStorage.setItem('auth_token', res);
         }),
@@ -52,7 +55,6 @@ export class UserService extends BaseService {
         { headers: headers, responseType: 'text' }
       )
       .pipe(
-        map(res => res),
         map(res =>  {
           localStorage.setItem('auth_token', res);
           this._isLoggedInSubject.next(true);
@@ -66,6 +68,7 @@ export class UserService extends BaseService {
     localStorage.removeItem('auth_token');
     this._isLoggedInSubject.next(false);
     this.router.navigate(['login']);
+    this.connectionService.stopConnection();
   }
 
   getUserName() {
@@ -78,10 +81,6 @@ export class UserService extends BaseService {
     return this.http.get(
       this.baseUrl + '/values/getUserName',
       {headers: headers}
-    ).pipe(map(res => res));
-  }
-
-  getIsLoggedIn() {
-    return this.isLoggedIn.toPromise();
+    ).pipe(map(res => res), map(res => this.currentUserName = res.toString()));
   }
 }

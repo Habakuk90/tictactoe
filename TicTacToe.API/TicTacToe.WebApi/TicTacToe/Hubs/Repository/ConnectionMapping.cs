@@ -63,7 +63,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             return Enumerable.Empty<string>();
         }
 
-        public string GetUserByConnection(string conId)
+        public GameUserModel GetUserByConnection(string conId)
         {
             foreach (var key in _userConnections.Keys)
             {
@@ -71,10 +71,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
                 var userFound = connection.Any(con => con == conId);
                 if (userFound)
                 {
-                    return key.ToString();
+                    return key;
                 }
             }
-            return string.Empty;
+            return new GameUserModel();
         }
 
         /// <summary>

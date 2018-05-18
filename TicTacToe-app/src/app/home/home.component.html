@@ -4,3 +4,11 @@
   <button (click)="hello(inputMessage)">Test da message</button>
   {{message}}
 </p>
+
+
+<ng-template ngFor let-user [ngForOf]="userOnline">
+  <li class="enemy-list__item"
+      *ngIf="user.name !== currentUser">
+      <span>{{user.name}}</span>
+  </li>
+</ng-template>

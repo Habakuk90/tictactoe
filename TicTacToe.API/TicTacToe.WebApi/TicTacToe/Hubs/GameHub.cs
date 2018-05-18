@@ -17,8 +17,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         private readonly static HashSet<GameUserModel> _userOnline = new HashSet<GameUserModel>();
 
-        private readonly static HashSet<GameUserModel> _userModelOnline = new HashSet<GameUserModel>();
-
         public enum ModalStates { Accepted, Declined };
 
         //[TODO] map two player against each other on connection to "game"
@@ -35,6 +33,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public IEnumerable<GameUserModel> GetAllUser()
         {
+            Clients.Others.SendAsync("SetConnectedUser", _userOnline);
             return _userOnline.ToList();
         }
 
@@ -54,16 +53,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="selectedPlayer"></param>
         public void ChallengePlayer(GameUserModel selectedPlayer)
         {
-            GameUserModel currentUser = SetCurrentUser();
+            //GameUserModel currentUser = SetCurrentUser();
 
             // Clients.User => quick workaround with all ids
-            var selectedPlayerIdList = _connections
-                .GetConnections(selectedPlayer).ToList();
+            //var selectedPlayerIdList = _connections
+            //    .GetConnections(selectedPlayer).ToList();
 
-            Clients.Clients(selectedPlayerIdList)
-                .SendAsync("OpenChallengedModal", currentUser);
-            //call self
-            Clients.Caller.SendAsync("OpenWaitingModal", selectedPlayer);
+            //Clients.Clients(selectedPlayerIdList)
+            //    .SendAsync("OpenChallengedModal", currentUser);
+            ////call self
+            //Clients.Caller.SendAsync("OpenWaitingModal", selectedPlayer);
 
         }
 
@@ -114,29 +113,49 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns></returns>
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            var currentUser = SetCurrentUser();
-            _connections.Remove(currentUser, Context.ConnectionId);
+            
+            var currentUser = _connections.GetUserByConnection(Context.ConnectionId);
+            //var currentUser = new GameUserModel
+            //{
+            //    Name = currentUserName,
+            //    CurrentConnectionId = Context.ConnectionId
+            //};
+            _connections.Remove(currentUser, currentUser.CurrentConnectionId);
             _userOnline.Remove(currentUser);
-            // [TODO] need to send _userOnline?
-            Clients.All.SendAsync("SetConnectedUser",
-                    currentUser, _userOnline.ToList());
+            UpdateUserList();
+            //var currentUser = SetCurrentUser();
+            //_connections.Remove(currentUser, Context.ConnectionId);
+            //_userOnline.Remove(currentUser);
+            //// [TODO] need to send _userOnline?
+            //Clients.All.SendAsync("SetConnectedUser",
+            //        currentUser, _userOnline.ToList());
             return base.OnDisconnectedAsync(exception);
         }
 
-        public GameUserModel SetCurrentUser()
+        public void AddCurrentUser(string userName)
         {
             if (Context != null || Context.User != null)
             {
-                return new GameUserModel
+                var user = new GameUserModel
                 {
-                    Name = Context.User.Identity.Name,
+                    Name = userName,
                     CurrentConnectionId = Context.ConnectionId
                 };
+                _connections.Add(user, user.CurrentConnectionId);
+                _userOnline.Add(user);
+                UpdateUserList();
             }
-
-            return new GameUserModel();
         }
 
+        public void RemoveCurrentUser()
+        {
+
+        }
+
+        public void UpdateUserList()
+        {
+            Clients.All.SendAsync("UpdateUserList", _userOnline);
+        }
 
         /// <summary>
         /// Both player accepted, set up game and room
@@ -145,13 +164,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public async void SetUpGame(GameUserModel enemy)
         {
 
-            var currentUser = SetCurrentUser();
+            //var currentUser = SetCurrentUser();
 
             //[TODO] allow more games
-            var gameName = "tictactoe";
+            //var gameName = "tictactoe";
 
 
-            var url = "/games";
+            //var url = "/games";
 
 
             //_connections.AddGroup(currentUser, room.RoomName);
