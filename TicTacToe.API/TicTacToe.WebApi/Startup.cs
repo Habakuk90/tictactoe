@@ -73,7 +73,7 @@ namespace TicTacToe.WebApi
                     {
                         OnMessageReceived = context =>
                         {
-                            if (context.Request.Path.Value.StartsWith("/signalR") &&
+                            if (context.Request.Path.Value.StartsWith("/api/signalR") &&
                     context.Request.Query.TryGetValue("token", out StringValues token))
                             {
                                 context.Token = token;

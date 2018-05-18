@@ -9,15 +9,21 @@ import { HubConnection } from '@aspnet/signalr';
 })
 export class HomeComponent implements OnInit {
   connection: HubConnection;
-
+  message: string;
   constructor(connectionService: HubConnectionService) {
-    this.connection = connectionService.getConnection();
-  }
-
-  ngOnInit() {
-    this.connection.invoke('send', 'Hallo').then(res => {
-      console.log(res);
+    this.connection = connectionService.connection;
+    connectionService.startConnection().then(() => {
+      this.connection.on('SendAll', (res) => {
+        this.message = res;
+      });
     });
   }
 
+  ngOnInit() {
+
+  }
+
+  hello(message) {
+    this.connection.invoke('SendAll', message.value);
+  }
 }

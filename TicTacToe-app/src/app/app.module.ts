@@ -8,6 +8,7 @@ import { routing } from './app.routing';
 import { AccountModule } from './account/account.module';
 import { HubConnectionService } from './shared/services/hubconnection.service';
 import { ConfigService } from './shared/utils/config.service';
+import { AuthGuard } from './auth.guard';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,7 @@ import { ConfigService } from './shared/utils/config.service';
     routing,
     AccountModule
   ],
-  providers: [ConfigService, HubConnectionService],
+  providers: [ConfigService, HubConnectionService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

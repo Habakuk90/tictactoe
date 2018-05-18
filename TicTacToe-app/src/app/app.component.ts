@@ -8,11 +8,13 @@ import { UserService } from './shared/services/user.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
-  isConnected = false;
   userName = '';
-  constructor(connectionService: HubConnectionService, userService: UserService) {
-    connectionService.startConnection().then(() => this.isConnected = true);
-    userService.getUserName().subscribe(res => this.userName =  res.toString());
+  constructor(userService: UserService) {
+    userService.isLoggedIn.subscribe(isLoggedIn => {
+      if (isLoggedIn) {
+        userService.getUserName().subscribe(res => this.userName =  res.toString());
+      }
+    });
+   }
   }
-}
+

@@ -10,22 +10,20 @@ import { Subscription } from 'rxjs';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() userName: string;
   isLoggedIn: boolean;
-  navStatusSubscription: Subscription;
-
+  isLoggedInSubscription: Subscription;
   constructor(private userService: UserService) {
-    this.isLoggedIn = userService.isLoggedIn();
+
   }
 
   ngOnInit() {
-    this.navStatusSubscription = this.userService.authNavStatus$.subscribe(
-      navStatus => this.isLoggedIn = navStatus);
+    this.isLoggedInSubscription = this.userService.isLoggedIn
+      .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
   }
 
   ngOnDestroy() {
-    this.navStatusSubscription.unsubscribe();
+    this.isLoggedInSubscription.unsubscribe();
   }
   logout() {
     this.userService.logout();
-    this.isLoggedIn = false;
   }
 }

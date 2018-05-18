@@ -9,7 +9,7 @@ using TicTacToe.WebApi.TicTacToe.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class GameHub : Hub
     {
         private readonly static ConnectionMapping<GameUserModel> _connections =
@@ -41,6 +41,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public string Send(string message)
         {
             return message;
+        }
+
+        public void SendAll(string message)
+        {
+            Clients.All.SendAsync("SendAll", message);
         }
 
         /// <summary>

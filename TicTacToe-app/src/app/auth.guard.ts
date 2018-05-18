@@ -1,16 +1,16 @@
 // auth.guard.ts
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { UserService } from './shared/services/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private user: UserService, private router: Router) {}
+  constructor(private router: Router) {}
 
-  canActivate() {
+   canActivate() {
+    const isLoggedIn = !!localStorage.getItem('auth_token');
 
-    if (!this.user.isLoggedIn()) {
-       this.router.navigate(['/account/login']);
+    if (!isLoggedIn) {
+       this.router.navigate(['login']);
        return false;
     }
 
