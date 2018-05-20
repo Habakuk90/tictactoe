@@ -10,12 +10,14 @@ import { HubConnectionService } from '../services/hubconnection.service';
 export class ModalComponent implements OnInit {
   enemyUserName;
   connection;
-  activeModal;
   modals = {
+    none: '',
     challengedModal: 'challenged',
     waitingModal: 'waiting'
   };
-  constructor(connectionService: HubConnectionService, render: Renderer2,
+  activeModal = this.modals.none;
+
+  constructor(connectionService: HubConnectionService, private render: Renderer2,
               @Inject(DOCUMENT) document) {
 
     connectionService.isConnected.subscribe(isConnected => {
@@ -37,5 +39,14 @@ export class ModalComponent implements OnInit {
 
   onChallengeResponse(status) {
     this.connection.invoke('ChallengeResponse', this.enemyUserName, status);
+  }
+
+  abort() {
+    this.activeModal = '';
+  }
+
+  testModal(e) {
+    this.activeModal = e.target.value;
+    this.render.addClass(document.body, 'modal-open');
   }
 }

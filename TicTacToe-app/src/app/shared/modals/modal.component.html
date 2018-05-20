@@ -1,8 +1,21 @@
-<div class="modal__container">
-  <app-challenged-modal [enemyUserName]="enemyUserName"
-    (response)="onChallengeResponse($event)"
+<section class="modal" *ngIf="activeModal !== modals.none">
+  <span class="modal__close-container" (click)="abort()" >close modal X</span>
+
+
+  <app-challenged-modal class="modal__container" [enemyUserName]="enemyUserName"
+    (challengeResponse)="onChallengeResponse($event)"
     *ngIf="activeModal === modals.challengedModal">
 
   </app-challenged-modal>
-  <app-waiting-modal *ngIf="activeModal === modals.waitingModal"></app-waiting-modal>
+  <app-waiting-modal class="modal__container"
+    *ngIf="activeModal === modals.waitingModal">
+
+  </app-waiting-modal>
+</section>
+
+<div class="optionbox">
+  <input type="radio" value="challenged" name="activeModal" (click)="testModal($event)">
+  challenged
+  <input type="radio" value="waiting" name="activeModal" (click)="testModal($event)">
+  waiting
 </div>

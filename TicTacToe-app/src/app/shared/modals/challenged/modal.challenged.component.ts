@@ -7,16 +7,16 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 })
 export class ChallengedModalComponent {
   @Input() enemyUserName;
-  @Output() response: EventEmitter<string> = new EventEmitter<string>();
+  @Output() challengeResponse: EventEmitter<string> = new EventEmitter<string>();
   constructor() {
 
   }
 
   accept() {
-    this.response.emit('accepted');
+    this.challengeResponse.emit('accepted');
   }
 
   decline() {
-    this.response.emit('declined');
+    this.challengeResponse.emit('declined');
   }
 }

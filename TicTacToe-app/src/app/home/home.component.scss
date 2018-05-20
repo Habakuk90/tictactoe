@@ -3,7 +3,7 @@ section.home {
   margin: 10px auto;
   width: 80vw;
   padding: 10px;
-  box-shadow: 0 0 8px 3px rgba(17,17,17, 0.3);
+  box-shadow: $simple-box-shadow;
 
   @include mobile {
     margin: 10px 0;

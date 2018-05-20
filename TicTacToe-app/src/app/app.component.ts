@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { HubConnectionService } from './shared/services/hubconnection.service';
 import { UserService } from './shared/services/user.service';
 
@@ -7,9 +7,9 @@ import { UserService } from './shared/services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnDestroy {
   userName = '';
-  constructor(connectionService: HubConnectionService, userService: UserService) {
+  constructor(private connectionService: HubConnectionService, userService: UserService) {
     userService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => this.userName =  res.toString());
@@ -17,5 +17,9 @@ export class AppComponent {
       }
     });
    }
-  }
+
+   ngOnDestroy() {
+     this.connectionService.stopConnection();
+   }
+}
 

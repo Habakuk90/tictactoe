@@ -1,8 +1,13 @@
+// Media widths
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
 /** Colors **/
 
 $red: red;
 $orrange: orange;
 $green: #47d173;
+$white: #fff;
 
 
 
@@ -24,8 +29,7 @@ $color-red: #e84c30; // Main Complement color */
 $color-red-light: #FFAD9E;
 $color-red-dark: #F02500;
 
-$tablet-width: 768px;
-$desktop-width: 1024px;
+$simple-box-shadow: 0 0 8px 3px rgba(17, 17, 17, 0.3);
 
 // @mixin tablet {
 //   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
