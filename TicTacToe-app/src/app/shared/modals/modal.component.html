@@ -1,0 +1,8 @@
+<div class="modal__container">
+  <app-challenged-modal [enemyUserName]="enemyUserName"
+    (response)="onChallengeResponse($event)"
+    *ngIf="activeModal === modals.challengedModal">
+
+  </app-challenged-modal>
+  <app-waiting-modal *ngIf="activeModal === modals.waitingModal"></app-waiting-modal>
+</div>

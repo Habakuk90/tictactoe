@@ -21,7 +21,8 @@ export class UserService extends BaseService {
   currentUserName = '';
 
   constructor(private http: HttpClient, private router: Router,
-              configService: ConfigService, private connectionService: HubConnectionService) {
+              configService: ConfigService,
+              private connectionService: HubConnectionService) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in

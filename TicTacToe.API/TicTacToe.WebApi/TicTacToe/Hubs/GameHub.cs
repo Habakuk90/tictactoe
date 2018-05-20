@@ -12,10 +12,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class GameHub : Hub
     {
-        private readonly static ConnectionMapping<GameUserModel> _connections =
-            new ConnectionMapping<GameUserModel>();
+        private readonly static ConnectionMapping<string> _connections =
+            new ConnectionMapping<string>();
 
-        private readonly static HashSet<GameUserModel> _userOnline = new HashSet<GameUserModel>();
+        private readonly static HashSet<string> _userOnline = new HashSet<string>();
 
         public enum ModalStates { Accepted, Declined };
 
@@ -29,7 +29,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             Clients.Group(room).SendAsync("TileChange", tileId);
         }
 
-        public IEnumerable<GameUserModel> GetAllUser()
+        public IEnumerable<string> GetAllUser()
         {
             return _userOnline.ToList();
         }
@@ -41,25 +41,27 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public void SendAll(string message)
         {
-            Clients.All.SendAsync("SendAll", message);
+            //Clients.All.SendAsync("SendAll", message);
+            var x = _connections.GetConnections("User").ToList();
+            Clients.Clients(x).SendAsync("Test", "SUPA TEST");
         }
 
         /// <summary>
         /// Player selected enemy and send Request
         /// </summary>
         /// <param name="selectedPlayer"></param>
-        public void ChallengePlayer(GameUserModel selectedPlayer)
+        public void ChallengePlayer(string currentUser, string selectedPlayer)
         {
             //GameUserModel currentUser = SetCurrentUser();
 
             // Clients.User => quick workaround with all ids
-            //var selectedPlayerIdList = _connections
-            //    .GetConnections(selectedPlayer).ToList();
+            var selectedPlayerIdList = _connections
+                .GetConnections(selectedPlayer).ToList();
 
-            //Clients.Clients(selectedPlayerIdList)
-            //    .SendAsync("OpenChallengedModal", currentUser);
-            ////call self
-            //Clients.Caller.SendAsync("OpenWaitingModal", selectedPlayer);
+            Clients.Clients(selectedPlayerIdList)
+                .SendAsync("OpenModal", currentUser, "challenged");
+            //call self
+            Clients.Caller.SendAsync("OpenModal", selectedPlayer, "waiting");
 
         }
 
@@ -69,12 +71,20 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="enemy">enemy</param>
         /// <param name="response"></param>
         /// <clientMethod></clientMethod>
-        public void ChallengeResponse(GameUserModel enemy, ModalStates response)
+        public void ChallengeResponse(string enemy, ModalStates response)
         {
             switch (response)
             {
                 case (ModalStates.Accepted):
                     //[TODO] SetUpGame
+                    var userName = _connections.GetUserByConnection(Context.ConnectionId);
+
+                    var enemyPlayerIdList = _connections
+                        .GetConnections(enemy).ToList();
+                    Clients.Clients(enemyPlayerIdList)
+                        .SendAsync("ChallengeAccepted", userName);
+
+                    Clients.Caller.SendAsync("ChallengeAccepted", enemy);
                     break;
                 case (ModalStates.Declined):
                     //[TODO] Reset Users
@@ -85,15 +95,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public void AddCurrentUser(string userName)
         {
-            if (Context != null || Context.User != null)
+            if (Context != null)
             {
-                var user = new GameUserModel
-                {
-                    Name = userName,
-                    CurrentConnectionId = Context.ConnectionId
-                };
-                _connections.Add(user, user.CurrentConnectionId);
-                _userOnline.Add(user);
+                _connections.Add(userName, Context.ConnectionId);
+                _userOnline.Add(userName);
                 UpdateUserList();
             }
         }
@@ -127,7 +132,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             var currentUser = _connections.GetUserByConnection(Context.ConnectionId);
 
-            _connections.Remove(currentUser, currentUser.CurrentConnectionId);
+            _connections.Remove(currentUser, Context.ConnectionId);
             _userOnline.Remove(currentUser);
             UpdateUserList();
 

@@ -5,8 +5,7 @@ export abstract class BaseService {
 
   protected handleError(error: any) {
     const applicationError = error.headers.get('Application-Error');
-
-    // either applicationError in header or model error in body
+    // [TODO] Error richtig auswerten
     if (applicationError) {
       return Observable.throw(applicationError);
     }

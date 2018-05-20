@@ -10,32 +10,33 @@ import { UserService } from '../shared/services/user.service';
 })
 export class HomeComponent implements OnInit {
   connection: HubConnection;
-  message: string;
   userOnline;
   currentUser;
+  selectedPlayer;
+
   constructor(connectionService: HubConnectionService, userService: UserService) {
+
+    this.currentUser = userService.getUserName().subscribe(res => {
+      this.currentUser =  res.toString();
+    });
     connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
         this.connection = connectionService.connection;
-        this.connection.on('SendAll', (res) => {
-          this.message = res;
-        });
-        this.connection.on('UpdateUserList', userOnline => {this.userOnline = userOnline;} );
-        this.currentUser = userService.currentUserName;
+        this.connection.on('UpdateUserList', userOnline => this.userOnline = userOnline);
         this.connection.invoke('AddCurrentUser', userService.currentUserName);
-        this.connection.invoke('GetAllUser')
-          .then(userOnline => { this.userOnline = userOnline; });
+        this.connection.on('ChallengeAccepted', enemy => {
+          console.log('Game starting against ', enemy);
+        });
       }
     });
 
-    connectionService.startConnection();
   }
-
   ngOnInit() {
 
   }
 
-  hello(message) {
-    this.connection.invoke('SendAll', message.value);
+  challengeSelectedPlayer() {
+    this.connection.invoke(
+      'ChallengePlayer', this.currentUser, this.selectedPlayer);
   }
 }

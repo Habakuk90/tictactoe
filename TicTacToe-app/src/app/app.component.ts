@@ -9,10 +9,11 @@ import { UserService } from './shared/services/user.service';
 })
 export class AppComponent {
   userName = '';
-  constructor(userService: UserService) {
+  constructor(connectionService: HubConnectionService, userService: UserService) {
     userService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => this.userName =  res.toString());
+        connectionService.startConnection();
       }
     });
    }

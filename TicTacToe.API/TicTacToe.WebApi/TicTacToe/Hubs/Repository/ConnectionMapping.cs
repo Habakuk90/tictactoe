@@ -9,8 +9,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
     public class ConnectionMapping<T>
     {
-        private readonly Dictionary<GameUserModel, HashSet<string>> _userConnections =
-            new Dictionary<GameUserModel, HashSet<string>>();
+        private readonly Dictionary<string, HashSet<string>> _userConnections =
+            new Dictionary<string, HashSet<string>>();
 
         /// <summary>
         /// Get Count of alive Connections
@@ -29,7 +29,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         /// </summary>
         /// <param name="key">User String</param>
         /// <param name="connectionId"></param>
-        public void Add(GameUserModel userModel, string connectionId)
+        public void Add(string userModel, string connectionId)
         {
             lock (_userConnections)
             {
@@ -52,7 +52,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         /// </summary>
         /// <param name="key">User String</param>
         /// <returns></returns>
-        public IEnumerable<string> GetConnections(GameUserModel key)
+        public IEnumerable<string> GetConnections(string key)
         {
             HashSet<string> connections;
             if (_userConnections.TryGetValue(key, out connections))
@@ -63,7 +63,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             return Enumerable.Empty<string>();
         }
 
-        public GameUserModel GetUserByConnection(string conId)
+        public string GetUserByConnection(string conId)
         {
             foreach (var key in _userConnections.Keys)
             {
@@ -74,7 +74,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
                     return key;
                 }
             }
-            return new GameUserModel();
+            return string.Empty;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         /// </summary>
         /// <param name="key">User String</param>
         /// <param name="connectionId"></param>
-        public void Remove(GameUserModel key, string connectionId)
+        public void Remove(string key, string connectionId)
         {
             lock (_userConnections)
             {
@@ -103,8 +103,5 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
                 }
             }
         }
-
-
-
     }
 }

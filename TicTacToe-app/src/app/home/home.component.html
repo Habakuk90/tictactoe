@@ -1,14 +1,16 @@
-<p>
-  home works!
-  <input #inputMessage type="text">
-  <button (click)="hello(inputMessage)">Test da message</button>
-  {{message}}
-</p>
-
-
-<ng-template ngFor let-user [ngForOf]="userOnline">
-  <li class="enemy-list__item"
-      *ngIf="user.name !== currentUser">
-      <span>{{user.name}}</span>
-  </li>
-</ng-template>
+<section class="home">
+  <h2>
+    Hi, {{currentUser}}! I Heard you wanna Play! <br/>
+    See who's online and challenge them.
+  </h2>
+  <ul class="enemy-list__container">
+    <ng-template ngFor let-user [ngForOf]="userOnline">
+      <li class="enemy-list__item" (click)="selectedPlayer = user"
+          *ngIf="user !== currentUser" [class.selected]="user == selectedPlayer">
+          <span>{{user}}</span>
+      </li>
+    </ng-template>
+  </ul>
+  <button class="button button__start" (click)="challengeSelectedPlayer()">Go!</button>
+</section>
+<app-modal></app-modal>
