@@ -55,7 +55,8 @@ namespace TicTacToe.WebApi
                 options.Password.RequiredLength = 7;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
-            // ===== Add JWT Authentication ========
+            // ===== Add JWT Authentication ======== //
+            // Workaround for apsnetcore.signalR need to send token via request
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
