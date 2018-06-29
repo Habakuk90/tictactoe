@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { HubConnection } from '@aspnet/signalr';
 import { UserService } from '../shared/services/user.service';
@@ -8,7 +8,7 @@ import { UserService } from '../shared/services/user.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   connection: HubConnection;
   userOnline;
   currentUser;
@@ -29,9 +29,6 @@ export class HomeComponent implements OnInit {
         });
       }
     });
-
-  }
-  ngOnInit() {
 
   }
 

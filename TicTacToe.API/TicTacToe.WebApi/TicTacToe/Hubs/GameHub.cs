@@ -57,9 +57,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 .GetConnections(selectedPlayer).ToList();
 
             Clients.Clients(selectedPlayerIdList)
-                .SendAsync("OpenModal", currentUser, "challenged");
+                .SendAsync("OpenModal", currentUser, Constants.ModalStatus.Challenged);
             //call self
-            Clients.Caller.SendAsync("OpenModal", selectedPlayer, "waiting");
+            Clients.Caller.SendAsync("OpenModal", selectedPlayer, Constants.ModalStatus.Waiting);
 
         }
 
@@ -75,6 +75,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             {
                 case (ModalStates.Accepted):
                     //[TODO] SetUpGame
+                    //[TODO] More Games maybe
                     var userName = _connections.GetUserByConnection(Context.ConnectionId);
 
                     var enemyPlayerIdList = _connections
