@@ -52,8 +52,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="selectedPlayer"></param>
         public void ChallengePlayer(string currentUser, string selectedPlayer)
         {
-            //GameUserModel currentUser = SetCurrentUser();
-
             // Clients.User => quick workaround with all ids
             var selectedPlayerIdList = _connections
                 .GetConnections(selectedPlayer).ToList();
