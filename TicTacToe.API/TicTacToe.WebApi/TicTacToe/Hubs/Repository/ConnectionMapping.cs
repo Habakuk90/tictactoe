@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicTacToe.WebApi.TicTacToe.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
@@ -102,6 +101,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
                     }
                 }
             }
+        }
+
+        internal void Remove(object currentUserName, string connectionId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

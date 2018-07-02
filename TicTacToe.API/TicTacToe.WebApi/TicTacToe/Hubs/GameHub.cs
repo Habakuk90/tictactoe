@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
-using TicTacToe.WebApi.TicTacToe.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -14,6 +14,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     {
         private readonly static ConnectionMapping<string> _connections =
             new ConnectionMapping<string>();
+
+        private static Dictionary<string, string> _connectionGroups =
+            new Dictionary<string, string>();
 
         private readonly static HashSet<string> _userOnline = new HashSet<string>();
 
@@ -80,17 +83,56 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
                     var enemyPlayerIdList = _connections
                         .GetConnections(enemy).ToList();
+
                     Clients.Clients(enemyPlayerIdList)
                         .SendAsync("ChallengeAccepted", userName);
 
                     Clients.Caller.SendAsync("ChallengeAccepted", enemy);
+
                     break;
                 case (ModalStates.Declined):
                     //[TODO] Reset Users
                     break;
             }
         }
+        /// <summary>
+        /// Join Group after a challenge happend
+        /// </summary>
+        /// <param name="enemyName">User who got challenged</param>
+        /// <param name="groupName">represents as currentUserName + enemyUserName</param>
+        /// <returns></returns>
+        public async Task JoinGroup(string enemyName, string groupName)
+        {
+            GameUserModel currentUser = new GameUserModel
+            {
+                Name = _connections.GetUserByConnection(Context.ConnectionId)
+            };
 
+            GameUserModel enemyUser = new GameUserModel
+            {
+                Name = enemyName,
+                ConnectionIds = _connections.GetConnections(enemyName).ToList()
+            };
+
+            currentUser.ConnectionIds = _connections.GetConnections(currentUser.Name).ToList();
+
+            var allGroupPlayerIds = enemyUser.ConnectionIds
+                                             .Union(currentUser.ConnectionIds);
+
+            if (_connectionGroups.ContainsKey(currentUser.Name))
+            {
+                await Groups.RemoveFromGroupAsync(currentUser.Name, _connectionGroups[currentUser.Name]);
+                _connectionGroups.Remove(currentUser.Name);
+            }
+            _connectionGroups.Add(currentUser.Name, groupName);
+            _connectionGroups.Add(enemyName, groupName);
+
+            foreach (var item in allGroupPlayerIds)
+            {
+                await Groups.AddToGroupAsync(item, groupName);
+            }
+            await Clients.Group(groupName).SendAsync("UpdateGroup", groupName);
+        }
 
         public void AddCurrentUser(string userName)
         {
@@ -107,18 +149,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// [TODO] Dependent on UserStatus
         /// </summary>
         /// <clientMethod>UpdateUserList</clientMethod>
-        public void UpdateUserList()
+        public async void UpdateUserList()
         {
-            Clients.All.SendAsync("UpdateUserList", _userOnline);
+            await Clients.All.SendAsync("UpdateUserList", _userOnline);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public override Task OnConnectedAsync()
+        public override async Task OnConnectedAsync()
         {
-            return base.OnConnectedAsync();
+            await base.OnConnectedAsync();
         }
 
         /// <summary>
@@ -126,16 +168,22 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </summary>
         /// <param name="exception"></param>
         /// <returns></returns>
-        public override Task OnDisconnectedAsync(Exception exception)
+        public override async Task OnDisconnectedAsync(Exception exception)
         {
 
-            var currentUser = _connections.GetUserByConnection(Context.ConnectionId);
-
-            _connections.Remove(currentUser, Context.ConnectionId);
-            _userOnline.Remove(currentUser);
+            GameUserModel currentUser = new GameUserModel
+            {
+                Name = _connections.GetUserByConnection(Context.ConnectionId)
+            };
+            _connections.Remove(currentUser.Name, Context.ConnectionId);
+            _userOnline.Remove(currentUser.Name);
             UpdateUserList();
-
-            return base.OnDisconnectedAsync(exception);
+            if (_connectionGroups.ContainsKey(currentUser.Name))
+            {
+                await Groups.RemoveFromGroupAsync(currentUser.Name, _connectionGroups[currentUser.Name]);
+                _connectionGroups.Remove(currentUser.Name);
+            }
+            await base.OnDisconnectedAsync(exception);
         }
 
 

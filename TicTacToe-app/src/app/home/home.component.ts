@@ -11,12 +11,12 @@ import { UserService } from '../shared/services/user.service';
 export class HomeComponent {
   connection: HubConnection;
   userOnline;
-  currentUser;
-  selectedPlayer;
-
+  currentUser: string;
+  selectedPlayer: string;
+  groupName: string;
   constructor(connectionService: HubConnectionService, userService: UserService) {
 
-    this.currentUser = userService.getUserName().subscribe(res => {
+    userService.getUserName().subscribe(res => {
       this.currentUser =  res.toString();
     });
     connectionService.isConnected.subscribe(isConnected => {
@@ -27,6 +27,10 @@ export class HomeComponent {
         this.connection.on('ChallengeAccepted', enemy => {
           console.log('Game starting against ', enemy);
         });
+
+        this.connection.on('UpdateGroup', (groupName) => {
+          this.groupName = groupName;
+        });
       }
     });
 
@@ -35,5 +39,8 @@ export class HomeComponent {
   challengeSelectedPlayer() {
     this.connection.invoke(
       'ChallengePlayer', this.currentUser, this.selectedPlayer);
+    this.groupName = this.currentUser + this.selectedPlayer;
+
+    this.connection.invoke('JoinGroup', this.selectedPlayer, this.groupName);
   }
 }
