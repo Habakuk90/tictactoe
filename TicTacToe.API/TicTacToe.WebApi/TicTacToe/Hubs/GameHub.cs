@@ -26,7 +26,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// 
         /// </summary>
         /// <param name="room">id:number, name:string, List<GameUserModel></param>
-        public void TileClicked(string room, string id1, string id2, string tileId)
+        public void TileClicked(string room, string tileId)
         {
             Clients.Group(room).SendAsync("SwitchTurn");
             Clients.Group(room).SendAsync("TileChange", tileId);
@@ -81,13 +81,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     //[TODO] More Games maybe
                     var userName = _connections.GetUserByConnection(Context.ConnectionId);
 
+                    var groupName = _connectionGroups.FirstOrDefault(x => x.Key.Equals(userName));
+
                     var enemyPlayerIdList = _connections
                         .GetConnections(enemy).ToList();
 
                     Clients.Clients(enemyPlayerIdList)
-                        .SendAsync("ChallengeAccepted", userName);
+                        .SendAsync("ChallengeAccepted", userName, groupName);
 
-                    Clients.Caller.SendAsync("ChallengeAccepted", enemy);
+                    Clients.Caller.SendAsync("ChallengeAccepted", enemy, groupName);
 
                     break;
                 case (ModalStates.Declined):

@@ -24,8 +24,9 @@ export class HomeComponent {
         this.connection = connectionService.connection;
         this.connection.on('UpdateUserList', userOnline => this.userOnline = userOnline);
         this.connection.invoke('AddCurrentUser', userService.currentUserName);
-        this.connection.on('ChallengeAccepted', enemy => {
-          console.log('Game starting against ', enemy);
+        this.connection.on('ChallengeAccepted', (enemy, groupName) => {
+          this.groupName = groupName;
+
         });
 
         this.connection.on('UpdateGroup', (groupName) => {

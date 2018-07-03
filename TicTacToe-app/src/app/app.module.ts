@@ -12,12 +12,14 @@ import { AuthGuard } from './auth.guard';
 import { TestSiteComponent } from './test-site/test-site.component';
 import { SharedModule } from './shared/modules/shared.module';
 import { ModalModule } from './shared/modals/modal.module';
+import { TicTacToeComponent } from './tictactoe/tictactoe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
+    TicTacToeComponent,
     TestSiteComponent
   ],
   imports: [
