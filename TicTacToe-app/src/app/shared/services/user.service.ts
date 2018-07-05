@@ -4,8 +4,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 // Add the RxJS Observable operators we need in this app.
 // import '../../rxjs-operators';
 import { ConfigService } from '../utils/config.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { UserRegistration } from '../models/user.registration.inteface';
+import { BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';

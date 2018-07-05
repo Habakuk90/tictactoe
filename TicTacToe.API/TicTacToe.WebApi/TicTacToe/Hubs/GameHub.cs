@@ -81,15 +81,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     //[TODO] More Games maybe
                     var userName = _connections.GetUserByConnection(Context.ConnectionId);
 
-                    var groupName = _connectionGroups.FirstOrDefault(x => x.Key.Equals(userName));
+                    var groupName = _connectionGroups.FirstOrDefault(x => x.Key.Equals(enemy));
 
                     var enemyPlayerIdList = _connections
                         .GetConnections(enemy).ToList();
 
                     Clients.Clients(enemyPlayerIdList)
-                        .SendAsync("ChallengeAccepted", userName, groupName);
-
-                    Clients.Caller.SendAsync("ChallengeAccepted", enemy, groupName);
+                        .SendAsync("ChallengeAccepted", userName, groupName.Value, true);
+                    
+                    Clients.Caller.SendAsync("ChallengeAccepted", enemy, groupName.Value);
 
                     break;
                 case (ModalStates.Declined):
@@ -120,11 +120,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             var allGroupPlayerIds = enemyUser.ConnectionIds
                                              .Union(currentUser.ConnectionIds);
-
+            // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
             if (_connectionGroups.ContainsKey(currentUser.Name))
             {
                 await Groups.RemoveFromGroupAsync(currentUser.Name, _connectionGroups[currentUser.Name]);
                 _connectionGroups.Remove(currentUser.Name);
+
+                await Groups.RemoveFromGroupAsync(enemyName, _connectionGroups[enemyName]);
+                _connectionGroups.Remove(enemyName);
             }
             _connectionGroups.Add(currentUser.Name, groupName);
             _connectionGroups.Add(enemyName, groupName);
