@@ -13,6 +13,8 @@ import { TestSiteComponent } from './test-site/test-site.component';
 import { SharedModule } from './shared/modules/shared.module';
 import { ModalModule } from './shared/modals/modal.module';
 import { TicTacToeComponent } from './tictactoe/tictactoe.component';
+import { TicTacToeService } from './tictactoe/tictactoe.service';
+import { GroupService } from './shared/services/group.service';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import { TicTacToeComponent } from './tictactoe/tictactoe.component';
     SharedModule,
     ModalModule
   ],
-  providers: [ConfigService, HubConnectionService, AuthGuard],
+  providers: [
+    ConfigService, HubConnectionService,
+    TicTacToeService, AuthGuard, GroupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
