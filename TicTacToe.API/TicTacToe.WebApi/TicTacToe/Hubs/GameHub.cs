@@ -47,7 +47,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public string Send(string message)
         {
-            
+
             return message;
         }
 
@@ -136,12 +136,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Groups.RemoveFromGroupAsync(
                         currentUser.ConnectionIds.FirstOrDefault(),
                         _connectionGroups[currentUser.Name]);
-                    _connectionGroups.Remove(currentUser.Name);
+                    lock (_connectionGroups)
+                    {
+                        _connectionGroups.Remove(currentUser.Name);
+                    }
                 }
-                _connectionGroups.Add(currentUser.Name, groupName);
+                lock (_connectionGroups)
+                {
+                    _connectionGroups.Add(currentUser.Name, groupName);
+                }
                 await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
@@ -164,7 +170,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Groups.RemoveFromGroupAsync(
                         Context.ConnectionId,
                         _connectionGroups[currentUser.Name]);
-                    _connectionGroups.Remove(currentUser.Name);
+                    lock (_connectionGroups)
+                    {
+                        _connectionGroups.Remove(currentUser.Name);
+                    }
                 }
             }
             catch (Exception e)
