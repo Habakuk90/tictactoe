@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { HubConnectionService } from './shared/services/hubconnection.service';
 import { UserService } from './shared/services/user.service';
+import { SpinnerService } from './spinner/spinner.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +10,12 @@ import { UserService } from './shared/services/user.service';
 })
 export class AppComponent implements OnDestroy {
   userName = '';
-  constructor(private connectionService: HubConnectionService, userService: UserService) {
+  constructor(private connectionService: HubConnectionService, userService: UserService, spinnerService: SpinnerService) {
     userService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => this.userName =  res.toString());
-        connectionService.startConnection();
+        spinnerService.toggleSpinner();
+        connectionService.startConnection().then(() => spinnerService.toggleSpinner());
       }
     });
    }

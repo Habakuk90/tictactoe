@@ -11,7 +11,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
         public ICollection<FriendUserModel> Friends { get; set; }
 
         [NotMapped]
-        public List<string> ConnectionIds { get; set; }
+        public ICollection<string> ConnectionIds { get; set; }
 
         [NotMapped]
         public ICollection<string> Groups { get; set; }

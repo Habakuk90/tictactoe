@@ -5,13 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20180714154038_InitialCreate.cs" />
+    <Compile Remove="Migrations\20180714154038_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20180714154550_Test.cs" />
+    <Compile Remove="Migrations\20180714154550_Test.Designer.cs" />
+    <Compile Remove="Migrations\20180714155210_InitialCreate.cs" />
+    <Compile Remove="Migrations\20180714155210_InitialCreate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="TicTacToe\Attributes\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.1" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
   </ItemGroup>
 

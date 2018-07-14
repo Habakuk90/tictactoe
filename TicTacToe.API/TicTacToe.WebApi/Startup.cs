@@ -92,7 +92,8 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
-            services.AddTransient<IGameUserRepository, GameUserRepository>();
+            services.AddTransient<IGameUserService, GameUserService>();
+            services.AddTransient<IGroupService, GroupService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

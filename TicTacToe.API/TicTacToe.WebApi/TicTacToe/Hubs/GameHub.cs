@@ -19,18 +19,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         private static Dictionary<string, string> _connectionGroups =
             new Dictionary<string, string>();
 
-        private readonly static HashSet<string> _userOnline = new HashSet<string>();
-
         public enum ModalStates { Accepted, Declined };
 
         private readonly ILogger _logger;
-        private IGameUserRepository _gameUserRepository;
+        private IGameUserService _gameUserService;
+        private IGroupService _groupService;
 
-        public GameHub(ILogger<GameHub> logger, IGameUserRepository gameUserRepository)
+        public GameHub(ILogger<GameHub> logger, IGameUserService gameUserRepository,
+            IGroupService groupService)
         {
             _logger = logger;
             //_context = context;
-            _gameUserRepository = gameUserRepository;
+            _gameUserService = gameUserRepository;
+            _groupService = groupService;
         }
 
         /// <summary>
@@ -43,11 +44,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             Clients.Group(room).SendAsync("TileChange", tileId);
         }
 
-        public IEnumerable<string> GetAllUser()
-        {
-            return _userOnline.ToList();
-        }
-
         /// <summary>
         /// Player selected enemy and send Request
         /// </summary>
@@ -55,8 +51,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public async Task ChallengePlayer(string enemyName)
         {
             // Clients.User => quick workaround with all ids
-            var selectedPlayerIdList = _gameUserRepository.GetConnections(enemyName).ToList();
-            var currentUser = _gameUserRepository.GetUserByConnection(Context.ConnectionId);
+            var selectedPlayerIdList = _gameUserService.GetConnections(enemyName).ToList();
+            var currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
 
             await Clients.Clients(selectedPlayerIdList)
                 .SendAsync("OpenModal", currentUser.Name, Constants.ModalStatus.Challenged);
@@ -78,14 +74,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 case (ModalStates.Accepted):
                     //[TODO] SetUpGame
                     //[TODO] More Games maybe
-                    GameUserModel currentUser = _gameUserRepository.GetUserByConnection(Context.ConnectionId);
+                    GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
+                    GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+                    var allUser = new List<GameUserModel> { currentUser, enemyUser };
+                    _gameUserService.UpdateUser(allUser);
+                    var groupName = currentUser.Name + enemyUser.Name;
 
-                    var groupName = currentUser.Name + enemyName;
-
-                    var enemyPlayerIdList = _gameUserRepository
-                        .GetConnections(enemyName).ToList();
-
-                    await Clients.Clients(enemyPlayerIdList)
+                    await Clients.Clients(enemyUser.ConnectionIds.ToList())
                         .SendAsync("ChallengeAccepted", groupName, true);
 
                     await Clients.Caller.SendAsync("ChallengeAccepted", groupName);
@@ -106,41 +101,32 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         {
             GameUserModel currentUser = new GameUserModel();
 
-            currentUser = _gameUserRepository.GetUserByConnection(Context.ConnectionId);
+            currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
 
-            try
+            // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
+            if (_connectionGroups.ContainsKey(currentUser.Name))
             {
 
-                _logger.LogDebug($"containskey {_connectionGroups.ContainsKey(currentUser.Name)}");
-                // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
-                if (_connectionGroups.ContainsKey(currentUser.Name))
-                {
-                    _logger.LogDebug($"removing  {currentUser.Name} from Group {groupName}");
-
-                    await Groups.RemoveFromGroupAsync(
-                        currentUser.ConnectionIds.FirstOrDefault(),
-                        _connectionGroups[currentUser.Name]);
-                    lock (_connectionGroups)
-                    {
-                        _connectionGroups.Remove(currentUser.Name);
-                    }
-                }
+                await Groups.RemoveFromGroupAsync(
+                    currentUser.ConnectionIds.FirstOrDefault(),
+                    _connectionGroups[currentUser.Name]);
                 lock (_connectionGroups)
                 {
-                    _connectionGroups.Add(currentUser.Name, groupName);
+                    _connectionGroups.Remove(currentUser.Name);
                 }
-                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             }
-            catch (Exception e)
+            lock (_connectionGroups)
             {
-                throw new Exception(e.Message);
+                _connectionGroups.Add(currentUser.Name, groupName);
             }
+            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
         }
+
 
         public async Task LeaveGroup(string groupName)
         {
             GameUserModel currentUser = new GameUserModel();
-            currentUser = _gameUserRepository.GetUserByConnection(Context.ConnectionId);
+            currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
             try
             {
                 // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
@@ -168,25 +154,17 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="userName">userName of current User</param>
         public void AddCurrentUser(string userName)
         {
-            GameUserModel userModel = _gameUserRepository.GetUserByName(userName);
-            _userOnline.Add(userModel.Name);
+            GameUserModel userModel = _gameUserService.GetUserByName(userName);
 
             if (Context == null) return;
 
             if (userModel == null)
             {
-                userModel = new GameUserModel
-                {
-                    Name = userName,
-                    ConnectionIds = new List<string>()
-                };
-                userModel.ConnectionIds.Add(Context.ConnectionId);
-                _gameUserRepository.AddNewUser(userModel);
-
-                return;
+                _gameUserService.AddNewUser(userName, Context.ConnectionId);
             }
+
             userModel.ConnectionIds.Add(Context.ConnectionId);
-            _gameUserRepository.UpdateUser(userModel);
+            _gameUserService.UpdateUser(userModel);
 
             UpdateUserList();
         }
@@ -198,7 +176,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <clientMethod>UpdateUserList</clientMethod>
         public async void UpdateUserList()
         {
-            await Clients.All.SendAsync("UpdateUserList", _userOnline);
+            var userOnline = _gameUserService.GetOnlineUsers().Select(x => x.Name);
+            await Clients.All.SendAsync("UpdateUserList", userOnline);
         }
 
         /// <summary>
@@ -218,9 +197,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public override async Task OnDisconnectedAsync(Exception exception)
         {
 
-            GameUserModel currentUser = _gameUserRepository.GetUserByConnection(Context.ConnectionId);
-            _gameUserRepository.RemoveUser(currentUser, Context.ConnectionId);
-            _userOnline.Remove(currentUser.Name);
+            GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
+            if (currentUser == null) return;
+            _gameUserService.RemoveUser(currentUser, Context.ConnectionId);
             UpdateUserList();
             if (_connectionGroups.ContainsKey(currentUser.Name))
             {

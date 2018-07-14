@@ -86,7 +86,9 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.connectionService.connection.off('TileChange');
     this.connectionService.connection.off('SwitchTurn');
     this.tictactoeService.reset();
-    this.tictactoeService.LeaveGroup(this.groupName);
+    if (this.groupName) {
+      this.tictactoeService.LeaveGroup(this.groupName);
+    }
     this.turnSubscription.unsubscribe();
     this.groupNameSubscription.unsubscribe();
 

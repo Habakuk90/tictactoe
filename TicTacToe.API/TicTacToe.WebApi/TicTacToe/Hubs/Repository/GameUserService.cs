@@ -7,16 +7,15 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
-    public class GameUserRepository : IGameUserRepository
+    public class GameUserService : IGameUserService
     {
         private AppDbContext _context;
-        public GameUserModel currentUser { get; set; }
 
-        public GameUserRepository(AppDbContext context)
+        public GameUserService(AppDbContext context)
         {
             _context = context;
         }
-        
+
         public GameUserModel GetUserByConnection(string connectionId)
         {
             return _context.AppUser.FirstOrDefault(x
@@ -25,7 +24,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public ICollection<string> GetConnections(string userName)
         {
-            ICollection<string> connections = 
+            ICollection<string> connections =
                 _context.AppUser.FirstOrDefault(x => x.Name == userName).ConnectionIds;
 
             return connections != null ? connections : null;
@@ -39,8 +38,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             //    ?? new GameUserModel { ConnectionIds = new List<string>() };
         }
 
-        public void AddNewUser(GameUserModel userModel)
+        public IQueryable<GameUserModel> GetOnlineUsers()
         {
+            return _context.AppUser.Where(x=> x.Status == Constants.Status.Online);
+        }
+
+        public void AddNewUser(string userName, string connectionId)
+        {
+            GameUserModel userModel = new GameUserModel
+            {
+                Name = userName,
+                ConnectionIds = new List<string> { connectionId }
+            };
+
             userModel.Status = Constants.Status.Online;
             _context.AppUser.Add(userModel);
             _context.SaveChanges();
@@ -48,13 +58,25 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public void UpdateUser(GameUserModel userModel)
         {
-            userModel.ConnectionIds.RemoveAll(x => string.IsNullOrWhiteSpace(x));
+            userModel.ConnectionIds = userModel.ConnectionIds.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList();
             userModel.Status = Constants.Status.Online;
             _context.AppUser.Update(userModel);
             _context.SaveChanges();
         }
 
-        public void RemoveUser(GameUserModel currenUser, string currentConnectionId)
+        public void UpdateUser(ICollection<GameUserModel> userModelList)
+        {
+            foreach (var userModel in userModelList)
+            {
+                userModel.ConnectionIds.Distinct();
+                userModel.Status = Constants.Status.Ingame;
+                _context.AppUser.Update(userModel);
+            }
+            _context.SaveChanges();
+
+        }
+
+        public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
         {
             if (currentUser == null) return;
             currentUser.ConnectionIds.Remove(currentConnectionId);

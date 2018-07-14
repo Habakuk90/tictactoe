@@ -7,7 +7,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
-    public interface IGameUserRepository 
+    public interface IGameUserService 
     {
         GameUserModel GetUserByConnection(string connectionId);
 
@@ -15,10 +15,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         GameUserModel GetUserByName(string userName);
 
-        void AddNewUser(GameUserModel userModel);
+        IQueryable<GameUserModel> GetOnlineUsers();
+
+        void AddNewUser(string userName, string connectionIdl);
 
         void UpdateUser(GameUserModel userModel);
 
+        void UpdateUser(ICollection<GameUserModel> userModel);
+
         void RemoveUser(GameUserModel userModel, string currentConnectionId);
+
+
     }
 }
