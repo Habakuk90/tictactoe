@@ -13,5 +13,13 @@ namespace TicTacToe.WebApi.TicTacToe
             public static readonly string Waiting = "waiting";
 
         }
+
+        public static class Status
+        {
+            public static readonly string Online = "Online";
+            public static readonly string Offline = "Offline";
+            public static readonly string Ingame = "Ingame";
+
+        }
     }
 }

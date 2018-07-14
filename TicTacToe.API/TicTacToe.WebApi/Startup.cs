@@ -17,6 +17,7 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 using Microsoft.AspNetCore.Cors;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using Microsoft.Extensions.Primitives;
+using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
 
 namespace TicTacToe.WebApi
 {
@@ -91,6 +92,7 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
+            services.AddTransient<IGameUserRepository, GameUserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

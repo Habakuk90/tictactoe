@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Entities
 {
@@ -14,6 +15,8 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
             : base(options)
         {
         }
+
+        public DbSet<GameUserModel> AppUser { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
