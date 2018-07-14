@@ -21,6 +21,7 @@ export class GroupService {
         this.connectionService.connection.invoke('JoinGroup', groupName).then(() => {
           that._groupNameSubject.next(groupName);
           that.router.navigate([roomRoute]);
+          that.connectionService.connection.invoke('UpdateUserList');
           that.spinnerService.toggleSpinner();
         });
       }
