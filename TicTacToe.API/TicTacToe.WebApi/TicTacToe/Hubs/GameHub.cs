@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public enum ModalStates { Accepted, Declined };
 
+        private readonly ILogger _logger;
+
+        public GameHub(ILogger<GameHub> logger)
+        {
+            _logger = logger;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -39,6 +47,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public string Send(string message)
         {
+            
             return message;
         }
 
@@ -115,17 +124,54 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             currentUser.ConnectionIds = _connections
                 .GetConnections(currentUser.Name).ToList();
-
-            // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
-            if (_connectionGroups.ContainsKey(currentUser.Name))
+            try
             {
-                await Groups.RemoveFromGroupAsync(
-                    currentUser.ConnectionIds.FirstOrDefault(),
-                    _connectionGroups[currentUser.Name]);
-                _connectionGroups.Remove(currentUser.Name);
+
+                _logger.LogDebug($"containskey {_connectionGroups.ContainsKey(currentUser.Name)}");
+                // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
+                if (_connectionGroups.ContainsKey(currentUser.Name))
+                {
+                    _logger.LogDebug($"removing  {currentUser.Name} from Group {groupName}");
+
+                    await Groups.RemoveFromGroupAsync(
+                        currentUser.ConnectionIds.FirstOrDefault(),
+                        _connectionGroups[currentUser.Name]);
+                    _connectionGroups.Remove(currentUser.Name);
+                }
+                _connectionGroups.Add(currentUser.Name, groupName);
+                await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
             }
-            _connectionGroups.Add(currentUser.Name, groupName);
-            await Groups.AddToGroupAsync(Context.ConnectionId, groupName);
+            catch(Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        public async Task LeaveGroup(string groupName)
+        {
+            GameUserModel currentUser = new GameUserModel()
+            {
+                Name = _connections.GetUserByConnection(Context.ConnectionId)
+            };
+
+            currentUser.ConnectionIds = _connections
+                .GetConnections(currentUser.Name).ToList();
+            try
+            {
+                // TODO abfangen wenn User schon in Gruppe // mehr user ermöglichen
+                if (_connectionGroups.ContainsKey(currentUser.Name))
+                {
+                    await Groups.RemoveFromGroupAsync(
+                        Context.ConnectionId,
+                        _connectionGroups[currentUser.Name]);
+                    _connectionGroups.Remove(currentUser.Name);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+
         }
 
         public void AddCurrentUser(string userName)

@@ -15,6 +15,8 @@ import { ModalModule } from './shared/modals/modal.module';
 import { TicTacToeComponent } from './tictactoe/tictactoe.component';
 import { TicTacToeService } from './tictactoe/tictactoe.service';
 import { GroupService } from './shared/services/group.service';
+import { SpinnerComponent } from './spinner/spinner.component';
+import { SpinnerService } from './spinner/spinner.service';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { GroupService } from './shared/services/group.service';
     HeaderComponent,
     HomeComponent,
     TicTacToeComponent,
+    SpinnerComponent,
     TestSiteComponent
   ],
   imports: [
@@ -33,7 +36,7 @@ import { GroupService } from './shared/services/group.service';
     ModalModule
   ],
   providers: [
-    ConfigService, HubConnectionService,
+    ConfigService, HubConnectionService, SpinnerService,
     TicTacToeService, AuthGuard, GroupService],
   bootstrap: [AppComponent]
 })

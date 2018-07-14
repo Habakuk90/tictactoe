@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { GroupService } from '../shared/services/group.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
+import { SpinnerService } from '../spinner/spinner.service';
 
 @Injectable()
 export class TicTacToeService extends GroupService {
@@ -11,8 +12,8 @@ export class TicTacToeService extends GroupService {
   isTurn = this._turnSubject.asObservable();
 
   constructor(connectionService: HubConnectionService,
-      router: Router) {
-    super(connectionService, router);
+      router: Router, spinnerService: SpinnerService) {
+    super(connectionService, router, spinnerService);
   }
 
   switchTurn() {

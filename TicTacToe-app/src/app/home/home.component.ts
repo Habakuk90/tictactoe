@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { HubConnection } from '@aspnet/signalr';
 import { UserService } from '../shared/services/user.service';
@@ -11,15 +11,14 @@ import { GroupService } from '../shared/services/group.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
   connection: HubConnection;
   userOnline;
   currentUser: string;
   selectedPlayer: string;
   // groupName: string;
   constructor(connectionService: HubConnectionService, userService: UserService,
-    private router: Router, private tictactoeService: TicTacToeService,)
-    {
+    private router: Router, private tictactoeService: TicTacToeService) {
 
     userService.getUserName().subscribe(res => {
       this.currentUser =  res.toString();
@@ -42,5 +41,10 @@ export class HomeComponent {
   challengeSelectedPlayer() {
     this.connection.invoke(
       'ChallengePlayer', this.selectedPlayer);
+  }
+
+  ngOnDestroy() {
+    this.connection.off('ChallengeAccepted');
+    this.connection.off('UpdateUserList');
   }
 }

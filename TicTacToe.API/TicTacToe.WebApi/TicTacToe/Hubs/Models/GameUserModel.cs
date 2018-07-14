@@ -10,5 +10,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
         public string Name { get; set; }
 
         public IEnumerable<string> ConnectionIds { get; set; }
+
+        public IEnumerable<string> Groups { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { Router } from '@angular/router';
-import { HubConnection } from '@aspnet/signalr';
 import { TicTacToeService } from './tictactoe.service';
 import { Subscription } from 'rxjs';
 import { Box } from './boxes.interface';
@@ -11,7 +10,6 @@ import { Box } from './boxes.interface';
   styleUrls: ['./tictactoe.component.scss']
 })
 export class TicTacToeComponent implements OnInit, OnDestroy {
-  connection: HubConnection;
   public turn: boolean;
   selfTileState = 'circle';
   private groupName: string;
@@ -21,19 +19,18 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   groupNameSubscription: Subscription;
   isTurn: any;
 
-  constructor(connectionService: HubConnectionService, private router: Router,
+  constructor(private connectionService: HubConnectionService, private router: Router,
             private tictactoeService: TicTacToeService) {
 
     const that = this;
     connectionService.isConnected.subscribe(isConnected => {
       that.turn = false;
       if (isConnected) {
-        this.connection = connectionService.connection;
-        this.connection.on('TileChange', (tileId) => {
+        connectionService.connection.on('TileChange', (tileId) => {
           that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
           that.boxes.filter(x => x.id === tileId)[0].locked = true;
         });
-        this.connection.on('SwitchTurn', () => {
+        connectionService.connection.on('SwitchTurn', () => {
           // that.turn = !that.turn;
           console.log('SwitchTurn');
           tictactoeService.switchTurn();
@@ -55,7 +52,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
           return;
       }
       // TODO Get right groupName vielleicht auslagern
-      this.connection.invoke('TileClicked', this.groupName, tileId);
+      this.connectionService.connection.invoke('TileClicked', this.groupName, tileId);
   }
 
   ngOnInit() {
@@ -82,10 +79,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.turnSubscription == null) {
-      this.router.navigate(['/']);
-      return;
-    }
+    // if (this.turnSubscription == null) {
+    //   this.router.navigate(['/']);
+    //   return;
+    // }
+    this.connectionService.connection.off('TileChange');
+    this.connectionService.connection.off('SwitchTurn');
+    this.tictactoeService.reset();
+    this.tictactoeService.LeaveGroup(this.groupName);
     this.turnSubscription.unsubscribe();
     this.groupNameSubscription.unsubscribe();
 

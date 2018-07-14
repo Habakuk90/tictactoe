@@ -1,0 +1,22 @@
+$spinnerWidth: 100px;
+.spinner {
+  background-color: black;
+  width: 100px;
+  height: 100px;
+
+  &__overlay {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    background-color: rgba($color: #000000, $alpha: 0.5)
+  }
+
+  &__container{
+    height: 100px;
+    width: 100px;
+    position: fixed;
+    top: calc(50% - (#{$spinnerWidth} / 2));
+    left: calc(50% - (#{$spinnerWidth} / 2));
+  }
+}
