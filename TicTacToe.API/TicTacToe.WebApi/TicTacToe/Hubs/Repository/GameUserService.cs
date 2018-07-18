@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,72 +19,92 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public GameUserModel GetUserByConnection(string connectionId)
         {
-            return _context.AppUser.FirstOrDefault(x
-             => x.ConnectionIds.Any(y => y.Contains(connectionId)));
+            // instead of first => by group name || first
+            GameUserModel userModel = _context.AppUser.Where(x => x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
+            userModel.CurrentConnectionId = connectionId;
+            return userModel;
         }
 
-        public ICollection<string> GetConnections(string userName)
+        public IEnumerable<string> GetConnectionIds(string userName)
         {
-            ICollection<string> connections =
+            List<string> connectionIds =
                 _context.AppUser.FirstOrDefault(x => x.Name == userName).ConnectionIds;
 
-            return connections != null ? connections : null;
+            return connectionIds;
         }
 
         public GameUserModel GetUserByName(string userName)
         {
-            return _context.AppUser.FirstOrDefault(x => x.Name == userName);
+            GameUserModel userModel = _context.AppUser.FirstOrDefault(x => x.Name == userName);
 
-            //return _context.AppUser.FirstOrDefault(x => x.Name == userName) 
-            //    ?? new GameUserModel { ConnectionIds = new List<string>() };
+            // meh, [TODO]
+            if (userModel == null) return new GameUserModel { Name = "NotFound", Status = Constants.Status.Offline };
+
+            return userModel;
         }
 
         public IQueryable<GameUserModel> GetOnlineUsers()
         {
-            return _context.AppUser.Where(x=> x.Status == Constants.Status.Online);
+            return _context.AppUser.Where(x => x.Status == Constants.Status.Online);
         }
 
         public void AddNewUser(string userName, string connectionId)
         {
-            GameUserModel userModel = new GameUserModel
+            var userModel = _context.AppUser.Where(x => x.Name == userName).FirstOrDefault();
+
+            if (userModel != null)
             {
-                Name = userName,
-                ConnectionIds = new List<string> { connectionId }
-            };
-
-            userModel.Status = Constants.Status.Online;
-            _context.AppUser.Add(userModel);
-            _context.SaveChanges();
-        }
-
-        public void UpdateUser(GameUserModel userModel)
-        {
-            userModel.ConnectionIds = userModel.ConnectionIds.Where(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList();
-            userModel.Status = Constants.Status.Online;
-            _context.AppUser.Update(userModel);
-            _context.SaveChanges();
-        }
-
-        public void UpdateUser(ICollection<GameUserModel> userModelList)
-        {
-            foreach (var userModel in userModelList)
-            {
-                userModel.ConnectionIds.Distinct();
-                userModel.Status = Constants.Status.Ingame;
-                _context.AppUser.Update(userModel);
+                _context.AppUser.Attach(userModel);
+                userModel.ConnectionIds.Add(connectionId);
             }
-            _context.SaveChanges();
+            else
+            {
+                userModel = new GameUserModel
+                {
+                    Name = userName
+                };
+                userModel.ConnectionIds.Add(connectionId);
+                _context.AppUser.Add(userModel);
 
+            }
+            userModel.Status = Constants.Status.Online;
+            userModel.ConnectionIds = userModel.ConnectionIds.Distinct().ToList();
+            _context.SaveChanges();
         }
 
-        public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
-        {
-            if (currentUser == null) return;
-            currentUser.ConnectionIds.Remove(currentConnectionId);
-            currentUser.Status = Constants.Status.Offline;
+    public void UpdateUser(GameUserModel userModel)
+    {
 
-            _context.SaveChanges();
-
-        }
     }
+
+    public void UpdateUser(ICollection<GameUserModel> userModelList)
+    {
+        foreach (var userModel in userModelList)
+        {
+            userModel.ConnectionIds.Distinct();
+            userModel.Status = Constants.Status.Ingame;
+            _context.AppUser.Update(userModel);
+        }
+        _context.SaveChanges();
+
+    }
+
+    public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
+    {
+        if (currentUser == null || currentUser.ConnectionIds == null) return;
+        currentUser.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
+        currentUser.Status = Constants.Status.Offline;
+
+        _context.SaveChanges();
+    }
+
+    public void RemoveUser(string userName)
+    {
+        var currentUser = this.GetUserByName(userName);
+        if (currentUser == null) return;
+
+        _context.AppUser.Remove(currentUser);
+        _context.SaveChanges();
+    }
+}
 }

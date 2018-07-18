@@ -16,14 +16,20 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context = context;
         }
 
-        public void JoinGroup(GameUserModel userModel)
+        public void JoinGroup(GameUserModel userModel, string groupName)
         {
-
+            //var currentUser = _context.AppUser.Where(x => x.ConnectionIds.Contains(userModel.CurrentConnectionId)).First();
+            userModel.GroupName = groupName;
+            _context.SaveChanges();
         }
 
-        public void LeaveGroup(GameUserModel userModel)
+        public void LeaveGroup(GameUserModel userModel, string groupName)
         {
-
+            if (!string.IsNullOrWhiteSpace(userModel.GroupName))
+            {
+                userModel.GroupName = string.Empty;
+            }
+            _context.SaveChanges();
         }
     }
 }

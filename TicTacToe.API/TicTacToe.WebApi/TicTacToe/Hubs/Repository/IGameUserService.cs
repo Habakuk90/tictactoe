@@ -11,7 +11,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
     {
         GameUserModel GetUserByConnection(string connectionId);
 
-        ICollection<string> GetConnections(string userName);
+        IEnumerable<string> GetConnectionIds(string userName);
 
         GameUserModel GetUserByName(string userName);
 
@@ -25,6 +25,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         void RemoveUser(GameUserModel userModel, string currentConnectionId);
 
-
+        void RemoveUser(string userName);
     }
 }

@@ -8,8 +8,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
     public interface IGroupService
     {
-        void JoinGroup(GameUserModel userModel);
+        void JoinGroup(GameUserModel userModel, string groupName);
 
-        void LeaveGroup(GameUserModel userModel);
+        void LeaveGroup(GameUserModel userModel, string groupName);
     }
 }

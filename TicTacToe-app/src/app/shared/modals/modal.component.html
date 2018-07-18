@@ -1,5 +1,5 @@
 <section class="modal" *ngIf="activeModal !== modals.none">
-  <span class="modal__close-container" (click)="abort()" >close modal X</span>
+  <!-- <span class="modal__close-container" (click)="abort()" >close modal X</span> -->
 
 
   <app-challenged-modal class="modal__container" [enemyUserName]="enemyUserName"
@@ -12,10 +12,10 @@
 
   </app-waiting-modal>
 </section>
-
+<!--
 <div class="optionbox">
   <input type="radio" value="challenged" name="activeModal" (click)="testModal($event)">
   challenged
   <input type="radio" value="waiting" name="activeModal" (click)="testModal($event)">
   waiting
-</div>
+</div> -->
