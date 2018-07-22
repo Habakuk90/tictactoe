@@ -1,15 +1,8 @@
-
-tictactoe {
-  max-width: 1024px;
-  display: block;
-  margin: 0 auto;
-}
-
 .tile-wrapper {
-  display: grid;
-  flex-direction: row;
+  display:flex;
   flex-wrap: wrap;
-  grid-template-columns: auto auto auto;
+  max-width: 1024px;
+  margin: 0 auto;
 
   &.not-your-turn {
       opacity: 0.5;
@@ -19,6 +12,7 @@ tictactoe {
 
 .box {
   height: 200px;
+  width: 33.333333%;
 
   &__inner {
       height: 100%;
@@ -47,6 +41,7 @@ tictactoe {
       margin: 15px auto 0 auto;
   }
 }
+
 
 @mixin tictactoe-grid() {
 }

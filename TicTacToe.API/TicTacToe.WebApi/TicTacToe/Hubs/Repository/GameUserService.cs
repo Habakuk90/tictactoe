@@ -21,8 +21,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         {
             // instead of first => by group name || first
             GameUserModel userModel = _context.AppUser.Where(x => x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
+            if (userModel == null)
+            {
+                throw new Exception("no user found");
+            }
+
             userModel.CurrentConnectionId = connectionId;
             return userModel;
+
         }
 
         public IEnumerable<string> GetConnectionIds(string userName)
@@ -72,39 +78,39 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
-    public void UpdateUser(GameUserModel userModel)
-    {
-
-    }
-
-    public void UpdateUser(ICollection<GameUserModel> userModelList)
-    {
-        foreach (var userModel in userModelList)
+        public void UpdateUser(GameUserModel userModel)
         {
-            userModel.ConnectionIds.Distinct();
-            userModel.Status = Constants.Status.Ingame;
-            _context.AppUser.Update(userModel);
+
         }
-        _context.SaveChanges();
 
+        public void UpdateUser(ICollection<GameUserModel> userModelList)
+        {
+            foreach (var userModel in userModelList)
+            {
+                userModel.ConnectionIds.Distinct();
+                userModel.Status = Constants.Status.Ingame;
+                _context.AppUser.Update(userModel);
+            }
+            _context.SaveChanges();
+
+        }
+
+        public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
+        {
+            if (currentUser == null || currentUser.ConnectionIds == null) return;
+            currentUser.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
+            currentUser.Status = Constants.Status.Offline;
+
+            _context.SaveChanges();
+        }
+
+        public void RemoveUser(string userName)
+        {
+            var currentUser = this.GetUserByName(userName);
+            if (currentUser == null) return;
+
+            _context.AppUser.Remove(currentUser);
+            _context.SaveChanges();
+        }
     }
-
-    public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
-    {
-        if (currentUser == null || currentUser.ConnectionIds == null) return;
-        currentUser.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
-        currentUser.Status = Constants.Status.Offline;
-
-        _context.SaveChanges();
-    }
-
-    public void RemoveUser(string userName)
-    {
-        var currentUser = this.GetUserByName(userName);
-        if (currentUser == null) return;
-
-        _context.AppUser.Remove(currentUser);
-        _context.SaveChanges();
-    }
-}
 }

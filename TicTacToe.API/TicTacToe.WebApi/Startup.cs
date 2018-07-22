@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Cors;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using Microsoft.Extensions.Primitives;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+using System.IO;
 
 namespace TicTacToe.WebApi
 {
@@ -25,7 +26,14 @@ namespace TicTacToe.WebApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(
+                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json",
+                    optional: true)
+                .Build();
+
         }
 
         public IConfiguration Configuration { get; }
@@ -40,7 +48,7 @@ namespace TicTacToe.WebApi
                     builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials()
                            .AllowAnyOrigin();
                 }));
-            // DB Connection DefaultConnection to be found in launchsettings.json
+            // DB Connection DefaultConnection to be found in appsettings.json
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
                 options

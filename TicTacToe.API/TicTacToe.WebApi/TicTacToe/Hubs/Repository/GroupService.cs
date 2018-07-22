@@ -25,10 +25,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public void LeaveGroup(GameUserModel userModel, string groupName)
         {
+            userModel.GroupName = groupName;
             if (!string.IsNullOrWhiteSpace(userModel.GroupName))
             {
                 userModel.GroupName = string.Empty;
             }
+
+            _context.Attach(userModel);
             _context.SaveChanges();
         }
     }

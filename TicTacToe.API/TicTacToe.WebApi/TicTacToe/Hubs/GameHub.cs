@@ -84,7 +84,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
                     break;
                 case (ModalStates.Declined):
-                    //[TODO] Reset Users
+                    //[TODO] Reset Users    
                     break;
             }
         }
@@ -168,6 +168,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
             _gameUserService.RemoveUser(currentUser, Context.ConnectionId);
+            _groupService.LeaveGroup(currentUser, currentUser.GroupName);
             UpdateUserList();
             await base.OnDisconnectedAsync(exception);
         }

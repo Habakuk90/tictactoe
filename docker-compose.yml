@@ -1,0 +1,25 @@
+version: '3'
+services:
+  run-db:
+    image: microsoft/mssql-server-linux:latest
+    container_name: myapp.dev.db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      - SA_PASSWORD=aaBc123!WASA
+    expose:
+      - 1433
+  run-api:
+    image: tictactoe-api
+    container_name: myapp.dev.api
+    build:
+      context: ./TicTacToe.API/TicTacToe.WebApi/
+      dockerfile: DOCKERFILE
+    environment:
+        - ASPNETCORE_ENVIRONMENT=docker
+    ports:
+      - 8080:80
+    depends_on:
+      - run-db
+    links:
+      - run-db:db
