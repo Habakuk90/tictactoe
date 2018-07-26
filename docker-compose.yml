@@ -2,7 +2,7 @@ version: '3'
 services:
   run-db:
     image: microsoft/mssql-server-linux:latest
-    container_name: myapp.dev.db
+    container_name: tictactoe.dev.db
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
@@ -11,7 +11,7 @@ services:
       - 1433
   run-api:
     image: tictactoe-api
-    container_name: myapp.dev.api
+    container_name: tictactoe.dev.api
     build:
       context: ./TicTacToe.API/TicTacToe.WebApi/
       dockerfile: DOCKERFILE
@@ -23,3 +23,11 @@ services:
       - run-db
     links:
       - run-db:db
+  run-web:
+    image: tictactoe-app
+    container_name: tictactoe.dev.web
+    build: 
+      context: ./TicTacToe-app
+      dockerfile: DOCKERFILE
+    ports:
+      - 4200:80

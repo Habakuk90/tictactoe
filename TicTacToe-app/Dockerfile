@@ -1,20 +1,22 @@
-# base image
-FROM node:9.6.1
+#
+# BudgetTracker Dockerfile for UI
+#
+FROM nginx:alpine
+WORKDIR /ng-app
+# COPY . .
+# # Remove the default Nginx configuration file
+# RUN rm -v /etc/nginx/nginx.conf
 
-# set working directory
-RUN mkdir /usr/src/app
-WORKDIR /usr/src/app
+# # Copy a configuration file from the current directory
+# ADD nginx.conf /etc/nginx/
 
-# add `/usr/src/app/node_modules/.bin` to $PATH
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
+COPY /dist/TicTacToe-app /usr/share/nginx/html
+# Append "daemon off;" to the beginning of the configuration
+# RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
-# install and cache app dependencies
-COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install -g @angular/cli@1.7.1
+# Expose ports
+EXPOSE 80
 
-# add app
-COPY . /usr/src/app
-
-# start app
-CMD ng build
+# Set the default command to execute
+# when creating a new container
+# CMD ["/bin/bash"]
