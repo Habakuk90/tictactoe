@@ -9,6 +9,8 @@ services:
       - SA_PASSWORD=aaBc123!WASA
     expose:
       - 1433
+    ports:
+      - 1433:1433
   run-api:
     image: tictactoe-api
     container_name: tictactoe.dev.api
