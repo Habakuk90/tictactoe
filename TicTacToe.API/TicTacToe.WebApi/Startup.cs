@@ -83,6 +83,7 @@ namespace TicTacToe.WebApi
                     {
                         OnMessageReceived = context =>
                         {
+                            // enables authorization for the websocket via token
                             if (context.Request.Path.Value.StartsWith("/api/signalR") &&
                     context.Request.Query.TryGetValue("token", out StringValues token))
                             {
