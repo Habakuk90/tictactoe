@@ -32,6 +32,6 @@ services:
       context: ./TicTacToe-app
       dockerfile: DOCKERFILE
     volumes:
-      - ./ng-app:/app
+      - /ng-app:/app
     ports:
       - 4200:80
