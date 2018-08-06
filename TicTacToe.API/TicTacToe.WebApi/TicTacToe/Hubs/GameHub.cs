@@ -66,14 +66,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <clientMethod></clientMethod>
         public async Task ChallengeResponse(string enemyName, ModalStates response)
         {
+            GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
+            GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+            var allUser = new List<GameUserModel> { currentUser, enemyUser };
+
             switch (response)
             {
                 case (ModalStates.Accepted):
                     //[TODO] SetUpGame
                     //[TODO] More Games maybe
-                    GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
-                    GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
-                    var allUser = new List<GameUserModel> { currentUser, enemyUser };
                     _gameUserService.UpdateUser(allUser);
                     var groupName = currentUser.Name + enemyUser.Name;
 
@@ -85,6 +86,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     break;
                 case (ModalStates.Declined):
                     //[TODO] Reset Users    
+                    await Clients.Clients(enemyUser.ConnectionIds.ToList())
+                        .SendAsync("ChallengeDeclined");
+                    await Clients.Caller.SendAsync("ChallengeDeclined", enemyUser.Name);
+
                     break;
             }
         }
@@ -136,6 +141,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             //_gameUserService.UpdateUser(userModel);
 
             UpdateUserList();
+        }
+
+        /// <summary>
+        /// Send GameOver to specific Group
+        /// </summary>
+        /// <param name="groupName">Group Name given by the frontend</param>
+        public void GameOver(string groupName)
+        {
+            Clients.Group(groupName).SendAsync("GameOver");
         }
 
         /// <summary>

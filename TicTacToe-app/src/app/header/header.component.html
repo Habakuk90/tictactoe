@@ -4,11 +4,6 @@
       <li class="nav-list__item" routerLink="">
         Home
       </li>
-
-      <li class="nav-list__item" style="margin-right: auto;" routerLink="/test">
-        Test
-      </li>
-      <li class="nav-list__item" style="margin-right: auto;" (click)="switch()">{{turn}}</li>
       <li *ngIf="isLoggedIn; else auth" class="nav-list__item" (click)="logout()">
         Logout {{userName}}
       </li>

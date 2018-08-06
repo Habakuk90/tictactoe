@@ -52,11 +52,9 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
                 await _signInManager.SignInAsync(user, false);
                 return await GenerateJwtToken(user.UserName, user);
             }
+
             //[TODO] better error message for user to know what happened
             throw new ApplicationException("UNKNOWN_ERROR");
-
-            //var result = await _userManager.CreateAsync(user.Identity, user.Password);
-            //return result;
         }
 
         /// <summary>
@@ -73,20 +71,9 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
                 var appUser = _userManager.Users.SingleOrDefault(r => r.UserName == user.UserName);
                 return await GenerateJwtToken(user.UserName, appUser);
             }
+
             //[TODO] better error message for user to know what happened
-
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
-
-            // old stuff
-            //SignInResult result = new SignInResult();
-
-            //if (user != null && user.Identity != null && user.Identity.UserName != null)
-            //{
-            //    IdentityUser signedUser = await _userManager.FindByNameAsync(user.Identity.UserName);
-            //    result = await _signInManager.PasswordSignInAsync(signedUser.UserName, user.Password, true, lockoutOnFailure: true);
-            //    return result;
-            //}
-            //return result;
+            throw new ApplicationException("INVALID_LOGIN_ATTEMPT"); 
         }
 
         

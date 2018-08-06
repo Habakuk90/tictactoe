@@ -6,6 +6,7 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
+      # Password irgendwie auslagern, dateien über docker transformieren/variablen
       - SA_PASSWORD=aaBc123!WASA
     expose:
       - 1433
@@ -31,7 +32,5 @@ services:
     build: 
       context: ./TicTacToe-app
       dockerfile: DOCKERFILE
-    volumes:
-      - /ng-app:/app
     ports:
       - 4200:80
