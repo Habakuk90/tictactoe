@@ -72,10 +72,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
             GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
             List<GameUserModel> allUser = new List<GameUserModel>
-                {
-                    currentUser,
-                    enemyUser
-                };
+            {
+                currentUser,
+                enemyUser
+            };
 
             switch (response)
             {
@@ -92,10 +92,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
                     break;
                 case (ModalStates.Declined):
-                    //[TODO] Reset Users    
                     await Clients.Clients(enemyUser.ConnectionIds.ToList())
-                        .SendAsync("ChallengeDeclined");
-                    await Clients.Caller.SendAsync("ChallengeDeclined", enemyUser.Name);
+                        .SendAsync("ChallengeDeclined", enemyUser.Name);
 
                     break;
             }
