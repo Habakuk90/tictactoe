@@ -20,7 +20,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         public GameUserModel GetUserByConnection(string connectionId)
         {
             // instead of first => by group name || first
-            GameUserModel userModel = _context.AppUser.Where(x => x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
+            GameUserModel userModel = _context.AppUser.Where(x =>
+                x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
+
             if (userModel == null)
             {
                 throw new Exception("no user found");
