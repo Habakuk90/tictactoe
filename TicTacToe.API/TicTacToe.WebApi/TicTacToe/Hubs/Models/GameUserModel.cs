@@ -9,10 +9,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
     public class GameUserModel : BaseUserModel
     {
 
-        public ICollection<FriendUserModel> Friends { get; set; }
+        public ICollection<FriendUserModel> Friends
+        {
+            get;
+            set;
+        }
 
         [NotMapped]
-        public List<string> ConnectionIds { get; set; } = new List<string>();
+        public List<string> ConnectionIds
+        {
+            get;
+            set;
+        } = new List<string>();
 
         [NotMapped]
         public string CurrentConnectionId { get; set; }
@@ -23,7 +31,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
         {
             get
             {
-                var blob = string.Join(",", this.ConnectionIds);
+                string blob = string.Join(",", this.ConnectionIds);
 
                 return blob;
             }

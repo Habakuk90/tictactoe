@@ -56,7 +56,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public void AddNewUser(string userName, string connectionId)
         {
-            var userModel = _context.AppUser.Where(x => x.Name == userName).FirstOrDefault();
+            GameUserModel userModel = _context.AppUser.Where(x => x.Name == userName).FirstOrDefault();
 
             if (userModel != null)
             {
@@ -85,7 +85,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public void UpdateUser(ICollection<GameUserModel> userModelList)
         {
-            foreach (var userModel in userModelList)
+            foreach (GameUserModel userModel in userModelList)
             {
                 userModel.ConnectionIds.Distinct();
                 userModel.Status = Constants.Status.Ingame;
@@ -106,7 +106,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         public void RemoveUser(string userName)
         {
-            var currentUser = this.GetUserByName(userName);
+            GameUserModel currentUser = this.GetUserByName(userName);
             if (currentUser == null) return;
 
             _context.AppUser.Remove(currentUser);

@@ -94,7 +94,7 @@ namespace TicTacToe.WebApi
                         },
                         OnAuthenticationFailed = context =>
                         {
-                            var te = context.Exception;
+                            Exception te = context.Exception;
                             return Task.CompletedTask;
                         }
                     };

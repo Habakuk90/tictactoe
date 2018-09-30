@@ -2,16 +2,18 @@
 <section class="authorization">
   <form #form="ngForm" (ngSubmit)="register(form)" class="authorization-form">
     <div class="authorization-form__container">
-      <input type="text" name="userName" value="User"
-      ngModel required />
-      <input type="password" name="password" placeholder="Password" required
-      ngModel />
-      <input type="password" name="passwordConfirm" placeholder="Confirm Password"
-      required ngModel />
+      <input type="text" name="userName" value="User" ngModel required />
+      <input type="password" name="password" placeholder="Password" required ngModel />
+      <input type="password" name="confirmPassword" placeholder="Confirm Password" required ngModel />
 
       <button class="button button__submit" type="submit" [disabled]="form.invalid">
         Register
       </button>
     </div>
   </form>
+  <ul class="authorization-form__errors">
+    <ng-template ngFor let-error [ngForOf]="errors">
+      <li>{{error}}</li>
+    </ng-template>
+  </ul>
 </section>

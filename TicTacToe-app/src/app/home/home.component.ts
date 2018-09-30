@@ -4,7 +4,6 @@ import { HubConnection } from '@aspnet/signalr';
 import { UserService } from '../shared/services/user.service';
 import { Router } from '@angular/router';
 import { TicTacToeService } from '../tictactoe/tictactoe.service';
-import { GroupService } from '../shared/services/group.service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +17,7 @@ export class HomeComponent implements OnDestroy {
   selectedPlayer: string;
   // groupName: string;
   constructor(connectionService: HubConnectionService, userService: UserService,
-    private router: Router, private tictactoeService: TicTacToeService) {
+    private tictactoeService: TicTacToeService) {
 
     userService.getUserName().subscribe(res => {
       this.currentUser =  res.toString();
@@ -32,6 +31,11 @@ export class HomeComponent implements OnDestroy {
         this.connection.on('ChallengeAccepted', (groupName, isTurn) => {
           that.tictactoeService.JoinGroup(groupName, 'tictactoe');
           if (isTurn) { that.tictactoeService.switchTurn(); }
+        });
+        this.connection.on('ChallengeDeclined', (enemyUserName) => {
+          console.log(enemyUserName + 'has declined');
+
+
         });
       }
     });

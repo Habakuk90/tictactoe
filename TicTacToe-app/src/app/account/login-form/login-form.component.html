@@ -12,4 +12,9 @@
     </div>
 </form>
 <span>If you haven't yet registred <a routerLink="/register">register here</a></span>
+<ul class="authorization-form__errors">
+  <ng-template ngFor let-error [ngForOf]="errors">
+    <li>{{error}}</li>
+  </ng-template>
+</ul>
 </section>

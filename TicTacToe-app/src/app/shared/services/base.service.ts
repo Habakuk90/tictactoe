@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 export abstract class BaseService {
   constructor() {}
@@ -7,21 +7,22 @@ export abstract class BaseService {
     const applicationError = error.headers.get('Application-Error');
     // [TODO] Error richtig auswerten
     if (applicationError) {
-      return Observable.throw(applicationError);
+      return throwError(applicationError);
     }
 
     let modelStateErrors: String = '';
-    const serverError = error.json();
-
+    const serverError = JSON.parse(error.error);
+    let errorMessage = [];
     if (!serverError.type) {
       for (const key in serverError) {
         if (serverError[key]) {
-          modelStateErrors += serverError[key] + '\n';
+          modelStateErrors += serverError[key];
+          errorMessage.push(serverError[key]);
         }
       }
     }
 
     modelStateErrors = modelStateErrors = '' ? null : modelStateErrors;
-    return Observable.throw(modelStateErrors || 'Server error');
+    return throwError(errorMessage || 'Server error');
   }
 }

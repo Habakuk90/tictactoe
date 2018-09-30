@@ -25,5 +25,11 @@
               margin-bottom: 15px;
           }
       }
+
+      &__errors {
+        text-align: left;
+        padding-top: 20px;
+        color: red;
+      }
   }
 }
