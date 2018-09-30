@@ -11,6 +11,9 @@ export class TicTacToeService extends GroupService {
   private _turnSubject = new BehaviorSubject<boolean>(false);
   isTurn = this._turnSubject.asObservable();
 
+  private _hasWonSubject = new BehaviorSubject<boolean>(false);
+  hasWon = this._hasWonSubject.asObservable();
+
   constructor(connectionService: HubConnectionService,
       router: Router, spinnerService: SpinnerService) {
     super(connectionService, router, spinnerService);
@@ -18,6 +21,16 @@ export class TicTacToeService extends GroupService {
 
   switchTurn() {
     this._turnSubject.next(!this._turnSubject.value);
+  }
+
+  playerHasWon(groupName) {
+    this._hasWonSubject.next(true);
+
+    this.connectionService.isConnected.subscribe(isConnected => {
+      if (isConnected) {
+        this.connectionService.connection.invoke('GameOver', groupName);
+      }
+    });
   }
 
   reset() {

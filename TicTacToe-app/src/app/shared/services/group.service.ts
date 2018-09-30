@@ -9,7 +9,7 @@ export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
   groupName = this._groupNameSubject.asObservable();
 
-  constructor(private connectionService: HubConnectionService,
+  constructor(public connectionService: HubConnectionService,
      private router: Router, private spinnerService: SpinnerService) {
 
   }

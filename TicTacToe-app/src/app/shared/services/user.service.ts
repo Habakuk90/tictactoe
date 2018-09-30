@@ -29,17 +29,20 @@ export class UserService extends BaseService {
     this.baseUrl = configService.getApiURI();
   }
 
-  register(userName: string, password: string) {
+  register(userName: string, password: string, confirmPassword: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
 
     return this.http.post(this.baseUrl + '/Account/RegisterUser',
-        JSON.stringify({ userName, password }),
+        JSON.stringify({ userName, password, confirmPassword }),
         {headers: headers, responseType: 'text'}
       )
       .pipe(
         map(res => {
           localStorage.setItem('auth_token', res);
+          this._isLoggedInSubject.next(true);
+
+          return res;
         }),
         catchError(this.handleError)
       );

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
 import { Subscription } from 'rxjs';
 import { Box } from './boxes.interface';
+
 @Component({
   selector: 'app-tictactoe',
   templateUrl: './tictactoe.component.html',
@@ -14,25 +15,29 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   selfTileState = 'circle';
   private groupName: string;
   gameTile = 'circle';
+  winningTile = '';
+
 
   turnSubscription: Subscription;
   groupNameSubscription: Subscription;
   isTurn: any;
+  hasWon: boolean;
 
   constructor(private connectionService: HubConnectionService, private router: Router,
             private tictactoeService: TicTacToeService) {
 
     const that = this;
     connectionService.isConnected.subscribe(isConnected => {
-      that.turn = false;
+      // that.turn = false;
       if (isConnected) {
         connectionService.connection.on('TileChange', (tileId) => {
           that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
           that.boxes.filter(x => x.id === tileId)[0].locked = true;
+
+
         });
         connectionService.connection.on('SwitchTurn', () => {
           // that.turn = !that.turn;
-          console.log('SwitchTurn');
           tictactoeService.switchTurn();
           // that.gameTile = 'circle' ? 'cross' : 'circle';
           if (that.gameTile === 'circle') {
@@ -41,8 +46,15 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
             that.gameTile = 'circle';
           }
         });
+
+        connectionService.connection.on('GameOver', () => {
+          that.boxes.forEach(box => box.locked = true);
+          that.turn = false;
+        });
         // that.turn = tictactoeService.isTurn;
       }
+
+      tictactoeService.hasWon.subscribe(x => that.hasWon = x);
     });
   }
 
@@ -51,8 +63,49 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
           this.boxes.filter(x => x.id === tileId)[0].locked === true) {
           return;
       }
-      // TODO Get right groupName vielleicht auslagern
-      this.connectionService.connection.invoke('TileClicked', this.groupName, tileId);
+
+      this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
+        if (this.checkWin()) {
+          this.tictactoeService.playerHasWon(this.groupName);
+        }
+      });
+
+  }
+
+  checkWin() {
+    const that = this;
+
+    // check if columns are all on same state
+    const columns = this.boxes.filter(x => {
+
+      for (let i = 1; i < 4; i++) {
+        return x.id.endsWith(i.toString()) && x.state === that.selfTileState;
+      }
+      return null;
+    });
+
+    const rows = this.boxes.filter(x => {
+
+      for (let i = 1; i < 4; i++) {
+        return x.id.endsWith(i.toString()) && x.state === that.selfTileState;
+      }
+      return null;
+    });
+
+    const diagonalLeft = this.boxes.filter(x => {
+      for (let i = 1; i < 4; i++) {
+        return x.id.startsWith(i.toString()) && x.state === that.selfTileState &&
+        x.id.endsWith(i.toString());
+      }
+    });
+
+    const diagonalRight = this.boxes.filter(x => {
+      for (let i = 1; i < 4; i++) {
+        return x.id.startsWith(i.toString()) && x.id.endsWith((4 - i).toString())
+         && x.state === that.selfTileState;
+      }
+    });
+    return columns.length > 2 || rows.length > 2 || diagonalLeft.length > 2 || diagonalRight.length > 2;
   }
 
   ngOnInit() {
@@ -60,7 +113,6 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.groupNameSubscription = this.tictactoeService.groupName
       .subscribe(groupName => {
         this.groupName = groupName;
-        console.log(that.groupName, 'groupName');
         if (this.groupName === undefined ||
             this.groupName === '') {
           this.router.navigate(['/']);
@@ -71,11 +123,10 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.turnSubscription = this.tictactoeService.isTurn
       .subscribe(isTurn => {
         that.turn = isTurn;
-        that.selfTileState = that.turn ? 'cross' : 'circle';
 
       });
 
-
+    that.selfTileState = that.turn ? 'cross' : 'circle';
   }
 
   ngOnDestroy() {

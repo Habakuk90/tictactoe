@@ -1,6 +1,7 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, OnInit,  Renderer2, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ModalService } from './modal.service';
 import { HubConnectionService } from '../services/hubconnection.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-modal',
@@ -13,40 +14,35 @@ export class ModalComponent implements OnInit {
   modals = {
     none: '',
     challengedModal: 'challenged',
-    waitingModal: 'waiting'
+    waitingModal: 'waiting',
+    declinedModal: 'declined'
   };
   activeModal = this.modals.none;
+  activeModalSubscription: Subscription;
 
-  constructor(connectionService: HubConnectionService, private render: Renderer2,
-              @Inject(DOCUMENT) document) {
 
+  constructor(connectionService: HubConnectionService,
+    private modalService: ModalService) {
     connectionService.isConnected.subscribe(isConnected => {
       this.connection = connectionService.connection;
       if (isConnected) {
         this.connection.on('OpenModal', (enemy, modal) => {
-          render.addClass(document.body, 'modal-open');
-          this.activeModal = modal;
+          modalService.openModal(modal);
           this.enemyUserName = enemy;
         });
-
       }
     });
-
   }
-  ngOnInit() {
 
+  ngOnInit() {
+    this.activeModalSubscription = this.modalService.activeModal
+      .subscribe(activeModal => {
+        this.activeModal = activeModal;
+      });
   }
 
   onChallengeResponse(status) {
     this.connection.invoke('ChallengeResponse', this.enemyUserName, status);
-  }
-
-  abort() {
-    this.activeModal = '';
-  }
-
-  testModal(e) {
-    this.activeModal = e.target.value;
-    this.render.addClass(document.body, 'modal-open');
+    this.modalService.closeModal();
   }
 }

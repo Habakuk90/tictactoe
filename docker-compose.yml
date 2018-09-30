@@ -1,0 +1,36 @@
+version: '3'
+services:
+  run-db:
+    image: microsoft/mssql-server-linux:latest
+    container_name: tictactoe.dev.db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+      # Password irgendwie auslagern, dateien über docker transformieren/variablen
+      - SA_PASSWORD=aaBc123!WASA
+    expose:
+      - 1433
+    ports:
+      - 1433:1433
+  run-api:
+    image: tictactoe-api
+    container_name: tictactoe.dev.api
+    build:
+      context: ./TicTacToe.API/TicTacToe.WebApi/
+      dockerfile: DOCKERFILE
+    environment:
+        - ASPNETCORE_ENVIRONMENT=docker
+    ports:
+      - 8080:80
+    depends_on:
+      - run-db
+    links:
+      - run-db:db
+  run-web:
+    image: tictactoe-app
+    container_name: tictactoe.dev.web
+    build: 
+      context: ./TicTacToe-app
+      dockerfile: DOCKERFILE
+    ports:
+      - 4200:80
