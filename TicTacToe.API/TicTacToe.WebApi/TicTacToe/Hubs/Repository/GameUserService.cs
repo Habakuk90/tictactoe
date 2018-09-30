@@ -78,21 +78,22 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
-        public void UpdateUser(GameUserModel userModel)
+        public void UpdateUser(GameUserModel userModel, string status)
         {
-
+            userModel.Status = status;
+            _context.AppUser.Update(userModel);
+            _context.SaveChanges();
         }
 
-        public void UpdateUser(ICollection<GameUserModel> userModelList)
+        public void UpdateUser(ICollection<GameUserModel> userModelList, string status)
         {
             foreach (GameUserModel userModel in userModelList)
             {
                 userModel.ConnectionIds.Distinct();
-                userModel.Status = Constants.Status.Ingame;
+                userModel.Status = status;
                 _context.AppUser.Update(userModel);
             }
             _context.SaveChanges();
-
         }
 
         public void RemoveUser(GameUserModel currentUser, string currentConnectionId)

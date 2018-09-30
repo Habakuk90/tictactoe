@@ -19,9 +19,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         void AddNewUser(string userName, string connectionIdl);
 
-        void UpdateUser(GameUserModel userModel);
+        void UpdateUser(GameUserModel userModel, string status);
 
-        void UpdateUser(ICollection<GameUserModel> userModel);
+        void UpdateUser(ICollection<GameUserModel> userModel, string status);
 
         void RemoveUser(GameUserModel userModel, string currentConnectionId);
 

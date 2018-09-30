@@ -54,6 +54,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             GameUserModel currentUser = _gameUserService
                 .GetUserByConnection(Context.ConnectionId);
 
+            GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+
+            List<GameUserModel> allUser = new List<GameUserModel>
+            {
+                currentUser,
+                enemyUser
+            };
+            _gameUserService.UpdateUser(allUser, Constants.Status.Ingame);
+            UpdateUserList();
+
             await Clients.Clients(selectedPlayerIdList)
                 .SendAsync("OpenModal", currentUser.Name, Constants.ModalStatus.Challenged);
             //call self
@@ -71,6 +81,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         {
             GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
             GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+
             List<GameUserModel> allUser = new List<GameUserModel>
             {
                 currentUser,
@@ -82,7 +93,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 case (ModalStates.Accepted):
                     //[TODO] SetUpGame
                     //[TODO] More Games maybe
-                    _gameUserService.UpdateUser(allUser);
                     string groupName = currentUser.Name + enemyUser.Name;
 
                     await Clients.Clients(enemyUser.ConnectionIds.ToList())
@@ -94,6 +104,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 case (ModalStates.Declined):
                     await Clients.Clients(enemyUser.ConnectionIds.ToList())
                         .SendAsync("ChallengeDeclined", enemyUser.Name);
+
+                    _gameUserService.UpdateUser(allUser, Constants.Status.Online);
+                    UpdateUserList();
 
                     break;
             }
