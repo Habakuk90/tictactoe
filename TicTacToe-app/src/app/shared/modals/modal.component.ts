@@ -9,16 +9,21 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  enemyUserName;
   connection;
+  // TODO modals auslagern und typeFest machen
   modals = {
     none: '',
     challengedModal: 'challenged',
     waitingModal: 'waiting',
-    declinedModal: 'declined'
+    declinedModal: 'declined',
+    gameoverModal: 'gameover'
   };
   activeModal = this.modals.none;
   activeModalSubscription: Subscription;
+
+  // statt object ein Interface verwenden
+  modalArgs: object;
+  modalArgsSubscription: Subscription;
 
 
   constructor(connectionService: HubConnectionService,
@@ -26,9 +31,8 @@ export class ModalComponent implements OnInit {
     connectionService.isConnected.subscribe(isConnected => {
       this.connection = connectionService.connection;
       if (isConnected) {
-        this.connection.on('OpenModal', (enemy, modal) => {
-          modalService.openModal(modal);
-          this.enemyUserName = enemy;
+        this.connection.on('OpenModal', (enemy, modalName) => {
+          modalService.openModal(modalName, {enemyUserName: enemy});
         });
       }
     });
@@ -39,10 +43,12 @@ export class ModalComponent implements OnInit {
       .subscribe(activeModal => {
         this.activeModal = activeModal;
       });
+    this.modalArgsSubscription = this.modalService.modalArgs
+      .subscribe(args => this.modalArgs = args);
   }
 
   onChallengeResponse(status) {
-    this.connection.invoke('ChallengeResponse', this.enemyUserName, status);
+    this.connection.invoke('ChallengeResponse', this.modalArgs['enemyUserName'], status);
     this.modalService.closeModal();
   }
 }

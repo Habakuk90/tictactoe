@@ -6,7 +6,7 @@ import { ModalService } from '../modal.service';
   templateUrl: './modal.declined.component.html'
 })
 export class DeclinedModalComponent {
-  @Input() enemyUserName;
+  @Input() args;
   constructor(private modalService: ModalService) {
   }
 
