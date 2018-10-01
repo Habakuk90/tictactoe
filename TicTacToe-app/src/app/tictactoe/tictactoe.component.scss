@@ -3,6 +3,18 @@
   flex-wrap: wrap;
   max-width: 1024px;
   margin: 0 auto;
+  position: relative;
+
+  .win__svg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+
+    &.active {
+      display: block;
+    }
+  }
 
   &.not-your-turn {
       opacity: 0.5;
@@ -40,10 +52,6 @@
       height: 50px;
       margin: 15px auto 0 auto;
   }
-}
-
-
-@mixin tictactoe-grid() {
 }
 
 $grid-columns: 3;

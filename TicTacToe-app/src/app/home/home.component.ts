@@ -37,8 +37,8 @@ export class HomeComponent implements OnDestroy {
             this.modalService.closeModal();
           });
 
-          this.connection.on('ChallengeDeclined', () => {
-            this.modalService.openModal('declined');
+          this.connection.on('ChallengeDeclined', (enemyName) => {
+            this.modalService.openModal('declined', {enemyUserName: enemyName});
           });
         }
       });

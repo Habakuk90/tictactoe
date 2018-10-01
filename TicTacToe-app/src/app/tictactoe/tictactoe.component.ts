@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
 import { Subscription } from 'rxjs';
 import { Box } from './boxes.interface';
+import { ModalService } from '../shared/modals/modal.service';
 
 @Component({
   selector: 'app-tictactoe',
@@ -11,35 +12,32 @@ import { Box } from './boxes.interface';
   styleUrls: ['./tictactoe.component.scss']
 })
 export class TicTacToeComponent implements OnInit, OnDestroy {
+  @ViewChild('winSvg', {read: ElementRef}) svg: ElementRef;
   public turn: boolean;
-  selfTileState = 'circle';
+  private selfTileState = 'circle';
   private groupName: string;
-  gameTile = 'circle';
-  winningTile = '';
+  private gameTile = 'circle';
 
+  private winningTileId: string;
+  private winningLine: string;
+  private hasWon: boolean;
 
-  turnSubscription: Subscription;
-  groupNameSubscription: Subscription;
-  isTurn: any;
-  hasWon: boolean;
+  private turnSubscription: Subscription;
+  private groupNameSubscription: Subscription;
 
   constructor(private connectionService: HubConnectionService, private router: Router,
-            private tictactoeService: TicTacToeService) {
+            private tictactoeService: TicTacToeService, private modalService: ModalService) {
 
     const that = this;
     connectionService.isConnected.subscribe(isConnected => {
-      // that.turn = false;
       if (isConnected) {
         connectionService.connection.on('TileChange', (tileId) => {
           that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
           that.boxes.filter(x => x.id === tileId)[0].locked = true;
-
-
         });
+
         connectionService.connection.on('SwitchTurn', () => {
-          // that.turn = !that.turn;
           tictactoeService.switchTurn();
-          // that.gameTile = 'circle' ? 'cross' : 'circle';
           if (that.gameTile === 'circle') {
             that.gameTile = 'cross';
           } else {
@@ -47,11 +45,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
           }
         });
 
-        connectionService.connection.on('GameOver', () => {
+        connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
           that.boxes.forEach(box => box.locked = true);
           that.turn = false;
+          that.winningLine = winningLine;
+          that.winningTileId = winningTileId;
+          this.setLine();
+          this.modalService.openModal('gameover', {hasWon: this.hasWon});
         });
-        // that.turn = tictactoeService.isTurn;
       }
 
       tictactoeService.hasWon.subscribe(x => that.hasWon = x);
@@ -63,49 +64,96 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
           this.boxes.filter(x => x.id === tileId)[0].locked === true) {
           return;
       }
-
       this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
-        if (this.checkWin()) {
-          this.tictactoeService.playerHasWon(this.groupName);
+        if (this.checkWin(tileId)) {
+          this.tictactoeService
+            .playerHasWon(this.groupName, tileId, this.winningLine);
         }
       });
+  }
+
+  checkWin(tileId: string) {
+    const that = this;
+    const columns = [];
+    const rows = [];
+    const diagonalTopLeft = [];
+    const diagonalBottomLeft = [];
+
+    // based on x-y e.g. 1-2 => first Row, second column
+    const tileClickedRow = tileId.substring(0, 1);
+    const tileClickedColumn = tileId.substring(2);
+
+    for (let i = 1; i <= 3; i++) {
+      this.boxes.forEach(x => {
+        if (x.id.endsWith(tileClickedColumn) && x.id.startsWith(i.toString())
+          && x.state === that.selfTileState) {
+            columns.push(x);
+        }
+        if (x.id.startsWith(tileClickedRow) && x.id.endsWith(i.toString())
+          && x.state === that.selfTileState) {
+            rows.push(x);
+        }
+        if (x.id.startsWith(i.toString()) && x.state === that.selfTileState &&
+          x.id.endsWith(i.toString())) {
+            diagonalTopLeft.push(x);
+        }
+        if (x.id.startsWith(i.toString()) && x.id.endsWith((4 - i).toString())
+          && x.state === that.selfTileState) {
+            diagonalBottomLeft.push(x);
+        }
+      });
+    }
+
+    // set winning line in svg for winning row/column/diagonal
+    if (columns.length > 2) {
+      this.winningLine = 'column';
+    } else if (rows.length > 2) {
+      this.winningLine = 'row';
+    } else if (diagonalTopLeft.length > 2) {
+      this.winningLine = 'diagonalTopLeft';
+    } else if (diagonalBottomLeft.length > 2) {
+      this.winningLine = 'diagonalBottomLeft';
+    }
+
+    if (columns.length > 2 || rows.length > 2 || diagonalTopLeft.length > 2 || diagonalBottomLeft.length > 2) {
+      this.hasWon = true;
+      this.winningTileId = tileId;
+      return true;
+    }
+    return false;
 
   }
 
-  checkWin() {
-    const that = this;
-
-    // check if columns are all on same state
-    const columns = this.boxes.filter(x => {
-
-      for (let i = 1; i < 4; i++) {
-        return x.id.endsWith(i.toString()) && x.state === that.selfTileState;
-      }
-      return null;
-    });
-
-    const rows = this.boxes.filter(x => {
-
-      for (let i = 1; i < 4; i++) {
-        return x.id.endsWith(i.toString()) && x.state === that.selfTileState;
-      }
-      return null;
-    });
-
-    const diagonalLeft = this.boxes.filter(x => {
-      for (let i = 1; i < 4; i++) {
-        return x.id.startsWith(i.toString()) && x.state === that.selfTileState &&
-        x.id.endsWith(i.toString());
-      }
-    });
-
-    const diagonalRight = this.boxes.filter(x => {
-      for (let i = 1; i < 4; i++) {
-        return x.id.startsWith(i.toString()) && x.id.endsWith((4 - i).toString())
-         && x.state === that.selfTileState;
-      }
-    });
-    return columns.length > 2 || rows.length > 2 || diagonalLeft.length > 2 || diagonalRight.length > 2;
+  private setLine() {
+    const svgLineAxes = this.svg.nativeElement.firstChild.attributes;
+    const winningLine = this.winningLine;
+    const tileId = this.winningTileId;
+    if (winningLine === 'column') {
+      // column number * 2 - 1 = (1/3/5) * 16.3333333%
+      const columnLinePosition = ((parseInt(tileId.substring(2), 10) * 2) - 1) * (1 / 6 * 100);
+      svgLineAxes.x1.value = columnLinePosition + '%';
+      svgLineAxes.x2.value = columnLinePosition + '%';
+      svgLineAxes.y1.value = '0';
+      svgLineAxes.y2.value = '100%';
+    } else if (winningLine === 'row') {
+      // row number * 2 - 1 = (1/3/5) * 16.3333333%
+      const rowLinePosition = ((parseInt(tileId.substring(0, 1), 10) * 2) - 1) * (1 / 6 * 100);
+      svgLineAxes.x1.value = '0';
+      svgLineAxes.x2.value = '100%';
+      svgLineAxes.y1.value = rowLinePosition + '%';
+      svgLineAxes.y2.value = rowLinePosition + '%';
+    } else if (winningLine === 'diagonalTopLeft') {
+      svgLineAxes.x1.value = '100%';
+      svgLineAxes.x2.value = '0';
+      svgLineAxes.y1.value = '100%';
+      svgLineAxes.y2.value = '0';
+    } else if (winningLine === 'diagonalBottomLeft') {
+      svgLineAxes.x1.value = '100%';
+      svgLineAxes.x2.value = '0';
+      svgLineAxes.y1.value = '0';
+      svgLineAxes.y2.value = '100%';
+    }
+    this.svg.nativeElement.classList.add('active');
   }
 
   ngOnInit() {
@@ -123,17 +171,12 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.turnSubscription = this.tictactoeService.isTurn
       .subscribe(isTurn => {
         that.turn = isTurn;
-
       });
 
     that.selfTileState = that.turn ? 'cross' : 'circle';
   }
 
   ngOnDestroy() {
-    // if (this.turnSubscription == null) {
-    //   this.router.navigate(['/']);
-    //   return;
-    // }
     this.connectionService.connection.off('TileChange');
     this.connectionService.connection.off('SwitchTurn');
     this.tictactoeService.reset();

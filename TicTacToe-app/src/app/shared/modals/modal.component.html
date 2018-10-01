@@ -1,5 +1,5 @@
 <section class="modal" *ngIf="activeModal !== modals.none">
-  <app-challenged-modal class="modal__container" [enemyUserName]="enemyUserName"
+  <app-challenged-modal class="modal__container" [args]="modalArgs"
     (challengeResponse)="onChallengeResponse($event)"
     *ngIf="activeModal === modals.challengedModal">
 
@@ -9,8 +9,13 @@
 
   </app-waiting-modal>
 
-  <app-declined-modal class="modal__container" [enemyUserName]="enemyUserName"
+  <app-declined-modal class="modal__container" [args]="modalArgs"
     *ngIf="activeModal === modals.declinedModal">
 
   </app-declined-modal>
+
+  <app-gameover-modal class="modal__container" [args]="modalArgs"
+    *ngIf="activeModal === modals.gameoverModal">
+
+  </app-gameover-modal>
 </section>

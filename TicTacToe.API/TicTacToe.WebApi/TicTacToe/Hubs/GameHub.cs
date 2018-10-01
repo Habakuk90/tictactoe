@@ -165,9 +165,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// Send GameOver to specific Group
         /// </summary>
         /// <param name="groupName">Group Name given by the frontend</param>
-        public void GameOver(string groupName)
+        public void GameOver(string groupName, string winningTileId, string winningLine)
         {
-            Clients.Group(groupName).SendAsync("GameOver");
+            Clients.Group(groupName).SendAsync("GameOver", winningTileId, winningLine);
         }
 
         /// <summary>

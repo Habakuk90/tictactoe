@@ -6,7 +6,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
   // styleUrls: ['./modal.challenged.component.scss']
 })
 export class ChallengedModalComponent {
-  @Input() enemyUserName;
+  @Input() args;
   @Output() challengeResponse: EventEmitter<string> = new EventEmitter<string>();
   constructor() {}
 

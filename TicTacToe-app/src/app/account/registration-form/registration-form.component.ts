@@ -16,7 +16,6 @@ export class RegistrationFormComponent {
   register({value, valid}: {value: UserRegistration, valid: boolean}) {
     if (valid) {
       this.userService.register(value.userName, value.password, value.confirmPassword)
-        // .finally(() => this.isRequesting = false)
         .subscribe(
         (result) => {
             this.router.navigate(['']);

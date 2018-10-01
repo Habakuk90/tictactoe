@@ -5,6 +5,7 @@ import { WaitingModalComponent } from './waiting/modal.waiting.challenged.compon
 import { SharedModule } from '../modules/shared.module';
 import { ModalService } from './modal.service';
 import { DeclinedModalComponent } from './declined/modal.declined.component';
+import { GameOverModalComponent } from './gameOver/modal.gameover.challenged.component';
 
 
 
@@ -13,7 +14,8 @@ import { DeclinedModalComponent } from './declined/modal.declined.component';
   declarations: [ModalComponent,
     ChallengedModalComponent,
     WaitingModalComponent,
-    DeclinedModalComponent
+    DeclinedModalComponent,
+    GameOverModalComponent
   ],
   providers: [ModalService],
   exports: [ModalComponent]
