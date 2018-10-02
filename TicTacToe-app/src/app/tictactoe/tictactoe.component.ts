@@ -14,7 +14,7 @@ import { ModalService } from '../shared/modals/modal.service';
 export class TicTacToeComponent implements OnInit, OnDestroy {
   @ViewChild('winSvg', {read: ElementRef}) svg: ElementRef;
   public turn: boolean;
-  private selfTileState = 'circle';
+  public selfTileState = 'circle';
   private groupName: string;
   private gameTile = 'circle';
 
