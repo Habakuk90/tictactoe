@@ -3,8 +3,8 @@ import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
 import { Subscription } from 'rxjs';
-import { Box } from './boxes.interface';
 import { ModalService } from '../shared/modals/modal.service';
+import { Boxes } from './boxes';
 
 @Component({
   selector: 'app-tictactoe',
@@ -12,12 +12,14 @@ import { ModalService } from '../shared/modals/modal.service';
   styleUrls: ['./tictactoe.component.scss']
 })
 export class TicTacToeComponent implements OnInit, OnDestroy {
-  @ViewChild('winSvg', {read: ElementRef}) svg: ElementRef;
+  @ViewChild('winSvg', {
+    read: ElementRef
+  }) svg: ElementRef;
   public turn: boolean;
   private selfTileState = 'circle';
   private groupName: string;
   private gameTile = 'circle';
-
+  public boxes = new Boxes();
   private winningTileId: string;
   private winningLine: string;
   private hasWon: boolean;
@@ -26,14 +28,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   private groupNameSubscription: Subscription;
 
   constructor(private connectionService: HubConnectionService, private router: Router,
-            private tictactoeService: TicTacToeService, private modalService: ModalService) {
+    private tictactoeService: TicTacToeService, private modalService: ModalService) {
 
     const that = this;
     connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
         connectionService.connection.on('TileChange', (tileId) => {
-          that.boxes.filter(x => x.id === tileId)[0].state = that.gameTile;
-          that.boxes.filter(x => x.id === tileId)[0].locked = true;
+          that.boxes.setState(tileId, that.gameTile);
+          that.boxes.setLocked(tileId, true);
         });
 
         connectionService.connection.on('SwitchTurn', () => {
@@ -46,12 +48,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
         });
 
         connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
-          that.boxes.forEach(box => box.locked = true);
+          that.boxes.setAllLocked();
           that.turn = false;
           that.winningLine = winningLine;
           that.winningTileId = winningTileId;
           this.setLine();
-          this.modalService.openModal('gameover', {hasWon: this.hasWon});
+          this.modalService.openModal('gameover', {
+            hasWon: this.hasWon
+          });
         });
       }
 
@@ -60,16 +64,16 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   changeField(event: Event, tileId: string) {
-      if (!this.turn ||
-          this.boxes.filter(x => x.id === tileId)[0].locked === true) {
-          return;
+    if (!this.turn ||
+      this.boxes.getLocked(tileId) === true) {
+      return;
+    }
+    this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
+      if (this.checkWin(tileId)) {
+        this.tictactoeService
+          .playerHasWon(this.groupName, tileId, this.winningLine);
       }
-      this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
-        if (this.checkWin(tileId)) {
-          this.tictactoeService
-            .playerHasWon(this.groupName, tileId, this.winningLine);
-        }
-      });
+    });
   }
 
   checkWin(tileId: string) {
@@ -84,22 +88,22 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     const tileClickedColumn = tileId.substring(2);
 
     for (let i = 1; i <= 3; i++) {
-      this.boxes.forEach(x => {
-        if (x.id.endsWith(tileClickedColumn) && x.id.startsWith(i.toString())
-          && x.state === that.selfTileState) {
-            columns.push(x);
+      this.boxes.boxes.forEach(x => {
+        if (x.id.endsWith(tileClickedColumn) && x.id.startsWith(i.toString()) &&
+          x.state === that.selfTileState) {
+          columns.push(x);
         }
-        if (x.id.startsWith(tileClickedRow) && x.id.endsWith(i.toString())
-          && x.state === that.selfTileState) {
-            rows.push(x);
+        if (x.id.startsWith(tileClickedRow) && x.id.endsWith(i.toString()) &&
+          x.state === that.selfTileState) {
+          rows.push(x);
         }
         if (x.id.startsWith(i.toString()) && x.state === that.selfTileState &&
           x.id.endsWith(i.toString())) {
-            diagonalTopLeft.push(x);
+          diagonalTopLeft.push(x);
         }
-        if (x.id.startsWith(i.toString()) && x.id.endsWith((4 - i).toString())
-          && x.state === that.selfTileState) {
-            diagonalBottomLeft.push(x);
+        if (x.id.startsWith(i.toString()) && x.id.endsWith((4 - i).toString()) &&
+          x.state === that.selfTileState) {
+          diagonalBottomLeft.push(x);
         }
       });
     }
@@ -162,7 +166,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       .subscribe(groupName => {
         this.groupName = groupName;
         if (this.groupName === undefined ||
-            this.groupName === '') {
+          this.groupName === '') {
           this.router.navigate(['/']);
           return;
         }
@@ -187,42 +191,4 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.groupNameSubscription.unsubscribe();
 
   }
-  // tslint:disable-next-line:member-ordering
-  public boxes: Box[] = [
-    {
-        id: '1-1',
-        locked: false
-    },
-    {
-        id: '1-2',
-        locked: false
-    },
-    {
-        id: '1-3',
-        locked: false
-    },
-    {
-        id: '2-1',
-        locked: false
-    },
-    {
-        id: '2-2',
-        locked: false
-    },
-    {
-        id: '2-3',
-        locked: false
-    },
-    {
-        id: '3-1',
-        locked: false
-    },
-    {
-        id: '3-2',
-        locked: false
-    },
-    {
-        id: '3-3',
-        locked: false
-    }];
 }
