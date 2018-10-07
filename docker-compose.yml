@@ -12,6 +12,8 @@ services:
       - 1433
     ports:
       - 1433:1433
+    volumes:
+      - d:/docker/sql:/var/opt/mssql
   run-api:
     image: tictactoe-api
     container_name: tictactoe.dev.api
@@ -31,6 +33,6 @@ services:
     container_name: tictactoe.dev.web
     build: 
       context: ./TicTacToe-app
-      dockerfile: DOCKERFILE
+      dockerfile: Dockerfile
     ports:
       - 4200:80
