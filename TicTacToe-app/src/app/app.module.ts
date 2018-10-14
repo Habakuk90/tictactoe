@@ -17,6 +17,7 @@ import { TicTacToeService } from './tictactoe/tictactoe.service';
 import { GroupService } from './shared/services/group.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
+import { RPSComponent } from './rps/rps.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { SpinnerService } from './spinner/spinner.service';
     HomeComponent,
     TicTacToeComponent,
     SpinnerComponent,
-    TestSiteComponent
+    TestSiteComponent,
+    RPSComponent
   ],
   imports: [
     BrowserModule,
