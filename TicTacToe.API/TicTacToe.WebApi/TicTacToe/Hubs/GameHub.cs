@@ -14,7 +14,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class GameHub : Hub
+    public class GameHub : Hub<IGameClient>
     {
         public enum ModalStates { Accepted, Declined };
 
@@ -26,7 +26,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             IGroupService groupService)
         {
             _logger = logger;
-            //_context = context;
             _gameUserService = gameUserRepository;
             _groupService = groupService;
         }
@@ -37,8 +36,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="room">id:number, name:string, List<GameUserModel></param>
         public void TileClicked(string room, string tileId)
         {
-            Clients.Group(room).SendAsync("SwitchTurn");
-            Clients.Group(room).SendAsync("TileChange", tileId);
+            Clients.Group(room).SwitchTurn();
+            Clients.Group(room).TileChange(tileId);
         }
 
         /// <summary>
@@ -65,9 +64,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             UpdateUserList();
 
             await Clients.Clients(selectedPlayerIdList)
-                .SendAsync("OpenModal", currentUser.Name, Constants.ModalStatus.Challenged);
+                .OpenModal(currentUser.Name, Constants.ModalStatus.Challenged);
             //call self
-            await Clients.Caller.SendAsync("OpenModal", enemyName, Constants.ModalStatus.Waiting);
+            await Clients.Caller.OpenModal(enemyName, Constants.ModalStatus.Waiting);
 
         }
 
@@ -96,14 +95,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     string groupName = currentUser.Name + enemyUser.Name;
 
                     await Clients.Clients(enemyUser.ConnectionIds.ToList())
-                        .SendAsync("ChallengeAccepted", groupName, true);
+                        .ChallengeAccepted(groupName, true);
 
-                    await Clients.Caller.SendAsync("ChallengeAccepted", groupName);
+                    await Clients.Caller.ChallengeAccepted(groupName);
 
                     break;
                 case (ModalStates.Declined):
                     await Clients.Clients(enemyUser.ConnectionIds.ToList())
-                        .SendAsync("ChallengeDeclined", enemyUser.Name);
+                        .ChallengeDeclined(enemyUser.Name);
 
                     _gameUserService.UpdateUser(allUser, Constants.Status.Online);
                     UpdateUserList();
@@ -167,7 +166,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="groupName">Group Name given by the frontend</param>
         public void GameOver(string groupName, string winningTileId, string winningLine)
         {
-            Clients.Group(groupName).SendAsync("GameOver", winningTileId, winningLine);
+            Clients.Group(groupName).GameOver(winningTileId, winningLine);
         }
 
         /// <summary>
@@ -180,7 +179,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             IQueryable<string> userOnline = _gameUserService.GetOnlineUsers()
                 .Select(x => x.Name);
 
-            await Clients.All.SendAsync("UpdateUserList", userOnline);
+            await Clients.All.UpdateUserList(userOnline);
         }
 
         /// <summary>

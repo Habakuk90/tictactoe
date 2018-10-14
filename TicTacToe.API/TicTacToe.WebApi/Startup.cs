@@ -118,7 +118,10 @@ namespace TicTacToe.WebApi
             // JWT Bearer Token Authentication
             app.UseAuthentication();
 
-            app.UseSignalR(routes => routes.MapHub<GameHub>("/api/signalR"));
+            app.UseSignalR(routes =>
+             {
+                 routes.MapHub<GameHub>("/api/signalR");
+             });
 
             app.UseMvc();
 

@@ -1,22 +1,45 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
+    /// <summary>
+    /// Represents a GameUserService which communicates with the DB
+    /// </summary>
     public class GameUserService : IGameUserService
     {
+        #region private objects
+
+        /// <summary>
+        /// private instance of DbContext
+        /// </summary>
         private AppDbContext _context;
 
+        #endregion
+
+        /// <summary>
+        /// GameUserService Constructor.
+        /// </summary>
+        /// <param name="context">
+        /// the app db context.
+        /// </param>
         public GameUserService(AppDbContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Gets the user with given connection Id.
+        /// </summary>
+        /// <param name="connectionId">
+        /// connection id of the requested User.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GameUserModel"/> with the given connectionId.
+        /// </returns>
         public GameUserModel GetUserByConnection(string connectionId)
         {
             // instead of first => by group name || first
@@ -33,6 +56,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         }
 
+        /// <summary>
+        /// Gets all ConnectionsIds of given user name.
+        /// </summary>
+        /// <param name="userName">
+        /// user name of requested User.
+        /// </param>
+        /// <returns>
+        /// Enumeration of connectionIds for given userName.
+        /// </returns>
         public IEnumerable<string> GetConnectionIds(string userName)
         {
             List<string> connectionIds =
@@ -41,21 +73,47 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             return connectionIds;
         }
 
+        /// <summary>
+        /// Gets the User by gviven name.
+        /// </summary>
+        /// <param name="userName">
+        /// user name of the requested User.
+        /// </param>
+        /// <returns>
+        /// The <see cref="GameUserModel"/> of the given userName.
+        /// </returns>
         public GameUserModel GetUserByName(string userName)
         {
             GameUserModel userModel = _context.AppUser.FirstOrDefault(x => x.Name == userName);
 
-            // meh, [TODO]
-            if (userModel == null) return new GameUserModel { Name = "NotFound", Status = Constants.Status.Offline };
+            if (userModel == null)
+            {
+                throw new Exception("User Not Found");
+            }
 
             return userModel;
         }
 
+        /// <summary>
+        /// Gets all current Online User.
+        /// </summary>
+        /// <returns>
+        /// List of the current Online User.
+        /// </returns>
         public IQueryable<GameUserModel> GetOnlineUsers()
         {
             return _context.AppUser.Where(x => x.Status == Constants.Status.Online);
         }
 
+        /// <summary>
+        /// Adds new User to the Database.
+        /// </summary>
+        /// <param name="userName">
+        /// User name of the new User.
+        /// </param>
+        /// <param name="connectionId">
+        /// connectionId of the new User.
+        /// </param>
         public void AddNewUser(string userName, string connectionId)
         {
             GameUserModel userModel = _context.AppUser.Where(x => x.Name == userName).FirstOrDefault();
@@ -80,6 +138,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Updates user in Database
+        /// </summary>
+        /// <param name="userModel">
+        /// The user to Update.
+        /// </param>
+        /// <param name="status">
+        /// Update given user with this status.
+        /// </param>
         public void UpdateUser(GameUserModel userModel, string status)
         {
             userModel.Status = status;
@@ -87,6 +154,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Updates a list of user with same Status in Database.
+        /// </summary>
+        /// <param name="userModelList">
+        /// the given collection of <see cref="GameUserModel"/>.
+        /// </param>
+        /// <param name="status">
+        /// the given status to update the user.
+        /// </param>
         public void UpdateUser(ICollection<GameUserModel> userModelList, string status)
         {
             foreach (GameUserModel userModel in userModelList)
@@ -98,6 +174,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Remove the given user from Database
+        /// </summary>
+        /// <param name="currentUser">
+        /// the User to remove.
+        /// </param>
+        /// <param name="currentConnectionId">
+        /// the currentConnectionId of the User
+        /// </param>
         public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
         {
             if (currentUser == null || currentUser.ConnectionIds == null) return;
@@ -107,6 +192,12 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             _context.SaveChanges();
         }
 
+        /// <summary>
+        /// Remove the given user from Database by name
+        /// </summary>
+        /// <param name="userName">
+        /// the username of User to remove.
+        /// </param>
         public void RemoveUser(string userName)
         {
             GameUserModel currentUser = this.GetUserByName(userName);
