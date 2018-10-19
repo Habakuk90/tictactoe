@@ -28,8 +28,10 @@ services:
     build: 
       context: ./TicTacToe-app
       dockerfile: Dockerfile
-#    environment:
-#      VIRTUAL_HOST: "app.andkra.eu"
+#    ports:
+#      - 4200:80
+    environment:
+      VIRTUAL_HOST: "app.andkra.eu"
 
       #NETWORK IMPLEMENTIEREN
       # andkra:8080 nur für network sowie mssql nur für network network

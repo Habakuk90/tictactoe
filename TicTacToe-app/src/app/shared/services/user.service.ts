@@ -27,7 +27,7 @@ export class UserService extends BaseService {
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
     // header component resulting in authed user nav links disappearing despite the fact user is still logged in
-    this.baseUrl = environment.baseUrl;
+    this.baseUrl = configService._apiURI;
   }
 
   register(userName: string, password: string, confirmPassword: string) {
