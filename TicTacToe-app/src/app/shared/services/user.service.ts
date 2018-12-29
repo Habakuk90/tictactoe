@@ -49,7 +49,7 @@ export class UserService extends BaseService {
       );
   }
 
-  login(userName, password) {
+  login(userName: string, password: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
 

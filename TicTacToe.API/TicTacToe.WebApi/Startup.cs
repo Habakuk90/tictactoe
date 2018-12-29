@@ -42,12 +42,20 @@ namespace TicTacToe.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // ===== Add Policy ========
-            services.AddCors(options => options.AddPolicy("LocalCorsPolicy",
-                builder =>
+            services.AddCors(options =>
                 {
-                    builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-                           .AllowAnyOrigin();
-                }));
+                    options.AddPolicy("LocalCorsPolicy",
+                        builder => builder.WithOrigins("http://localhost:4200")
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader()
+                                            .AllowCredentials());
+
+                    options.AddPolicy("ProdCorsPolicy",
+                        builder => builder.WithOrigins("http://app.andkra.eu")
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader()
+                                            .AllowCredentials());
+                });
             // DB Connection DefaultConnection to be found in appsettings.json
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
@@ -59,11 +67,11 @@ namespace TicTacToe.WebApi
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 7;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 5;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-
+            
             // ===== Add JWT Authentication ======== //
             // Workaround for apsnetcore.signalR need to send token via request
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -112,8 +120,14 @@ namespace TicTacToe.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("LocalCorsPolicy");
+
             }
-            app.UseCors("LocalCorsPolicy");
+            else
+            {
+                // TODO: Test Production
+                app.UseCors("ProdCorsPolicy");
+            }
 
             // JWT Bearer Token Authentication
             app.UseAuthentication();

@@ -23,7 +23,7 @@ export class TicTacToeService extends GroupService {
     this._turnSubject.next(!this._turnSubject.value);
   }
 
-  playerHasWon(groupName, winningTileId, winningLine) {
+  playerHasWon(groupName: string, winningTileId: string, winningLine: string) {
     this._hasWonSubject.next(true);
 
     this.connectionService.isConnected.subscribe(isConnected => {

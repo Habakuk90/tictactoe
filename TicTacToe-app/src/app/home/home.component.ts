@@ -54,5 +54,6 @@ export class HomeComponent implements OnDestroy {
     this.connection.off('ChallengeAccepted');
     this.connection.off('UpdateUserList');
     this.connection.off('ChallengeDeclined');
+    this.connection.off('SwitchTurn');
   }
 }
