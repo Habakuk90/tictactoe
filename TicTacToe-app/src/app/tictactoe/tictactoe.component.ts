@@ -39,7 +39,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
         connectionService.connection.on('TileChange', (tileId) => {
           const box: Box = that.boxHandler.findById(tileId);
           box.state = that.gameTile;
-          box.locked =  true;
+          box.locked = true;
         });
 
         connectionService.connection.on('SwitchTurn', () => {
@@ -53,12 +53,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
         connectionService.connection.on('StartGame', (groupName: string) => {
           console.log('start');
-          if (groupName.startsWith(that.userService.currentUserName)) {
-            that.tictactoeService.switchTurn();
-          }
+          this.boxes = this.boxHandler.createBoxes();
+          this.boxHandler.setAllUnlocked();
+          this.setLine(null, null);
+          this.ngOnInit();
           // that.spinner
           that.modalService.closeModal();
         });
+
         connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
           this.endGame(winningTileId, winningLine);
         });
@@ -141,11 +143,15 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       svgLineAxes.y2.value = '100%';
     }
 
-    this.svg.nativeElement.classList.add('active');
+    this.svg.nativeElement.classList.toggle('active');
   }
 
   ngOnInit() {
     this.selfTileState = this.turn ? 'cross' : 'circle';
+    console.log('init')
+    if (this.groupName.startsWith(this.userService.currentUserName)) {
+            this.tictactoeService.switchTurn();
+    }
   }
 
   ngOnDestroy() {

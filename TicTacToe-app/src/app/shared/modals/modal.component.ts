@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { HubConnectionService } from '../services/hubconnection.service';
 import { Subscription } from 'rxjs';
+import { GroupService } from '../services/group.service';
 
 @Component({
   selector: 'app-modal',
@@ -27,8 +28,11 @@ export class ModalComponent implements OnInit {
 
   selectedGame: string;
 
+  groupName: string;
+
   constructor(connectionService: HubConnectionService,
-    private modalService: ModalService) {
+    private modalService: ModalService,
+    groupService: GroupService) {
     connectionService.isConnected.subscribe(isConnected => {
       this.connection = connectionService.connection;
       if (isConnected) {
@@ -37,6 +41,8 @@ export class ModalComponent implements OnInit {
           modalService.openModal(modalName, {enemyUserName: enemy});
         });
       }
+      groupService.groupName.subscribe(x => this.groupName = x);
+
     });
   }
 
@@ -51,6 +57,13 @@ export class ModalComponent implements OnInit {
 
   onChallengeResponse(status: any) {
     this.connection.invoke('ChallengeResponse', this.modalArgs['enemyUserName'], this.selectedGame, status);
+    // this.connection.invoke('StartGame')
     this.modalService.closeModal();
+  }
+
+  gameRestart() {
+    this.connection.invoke('StartGame', this.groupName).then(() => {
+      this.modalService.closeModal();
+    });
   }
 }

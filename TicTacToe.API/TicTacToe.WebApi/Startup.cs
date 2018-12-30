@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+using TicTacToe.WebApi.TicTacToe.Services;
 
 namespace TicTacToe.WebApi
 {
@@ -51,6 +52,7 @@ namespace TicTacToe.WebApi
                                             .AllowAnyHeader()
                                             .AllowCredentials());
                 });
+
             // DB Connection DefaultConnection to be found in appsettings.json
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
@@ -66,9 +68,10 @@ namespace TicTacToe.WebApi
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 5;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-            
+
             // ===== Add JWT Authentication ======== //
             // Workaround for apsnetcore.signalR need to send token via request
+            // FIXME: Auslagern
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -86,8 +89,10 @@ namespace TicTacToe.WebApi
                     {
                         OnMessageReceived = context =>
                         {
+                            var contextPathValue = context.Request.Path.Value;
                             // enables authorization for the websocket via token
-                            if (context.Request.Path.Value.StartsWith("/api/signalR") &&
+                            if ((contextPathValue.StartsWith("/api/signalR") ||
+                            contextPathValue.StartsWith("/api/tictactoe")) &&
                     context.Request.Query.TryGetValue("token", out StringValues token))
                             {
                                 context.Token = token;
@@ -106,6 +111,7 @@ namespace TicTacToe.WebApi
             services.AddSignalR();
             services.AddTransient<IGameUserService, GameUserService>();
             services.AddTransient<IGroupService, GroupService>();
+            services.AddSingleton<GameService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -127,7 +133,11 @@ namespace TicTacToe.WebApi
             // JWT Bearer Token Authentication
             app.UseAuthentication();
 
-            app.UseSignalR(routes => routes.MapHub<GameHub>("/api/signalR"));
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<GameHub>("/api/signalR");
+                routes.MapHub<TicTacToeHub>("/api/tictactoe");
+            });
 
             app.UseMvc();
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-gameover-modal',
@@ -7,12 +7,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class GameOverModalComponent {
   @Input() args: any;
+  @Output() restartGame: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() {
 
   }
 
   public tryAgain() {
+    this.restartGame.emit();
     // connection.invoke('StartGame', groupName, )
   }
 }
