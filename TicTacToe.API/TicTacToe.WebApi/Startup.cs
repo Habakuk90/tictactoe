@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,15 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using TicTacToe.WebApi.TicTacToe.Entities;
-using Microsoft.AspNetCore.Cors;
 using TicTacToe.WebApi.TicTacToe.Hubs;
-using Microsoft.Extensions.Primitives;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
-using System.IO;
 
 namespace TicTacToe.WebApi
 {

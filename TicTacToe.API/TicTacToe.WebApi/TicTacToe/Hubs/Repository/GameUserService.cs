@@ -46,14 +46,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             GameUserModel userModel = _context.AppUser.FirstOrDefault(x => x.Name == userName);
 
             // meh, [TODO]
-            if (userModel == null) return new GameUserModel { Name = "NotFound", Status = Constants.Status.Offline };
+            if (userModel == null) return new GameUserModel { Name = "NotFound", Status = Constants.Status.OFFLINE };
 
             return userModel;
         }
 
         public IQueryable<GameUserModel> GetOnlineUsers()
         {
-            return _context.AppUser.Where(x => x.Status == Constants.Status.Online);
+            return _context.AppUser.Where(x => x.Status == Constants.Status.ONLINE);
         }
 
         public void AddNewUser(string userName, string connectionId)
@@ -75,7 +75,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
                 _context.AppUser.Add(userModel);
 
             }
-            userModel.Status = Constants.Status.Online;
+            userModel.Status = Constants.Status.ONLINE;
             userModel.ConnectionIds = userModel.ConnectionIds.Distinct().ToList();
             _context.SaveChanges();
         }
@@ -102,7 +102,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         {
             if (currentUser == null || currentUser.ConnectionIds == null) return;
             currentUser.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
-            currentUser.Status = Constants.Status.Offline;
+            currentUser.Status = Constants.Status.OFFLINE;
 
             _context.SaveChanges();
         }

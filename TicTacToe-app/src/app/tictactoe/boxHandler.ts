@@ -15,7 +15,7 @@ export class BoxHandler {
     this.boxes.forEach(box => box.locked = true);
   }
 
-  public checkWin(box: Box): any {
+  public checkWin(box: Box): boolean {
     const columns = [];
     const rows = [];
     const diagonalTopLeft = [];

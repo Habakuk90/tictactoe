@@ -1,9 +1,15 @@
+@import "../../styles/_variables.scss";
+$grid-columns: 3;
+$grid-rows: 3;
+$border-tictactoe: 5px solid black;
+
 .tile-wrapper {
   display:flex;
   flex-wrap: wrap;
-  max-width: 1024px;
+  max-width: $desktop-width;
   margin: 0 auto;
   position: relative;
+  height: calc(100vh - #{$nav-height});
 
   .win__svg {
     width: 100%;
@@ -23,7 +29,6 @@
 }
 
 .box {
-  height: 200px;
   width: 33.333333%;
 
   &__inner {
@@ -54,9 +59,7 @@
   }
 }
 
-$grid-columns: 3;
-$grid-rows: 3;
-$border-tictactoe: 5px solid black;
+
 /*#\31 -2*/
 @for $i from 1 through $grid-columns {
   @for $j from 1 through $grid-rows {

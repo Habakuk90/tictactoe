@@ -4,9 +4,11 @@ import { GroupService } from '../shared/services/group.service';
 import { Router } from '../../../node_modules/@angular/router';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { SpinnerService } from '../spinner/spinner.service';
+import { GameService } from '../shared/services/game.service';
+import { ModalService } from '../shared/modals/modal.service';
 
 @Injectable()
-export class TicTacToeService extends GroupService {
+export class TicTacToeService extends GameService {
   // Group Service?
   private _turnSubject = new BehaviorSubject<boolean>(false);
   isTurn = this._turnSubject.asObservable();
@@ -15,16 +17,18 @@ export class TicTacToeService extends GroupService {
   hasWon = this._hasWonSubject.asObservable();
 
   constructor(connectionService: HubConnectionService,
-      router: Router, spinnerService: SpinnerService) {
-    super(connectionService, router, spinnerService);
+      modalService: ModalService) {
+    super(connectionService, modalService);
   }
 
   switchTurn() {
     this._turnSubject.next(!this._turnSubject.value);
   }
 
-  playerHasWon(groupName: string, winningTileId: string, winningLine: string) {
-    this._hasWonSubject.next(true);
+  gameOver(groupName: string, winningTileId: string, winningLine: string) {
+    if (winningTileId != null) {
+      this._hasWonSubject.next(true);
+    }
 
     this.connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
@@ -36,6 +40,5 @@ export class TicTacToeService extends GroupService {
 
   reset() {
     this._turnSubject.next(false);
-    this._groupNameSubject.next('');
   }
 }
