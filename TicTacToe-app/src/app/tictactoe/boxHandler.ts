@@ -15,6 +15,10 @@ export class BoxHandler {
     this.boxes.forEach(box => box.locked = true);
   }
 
+  public setAllUnlocked(): void {
+    return this.boxes.forEach(box => box.locked = false);
+  }
+
   public checkWin(box: Box): boolean {
     const columns = [];
     const rows = [];

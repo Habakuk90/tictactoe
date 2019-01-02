@@ -1,45 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
     /// <summary>
-    /// Represents a GameUserService which communicates with the DB
+    /// Access to 
     /// </summary>
     public class GameUserService : IGameUserService
     {
-        #region private objects
+        #region private properties
 
-        /// <summary>
-        /// private instance of DbContext
-        /// </summary>
         private AppDbContext _context;
+        private IHubContext<GameHub> _gameHub;
 
         #endregion
 
-        /// <summary>
-        /// GameUserService Constructor.
-        /// </summary>
-        /// <param name="context">
-        /// the app db context.
-        /// </param>
-        public GameUserService(AppDbContext context)
+        public GameUserService(AppDbContext context, IHubContext<GameHub> gameHub)
         {
-            _context = context;
+            this._context = context;
+            this._gameHub = gameHub;
         }
 
-        /// <summary>
-        /// Gets the user with given connection Id.
-        /// </summary>
-        /// <param name="connectionId">
-        /// connection id of the requested User.
-        /// </param>
-        /// <returns>
-        /// The <see cref="GameUserModel"/> with the given connectionId.
-        /// </returns>
         public GameUserModel GetUserByConnection(string connectionId)
         {
             // instead of first => by group name || first
@@ -55,156 +40,84 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             return userModel;
 
         }
-
-        /// <summary>
-        /// Gets all ConnectionsIds of given user name.
-        /// </summary>
-        /// <param name="userName">
-        /// user name of requested User.
-        /// </param>
-        /// <returns>
-        /// Enumeration of connectionIds for given userName.
-        /// </returns>
-        public IEnumerable<string> GetConnectionIds(string userName)
-        {
-            List<string> connectionIds =
-                _context.AppUser.FirstOrDefault(x => x.Name == userName).ConnectionIds;
-
-            return connectionIds;
-        }
-
-        /// <summary>
-        /// Gets the User by gviven name.
-        /// </summary>
-        /// <param name="userName">
-        /// user name of the requested User.
-        /// </param>
-        /// <returns>
-        /// The <see cref="GameUserModel"/> of the given userName.
-        /// </returns>
+        
         public GameUserModel GetUserByName(string userName)
         {
-            GameUserModel userModel = _context.AppUser.FirstOrDefault(x => x.Name == userName);
+            GameUserModel userModel = _context.AppUser
+                .FirstOrDefault(x => x.Name == userName);
 
             if (userModel == null)
             {
-                throw new Exception("User Not Found");
+                throw new Exception("user not found");
             }
 
             return userModel;
         }
 
-        /// <summary>
-        /// Gets all current Online User.
-        /// </summary>
-        /// <returns>
-        /// List of the current Online User.
-        /// </returns>
-        public IQueryable<GameUserModel> GetOnlineUsers()
+        public bool UserExists(string userName)
         {
-            return _context.AppUser.Where(x => x.Status == Constants.Status.ONLINE);
+            return _context.AppUser.Any(x => x.Name == userName);
         }
 
-        /// <summary>
-        /// Adds new User to the Database.
-        /// </summary>
-        /// <param name="userName">
-        /// User name of the new User.
-        /// </param>
-        /// <param name="connectionId">
-        /// connectionId of the new User.
-        /// </param>
-        public void AddNewUser(string userName, string connectionId)
+        public void AddNewUser(GameUserModel user)
         {
-            GameUserModel userModel = _context.AppUser.Where(x => x.Name == userName).FirstOrDefault();
-
-            if (userModel != null)
-            {
-                _context.AppUser.Attach(userModel);
-                userModel.ConnectionIds.Add(connectionId);
-            }
-            else
-            {
-                userModel = new GameUserModel
-                {
-                    Name = userName
-                };
-                userModel.ConnectionIds.Add(connectionId);
-                _context.AppUser.Add(userModel);
-
-            }
-            userModel.Status = Constants.Status.ONLINE;
-            userModel.ConnectionIds = userModel.ConnectionIds.Distinct().ToList();
-            _context.SaveChanges();
+            _context.AppUser.Add(user);
+            user.Status = Constants.Status.ONLINE;
+            user.ConnectionIds.Add(user.CurrentConnectionId);
+            this.ApplyUserChange();
         }
 
-        /// <summary>
-        /// Updates user in Database
-        /// </summary>
-        /// <param name="userModel">
-        /// The user to Update.
-        /// </param>
-        /// <param name="status">
-        /// Update given user with this status.
-        /// </param>
-        public void UpdateUser(GameUserModel userModel, string status)
+        public void UpdateUser(GameUserModel user, string status)
         {
-            userModel.Status = status;
-            _context.AppUser.Update(userModel);
-            _context.SaveChanges();
+            user.Status = status;
+            user.ConnectionIds.Add(user.CurrentConnectionId);
+            user.ConnectionIds.Distinct();
+            _context.AppUser.Update(user);
+            this.ApplyUserChange();
         }
 
-        /// <summary>
-        /// Updates a list of user with same Status in Database.
-        /// </summary>
-        /// <param name="userModelList">
-        /// the given collection of <see cref="GameUserModel"/>.
-        /// </param>
-        /// <param name="status">
-        /// the given status to update the user.
-        /// </param>
         public void UpdateUser(ICollection<GameUserModel> userModelList, string status)
         {
             foreach (GameUserModel userModel in userModelList)
             {
-                userModel.ConnectionIds.Distinct();
-                userModel.Status = status;
-                _context.AppUser.Update(userModel);
+                this.UpdateUser(userModel, status);
             }
-            _context.SaveChanges();
         }
 
-        /// <summary>
-        /// Remove the given user from Database
-        /// </summary>
-        /// <param name="currentUser">
-        /// the User to remove.
-        /// </param>
-        /// <param name="currentConnectionId">
-        /// the currentConnectionId of the User
-        /// </param>
         public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
         {
             if (currentUser == null || currentUser.ConnectionIds == null) return;
+            // FIXME: Multiple Connections for one user should be possible
             currentUser.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
             currentUser.Status = Constants.Status.OFFLINE;
 
-            _context.SaveChanges();
+            this.ApplyUserChange();
         }
 
         /// <summary>
-        /// Remove the given user from Database by name
+        /// Invoke Update current Online Users to all
         /// </summary>
-        /// <param name="userName">
-        /// the username of User to remove.
-        /// </param>
-        public void RemoveUser(string userName)
+        /// <clientMethod>UpdateUserList</clientMethod>
+        public async void UpdateUserList()
         {
-            GameUserModel currentUser = this.GetUserByName(userName);
-            if (currentUser == null) return;
+            IQueryable<string> userOnline = this.GetOnlineUsers()
+                .Select(x => x.Name);
 
-            _context.AppUser.Remove(currentUser);
-            _context.SaveChanges();
+            await this._gameHub.Clients.All.SendAsync("UpdateUserList", userOnline);
         }
+
+        #region private methods 
+
+        private IQueryable<GameUserModel> GetOnlineUsers()
+        {
+            return _context.AppUser.Where(x => x.Status == Constants.Status.ONLINE);
+        }
+
+        private void ApplyUserChange()
+        {
+            this._context.SaveChanges();
+            this.UpdateUserList();
+        }
+        #endregion
     }
 }

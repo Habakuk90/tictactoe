@@ -16,7 +16,7 @@ export class HubConnectionService {
     return this.connection;
   }
 
-  startConnection() {
+  async startConnection() {
     let tokenValue = '';
     const token = localStorage.getItem('auth_token');
     if (token !== '') {
@@ -27,14 +27,14 @@ export class HubConnectionService {
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    return this.connection.start().then(() => {
-      this._connectionBehaviour.next(true);
-    });
+    await this.connection.start();
+    this.connection.invoke('SendMessage').then(a => console.log(a));
+    this.connection.on('hallo', (a) => console.log(a));
+    this._connectionBehaviour.next(true);
   }
 
-  stopConnection() {
-    return this.connection.stop().then(() => {
-      this._connectionBehaviour.next(false);
-    });
+  async stopConnection() {
+    await this.connection.stop();
+    this._connectionBehaviour.next(false);
   }
 }
