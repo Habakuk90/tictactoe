@@ -1,6 +1,7 @@
 <div>
-  <h1 *ngIf="args.hasWon != null" class="modal__header">
-      {{args.hasWon ? "You Have Won!" : "You have lost :("}}
-  </h1>
-  <button class="button button--big button__accept" (click)="tryAgain()">Again!</button>
+<h1 class="modal__header">
+    {{args.hasWon ? "You Have Won!" : "You have lost :("}}
+</h1>
+<!-- <button (click)="challengeAgain()" class="button button--big">Again</button> -->
+<button routerLink="" class="button button--big">Back</button>
 </div>

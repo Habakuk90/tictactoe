@@ -61,11 +61,10 @@ export class BoxHandler {
     }
 
     if (columns.length > 2 || rows.length > 2 || diagonalTopLeft.length > 2 || diagonalBottomLeft.length > 2) {
-      // this.winningTileId = tileId;
       return true;
     }
-    return false;
 
+    return false;
   }
 
   public createBoxes(): Box[] {

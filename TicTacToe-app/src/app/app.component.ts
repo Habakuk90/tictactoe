@@ -14,7 +14,7 @@ export class AppComponent implements OnDestroy {
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => this.userName =  res.toString());
         spinnerService.toggleSpinner();
-        connectionService.startConnection().then(() => spinnerService.toggleSpinner());
+        connectionService.startConnection('/signalR').then(() => spinnerService.toggleSpinner());
       }
     });
    }

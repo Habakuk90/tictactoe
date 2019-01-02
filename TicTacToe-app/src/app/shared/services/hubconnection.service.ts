@@ -16,25 +16,25 @@ export class HubConnectionService {
     return this.connection;
   }
 
-  async startConnection() {
+  startConnection(socketUri) {
     let tokenValue = '';
     const token = localStorage.getItem('auth_token');
     if (token !== '') {
         tokenValue = '?token=' + token;
     }
     this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(this.configService.getApiURI() + '/signalR' + tokenValue)
+      .withUrl(this.configService.getApiURI() + socketUri + tokenValue)
       .configureLogging(signalR.LogLevel.Information)
       .build();
 
-    await this.connection.start();
-    this.connection.invoke('SendMessage').then(a => console.log(a));
-    this.connection.on('hallo', (a) => console.log(a));
-    this._connectionBehaviour.next(true);
+    return this.connection.start().then(() => {
+      this._connectionBehaviour.next(true);
+    });
   }
 
-  async stopConnection() {
-    await this.connection.stop();
-    this._connectionBehaviour.next(false);
+  stopConnection() {
+    return this.connection.stop().then(() => {
+      this._connectionBehaviour.next(false);
+    });
   }
 }

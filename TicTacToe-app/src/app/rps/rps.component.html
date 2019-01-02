@@ -1,11 +1,14 @@
 <section class="rps">
-  <div #rock (click)="selectTile($event, rock)" class="rps__tile rps__tile--rock">
-    {{rock.classList}}
+  <div class="rps__tile rps__tile--rock"
+    (click)="selectTile($event)"
+    data-name="rock">
   </div>
-  <div #paper class="rps__tile rps__tile--paper">
-    paper
+  <div class="rps__tile rps__tile--paper"
+    (click)="selectTile($event)"
+    data-name="paper">
   </div>
-  <div #scissors class="rps__tile rps__tile--scissors">
-    scissors
+  <div #scissors class="rps__tile rps__tile--scissors"
+    (click)="selectTile($event)"
+    data-name="scissors">
   </div>
 </section>

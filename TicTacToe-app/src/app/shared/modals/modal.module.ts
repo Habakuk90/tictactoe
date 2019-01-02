@@ -6,11 +6,12 @@ import { SharedModule } from '../modules/shared.module';
 import { ModalService } from './modal.service';
 import { DeclinedModalComponent } from './declined/modal.declined.component';
 import { GameOverModalComponent } from './gameOver/modal.gameover.component';
+import { routing } from '../../app.routing';
 
 
 
 @NgModule({
-  imports: [ SharedModule ],
+  imports: [ SharedModule, routing ],
   declarations: [ModalComponent,
     ChallengedModalComponent,
     WaitingModalComponent,
