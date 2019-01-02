@@ -25,13 +25,15 @@ export class ModalComponent implements OnInit {
   modalArgs: object;
   modalArgsSubscription: Subscription;
 
+  selectedGame: string;
 
   constructor(connectionService: HubConnectionService,
     private modalService: ModalService) {
     connectionService.isConnected.subscribe(isConnected => {
       this.connection = connectionService.connection;
       if (isConnected) {
-        this.connection.on('OpenModal', (enemy, modalName) => {
+        this.connection.on('OpenModal', (enemy: string, gameName: string, modalName: string) => {
+          this.selectedGame = gameName;
           modalService.openModal(modalName, {enemyUserName: enemy});
         });
       }
@@ -47,8 +49,8 @@ export class ModalComponent implements OnInit {
       .subscribe(args => this.modalArgs = args);
   }
 
-  onChallengeResponse(status) {
-    this.connection.invoke('ChallengeResponse', this.modalArgs['enemyUserName'], status);
+  onChallengeResponse(status: any) {
+    this.connection.invoke('ChallengeResponse', this.modalArgs['enemyUserName'], this.selectedGame, status);
     this.modalService.closeModal();
   }
 }

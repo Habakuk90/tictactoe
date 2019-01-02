@@ -9,6 +9,7 @@ import { map, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { HubConnectionService } from './hubconnection.service';
+import { environment } from 'src/environments/environment.prod';
 
 @Injectable()
 export class UserService extends BaseService {
@@ -26,7 +27,7 @@ export class UserService extends BaseService {
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
     // header component resulting in authed user nav links disappearing despite the fact user is still logged in
-    this.baseUrl = configService.getApiURI();
+    this.baseUrl = configService._apiURI;
   }
 
   register(userName: string, password: string, confirmPassword: string) {
@@ -48,7 +49,7 @@ export class UserService extends BaseService {
       );
   }
 
-  login(userName, password) {
+  login(userName: string, password: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
 

@@ -1,19 +1,13 @@
 version: '3'
 services:
   run-db:
-    image: microsoft/mssql-server-linux:latest
+    image: tictactoe-mssql
     container_name: tictactoe.dev.db
-    environment:
-      - ACCEPT_EULA=Y
-      - MSSQL_PID=Express
-      # Password irgendwie auslagern, dateien über docker transformieren/variablen
-      - SA_PASSWORD=aaBc123!WASA
-    expose:
-      - 1433
+    build:
+      context: ./mssql
+      dockerfile: DOCKERFILE
     ports:
       - 1433:1433
-    volumes:
-      - d:/docker/sql:/var/opt/mssql
   run-api:
     image: tictactoe-api
     container_name: tictactoe.dev.api
@@ -26,13 +20,19 @@ services:
       - 8080:80
     depends_on:
       - run-db
-    links:
-      - run-db:db
+#    links:
+#      - run-db:db
   run-web:
     image: tictactoe-app
     container_name: tictactoe.dev.web
     build: 
       context: ./TicTacToe-app
       dockerfile: Dockerfile
-    ports:
-      - 4200:80
+#    ports:
+#      - 4200:80
+    environment:
+      VIRTUAL_HOST: "app.andkra.eu"
+networks:
+  default:
+    external:
+      name: proxynet

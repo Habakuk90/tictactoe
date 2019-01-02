@@ -17,6 +17,7 @@ import { TicTacToeService } from './tictactoe/tictactoe.service';
 import { GroupService } from './shared/services/group.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
+import { GameService } from './shared/services/game.service';
 import { RPSComponent } from './rps/rps.component';
 
 @NgModule({
@@ -39,7 +40,7 @@ import { RPSComponent } from './rps/rps.component';
   ],
   providers: [
     ConfigService, HubConnectionService, SpinnerService,
-    TicTacToeService, AuthGuard, GroupService],
+    TicTacToeService, AuthGuard, GroupService, GameService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,9 +6,13 @@ import { Component, OnInit, Input } from '@angular/core';
   // styleUrls: ['./modal.challenged.component.scss']
 })
 export class GameOverModalComponent {
-  @Input() args;
+  @Input() args: any;
 
   constructor() {
 
+  }
+
+  public tryAgain() {
+    // connection.invoke('StartGame', groupName, )
   }
 }

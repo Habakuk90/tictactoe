@@ -4,14 +4,9 @@ $desktop-width: 1024px;
 
 /** Colors **/
 
-$red: red;
-$orrange: orange;
-$green: #47d173;
-$white: #fff;
-
-
-
 // As hex codes */
+
+$white: #fff;
 
 $color-green: #3ED571; // Main Primary color */
 $color-green-light: #94EFB3;
@@ -31,11 +26,12 @@ $color-red-dark: #F02500;
 
 $simple-box-shadow: 0 0 8px 3px rgba(17, 17, 17, 0.3);
 
-// @mixin tablet {
-//   @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
-//     @content;
-//   }
-// }
+/** ## Dimensions start ## **/
+
+/** Navigation **/
+$nav-height: 40px;
+
+/** ## Dimensions end ## **/
 
 
 @mixin tablet {
