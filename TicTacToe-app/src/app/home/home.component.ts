@@ -28,7 +28,7 @@ export class HomeComponent implements OnDestroy {
     private router: Router) {
       userService.getUserName().subscribe(res => {
         this.currentUser =  res.toString();
-      });
+      }, err => userService.logout());
 
       connectionService.isConnected.subscribe(isConnected => {
         const that = this;
