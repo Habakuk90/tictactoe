@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { UserService } from '../../shared/services/user.service';
 import { Router } from '@angular/router';
 import { UserRegistration } from '../../shared/models/user.registration.inteface';

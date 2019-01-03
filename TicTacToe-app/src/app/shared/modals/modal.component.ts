@@ -30,20 +30,15 @@ export class ModalComponent implements OnInit {
 
   groupName: string;
 
-  constructor(connectionService: HubConnectionService,
-    private modalService: ModalService,
+  constructor(private modalService: ModalService,
     groupService: GroupService) {
-    connectionService.isConnected.subscribe(isConnected => {
-      this.connection = connectionService.connection;
-      if (isConnected) {
-        this.connection.on('OpenModal', (enemy: string, gameName: string, modalName: string) => {
-          this.selectedGame = gameName;
-          modalService.openModal(modalName, {enemyUserName: enemy});
-        });
-      }
-      groupService.groupName.subscribe(x => this.groupName = x);
 
+    this.modalService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+      this.selectedGame = gameName;
+      modalService.openModal(modalName, {enemyUserName: enemy});
     });
+
+    groupService.groupName.subscribe(x => this.groupName = x);
   }
 
   ngOnInit() {
@@ -56,13 +51,13 @@ export class ModalComponent implements OnInit {
   }
 
   onChallengeResponse(status: any) {
-    this.connection.invoke('ChallengeResponse', this.modalArgs['enemyUserName'], this.selectedGame, status);
+    this.modalService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
     // this.connection.invoke('StartGame')
     this.modalService.closeModal();
   }
 
   gameRestart() {
-    this.connection.invoke('StartGame', this.groupName).then(() => {
+    this.modalService.startGame(this.groupName).then(() => {
       this.modalService.closeModal();
     });
   }

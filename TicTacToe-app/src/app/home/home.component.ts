@@ -1,13 +1,10 @@
 import { Component, Input, OnDestroy, Query } from '@angular/core';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
-import { HubConnection } from '@aspnet/signalr';
 import { UserService } from '../shared/services/user.service';
 import { Router } from '@angular/router';
 import { ModalService } from '../shared/modals/modal.service';
-import { GameService } from '../shared/services/game.service';
 import { SpinnerService } from '../spinner/spinner.service';
 import { GroupService } from '../shared/services/group.service';
-import { TicTacToeService } from '../tictactoe/tictactoe.service';
 
 @Component({
   selector: 'app-home',
@@ -15,15 +12,12 @@ import { TicTacToeService } from '../tictactoe/tictactoe.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnDestroy {
-  connection: HubConnection;
   userOnline;
   currentUser: string;
   selectedPlayer: string;
 
-  constructor(connectionService: HubConnectionService, userService: UserService,
+  constructor(private connectionService: HubConnectionService, userService: UserService,
     private groupService: GroupService, private modalService: ModalService,
-    private gameService: GameService,
-    private tictactoeService: TicTacToeService,
     private spinnerService: SpinnerService,
     private router: Router) {
       userService.getUserName().subscribe(res => {
@@ -33,34 +27,33 @@ export class HomeComponent implements OnDestroy {
       connectionService.isConnected.subscribe(isConnected => {
         const that = this;
         if (isConnected) {
-          this.connection = connectionService.connection;
-          this.connection.on('UpdateUserList', userOnline =>
-            this.userOnline = userOnline);
+          this.connectionService.updateUserList(userOnline => {
+            this.userOnline = userOnline;
+          });
 
-          this.connection.on('StartGame', (groupName, gameName) => {
+          this.connectionService.onStartGame((groupName, gameName) => {
             that.spinnerService.toggleSpinner();
-            that.groupService.JoinGroup(groupName).then(() => {
+            that.groupService.joinGroup(groupName).then(() => {
               that.router.navigate([gameName]);
               that.spinnerService.toggleSpinner();
               that.modalService.closeModal();
             });
           });
 
-          this.connection.invoke('AddCurrentUser', userService.currentUserName);
+          this.connectionService.addCurrentUser(userService.currentUserName);
         }
       });
   }
 
   challengeSelectedPlayer() {
-    this.connection.invoke(
-      'ChallengePlayer', this.selectedPlayer, 'tictactoe');
+    this.connectionService.challengePlayer(this.selectedPlayer, 'tictactoe');
       this.selectedPlayer = '';
   }
 
   ngOnDestroy() {
-    this.connection.off('StartGame');
-    this.connection.off('UpdateUserList');
-    this.connection.off('SwitchTurn');
-    this.connection.off('JoinGroup');
+    this.connectionService.connection.off('StartGame');
+    this.connectionService.connection.off('UpdateUserList');
+    this.connectionService.connection.off('SwitchTurn');
+    this.connectionService.connection.off('JoinGroup');
   }
 }

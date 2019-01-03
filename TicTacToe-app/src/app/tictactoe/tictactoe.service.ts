@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GroupService } from '../shared/services/group.service';
-import { Router } from '../../../node_modules/@angular/router';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
-import { SpinnerService } from '../spinner/spinner.service';
 import { GameService } from '../shared/services/game.service';
 import { ModalService } from '../shared/modals/modal.service';
 
@@ -36,6 +33,14 @@ export class TicTacToeService extends GameService {
           .invoke('GameOver', groupName, winningTileId, winningLine);
       }
     });
+  }
+
+  onTileChange(method: (...args: any[]) => void) {
+    this.connectionService.connection.on('TileChange', method);
+  }
+
+  onSwitchTurn(method: (...args: any[]) => void) {
+    this.connectionService.connection.on('SwitchTurn', method);
   }
 
   reset() {

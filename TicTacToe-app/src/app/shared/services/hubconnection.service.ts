@@ -8,6 +8,7 @@ export class HubConnectionService {
   connection: HubConnection;
   _connectionBehaviour = new BehaviorSubject<boolean>(false);
   isConnected = this._connectionBehaviour.asObservable();
+
   constructor(private configService: ConfigService) {
 
   }
@@ -36,5 +37,21 @@ export class HubConnectionService {
     return this.connection.stop().then(() => {
       this._connectionBehaviour.next(false);
     });
+  }
+
+  updateUserList(method: (...args: any[]) => void) {
+    this.connection.on('UpdateUserList', method);
+  }
+
+  onStartGame(method: (...args: any[]) => void) {
+    this.connection.on('StartGame', method);
+  }
+
+  addCurrentUser(...args: any[]): Promise<any> {
+    return this.connection.invoke('AddCurrentUser', ...args);
+  }
+
+  challengePlayer(...args: any[]): Promise<any> {
+    return this.connection.invoke('ChallengePlayer', ...args);
   }
 }

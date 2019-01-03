@@ -5,9 +5,8 @@ import { TicTacToeService } from './tictactoe.service';
 import { ModalService } from '../shared/modals/modal.service';
 import { Box } from './box';
 import { BoxHandler } from './boxHandler';
-import { UserService } from '../shared/services/user.service';
-import { GameService } from '../shared/services/game.service';
 import { GroupService } from '../shared/services/group.service';
+import { UserService } from '../shared/services/user.service';
 
 @Component({
   selector: 'app-tictactoe',
@@ -28,61 +27,59 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   public boxes: Box[];
 
   constructor(private connectionService: HubConnectionService, private router: Router,
-    private tictactoeService: TicTacToeService, private userService: UserService,
-    private modalService: ModalService, private groupService: GroupService
+    private tictactoeService: TicTacToeService,
+    private modalService: ModalService, private groupService: GroupService,
+    private userService: UserService
     ) {
     const that = this;
     that.boxes = that.boxHandler.boxes;
 
-    connectionService.isConnected.subscribe(isConnected => {
-      if (isConnected) {
-        connectionService.connection.on('TileChange', (tileId) => {
-          const box: Box = that.boxHandler.findById(tileId);
-          box.state = that.gameTile;
-          box.locked = true;
-        });
+    tictactoeService.onTileChange((tileId) => {
+      const box: Box = that.boxHandler.findById(tileId);
+      box.state = that.gameTile;
+      box.locked = true;
+    });
 
-        connectionService.connection.on('SwitchTurn', () => {
-          tictactoeService.switchTurn();
-          if (that.gameTile === 'circle') {
-            that.gameTile = 'cross';
-          } else {
-            that.gameTile = 'circle';
-          }
-        });
-
-        connectionService.connection.on('StartGame', (groupName: string) => {
-          console.log('start');
-          this.boxes = this.boxHandler.createBoxes();
-          this.boxHandler.setAllUnlocked();
-          this.setLine(null, null);
-          this.ngOnInit();
-          // that.spinner
-          that.modalService.closeModal();
-        });
-
-        connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
-          this.endGame(winningTileId, winningLine);
-        });
+    tictactoeService.onSwitchTurn(() => {
+      tictactoeService.switchTurn();
+      if (that.gameTile === 'circle') {
+        that.gameTile = 'cross';
+      } else {
+        that.gameTile = 'circle';
       }
+    });
 
-      tictactoeService.hasWon.subscribe(x => that.hasWon = x);
-      tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
-      groupService.groupName
-        .subscribe(groupName => {
-          this.groupName = groupName;
-          if (this.groupName === undefined ||
-            this.groupName === '') {
-            this.router.navigate(['/']);
-            return;
-          }
-        });
+    connectionService.onStartGame((groupName: string) => {
+      console.log('start');
+      this.boxes = this.boxHandler.createBoxes();
+      this.boxHandler.setAllUnlocked();
+      this.setLine(null, null);
+      this.ngOnInit();
+      // that.spinner
+      that.modalService.closeModal();
+    });
+
+    connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
+      this.endGame(winningTileId, winningLine);
+    });
+
+  tictactoeService.hasWon.subscribe(x => that.hasWon = x);
+  tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
+  groupService.groupName
+    .subscribe(groupName => {
+      this.groupName = groupName;
+      if (this.groupName === undefined ||
+        this.groupName === '') {
+        this.router.navigate(['/']);
+        return;
+      }
     });
   }
 
-  changeField(event: Event, tileId: string) {
+  changeField(tileId: string) {
+    const that = this;
     if (!this.turn ||
-      this.boxHandler.findById(tileId).locked === true) {
+      that.boxHandler.findById(tileId).locked === true) {
       return;
     }
     this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
@@ -148,10 +145,10 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.selfTileState = this.turn ? 'cross' : 'circle';
-    console.log('init')
     if (this.groupName.startsWith(this.userService.currentUserName)) {
-            this.tictactoeService.switchTurn();
+      this.tictactoeService.switchTurn();
     }
+
   }
 
   ngOnDestroy() {
@@ -160,7 +157,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     this.connectionService.connection.off('StartGame');
     this.tictactoeService.reset();
     if (this.groupName) {
-      this.groupService.LeaveGroup(this.groupName);
+      this.groupService.leaveGroup(this.groupName);
     }
   }
 }
