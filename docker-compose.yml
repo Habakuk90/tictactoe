@@ -17,7 +17,7 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=docker
     ports:
-      - 8080:80
+      - 8081:80
     depends_on:
       - run-db
 #    links:
