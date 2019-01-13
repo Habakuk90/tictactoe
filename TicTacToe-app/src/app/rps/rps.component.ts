@@ -10,7 +10,7 @@ export class RPSComponent implements OnInit, OnDestroy {
   @ViewChild('paper', {read: ElementRef}) paperElement: ElementRef;
   @ViewChild('scissors', {read: ElementRef}) scissorsElement: ElementRef;
 
-  selectTile(event, rock) {
+  selectTile(event) {
   }
 
   ngOnInit() {

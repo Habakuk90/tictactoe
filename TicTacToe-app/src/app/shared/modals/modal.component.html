@@ -15,7 +15,7 @@
   </app-declined-modal>
 
   <app-gameover-modal class="modal__container" [args]="modalArgs"
-    (restartGame)="gameRestart($event)"
+    (restartGame)="gameRestart()"
     *ngIf="activeModal === modals.gameoverModal">
 
   </app-gameover-modal>
