@@ -12,7 +12,7 @@ export class ConfigService {
         hostname = hostname.substr(0, hostname.indexOf(':'));
       }
         // this._apiURI = environment.baseUrl + '/api';
-        this._apiURI = 'http://' + hostname + ':8080' + '/api';
+        this._apiURI = 'http://' + hostname + ':8081' + '/api';
      }
 
      getApiURI() {

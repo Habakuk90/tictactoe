@@ -28,6 +28,7 @@ namespace TicTacToe.WebApi
                 .AddJsonFile(
                     $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json",
                     optional: true)
+                .AddEnvironmentVariables()
                 .Build();
 
         }
@@ -57,7 +58,7 @@ namespace TicTacToe.WebApi
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
                 options
-                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                    .UseSqlServer(Configuration.GetConnectionString("TestConnect")));
 
             // ===== Add Identity ========
             services.AddIdentity<IdentityUser, IdentityRole>(options =>

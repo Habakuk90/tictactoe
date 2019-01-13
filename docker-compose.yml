@@ -6,8 +6,16 @@ services:
     build:
       context: ./mssql
       dockerfile: DOCKERFILE
+    environment:
+      - SA_PASSWORD=${DB_PASSWORD}
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
     ports:
       - 1433:1433
+    expose:
+      - "1433"
+    volumes:
+      - ${MSSQL_VOLUME}
   run-api:
     image: tictactoe-api
     container_name: tictactoe.dev.api
@@ -15,9 +23,11 @@ services:
       context: ./TicTacToe.API/TicTacToe.WebApi/
       dockerfile: DOCKERFILE
     environment:
-        - ASPNETCORE_ENVIRONMENT=docker
+        ASPNETCORE_ENVIRONMENT: docker
+        CUSTOMCONNSTR_TestConnect: Server=tictactoe.dev.db,1433;Database=master;User=sa;Password=${DB_PASSWORD};
+#        ASPNETCORE_ConnectionStrings__TestConnect: Server=tictactoe.dev.db,1433;Database=master;User=sa;Password=${DB_PASSWORD};
     ports:
-      - 8080:80
+      - 8081:80
     depends_on:
       - run-db
 #    links:
@@ -28,8 +38,8 @@ services:
     build: 
       context: ./TicTacToe-app
       dockerfile: Dockerfile
-#    ports:
-#      - 4200:80
+    ports:
+      - 4200:80
     environment:
       VIRTUAL_HOST: "app.andkra.eu"
 networks:
