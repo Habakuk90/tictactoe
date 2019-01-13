@@ -122,7 +122,7 @@ namespace TicTacToe.WebApi
             else
             {
                 // TODO: Test Production
-                app.UseCors("LocalCorsPolicy");
+                app.UseCors("ProdCorsPolicy");
             }
 
             // JWT Bearer Token Authentication
