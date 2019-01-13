@@ -1,9 +1,8 @@
 FROM microsoft/mssql-server-linux:latest
 
 EXPOSE 1433
-VOLUME d:/docker/sql:/var/opt/mssql
+#VOLUME d:/docker/sql:/var/opt/mssql
 
       # Password irgendwie auslagern, dateien über docker transformieren/variablen
-ENV SA_PASSWORD=aaBc123!WASA
 ENV ACCEPT_EULA=Y
 ENV MSSQL_PID=Express
