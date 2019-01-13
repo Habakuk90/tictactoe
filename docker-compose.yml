@@ -14,8 +14,8 @@ services:
       - 1433:1433
     expose:
       - "1433"
-#    volumes:
-#      - ${MSSQL_VOLUME}
+    volumes:
+      - ${MSSQL_VOLUME}
   run-api:
     image: tictactoe-api
     container_name: tictactoe.dev.api
