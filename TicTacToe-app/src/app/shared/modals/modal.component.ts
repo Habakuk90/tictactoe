@@ -32,11 +32,14 @@ export class ModalComponent implements OnInit {
 
   constructor(private modalService: ModalService,
     groupService: GroupService) {
-
-    this.modalService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
-      this.selectedGame = gameName;
-      modalService.openModal(modalName, {enemyUserName: enemy});
-    });
+    this.modalService.connectionService.isConnected.subscribe((isConnected => {
+        if (isConnected) {
+          this.modalService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+            this.selectedGame = gameName;
+            modalService.openModal(modalName, {enemyUserName: enemy});
+          });
+        }
+      }));
 
     groupService.groupName.subscribe(x => this.groupName = x);
   }
