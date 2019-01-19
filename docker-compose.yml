@@ -38,8 +38,8 @@ services:
     build: 
       context: ./TicTacToe-app
       dockerfile: Dockerfile
-    ports:
-      - 4200:80
+#    ports:
+#      - 4200:80
     environment:
       VIRTUAL_HOST: "app.andkra.eu"
 networks:
