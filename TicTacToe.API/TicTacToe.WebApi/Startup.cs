@@ -58,7 +58,7 @@ namespace TicTacToe.WebApi
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
                 options
-                    .UseSqlServer(Configuration.GetConnectionString("TestConnect")));
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // ===== Add Identity ========
             services.AddIdentity<IdentityUser, IdentityRole>(options =>

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
 using TicTacToe.WebApi.TicTacToe.Services;
@@ -11,7 +12,7 @@ using TicTacToe.WebApi.TicTacToe.Services;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class GameHub : Hub
+    public class GameHub : Hub<IGameHub>
     {
         public enum ModalStates { Accepted, Declined };
 
@@ -40,8 +41,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="room">id:number, name:string, List<GameUserModel></param>
         public void TileClicked(string room, string tileId)
         {
-            Clients.Group(room).SendAsync("SwitchTurn");
-            Clients.Group(room).SendAsync("TileChange", tileId);
+            Clients.Group(room).SwitchTurn();
+            Clients.Group(room).TileChange(tileId);
         }
 
         /// <summary>
@@ -64,9 +65,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             _gameUserService.UpdateUser(allUser, Constants.Status.INGAME);
 
             await Clients.Clients(enemyUser.ConnectionIds)
-                .SendAsync("OpenModal", currentUser.Name, gameName, Constants.ModalStatus.CHALLENGED);
+                .OpenModal(currentUser.Name, gameName, Constants.ModalStatus.CHALLENGED);
             //call self
-            await Clients.Caller.SendAsync("OpenModal", enemyName, gameName, Constants.ModalStatus.WAITING);
+            await Clients.Caller.OpenModal(enemyName, gameName, Constants.ModalStatus.WAITING);
         }
 
         /// <summary>
@@ -92,15 +93,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     //[TODO] More Games
                     string groupName = currentUser.Name + enemyUser.Name;
 
-                    await this.Clients.Clients(enemyUser.ConnectionIds)
-                        .SendAsync("StartGame", groupName, gameName);
+                    await this.Clients.Clients(enemyUser.ConnectionIds).
+                        StartGame(groupName, gameName);
 
-                    await this.Clients.Caller.SendAsync("StartGame", groupName, gameName);
+                    await this.Clients.Caller.StartGame(groupName, gameName);
 
                     break;
                 case (ModalStates.Declined):
                     await Clients.Clients(enemyUser.ConnectionIds)
-                        .SendAsync("OpenModal", enemyName, gameName, Constants.ModalStatus.DECLINED);
+                        .OpenModal(enemyName, gameName, Constants.ModalStatus.DECLINED);
 
                     _gameUserService.UpdateUser(allUser, Constants.Status.ONLINE);
 
@@ -110,7 +111,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public async Task StartGame(string groupName)
         {
-            await Clients.Group(groupName).SendAsync("StartGame", groupName);
+            await Clients.Group(groupName).StartGame(groupName);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="groupName">Group Name given by the frontend</param>
         public void GameOver(string groupName, string winningTileId, string winningLine)
         {
-            Clients.Group(groupName).SendAsync("GameOver", winningTileId, winningLine);
+            Clients.Group(groupName).GameOver(winningTileId, winningLine);
         }
 
         /// <summary>

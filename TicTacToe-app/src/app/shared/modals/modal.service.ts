@@ -10,7 +10,7 @@ export class ModalService {
   modalArgs = new BehaviorSubject<object>({});
   connection: HubConnection;
 
-  constructor(private connectionService: HubConnectionService) {
+  constructor(public connectionService: HubConnectionService) {
   }
 
   openModal(modalName: string, args: object) {
