@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { UserService } from '../shared/services/user.service';
 import { Subscription } from 'rxjs';
-import { TicTacToeService } from '../tictactoe/tictactoe.service';
 
 @Component({
   selector: 'app-header',

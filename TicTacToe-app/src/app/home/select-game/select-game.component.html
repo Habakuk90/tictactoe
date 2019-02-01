@@ -1,0 +1,10 @@
+<section class="select-game">
+  <div>
+    Select a Game
+  </div>
+  <div>
+    <ng-template ngFor let-game [ngForOf]="games">
+      <div [class.selected]="game == selectedGame" (click)="gameClicked(game)">{{game.name}}</div>
+    </ng-template>
+  </div>
+</section>

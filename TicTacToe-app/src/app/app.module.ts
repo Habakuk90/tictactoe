@@ -19,12 +19,16 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
 import { GameService } from './shared/services/game.service';
 import { RPSComponent } from './rps/rps.component';
+import { SelectGameComponent } from './home/select-game/select-game.component';
+import { SelectPlayerComponent } from './home/select-player/select-player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     HomeComponent,
+    SelectGameComponent,
+    SelectPlayerComponent,
     TicTacToeComponent,
     SpinnerComponent,
     TestSiteComponent,
