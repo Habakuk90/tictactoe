@@ -24,7 +24,7 @@ services:
       dockerfile: DOCKERFILE
     environment:
         ASPNETCORE_ENVIRONMENT: docker
-        CUSTOMCONNSTR_TestConnect: Server=tictactoe.dev.db,1433;Database=master;User=sa;Password=${DB_PASSWORD};
+        CUSTOMCONNSTR_DefaultConnection: Server=tictactoe.dev.db,1433;Database=master;User=sa;Password=${DB_PASSWORD};
 #        ASPNETCORE_ConnectionStrings__TestConnect: Server=tictactoe.dev.db,1433;Database=master;User=sa;Password=${DB_PASSWORD};
     ports:
       - 8081:80
@@ -42,6 +42,9 @@ services:
 #      - 4200:80
     environment:
       VIRTUAL_HOST: "app.andkra.eu"
+      VIRTUAL_PORT: 4200
+    expose:
+      - "4200"
 networks:
   default:
     external:

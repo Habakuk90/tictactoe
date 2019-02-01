@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TicTacToe.WebApi.TicTacToe.Entities;
+﻿using System.Collections.Generic;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
@@ -10,21 +6,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
     public interface IGameUserService 
     {
         GameUserModel GetUserByConnection(string connectionId);
-
-        IEnumerable<string> GetConnectionIds(string userName);
-
+        
         GameUserModel GetUserByName(string userName);
+        
+        void AddNewUser(GameUserModel user);
 
-        IQueryable<GameUserModel> GetOnlineUsers();
+        void UpdateUser(GameUserModel user, string status);
 
-        void AddNewUser(string userName, string connectionIdl);
+        void UpdateUser(ICollection<GameUserModel> userList, string status);
 
-        void UpdateUser(GameUserModel userModel, string status);
+        void RemoveUser(GameUserModel user, string currentConnectionId);
+        
+        void UpdateUserList();
 
-        void UpdateUser(ICollection<GameUserModel> userModel, string status);
-
-        void RemoveUser(GameUserModel userModel, string currentConnectionId);
-
-        void RemoveUser(string userName);
+        bool UserExists(string userName);
     }
 }

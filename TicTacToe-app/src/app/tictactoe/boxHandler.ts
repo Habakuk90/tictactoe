@@ -15,6 +15,10 @@ export class BoxHandler {
     this.boxes.forEach(box => box.locked = true);
   }
 
+  public setAllUnlocked(): void {
+    return this.boxes.forEach(box => box.locked = false);
+  }
+
   public checkWin(box: Box): boolean {
     const columns = [];
     const rows = [];
@@ -57,11 +61,10 @@ export class BoxHandler {
     }
 
     if (columns.length > 2 || rows.length > 2 || diagonalTopLeft.length > 2 || diagonalBottomLeft.length > 2) {
-      // this.winningTileId = tileId;
       return true;
     }
-    return false;
 
+    return false;
   }
 
   public createBoxes(): Box[] {

@@ -12,9 +12,9 @@ export class AppComponent implements OnDestroy {
   constructor(private connectionService: HubConnectionService, userService: UserService, spinnerService: SpinnerService) {
     userService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) {
-        userService.getUserName().subscribe(res => this.userName =  res.toString());
+        userService.getUserName().subscribe(res => this.userName =  res.toString(), err => userService.logout());
         spinnerService.toggleSpinner();
-        connectionService.startConnection().then(() => spinnerService.toggleSpinner());
+        connectionService.startConnection('/signalR').then(() => spinnerService.toggleSpinner());
       }
     });
    }

@@ -14,19 +14,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedInSubscription: Subscription;
   turnSubscription: Subscription;
   turn: boolean;
-  constructor(private userService: UserService, private tictactoeService: TicTacToeService) {
+  constructor(private userService: UserService) {
 
   }
 
   ngOnInit() {
     this.isLoggedInSubscription = this.userService.isLoggedIn
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
-    // tslint:disable-next-line:prefer-const
-    let that = this;
-    this.turnSubscription = this.tictactoeService.isTurn
-      .subscribe(isTurn => {
-        that.turn = isTurn;
-      });
   }
 
   ngOnDestroy() {
@@ -34,9 +28,5 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
   logout() {
     this.userService.logout();
-  }
-
-  switch() {
-    this.tictactoeService.switchTurn();
   }
 }

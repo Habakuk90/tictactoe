@@ -12,13 +12,14 @@ export class GroupService {
      private router: Router) {
 
   }
-  JoinGroup(groupName: string): Promise<void> {
+
+  joinGroup(groupName: string): Promise<void> {
     const that = this;
 
     let promise: Promise<void>;
     this.connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
-        promise = this.connectionService.connection.invoke<void>('JoinGroup', groupName).then((a) => {
+        promise = this.connectionService.connection.invoke<void>('JoinGroup', groupName).then(() => {
           that._groupNameSubject.next(groupName);
           console.log('group');
         });
@@ -28,7 +29,7 @@ export class GroupService {
     return promise;
   }
 
-  LeaveGroup(groupName: string) {
+  leaveGroup(groupName: string) {
     const that = this;
     that._groupNameSubject.next('');
 

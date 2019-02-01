@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
@@ -11,27 +9,35 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
     {
         private AppDbContext _context;
 
-        public GroupService(AppDbContext context)
+        private IHubContext<GameHub> _gameHub;
+
+        public GroupService(AppDbContext context, IHubContext<GameHub> gameHub)
         {
-            _context = context;
+            this._context = context;
+            this._gameHub = gameHub;
         }
 
-        public void JoinGroup(GameUserModel userModel, string groupName)
+        public async Task JoinGroupAsync(GameUserModel user, string groupName)
         {
-            //var currentUser = _context.AppUser.Where(x => x.ConnectionIds.Contains(userModel.CurrentConnectionId)).First();
-            userModel.GroupName = groupName;
+            user.GroupName = groupName;
+            await _gameHub.Groups
+                .AddToGroupAsync(user.CurrentConnectionId, groupName);
+
             _context.SaveChanges();
         }
 
-        public void LeaveGroup(GameUserModel userModel, string groupName)
+        public async Task LeaveGroupAsync(GameUserModel user, string groupName = "")
         {
-            userModel.GroupName = groupName;
-            if (!string.IsNullOrWhiteSpace(userModel.GroupName))
+            user.GroupName = groupName;
+            if (!string.IsNullOrWhiteSpace(user.GroupName))
             {
-                userModel.GroupName = string.Empty;
+                await _gameHub.Groups
+                .RemoveFromGroupAsync(user.CurrentConnectionId, groupName);
+
+                user.GroupName = string.Empty;
             }
 
-            _context.Attach(userModel);
+            _context.Attach(user);
             _context.SaveChanges();
         }
     }

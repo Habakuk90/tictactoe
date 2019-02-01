@@ -1,4 +1,4 @@
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 export abstract class BaseService {
   constructor() {}
@@ -12,7 +12,7 @@ export abstract class BaseService {
 
     let modelStateErrors: String = '';
     const serverError = JSON.parse(error.error);
-    let errorMessage = [];
+    const errorMessage = [];
     if (!serverError.type) {
       for (const key in serverError) {
         if (serverError[key]) {
