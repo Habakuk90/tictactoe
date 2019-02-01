@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
     public interface IGameHub
     {
         Task SwitchTurn();
+
         Task TileChange(string tileId);
 
         Task OpenModal(string userName, string gameName, string modalStatus);
@@ -14,5 +16,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
         Task StartGame(string groupName);
 
         Task GameOver(string winningTileId, string winningLine);
+
+        Task UpdateUserList(IEnumerable<string> onlineUsers);
     }
 }

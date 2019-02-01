@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
@@ -15,11 +16,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         #region private properties
 
         private AppDbContext _context;
-        private IHubContext<GameHub> _gameHub;
+        private IHubContext<GameHub, IGameHub> _gameHub;
 
         #endregion
 
-        public GameUserService(AppDbContext context, IHubContext<GameHub> gameHub)
+        public GameUserService(
+            AppDbContext context,
+            IHubContext<GameHub, IGameHub> gameHub)
         {
             this._context = context;
             this._gameHub = gameHub;
@@ -35,7 +38,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
             {
                 throw new Exception("no user found");
             }
-
+            
             userModel.CurrentConnectionId = connectionId;
             return userModel;
 
@@ -100,15 +103,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         /// <clientMethod>UpdateUserList</clientMethod>
         public async void UpdateUserList()
         {
-            IQueryable<string> userOnline = this.GetOnlineUsers()
+            IEnumerable<string> userOnline = this.GetOnlineUsers()
                 .Select(x => x.Name);
 
-            await this._gameHub.Clients.All.SendAsync("UpdateUserList", userOnline);
+            await this._gameHub.Clients.All.UpdateUserList(userOnline);
         }
 
         #region private methods 
 
-        private IQueryable<GameUserModel> GetOnlineUsers()
+        private IEnumerable<GameUserModel> GetOnlineUsers()
         {
             return _context.AppUser.Where(x => x.Status == Constants.Status.ONLINE);
         }
