@@ -7,7 +7,7 @@
     <ng-template ngFor let-user [ngForOf]="userOnline">
       <li
         class="enemy-list__item"
-        (click)="selectedPlayer = user"
+        (click)="enemyClicked(user)"
         *ngIf="user !== currentUser"
         [class.selected]="user == selectedPlayer"
       >
@@ -15,7 +15,4 @@
       </li>
     </ng-template>
   </ul>
-  <button class="button button__start" (click)="challengeSelectedPlayer()">
-    Go!
-  </button>
 </div>

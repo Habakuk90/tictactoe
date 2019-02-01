@@ -1,4 +1,7 @@
 <section class="home">
   <app-select-game (gameSelected)="gameSelected($event)"></app-select-game>
-  <app-select-player [selectedGame]="selectedGame" *ngIf="isGameSelected"></app-select-player>
+  <app-select-player (playerSelected)="enemySelected($event)" [selectedGame]="selectedGame" *ngIf="isGameSelected"></app-select-player>
+  <button *ngIf="isPlayerSelected && isGameSelected" class="button button__start" (click)="challengeSelectedPlayer()">
+      Go!
+  </button>
 </section>

@@ -1,10 +1,13 @@
 <section class="select-game">
-  <div>
+  <h2 class="select-game__headline">
     Select a Game
-  </div>
-  <div>
+  </h2>
+  <div class="select-game__container">
     <ng-template ngFor let-game [ngForOf]="games">
-      <div [class.selected]="game == selectedGame" (click)="gameClicked(game)">{{game.name}}</div>
+      <div class="select-game__item"  [class.selected]="game == selectedGame" (click)="gameClicked(game)">
+        <div class="select-game__image {{game.cssClass}}">
+        </div>
+      </div>
     </ng-template>
   </div>
 </section>

@@ -1,59 +1,67 @@
-import {Component, Input} from '@angular/core';
-import { IGame } from 'src/app/shared/models/game.interface';
+import {Component, Input, OnDestroy, Output, EventEmitter} from '@angular/core';
+import { HubConnectionService } from 'src/app/shared/services/hubconnection.service';
+import { UserService } from 'src/app/shared/services/user.service';
+import { ModalService } from 'src/app/shared/modals/modal.service';
+import { GroupService } from 'src/app/shared/services/group.service';
+import { SpinnerService } from 'src/app/spinner/spinner.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-select-player',
-  templateUrl: './select-player.component.html'
-  // styleUrls: ['./home.component.scss']
+  templateUrl: './select-player.component.html',
+  styleUrls: ['./select-player.component.scss']
 })
 
-export class SelectPlayerComponent {
+export class SelectPlayerComponent implements OnDestroy {
+  @Input() selectedGame;
+  @Output() playerSelected: EventEmitter<string> = new EventEmitter<string>();
+  userOnline: any;
+  currentUser: string;
+  selectedPlayer: string;
 
-  @Input() selectedGame: IGame;
-  // userOnline: any;
-  // currentUser: string;
-  // selectedPlayer: string;
+  constructor(private connectionService: HubConnectionService, userService: UserService,
+    private groupService: GroupService, private modalService: ModalService,
+    private spinnerService: SpinnerService,
+    private router: Router) {
+      userService.getUserName().subscribe(res => {
+        this.currentUser =  res.toString();
+      }, err => userService.logout());
 
-  // constructor(private connectionService: HubConnectionService, userService: UserService,
-  //   private groupService: GroupService, private modalService: ModalService,
-  //   private spinnerService: SpinnerService,
-  //   private router: Router) {
-  //     userService.getUserName().subscribe(res => {
-  //       this.currentUser =  res.toString();
-  //     }, err => userService.logout());
+      connectionService.isConnected.subscribe(isConnected => {
+        const that = this;
+        if (isConnected) {
+          this.connectionService.updateUserList(userOnline => {
+            this.userOnline = userOnline;
+          });
 
-  //     connectionService.isConnected.subscribe(isConnected => {
-  //       const that = this;
-  //       if (isConnected) {
-  //         this.connectionService.updateUserList(userOnline => {
-  //           this.userOnline = userOnline;
-  //         });
+          this.connectionService.onStartGame((groupName, gameName) => {
+            that.spinnerService.toggleSpinner();
+            that.groupService.joinGroup(groupName).then(() => {
+              that.router.navigate([gameName]);
+              that.spinnerService.toggleSpinner();
+              that.modalService.closeModal();
+            });
+          });
 
-  //         this.connectionService.onStartGame((groupName, gameName) => {
-  //           that.spinnerService.toggleSpinner();
-  //           that.groupService.joinGroup(groupName).then(() => {
-  //             that.router.navigate([gameName]);
-  //             that.spinnerService.toggleSpinner();
-  //             that.modalService.closeModal();
-  //           });
-  //         });
+          this.connectionService.addCurrentUser(userService.currentUserName);
+        }
+      });
+  }
 
-  //         this.connectionService.addCurrentUser(userService.currentUserName);
-  //       }
-  //     });
-  // }
+  enemyClicked(user: string) {
+    if (this.selectedPlayer === user) {
+      this.selectedPlayer = null;
+      user = null;
+    } else {
+      this.selectedPlayer = user;
+    }
+    this.playerSelected.emit(user);
+  }
 
-  // challengeSelectedPlayer() {
-  //   this.connectionService.challengePlayer(this.selectedPlayer, 'tictactoe');
-  //     this.selectedPlayer = '';
-  // }
-
-
-
-  // ngOnDestroy() {
-  //   this.connectionService.connection.off('StartGame');
-  //   this.connectionService.connection.off('UpdateUserList');
-  //   this.connectionService.connection.off('SwitchTurn');
-  //   this.connectionService.connection.off('JoinGroup');
-  // }
+  ngOnDestroy() {
+    this.connectionService.connection.off('StartGame');
+    this.connectionService.connection.off('UpdateUserList');
+    this.connectionService.connection.off('SwitchTurn');
+    this.connectionService.connection.off('JoinGroup');
+  }
 }
