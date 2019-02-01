@@ -43,6 +43,8 @@ services:
     environment:
       VIRTUAL_HOST: "app.andkra.eu"
       VIRTUAL_PORT: 4200
+    expose:
+      - "4200"
 networks:
   default:
     external:
