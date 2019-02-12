@@ -15,15 +15,15 @@
             set;
         }
 
-        public IUserService _gameUserService
+        public IUserService _userserService
         {
             get;
             set;
         }
-        public BaseHub(IUserService gameUserService,
+        public BaseHub(IUserService userService,
             IGroupService groupService)
         {
-            this._gameUserService = gameUserService;
+            this._userserService = userService;
             this._groupService = groupService;
         }
 
@@ -36,7 +36,7 @@
         /// <returns></returns>
         public void JoinGroup(string groupName)
         {
-            GameUserModel currentUser = this._gameUserService
+            GameUserModel currentUser = this._userserService
                 .GetUserByConnection(Context.ConnectionId);
 
             if (currentUser.GroupName == groupName)
@@ -45,13 +45,13 @@
             }
 
             this._groupService.JoinGroupAsync(currentUser, groupName);
-            this._gameUserService.UpdateUserList();
+            this._userserService.UpdateUserList();
         }
 
 
         public void LeaveGroup(string groupName)
         {
-            GameUserModel currentUser = this._gameUserService
+            GameUserModel currentUser = this._userserService
                 .GetUserByConnection(Context.ConnectionId);
 
             this._groupService.LeaveGroupAsync(currentUser, groupName);
@@ -75,10 +75,10 @@
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            GameUserModel currentUser = this._gameUserService
+            GameUserModel currentUser = this._userserService
                 .GetUserByConnection(Context.ConnectionId);
 
-            this._gameUserService.RemoveUser(currentUser, Context.ConnectionId);
+            this._userserService.RemoveUser(currentUser, Context.ConnectionId);
             await this._groupService.LeaveGroupAsync(currentUser, currentUser.GroupName);
             await base.OnDisconnectedAsync(exception);
         }

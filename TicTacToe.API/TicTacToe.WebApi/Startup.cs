@@ -111,7 +111,7 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
-            services.AddTransient<IUserService, GameUserService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddSingleton<GameService>();
         }

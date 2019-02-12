@@ -35,10 +35,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="selectedPlayer"></param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            GameUserModel currentUser = this._gameUserService
+            GameUserModel currentUser = this._userserService
                 .GetUserByConnection(Context.ConnectionId);
 
-            GameUserModel enemyUser = this._gameUserService
+            GameUserModel enemyUser = this._userserService
                 .GetUserByName(enemyName);
 
             List<GameUserModel> allUser = new List<GameUserModel>
@@ -47,7 +47,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 enemyUser
             };
 
-            this._gameUserService.UpdateUser(allUser, Constants.Status.INGAME);
+            this._userserService.UpdateUser(allUser, Constants.Status.INGAME);
 
             await Clients.Clients(enemyUser.ConnectionIds)
                 .OpenModal(currentUser.Name, gameName, Constants.ModalStatus.CHALLENGED);
@@ -63,8 +63,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <clientMethod></clientMethod>
         public async Task ChallengeResponse(string enemyName, string gameName, ModalStates response)
         {
-            GameUserModel currentUser = this._gameUserService.GetUserByConnection(Context.ConnectionId);
-            GameUserModel enemyUser = this._gameUserService.GetUserByName(enemyName);
+            GameUserModel currentUser = this._userserService.GetUserByConnection(Context.ConnectionId);
+            GameUserModel enemyUser = this._userserService.GetUserByName(enemyName);
 
             List<GameUserModel> allUser = new List<GameUserModel>
             {
@@ -88,7 +88,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Clients.Clients(enemyUser.ConnectionIds)
                         .OpenModal(enemyName, gameName, Constants.ModalStatus.DECLINED);
 
-                    this._gameUserService.UpdateUser(allUser, Constants.Status.ONLINE);
+                    this._userserService.UpdateUser(allUser, Constants.Status.ONLINE);
 
                     break;
             }
@@ -107,24 +107,24 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public void AddCurrentUser(string userName)
         {
-            bool userExists = this._gameUserService.UserExists(userName);
+            bool userExists = this._userserService.UserExists(userName);
 
             GameUserModel user =
                 userExists ?
-                this._gameUserService.GetUserByName(userName) :
+                this._userserService.GetUserByName(userName) :
                 new GameUserModel { Name = userName };
 
             user.CurrentConnectionId = Context.ConnectionId;
 
             if (userExists)
             {
-                this._gameUserService.UpdateUser(
-                    this._gameUserService.GetUserByName(userName),
+                this._userserService.UpdateUser(
+                    this._userserService.GetUserByName(userName),
                     Constants.Status.ONLINE);
             }
             else
             {
-                this._gameUserService.AddNewUser(user);
+                this._userserService.AddNewUser(user);
             }
         }
 

@@ -7,8 +7,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
 
-        public TicTacToeHub(IUserService gameUserService,
-            IGroupService groupService) : base(gameUserService, groupService)
+        public TicTacToeHub(IUserService userService,
+            IGroupService groupService) : base(userService, groupService)
         {
 
         }
@@ -27,7 +27,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// Send GameOver to specific Group
         /// </summary>
         /// <param name="groupName">Group Name given by the frontend</param>
-        public async void GameOverAsync(string groupName, string winningTileId, string winningLine)
+        public async void GameOverAsync(
+            string groupName,
+            string winningTileId, 
+            string winningLine)
         {
             await Clients.Group(groupName).GameOver(winningTileId, winningLine);
         }

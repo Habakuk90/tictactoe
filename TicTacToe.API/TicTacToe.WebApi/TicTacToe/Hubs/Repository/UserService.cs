@@ -11,7 +11,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
     /// <summary>
     /// Access to 
     /// </summary>
-    public class GameUserService : IUserService
+    public class UserService : IUserService
     {
         #region private properties
 
@@ -20,7 +20,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         #endregion
 
-        public GameUserService(
+        public UserService(
             AppDbContext context,
             IHubContext<GameHub, IGameHub> gameHub)
         {
