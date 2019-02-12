@@ -12,22 +12,16 @@ using TicTacToe.WebApi.TicTacToe.Services;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class GameHub : Hub<IGameHub>
+    public class GameHub : BaseHub<IGameHub>
     {
         public enum ModalStates { Accepted, Declined };
 
         private readonly ILogger _logger;
-        private IGameUserService _gameUserService;
-        private IGroupService _groupService;
         private GameService _game;
 
-        public GameHub(ILogger<GameHub> logger, IGameUserService gameUserService,
-            IGroupService groupService, GameService game)
+        public GameHub(IUserService userService, IGroupService groupService)
+            : base(userService, groupService)
         {
-            this._logger = logger;
-            this._gameUserService = gameUserService;
-            this._groupService = groupService;
-            this._game = game;
         }
 
         public string SendMessage()
@@ -36,25 +30,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="room">id:number, name:string, List<GameUserModel></param>
-        public void TileClicked(string room, string tileId)
-        {
-            Clients.Group(room).SwitchTurn();
-            Clients.Group(room).TileChange(tileId);
-        }
-
-        /// <summary>
         /// Player selected enemy and send Request
         /// </summary>
         /// <param name="selectedPlayer"></param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            GameUserModel currentUser = _gameUserService
+            GameUserModel currentUser = this._gameUserService
                 .GetUserByConnection(Context.ConnectionId);
 
-            GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+            GameUserModel enemyUser = this._gameUserService
+                .GetUserByName(enemyName);
 
             List<GameUserModel> allUser = new List<GameUserModel>
             {
@@ -62,7 +47,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 enemyUser
             };
 
-            _gameUserService.UpdateUser(allUser, Constants.Status.INGAME);
+            this._gameUserService.UpdateUser(allUser, Constants.Status.INGAME);
 
             await Clients.Clients(enemyUser.ConnectionIds)
                 .OpenModal(currentUser.Name, gameName, Constants.ModalStatus.CHALLENGED);
@@ -78,8 +63,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <clientMethod></clientMethod>
         public async Task ChallengeResponse(string enemyName, string gameName, ModalStates response)
         {
-            GameUserModel currentUser = _gameUserService.GetUserByConnection(Context.ConnectionId);
-            GameUserModel enemyUser = _gameUserService.GetUserByName(enemyName);
+            GameUserModel currentUser = this._gameUserService.GetUserByConnection(Context.ConnectionId);
+            GameUserModel enemyUser = this._gameUserService.GetUserByName(enemyName);
 
             List<GameUserModel> allUser = new List<GameUserModel>
             {
@@ -103,7 +88,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Clients.Clients(enemyUser.ConnectionIds)
                         .OpenModal(enemyName, gameName, Constants.ModalStatus.DECLINED);
 
-                    _gameUserService.UpdateUser(allUser, Constants.Status.ONLINE);
+                    this._gameUserService.UpdateUser(allUser, Constants.Status.ONLINE);
 
                     break;
             }
@@ -115,35 +100,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// Join Group after a challenge happend
-        /// </summary>
-        /// <param name="enemyName">User who got challenged</param>
-        /// <param name="groupName">represents as currentUserName + enemyUserName</param>
-        /// <returns></returns>
-        public void JoinGroup(string groupName)
-        {
-            GameUserModel currentUser = _gameUserService
-                .GetUserByConnection(Context.ConnectionId);
-
-            if (currentUser.GroupName == groupName)
-            {
-                _groupService.LeaveGroupAsync(currentUser, groupName);
-            }
-
-            _groupService.JoinGroupAsync(currentUser, groupName);
-            _gameUserService.UpdateUserList();
-        }
-
-
-        public void LeaveGroup(string groupName)
-        {
-            GameUserModel currentUser = _gameUserService
-                .GetUserByConnection(Context.ConnectionId);
-
-            _groupService.LeaveGroupAsync(currentUser, groupName);
-        }
-
-        /// <summary>
         /// Marks Current user as online, if new user, add to DB
         /// </summary>
         /// <param name="userName">
@@ -151,24 +107,24 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public void AddCurrentUser(string userName)
         {
-            bool userExists = _gameUserService.UserExists(userName);
+            bool userExists = this._gameUserService.UserExists(userName);
 
             GameUserModel user =
                 userExists ?
-                _gameUserService.GetUserByName(userName) :
+                this._gameUserService.GetUserByName(userName) :
                 new GameUserModel { Name = userName };
 
             user.CurrentConnectionId = Context.ConnectionId;
 
             if (userExists)
             {
-                _gameUserService.UpdateUser(
-                    _gameUserService.GetUserByName(userName),
+                this._gameUserService.UpdateUser(
+                    this._gameUserService.GetUserByName(userName),
                     Constants.Status.ONLINE);
             }
             else
             {
-                _gameUserService.AddNewUser(user);
+                this._gameUserService.AddNewUser(user);
             }
         }
 
@@ -179,30 +135,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public void GameOver(string groupName, string winningTileId, string winningLine)
         {
             Clients.Group(groupName).GameOver(winningTileId, winningLine);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public override async Task OnConnectedAsync()
-        {
-            await base.OnConnectedAsync();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="exception"></param>
-        /// <returns></returns>
-        public override async Task OnDisconnectedAsync(Exception exception)
-        {
-            GameUserModel currentUser = _gameUserService
-                .GetUserByConnection(Context.ConnectionId);
-
-            _gameUserService.RemoveUser(currentUser, Context.ConnectionId);
-            await _groupService.LeaveGroupAsync(currentUser, currentUser.GroupName);
-            await base.OnDisconnectedAsync(exception);
         }
     }
 }

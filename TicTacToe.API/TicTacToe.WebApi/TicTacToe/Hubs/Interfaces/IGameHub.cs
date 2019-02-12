@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
-    public interface IGameHub
+    public interface IGameHub : IBaseHub
     {
         Task SwitchTurn();
 

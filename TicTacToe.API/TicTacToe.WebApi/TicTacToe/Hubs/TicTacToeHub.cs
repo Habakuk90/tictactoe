@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
-    public class TicTacToeHub : Hub<ITicTacToeHub>
+    public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
 
-        public TicTacToeHub()
+        public TicTacToeHub(IUserService gameUserService,
+            IGroupService groupService) : base(gameUserService, groupService)
         {
 
         }

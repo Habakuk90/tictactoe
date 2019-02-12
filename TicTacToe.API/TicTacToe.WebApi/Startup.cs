@@ -13,6 +13,7 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
 using TicTacToe.WebApi.TicTacToe.Services;
 
@@ -110,7 +111,7 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
-            services.AddTransient<IGameUserService, GameUserService>();
+            services.AddTransient<IUserService, GameUserService>();
             services.AddTransient<IGroupService, GroupService>();
             services.AddSingleton<GameService>();
         }

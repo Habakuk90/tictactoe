@@ -3,7 +3,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 {
-    public interface IGameUserService 
+    public interface IUserService 
     {
         GameUserModel GetUserByConnection(string connectionId);
         

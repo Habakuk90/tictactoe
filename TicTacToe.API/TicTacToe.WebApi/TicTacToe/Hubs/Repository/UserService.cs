@@ -11,7 +11,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
     /// <summary>
     /// Access to 
     /// </summary>
-    public class GameUserService : IGameUserService
+    public class GameUserService : IUserService
     {
         #region private properties
 

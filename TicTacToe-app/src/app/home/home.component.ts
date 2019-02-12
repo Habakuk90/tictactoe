@@ -25,7 +25,6 @@ export class HomeComponent {
 
   enemySelected(enemy: string) {
     this.selectedPlayer = enemy;
-    console.log(enemy);
     this.isPlayerSelected = enemy != null;
   }
 
