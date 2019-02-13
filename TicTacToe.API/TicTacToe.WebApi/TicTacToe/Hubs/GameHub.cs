@@ -127,15 +127,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 this._userserService.AddNewUser(user);
             }
         }
-
-        /// <summary>
-        /// Send GameOver to specific Group
-        /// </summary>
-        /// <param name="groupName">Group Name given by the frontend</param>
-        public void GameOver(string groupName, string winningTileId, string winningLine)
-        {
-            Clients.Group(groupName).GameOver(winningTileId, winningLine);
-        }
     }
 }
 

@@ -16,13 +16,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
         #region private properties
 
         private AppDbContext _context;
-        private IHubContext<GameHub, IGameHub> _gameHub;
+        // check if still works when there are multiple hubs.
+        private IHubContext<BaseHub<IBaseHub>> _gameHub;
 
         #endregion
 
         public UserService(
             AppDbContext context,
-            IHubContext<GameHub, IGameHub> gameHub)
+            IHubContext<BaseHub<IBaseHub>> gameHub)
         {
             this._context = context;
             this._gameHub = gameHub;
