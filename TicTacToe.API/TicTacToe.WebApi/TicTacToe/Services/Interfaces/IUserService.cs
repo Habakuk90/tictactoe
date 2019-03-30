@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
+namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
     public interface IUserService 
     {

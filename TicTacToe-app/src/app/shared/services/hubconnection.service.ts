@@ -46,6 +46,8 @@ export class HubConnectionService {
   }
 
   addCurrentUser(...args: any[]): Promise<any> {
+console.log('hi2');
+
     return this.connection.invoke('AddCurrentUser', ...args);
   }
 

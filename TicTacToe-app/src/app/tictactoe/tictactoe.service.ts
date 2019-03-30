@@ -16,6 +16,8 @@ export class TicTacToeService extends GameService {
   constructor(connectionService: HubConnectionService,
       modalService: ModalService) {
     super(connectionService, modalService);
+    // fix reconnect via /tictactoe route => skip new connection
+    this.connectionService.startConnection('/tictactoe');
   }
 
   switchTurn() {
@@ -36,10 +38,14 @@ export class TicTacToeService extends GameService {
   }
 
   onTileChange(method: (...args: any[]) => void) {
+    console.log('TileChange');
+
     this.connectionService.connection.on('TileChange', method);
   }
 
   onSwitchTurn(method: (...args: any[]) => void) {
+    console.log('TileChange');
+
     this.connectionService.connection.on('SwitchTurn', method);
   }
 

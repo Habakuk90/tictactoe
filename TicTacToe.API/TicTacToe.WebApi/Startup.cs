@@ -13,9 +13,9 @@ using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
-using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi
 {

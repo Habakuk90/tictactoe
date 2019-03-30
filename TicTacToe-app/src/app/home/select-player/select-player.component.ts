@@ -28,24 +28,27 @@ export class SelectPlayerComponent implements OnDestroy {
       }, err => userService.logout());
 
       connectionService.isConnected.subscribe(isConnected => {
-        const that = this;
         if (isConnected) {
           this.connectionService.updateUserList(userOnline => {
             this.userOnline = userOnline;
           });
 
-          this.connectionService.onStartGame((groupName, gameName) => {
-            that.spinnerService.toggleSpinner();
-            that.groupService.joinGroup(groupName).then(() => {
-              that.router.navigate([gameName]);
-              that.spinnerService.toggleSpinner();
-              that.modalService.closeModal();
-            });
-          });
-
-          this.connectionService.addCurrentUser(userService.currentUserName);
         }
       });
+
+
+      this.connectionService.onStartGame((groupName, gameName) => {
+        const that = this;
+
+        that.spinnerService.toggleSpinner();
+        that.groupService.joinGroup(groupName).then(() => {
+          that.router.navigate([gameName]);
+          that.spinnerService.toggleSpinner();
+          that.modalService.closeModal();
+        });
+      });
+
+      this.connectionService.addCurrentUser(userService.currentUserName);
   }
 
   enemyClicked(user: string) {
@@ -61,7 +64,7 @@ export class SelectPlayerComponent implements OnDestroy {
   ngOnDestroy() {
     this.connectionService.connection.off('StartGame');
     this.connectionService.connection.off('UpdateUserList');
-    this.connectionService.connection.off('SwitchTurn');
+    // this.connectionService.connection.off('SwitchTurn');
     this.connectionService.connection.off('JoinGroup');
   }
 }

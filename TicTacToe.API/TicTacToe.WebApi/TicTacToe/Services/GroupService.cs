@@ -1,9 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
+using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
+namespace TicTacToe.WebApi.TicTacToe.Services
 {
     public class GroupService : IGroupService
     {

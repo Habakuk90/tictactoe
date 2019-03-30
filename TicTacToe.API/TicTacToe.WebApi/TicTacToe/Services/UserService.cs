@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
+using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
+namespace TicTacToe.WebApi.TicTacToe.Services
 {
     /// <summary>
     /// Access to 
@@ -17,13 +19,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
 
         private AppDbContext _context;
         // check if still works when there are multiple hubs.
-        private IHubContext<BaseHub<IBaseHub>> _gameHub;
+        private IHubContext<GameHub, IGameHub> _gameHub;
 
         #endregion
 
         public UserService(
             AppDbContext context,
-            IHubContext<BaseHub<IBaseHub>> gameHub)
+            IHubContext<GameHub, IGameHub> gameHub)
         {
             this._context = context;
             this._gameHub = gameHub;

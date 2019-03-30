@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="TicTacToe\Attributes\" />
+    <Folder Include="TicTacToe\Hubs\Repository\" />
     <Folder Include="TicTacToe\User\Models\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>

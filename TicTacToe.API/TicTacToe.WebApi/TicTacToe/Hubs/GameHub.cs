@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
-using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -96,6 +95,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public async Task StartGame(string groupName)
         {
+            
             await Clients.Group(groupName).StartGame(groupName);
         }
 

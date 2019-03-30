@@ -4,7 +4,8 @@
     using System.Threading.Tasks;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Models;
-    using global::TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+    using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+    using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
 
     public class BaseHub<T> : Hub<T> where T : class, IBaseHub
@@ -56,9 +57,7 @@
 
             this._groupService.LeaveGroupAsync(currentUser, groupName);
         }
-
-
-
+        
         /// <summary>
         /// 
         /// </summary>

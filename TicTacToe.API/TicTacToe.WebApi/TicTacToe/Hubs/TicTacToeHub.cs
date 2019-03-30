@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+﻿using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -17,7 +17,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// 
         /// </summary>
         /// <param name="room">id:number, name:string, List<GameUserModel></param>
-        public async void TileClickedAsync(string room, string tileId)
+        public async void TileClicked(string room, string tileId)
         {
             await Clients.Group(room).SwitchTurn();
             await Clients.Group(room).TileChange(tileId);
@@ -27,7 +27,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// Send GameOver to specific Group
         /// </summary>
         /// <param name="groupName">Group Name given by the frontend</param>
-        public async void GameOverAsync(
+        public async void GameOver(
             string groupName,
             string winningTileId, 
             string winningLine)

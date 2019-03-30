@@ -7,5 +7,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
     public interface IBaseHub
     {
+        Task UpdateUserList(IEnumerable<string> onlineUsers);
     }
 }

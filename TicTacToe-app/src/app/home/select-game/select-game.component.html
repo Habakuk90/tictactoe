@@ -4,8 +4,8 @@
   </h2>
   <div class="select-game__container">
     <ng-template ngFor let-game [ngForOf]="games">
-      <div class="select-game__item"  [class.selected]="game == selectedGame" (click)="gameClicked(game)">
-        <div class="select-game__image {{game.cssClass}}">
+      <div class="select-game__item" (click)="gameClicked(game)">
+        <div class="select-game__image {{game.cssClass}}" [class.selected]="game === selectedGame">
         </div>
       </div>
     </ng-template>

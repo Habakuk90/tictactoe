@@ -1,11 +1,14 @@
+$max-height: 40vh;
+
 .select-game {
   &__container {
     display: flex;
     flex-flow: row;
+    max-height: $max-height;
   }
 
   &__item {
-    padding-top: 50%;
+    padding-top: 25%;
     position: relative;
     width: 50%;
   }
@@ -16,6 +19,7 @@
     left: 0;
     height: 100%;
     width: 100%;
+    max-height: $max-height;
 
     background-repeat: no-repeat;
     background-size: contain;
