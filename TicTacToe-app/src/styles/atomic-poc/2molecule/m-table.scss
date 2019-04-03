@@ -1,0 +1,11 @@
+.m-table {
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  &__row {
+    background-color: $white;
+    &--header {
+      background-color: $steel-blue;
+    }
+  }
+}

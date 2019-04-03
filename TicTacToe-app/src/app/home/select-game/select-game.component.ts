@@ -7,23 +7,19 @@ import { IGame } from 'src/app/shared/models/game.interface';
   styleUrls: ['./select-game.component.scss']
 })
 export class SelectGameComponent {
-  @Output() gameSelected: EventEmitter<IGame> = new EventEmitter<IGame>();
+  @Output() gameSelected: EventEmitter<Array<IGame>> = new EventEmitter<Array<IGame>>();
 
   games: Array<IGame> =
     [
-      {name: 'TicTacToe', cssClass: 'ttt'},
-      {name: 'RPS', cssClass: 'rps'}
+      {name: 'TicTacToe', cssClass: 'ttt', selected: false, playerCount: 2},
+      {name: 'RPS', cssClass: 'rps', selected: false, playerCount: 2}
     ];
 
-  selectedGame: IGame;
-
   gameClicked(game: IGame) {
-    if (this.selectedGame === game) {
-      this.selectedGame = null;
-      game = null;
-    } else {
-      this.selectedGame = game;
+      this.games.filter((x: IGame) => x === game).map((x: IGame) => x.selected = !x.selected);
+      this.gameSelected.emit(this.games);
     }
-    this.gameSelected.emit(game);
+
+  nextStep() {
   }
 }

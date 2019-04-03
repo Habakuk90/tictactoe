@@ -9,23 +9,32 @@ import { HubConnectionService } from '../shared/services/hubconnection.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  isGameSelected: boolean = false;
-  isPlayerSelected: boolean = false;
-  selectedGame: IGame;
+  isGameSelected = false;
+  isPlayerSelected = false;
+  selectionState = 0;
+  selectedGames: Array<IGame>;
   selectedPlayer: string;
 
   constructor(public connectionService: HubConnectionService) {
 
   }
 
-  gameSelected(game: IGame) {
-    this.selectedGame = game;
-    this.isGameSelected = game != null;
+  gameSelected(games: Array<IGame>) {
+    this.selectedGames = games;
+    this.isGameSelected = this.selectedGames.length > 0;
+    this.selectionState = 1;
   }
 
   enemySelected(enemy: string) {
     this.selectedPlayer = enemy;
     this.isPlayerSelected = enemy != null;
+    this.selectionState = 2;
+  }
+
+  back() {
+    this.selectionState = this.selectionState > 0 ? --this.selectionState : 0;
+    this.isGameSelected = false;
+    this.isPlayerSelected = false;
   }
 
   challengeSelectedPlayer() {

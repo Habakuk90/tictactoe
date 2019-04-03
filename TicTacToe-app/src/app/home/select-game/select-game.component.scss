@@ -1,35 +1,5 @@
 $max-height: 40vh;
 
-.select-game {
-  &__container {
-    display: flex;
-    flex-flow: row;
-    max-height: $max-height;
-  }
+.minimized {
 
-  &__item {
-    padding-top: 25%;
-    position: relative;
-    width: 50%;
-  }
-
-  &__image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    max-height: $max-height;
-
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: 50% 50%;
-    &.rps {
-      background-image: url(../../../assets/images/rps_thumbnail.png);
-    }
-
-    &.ttt {
-      background-image: url(../../../assets/images/TicTacToe_thumbnail.png);
-    }
-  }
 }

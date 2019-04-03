@@ -1,0 +1,34 @@
+*, *:before, *:after {
+	margin: 0;
+    padding: 0;
+    
+	box-sizing: border-box !important;
+}
+body {
+    box-sizing: border-box;
+}
+
+header {
+    background-color: $steel-blue;
+    height: $header-height;
+}
+
+header, section {
+    > * {
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+}
+
+section {
+    > * {
+        margin: 52px auto 0;
+    }
+}
+
+.a-image {
+    // fixme
+    height: 400px;
+}
+
+

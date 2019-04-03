@@ -13,7 +13,6 @@ import { Router } from '@angular/router';
 })
 
 export class SelectPlayerComponent implements OnDestroy {
-  @Input() selectedGame;
   @Output() playerSelected: EventEmitter<string> = new EventEmitter<string>();
   userOnline: any;
   currentUser: string;
@@ -35,7 +34,6 @@ export class SelectPlayerComponent implements OnDestroy {
 
         }
       });
-
 
       this.connectionService.onStartGame((groupName, gameName) => {
         const that = this;

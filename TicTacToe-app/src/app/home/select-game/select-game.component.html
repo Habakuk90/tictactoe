@@ -1,13 +1,25 @@
-<section class="select-game">
-  <h2 class="select-game__headline">
-    Select a Game
-  </h2>
-  <div class="select-game__container">
+<div class="" style="width: 100%;">
+  <div class="t-fullscreen__header">
+    <h2 class="select-game__headline">
+      Select a Game
+    </h2>
+  </div>
+  <div class="o-grid m-multiselect">
     <ng-template ngFor let-game [ngForOf]="games">
-      <div class="select-game__item" (click)="gameClicked(game)">
-        <div class="select-game__image {{game.cssClass}}" [class.selected]="game === selectedGame">
+      <div class="o-grid__element m-card"
+           (click)="gameClicked(game)"
+           [class.selected]="game.selected">
+        <div class="a-image select-game__image {{game.cssClass}}">
         </div>
+
+        <div class="m-card__checkbox">
+          <input class="a-checkbox" [checked]="game.selected" type="checkbox" name="{{game.name}}" id="{{game.name}}">
+          <label class="a-label a-label--checkbox" for="{{game.name}}"></label>
+      </div>
       </div>
     </ng-template>
   </div>
-</section>
+  <button (click)="nextStep()">
+    Next
+  </button>
+</div>

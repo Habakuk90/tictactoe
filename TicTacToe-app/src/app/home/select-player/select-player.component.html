@@ -1,18 +1,16 @@
-<div>
-  <h2>
-    Hi, {{ currentUser }} {{selectedGame.name}}! I heard you wanna play a round of Tic Tac Toe! <br />
-    See who's online and challenge them.
-  </h2>
-  <ul class="enemy-list__container">
-    <ng-template ngFor let-user [ngForOf]="userOnline">
-      <li
-        class="enemy-list__item"
-        (click)="enemyClicked(user)"
-        *ngIf="user !== currentUser"
-        [class.selected]="user == selectedPlayer"
-      >
-        <span>{{ user }}</span>
-      </li>
-    </ng-template>
-  </ul>
-</div>
+<table class="m-table">
+  <tr class="m-table__row m-table__row--header">
+    <th class="m-table__header">Name</th>
+    <th class="m-table__header">Status</th>
+  </tr>
+  <ng-template ngFor let-user [ngForOf]="userOnline">
+    <tr class="m-table__row">
+      <td class="m-table__data">{{user}}</td>
+      <td class="m-table__data">Online</td>
+      <td class="m-table__data">
+          <input class="a-checkbox" [checked]="user === selectedPlayer" type="checkbox" name="{{user}}" id="{{user}}">
+          <label class="a-label a-label--checkbox" for="{{user}}"></label>
+      </td>
+    </tr>
+  </ng-template>
+</table>

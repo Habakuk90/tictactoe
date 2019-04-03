@@ -1,0 +1,11 @@
+.a-checkbox {
+    position: absolute;
+    opacity: 0;
+
+    &:checked + label::before {
+        @include icon("\f00c");
+        // content: "\f00c";
+        transform: rotate(-360deg);
+        transition: transform .3s ease-in-out;
+    }
+}

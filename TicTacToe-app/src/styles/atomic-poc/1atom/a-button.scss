@@ -1,0 +1,26 @@
+.a-button {
+    display: block;
+    background-color: $steel-blue;
+    border: none;
+    color: orange;
+
+    &--start {
+        border: 50px $steel-blue solid;
+        max-height: 400px;
+        max-width: 800px;
+        height: 100%;
+        width: 100%;
+        margin: auto;
+        border-radius: 20px;
+        transition: border 1s linear;
+
+        &:hover {
+            transition: border 1s linear;
+            border-color: $white;
+        }
+    }
+
+    &--back {
+      width:100px; height: 100px;
+    }
+}

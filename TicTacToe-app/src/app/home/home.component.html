@@ -1,7 +1,23 @@
-<section class="home">
-  <app-select-game (gameSelected)="gameSelected($event)"></app-select-game>
-  <app-select-player (playerSelected)="enemySelected($event)" [selectedGame]="selectedGame" *ngIf="isGameSelected"></app-select-player>
-  <button *ngIf="isPlayerSelected && isGameSelected" class="button button__start" (click)="challengeSelectedPlayer()">
-      Go!
+<section class="t-fullscreen">
+  <button class="a-button a-button--back" (click)="back()">
+    back
+  </button>
+
+  <app-select-game
+    class="t-fullscreen__content"
+    (gameSelected)="gameSelected($event)"
+    [class.minimized]="!isGameSelected">
+  </app-select-game>
+
+  <app-select-player class="t-fullscreen__content"
+      (playerSelected)="enemySelected($event)"
+      *ngIf="isGameSelected">
+  </app-select-player>
+
+  <button
+    *ngIf="isGameSelected && isPlayerSelected"
+    class="button button__start"
+    (click)="challengeSelectedPlayer()">
+    Go!
   </button>
 </section>
