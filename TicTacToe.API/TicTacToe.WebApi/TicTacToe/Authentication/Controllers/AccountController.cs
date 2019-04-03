@@ -55,6 +55,7 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// User Data for the registration Process <see cref="RegisterModel"/>
         /// </param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<IActionResult> RegisterUser([FromBody]RegisterModel registerModel)
         {
             IdentityUser user = new IdentityUser
@@ -83,6 +84,7 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<IActionResult> LoginUser([FromBody]LoginModel user)
         {
             if (!ModelState.IsValid)
@@ -109,6 +111,7 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// <summary>
         /// Logs Out User with SignInManager
         /// </summary>
+        [HttpPost]
         public async void LogoutUser()
         {
             await _signInManager.SignOutAsync();

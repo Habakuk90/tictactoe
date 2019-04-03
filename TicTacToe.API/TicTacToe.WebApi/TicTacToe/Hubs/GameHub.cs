@@ -16,16 +16,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public enum ModalStates { Accepted, Declined };
 
         private readonly ILogger _logger;
-        private GameService _game;
 
         public GameHub(IUserService userService, IGroupService groupService)
             : base(userService, groupService)
         {
-        }
-
-        public string SendMessage()
-        {
-            return _game.SendMessage2();
         }
 
         /// <summary>
