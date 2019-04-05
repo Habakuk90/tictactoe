@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { IUser } from '../shared/models/user.interface';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
@@ -9,7 +9,7 @@ import { GameService } from '../shared/services/game.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
+export class HomeComponent implements OnDestroy {
   isGameSelected = false;
   isPlayerSelected = false;
   selectionState = 0;
@@ -41,5 +41,9 @@ export class HomeComponent {
   challengeSelectedPlayer() {
     this.connectionService.challengePlayer(this.selectedPlayer, 'tictactoe');
       this.selectedPlayer = '';
+  }
+
+  ngOnDestroy() {
+    this.gameService._HomeStateSubject.next(0);
   }
 }
