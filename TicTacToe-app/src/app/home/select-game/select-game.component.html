@@ -6,20 +6,28 @@
   </div>
   <div class="o-grid m-multiselect">
     <ng-template ngFor let-game [ngForOf]="games">
-      <div class="o-grid__element m-card"
+      <div class="o-grid__element card m-card"
            (click)="gameClicked(game)"
            [class.selected]="game.selected">
-        <div class="a-image select-game__image {{game.cssClass}}">
+        <div class="select-game__image m-card__image card-image {{game.cssClass}}">
+          <img class="a-image" >
         </div>
+        <div class="card-title">{{game.name}}</div>
 
-        <div class="m-card__checkbox">
+        <div class="m-card__checkbox card-content">
           <input class="a-checkbox" [checked]="game.selected" type="checkbox" name="{{game.name}}" id="{{game.name}}">
           <label class="a-label a-label--checkbox" for="{{game.name}}"></label>
-      </div>
+        </div>
+
+        <div class="card-action">
+            <a href="#">This is a link</a>
+        </div>
       </div>
     </ng-template>
   </div>
-  <button (click)="nextStep()">
+  <button class="btn-small a-button a-button--next"
+          [disabled]="!isGameSelected()"
+          (click)="nextStep()">
     Next
   </button>
 </div>

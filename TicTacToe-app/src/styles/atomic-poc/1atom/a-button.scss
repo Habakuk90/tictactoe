@@ -1,9 +1,4 @@
 .a-button {
-    display: block;
-    background-color: $steel-blue;
-    border: none;
-    color: orange;
-
     &--start {
         border: 50px $steel-blue solid;
         max-height: 400px;
@@ -21,6 +16,16 @@
     }
 
     &--back {
-      width:100px; height: 100px;
+      // FIXME media queries
+      width: 65px;
+      height: 65px;
+      position: absolute;
+      &:before {
+        @include icon("\f104");
+      }
+    }
+
+    &--next {
+      margin-top: 20px;
     }
 }

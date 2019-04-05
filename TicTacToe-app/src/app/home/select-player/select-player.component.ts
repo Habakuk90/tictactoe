@@ -1,10 +1,11 @@
-import {Component, Input, OnDestroy, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
 import { HubConnectionService } from 'src/app/shared/services/hubconnection.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { ModalService } from 'src/app/shared/modals/modal.service';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { SpinnerService } from 'src/app/spinner/spinner.service';
 import { Router } from '@angular/router';
+import { IGame } from 'src/app/shared/models/game.interface';
 
 @Component({
   selector: 'app-select-player',
@@ -12,9 +13,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./select-player.component.scss']
 })
 
-export class SelectPlayerComponent implements OnDestroy {
+export class SelectPlayerComponent implements OnDestroy, OnInit {
   @Output() playerSelected: EventEmitter<string> = new EventEmitter<string>();
-  userOnline: any;
+  @Input() selectedGames: Array<IGame>;
+  userOnline: Array<string>;
   currentUser: string;
   selectedPlayer: string;
 
@@ -57,6 +59,10 @@ export class SelectPlayerComponent implements OnDestroy {
       this.selectedPlayer = user;
     }
     this.playerSelected.emit(user);
+  }
+
+  ngOnInit() {
+    this.selectedGames = this.selectedGames.filter(x => x.selected);
   }
 
   ngOnDestroy() {

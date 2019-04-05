@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { IUser } from '../shared/models/user.interface';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
+import { GameService } from '../shared/services/game.service';
 
 @Component({
   selector: 'app-home',
@@ -15,20 +16,20 @@ export class HomeComponent {
   selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  constructor(public connectionService: HubConnectionService) {
+  constructor(private gameService: GameService, public connectionService: HubConnectionService) {
+    gameService._HomeStateSubject.subscribe(x => this.selectionState = x);
 
   }
 
   gameSelected(games: Array<IGame>) {
     this.selectedGames = games;
     this.isGameSelected = this.selectedGames.length > 0;
-    this.selectionState = 1;
   }
 
   enemySelected(enemy: string) {
     this.selectedPlayer = enemy;
     this.isPlayerSelected = enemy != null;
-    this.selectionState = 2;
+    this.gameService._HomeStateSubject.next(2);
   }
 
   back() {

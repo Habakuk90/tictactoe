@@ -1,5 +1,9 @@
 <header>
   <nav class="o-nav">
+    <div [hidden]="homeState <= 0">
+        <button class="a-button a-button--back btn-floating" (click)="back()">
+        </button>
+    </div>
     <ul class="o-nav__list m-list">
       <li class="m-list__item" routerLink="">
         Home
