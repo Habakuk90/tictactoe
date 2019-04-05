@@ -18,13 +18,16 @@ namespace TicTacToe.WebApi.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public JsonResult Index()
         {
             var x = _context.AppUser.ToList();
             
             return Json(x);
         }
+
         [Route("reset")]
+        [HttpGet]
         public JsonResult Reset()
         {
 

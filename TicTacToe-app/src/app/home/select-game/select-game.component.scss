@@ -1,0 +1,49 @@
+$max-height: 40vh;
+
+.minimized {
+}
+
+.select-game {
+  &__image {
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      max-height: $max-height;
+
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: 50% 50%;
+    }
+
+    &.rps {
+      img {
+        background-image: url(../../../assets/images/rps_thumbnail.png);
+      }
+    }
+
+    &.ttt {
+      img {
+        background-image: url(../../../assets/images/TicTacToe_thumbnail.png);
+      }
+    }
+
+    .m-card {
+      cursor: pointer;
+      border: 18px transparent solid;
+
+      &__checkbox {
+        width: 100%;
+        border: none;
+
+        .a-label {
+          &--checkbox {
+            max-width: 1px;
+          }
+        }
+      }
+    }
+  }
+}

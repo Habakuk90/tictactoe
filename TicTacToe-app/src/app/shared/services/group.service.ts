@@ -17,13 +17,10 @@ export class GroupService {
     const that = this;
 
     let promise: Promise<void>;
-    this.connectionService.isConnected.subscribe(isConnected => {
-      if (isConnected) {
-        promise = this.connectionService.connection.invoke<void>('JoinGroup', groupName).then(() => {
-          that._groupNameSubject.next(groupName);
-          console.log('group');
-        });
-      }
+
+    promise = this.connectionService.connection.invoke<void>('JoinGroup', groupName).then(() => {
+      that._groupNameSubject.next(groupName);
+      console.log(groupName);
     });
 
     return promise;

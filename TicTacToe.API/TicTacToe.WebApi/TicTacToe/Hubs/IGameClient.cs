@@ -23,7 +23,5 @@
         Task ChallengeDeclined(string userName);
 
         Task GameOver(string winningTileId, string winningLine);
-
-        Task UpdateUserList(IQueryable<string> userOnline);
     }
 }

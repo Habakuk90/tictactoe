@@ -1,15 +1,21 @@
-<section class="home">
-  <h2>
-    Hi, {{currentUser}}! I heard you wanna play a round of Tic Tac Toe! <br/>
-    See who's online and challenge them.
-  </h2>
-  <ul class="enemy-list__container">
-    <ng-template ngFor let-user [ngForOf]="userOnline">
-      <li class="enemy-list__item" (click)="selectedPlayer = user"
-          *ngIf="user !== currentUser" [class.selected]="user == selectedPlayer">
-          <span>{{user}}</span>
-      </li>
-    </ng-template>
-  </ul>
-  <button class="button button__start" (click)="challengeSelectedPlayer()">Go!</button>
+<section class="t-fullscreen">
+  <app-select-game
+    class="t-fullscreen__content select-game"
+    (gameSelected)="gameSelected($event)"
+    *ngIf="selectionState === 0">
+  </app-select-game>
+
+  <app-select-player class="t-fullscreen__content"
+      (playerSelected)="enemySelected($event)"
+      [selectedGames]="selectedGames"
+      *ngIf="selectionState > 0">
+  </app-select-player>
+
+  <button
+    *ngIf="selectionState === 2 && isPlayerSelected"
+    class="button button__start"
+    (click)="challengeSelectedPlayer()"
+    >
+    Go!
+  </button>
 </section>

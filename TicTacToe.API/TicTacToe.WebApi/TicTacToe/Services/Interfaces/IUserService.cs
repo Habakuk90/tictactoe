@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
+namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
-    public interface IGameUserService 
+    public interface IUserService 
     {
         GameUserModel GetUserByConnection(string connectionId);
         

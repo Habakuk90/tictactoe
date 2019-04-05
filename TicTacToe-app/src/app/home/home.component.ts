@@ -1,10 +1,8 @@
-import { Component, Input, OnDestroy, Query } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { IGame } from '../shared/models/game.interface';
+import { IUser } from '../shared/models/user.interface';
 import { HubConnectionService } from '../shared/services/hubconnection.service';
-import { UserService } from '../shared/services/user.service';
-import { Router } from '@angular/router';
-import { ModalService } from '../shared/modals/modal.service';
-import { SpinnerService } from '../spinner/spinner.service';
-import { GroupService } from '../shared/services/group.service';
+import { GameService } from '../shared/services/game.service';
 
 @Component({
   selector: 'app-home',
@@ -12,37 +10,32 @@ import { GroupService } from '../shared/services/group.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnDestroy {
-  userOnline;
-  currentUser: string;
+  isGameSelected = false;
+  isPlayerSelected = false;
+  selectionState = 0;
+  selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  constructor(private connectionService: HubConnectionService, userService: UserService,
-    private groupService: GroupService, private modalService: ModalService,
-    private spinnerService: SpinnerService,
-    private router: Router) {
-      userService.getUserName().subscribe(res => {
-        this.currentUser =  res.toString();
-      }, err => userService.logout());
+  constructor(private gameService: GameService, public connectionService: HubConnectionService) {
+    gameService._HomeStateSubject.subscribe(x => this.selectionState = x);
 
-      connectionService.isConnected.subscribe(isConnected => {
-        const that = this;
-        if (isConnected) {
-          this.connectionService.updateUserList(userOnline => {
-            this.userOnline = userOnline;
-          });
+  }
 
-          this.connectionService.onStartGame((groupName, gameName) => {
-            that.spinnerService.toggleSpinner();
-            that.groupService.joinGroup(groupName).then(() => {
-              that.router.navigate([gameName]);
-              that.spinnerService.toggleSpinner();
-              that.modalService.closeModal();
-            });
-          });
+  gameSelected(games: Array<IGame>) {
+    this.selectedGames = games;
+    this.isGameSelected = this.selectedGames.length > 0;
+  }
 
-          this.connectionService.addCurrentUser(userService.currentUserName);
-        }
-      });
+  enemySelected(enemy: string) {
+    this.selectedPlayer = enemy;
+    this.isPlayerSelected = enemy != null;
+    this.gameService._HomeStateSubject.next(2);
+  }
+
+  back() {
+    this.selectionState = this.selectionState > 0 ? --this.selectionState : 0;
+    this.isGameSelected = false;
+    this.isPlayerSelected = false;
   }
 
   challengeSelectedPlayer() {
@@ -51,9 +44,6 @@ export class HomeComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.connectionService.connection.off('StartGame');
-    this.connectionService.connection.off('UpdateUserList');
-    this.connectionService.connection.off('SwitchTurn');
-    this.connectionService.connection.off('JoinGroup');
+    this.gameService._HomeStateSubject.next(0);
   }
 }

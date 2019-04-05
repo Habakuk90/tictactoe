@@ -36,11 +36,13 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
     tictactoeService.onTileChange((tileId) => {
       const box: Box = that.boxHandler.findById(tileId);
+debugger;
       box.state = that.gameTile;
       box.locked = true;
     });
 
     tictactoeService.onSwitchTurn(() => {
+      debugger;
       tictactoeService.switchTurn();
       if (that.gameTile === 'circle') {
         that.gameTile = 'cross';
@@ -82,6 +84,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       that.boxHandler.findById(tileId).locked === true) {
       return;
     }
+    console.log(this.groupName);
     this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
       const clickedBox: Box = this.boxHandler.findById(tileId);
 

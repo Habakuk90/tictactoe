@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
-    public interface IGameHub
+    public interface IGameHub : IBaseHub
     {
         Task SwitchTurn();
 
@@ -17,6 +17,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 
         Task GameOver(string winningTileId, string winningLine);
 
-        Task UpdateUserList(IEnumerable<string> onlineUsers);
+        //Task UpdateUserList(IEnumerable<string> onlineUsers);
     }
 }

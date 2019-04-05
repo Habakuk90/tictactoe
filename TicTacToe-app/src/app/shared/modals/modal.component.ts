@@ -55,7 +55,7 @@ export class ModalComponent implements OnInit {
 
   onChallengeResponse(status: any) {
     this.modalService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
-    // this.connection.invoke('StartGame')
+    this.modalService.startGame(this.groupName);
     this.modalService.closeModal();
   }
 

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs.Repository
+namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
 {
-    public interface IGroupService
+    public interface IGroupService : IBaseService
     {
         Task JoinGroupAsync(GameUserModel userModel, string groupName);
 

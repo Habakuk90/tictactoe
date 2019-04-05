@@ -1,0 +1,33 @@
+// FIX ME: match structure pls
+
+@import '0base/variables';
+@import '0base/colors';
+@import '0base/shame.scss';
+@import "0base/_normalize.scss";
+@import '0base/mixins';
+
+@import '1atom/a-button.scss';
+@import '1atom/a-input.scss';
+@import '1atom/a-label.scss';
+@import '1atom/a-link.scss';
+@import '1atom/a-checkbox.scss';
+@import '1atom/a-image.scss';
+
+@import '2molecule/m-list.scss';
+@import '2molecule/m-multiselect.scss';
+@import '2molecule/m-table.scss';
+
+@import '3organism/o-nav.scss';
+@import '3organism/o-slider.scss';
+@import '3organism/o-grid.scss';
+@import '3organism/o-filter.scss';
+
+@import '4template/t-fullscreen.scss';
+@import '4template/t-table.scss';
+
+
+// @import '0base/*';
+// @import '1atom/**/*';
+// @import '2molecule/**/*';
+// @import '3organism/**/*';
+// @import '4template/**/*';
