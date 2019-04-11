@@ -10,8 +10,8 @@ import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { HubConnectionService } from './hubconnection.service';
 import { UserHubConnection } from '../connections/user.hubconnection';
-import { Hub } from '../connections/base.hubconnection';
 import { SpinnerService } from 'src/app/spinner/spinner.service';
+import { Hub } from '../connections/hub';
 
 @Injectable()
 export class UserService extends BaseService {

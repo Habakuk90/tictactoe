@@ -4,7 +4,6 @@ import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { GameService } from '../shared/services/game.service';
 import { ModalService } from '../shared/modals/modal.service';
 import { GameHubConnection } from '../shared/connections/game.hubconnection';
-import { Hub } from '../shared/connections/base.hubconnection';
 
 @Injectable()
 export class TicTacToeService extends GameService {

@@ -1,23 +1,27 @@
+import { BehaviorSubject } from 'rxjs';
 import { HubConnection } from '@aspnet/signalr';
-import { IBaseHubConnection } from './user.hubconnection';
 
-export class Hub<T extends IBaseHubConnection> {
-  public connection: HubConnection;
-  public hub: T;
+export interface IBaseHubConnection {
+  name: string;
+  isConnected: BehaviorSubject<boolean>;
+  getConnection(): HubConnection;
+}
 
 
-  constructor(hub: T) {
-    this.connection = hub.getConnection();
-    this.start();
-    this.hub = hub;
+export class BaseHubConnection implements IBaseHubConnection {
+  private connection: HubConnection;
+  public name: string;
+
+  _connectionBehaviour = new BehaviorSubject<boolean>(false);
+  isConnected = new BehaviorSubject<boolean>(false);
+
+  constructor(connection: HubConnection, name: string) {
+    this.name = name;
+    this.connection = connection;
   }
 
-  async start() {
-    await this.connection.start();
-    this.hub.isConnected.next(true);
-  }
-
-  async stop() {
-    await this.connection.stop();
+  getConnection() {
+    return this.connection;
   }
 }
+

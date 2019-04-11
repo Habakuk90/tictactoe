@@ -1,5 +1,5 @@
 import { HubConnection } from '@aspnet/signalr';
-import { BaseHubConnection } from './user.hubconnection';
+import { BaseHubConnection } from './base.hubconnection';
 
 export class GameHubConnection extends BaseHubConnection {
   constructor(connection: HubConnection, name: string) {

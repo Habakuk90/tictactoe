@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HubConnectionService } from './hubconnection.service';
 import { ModalService } from '../modals/modal.service';
 import { GameHubConnection } from '../connections/game.hubconnection';
-import { Hub } from '../connections/base.hubconnection';
+import { Hub } from '../connections/hub';
 
 @Injectable()
 export class GameService {

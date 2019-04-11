@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { ConfigService } from '../utils/config.service';
 import { BehaviorSubject } from 'rxjs';
-import { Hub } from '../connections/base.hubconnection';
-import { IBaseHubConnection } from '../connections/user.hubconnection';
+import { IBaseHubConnection } from '../connections/base.hubconnection';
+import { Hub } from '../connections/hub';
 
 @Injectable()
 export class HubConnectionService<T extends IBaseHubConnection> {
