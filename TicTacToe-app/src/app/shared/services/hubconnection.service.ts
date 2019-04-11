@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@aspnet/signalr';
 import { ConfigService } from '../utils/config.service';
 import { BehaviorSubject } from 'rxjs';
-import { Hub, IBaseHubConnection } from '../connections/base.hubconnection';
+import { Hub } from '../connections/base.hubconnection';
+import { IBaseHubConnection } from '../connections/user.hubconnection';
 
 @Injectable()
 export class HubConnectionService<T extends IBaseHubConnection> {
@@ -16,15 +17,13 @@ export class HubConnectionService<T extends IBaseHubConnection> {
   async createHubConnection (hub: T) {
     const connection = new Hub<T>(hub);
 
-    // this.hub = connection;
-    this._connectionBehaviour.next(true);
+    this.hub = connection;
 
     return connection;
   }
 
   async stopConnection() {
     await this.hub.connection.stop();
-    this._connectionBehaviour.next(false);
   }
 
   buildConnection(socketUri: string): signalR.HubConnection {

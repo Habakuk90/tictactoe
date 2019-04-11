@@ -1,18 +1,10 @@
 import { HubConnection } from '@aspnet/signalr';
-import { BehaviorSubject } from 'rxjs';
-
-export interface IBaseHubConnection {
-  name: string;
-  getConnection(): HubConnection;
-}
-
+import { IBaseHubConnection } from './user.hubconnection';
 
 export class Hub<T extends IBaseHubConnection> {
   public connection: HubConnection;
   public hub: T;
 
-  _connectionBehaviour = new BehaviorSubject<boolean>(false);
-  isConnected = this._connectionBehaviour.asObservable();
 
   constructor(hub: T) {
     this.connection = hub.getConnection();
@@ -22,11 +14,10 @@ export class Hub<T extends IBaseHubConnection> {
 
   async start() {
     await this.connection.start();
-    this._connectionBehaviour.next(true);
+    this.hub.isConnected.next(true);
   }
 
   async stop() {
     await this.connection.stop();
-    this._connectionBehaviour.next(false);
   }
 }

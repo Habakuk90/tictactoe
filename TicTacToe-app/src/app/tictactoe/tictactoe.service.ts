@@ -15,15 +15,10 @@ export class TicTacToeService extends GameService {
   private _hasWonSubject = new BehaviorSubject<boolean>(false);
   hasWon = this._hasWonSubject.asObservable();
 
-  hub: Hub<GameHubConnection>;
 
-  constructor(connectionService: HubConnectionService<GameHubConnection>,
+  constructor(public connectionService: HubConnectionService<GameHubConnection>,
       modalService: ModalService) {
     super(connectionService, modalService);
-    // fix reconnect via /tictactoe route => skip new connection
-      // move to 'GameService'?
-    const hub = new GameHubConnection(connectionService.buildConnection('/tictactoe'), 'gamehub');
-    this.connectionService.createHubConnection(hub).then(x => this.hub = x);
   }
 
   switchTurn() {

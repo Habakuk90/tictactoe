@@ -41,6 +41,7 @@ export class UserService extends BaseService {
       .then((x) => {
         spinnerService.toggleSpinner();
         this.hub = x;
+        this.connectionService._connectionBehaviour.next(true);
       })
       .catch(() => window.location.href = window.location.host);
   }
@@ -101,5 +102,17 @@ export class UserService extends BaseService {
       this.baseUrl + '/values/getUserName',
       {headers: headers}
     ).pipe(map(res => res), map(res => this.currentUserName = res.toString()));
+  }
+
+  public startGame(groupName: string) {
+    let promise: Promise<string>;
+
+    this.connectionService.isConnected.subscribe(isConnected => {
+      if (isConnected) {
+        promise = this.hub.connection.invoke('StartGame', groupName);
+      }
+    });
+
+    return promise;
   }
 }

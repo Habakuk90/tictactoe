@@ -1,9 +1,20 @@
-import { IBaseHubConnection } from './base.hubconnection';
 import { HubConnection } from '@aspnet/signalr';
+import { BehaviorSubject, Observable } from 'rxjs';
 
-class BaseHubConnection implements IBaseHubConnection {
+
+export interface IBaseHubConnection {
+  name: string;
+  isConnected: BehaviorSubject<boolean>;
+  getConnection(): HubConnection;
+}
+
+
+export class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
   public name: string;
+
+  _connectionBehaviour = new BehaviorSubject<boolean>(false);
+  isConnected = new BehaviorSubject<boolean>(false);
 
   constructor(connection: HubConnection, name: string) {
     this.name = name;
@@ -33,6 +44,14 @@ export class UserHubConnection extends BaseHubConnection implements IUserHubConn
 
   public updateUserList(method: (...args: any[]) => void) {
     this.getConnection().on('UpdateUserList', method);
+  }
+
+  public onStartGame(method: (...args: any[]) => void) {
+    this.getConnection().on('StartGame', method);
+  }
+
+  public challengePlayer(...args: any[]): Promise<any> {
+    return this.getConnection().invoke('ChallengePlayer', ...args);
   }
 }
 

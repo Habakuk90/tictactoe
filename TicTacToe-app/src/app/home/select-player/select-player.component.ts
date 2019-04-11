@@ -3,6 +3,10 @@ import { HubConnectionService } from 'src/app/shared/services/hubconnection.serv
 import { UserService } from 'src/app/shared/services/user.service';
 import { IGame } from 'src/app/shared/models/game.interface';
 import { UserHubConnection } from 'src/app/shared/connections/user.hubconnection';
+import { GroupService } from 'src/app/shared/services/group.service';
+import { ModalService } from 'src/app/shared/modals/modal.service';
+import { SpinnerService } from 'src/app/spinner/spinner.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-select-player',
@@ -17,13 +21,18 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
   currentUser: string;
   selectedPlayer: string;
 
-  constructor(private connectionService: HubConnectionService<UserHubConnection>, userService: UserService) {
+  constructor(private connectionService: HubConnectionService<UserHubConnection>,
+     private userService: UserService,
+     private groupService: GroupService,
+     private modalService: ModalService,
+     private spinnerService: SpinnerService,
+     private router: Router) {
       userService.getUserName().subscribe(res => {
         this.currentUser =  res.toString();
       }, err => userService.logout());
 
       const connectionMethods = userService.hub;
-      connectionService.isConnected.subscribe(isConnected => {
+      userService.hub.hub.isConnected.subscribe(isConnected => {
         if (isConnected) {
           connectionMethods.hub.updateUserList(userOnline => {
             this.userOnline = userOnline;
@@ -32,16 +41,16 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
         }
       });
 
-      // this.connectionService.onStartGame((groupName, gameName) => {
-      //   const that = this;
+      this.userService.hub.hub.onStartGame((groupName, gameName) => {
+        const that = this;
 
-      //   that.spinnerService.toggleSpinner();
-      //   that.groupService.joinGroup(groupName).then(() => {
-      //     that.router.navigate([gameName]);
-      //     that.spinnerService.toggleSpinner();
-      //     that.modalService.closeModal();
-      //   });
-      // });
+        that.spinnerService.toggleSpinner();
+        that.groupService.joinGroup(groupName).then(() => {
+          that.router.navigate([gameName]);
+          that.spinnerService.toggleSpinner();
+          that.modalService.closeModal();
+        });
+      });
 
       connectionMethods.hub.addCurrentUser(userService.currentUserName);
   }

@@ -34,35 +34,20 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     const that = this;
     that.boxes = that.boxHandler.boxes;
 
-    tictactoeService.onTileChange((tileId) => {
-      const box: Box = that.boxHandler.findById(tileId);
-      box.state = that.gameTile;
-      box.locked = true;
-    });
-
-    tictactoeService.onSwitchTurn(() => {
-      tictactoeService.switchTurn();
-      if (that.gameTile === 'circle') {
-        that.gameTile = 'cross';
-      } else {
-        that.gameTile = 'circle';
-      }
-    });
-
     // FIXME
-    tictactoeService.hub.hub.onStartGame((groupName: string) => {
-      console.log('start');
-      this.boxes = this.boxHandler.createBoxes();
-      this.boxHandler.setAllUnlocked();
-      this.setLine(null, null);
-      this.ngOnInit();
-      // that.spinner
-      that.modalService.closeModal();
-    });
+    // tictactoeService.hub.hub.onStartGame((groupName: string) => {
+    //   console.log('start');
+    //   this.boxes = this.boxHandler.createBoxes();
+    //   this.boxHandler.setAllUnlocked();
+    //   this.setLine(null, null);
+    //   this.ngOnInit();
+    //   // that.spinner
+    //   that.modalService.closeModal();
+    // });
 
-    tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
-      this.endGame(winningTileId, winningLine);
-    });
+    // tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
+    //   this.endGame(winningTileId, winningLine);
+    // });
 
   tictactoeService.hasWon.subscribe(x => that.hasWon = x);
   tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
@@ -146,11 +131,30 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const that = this;
+
     this.selfTileState = this.turn ? 'cross' : 'circle';
     if (this.groupName.startsWith(this.userService.currentUserName)) {
       this.tictactoeService.switchTurn();
     }
+    this.tictactoeService.hub.hub.isConnected.subscribe(x => {
+      if (x) {
+        this.tictactoeService.onTileChange((tileId) => {
+          const box: Box = that.boxHandler.findById(tileId);
+          box.state = that.gameTile;
+          box.locked = true;
+        });
 
+        this.tictactoeService.onSwitchTurn(() => {
+          this.tictactoeService.switchTurn();
+          if (that.gameTile === 'circle') {
+            that.gameTile = 'cross';
+          } else {
+            that.gameTile = 'circle';
+          }
+        });
+      }
+    });
   }
 
   ngOnDestroy() {

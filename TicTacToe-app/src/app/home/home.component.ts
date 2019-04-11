@@ -39,7 +39,8 @@ export class HomeComponent implements OnDestroy {
 
   challengeSelectedPlayer() {
     // todoandi
-    // this.gameService.startGame('tictactoe').catch(e => console.log(e));
+    // this.userService.startGame('tictactoe').catch(e => console.log(e));
+    this.userService.hub.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
   }
 
   ngOnDestroy() {
