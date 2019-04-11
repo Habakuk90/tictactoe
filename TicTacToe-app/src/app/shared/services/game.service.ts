@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { HubConnectionService } from "./hubconnection.service";
-import { ModalService } from "../modals/modal.service";
-import { GameHubConnection } from "../connections/game.hubconnection";
-import { Hub } from "../connections/base.hubconnection";
+import { Injectable } from '@angular/core';
+import { HubConnectionService } from './hubconnection.service';
+import { ModalService } from '../modals/modal.service';
+import { GameHubConnection } from '../connections/game.hubconnection';
+import { Hub } from '../connections/base.hubconnection';
 
 @Injectable()
 export class GameService {
@@ -14,8 +14,8 @@ export class GameService {
     public modalService: ModalService
   ) {
     const hub = new GameHubConnection(
-      connectionService.buildConnection("/tictactoe"),
-      "gamehub"
+      connectionService.buildConnection('/tictactoe'),
+      'gamehub'
     );
     // this.connectionService._connectionBehaviour.next(false);
     this.connectionService.createHubConnection(hub).then(x => {
@@ -29,7 +29,7 @@ export class GameService {
 
     this.connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
-        promise = this.hub.connection.invoke("StartGame", groupName);
+        promise = this.hub.connection.invoke('StartGame', groupName);
       }
     });
 
