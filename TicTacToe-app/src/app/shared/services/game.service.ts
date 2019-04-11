@@ -19,7 +19,6 @@ export class GameService {
     );
     // this.connectionService._connectionBehaviour.next(false);
     this.connectionService.createHubConnection(hub).then(x => {
-      debugger;
       this.hub = x;
       this.connectionService._connectionBehaviour.next(true);
     });
