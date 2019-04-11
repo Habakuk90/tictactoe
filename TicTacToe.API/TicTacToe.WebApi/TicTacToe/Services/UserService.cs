@@ -70,6 +70,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             _context.AppUser.Add(user);
             user.Status = Constants.Status.ONLINE;
             user.ConnectionIds.Add(user.CurrentConnectionId);
+            Console.WriteLine(user);
             this.ApplyUserChange();
         }
 

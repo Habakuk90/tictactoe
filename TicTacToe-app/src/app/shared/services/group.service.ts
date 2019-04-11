@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HubConnectionService } from './hubconnection.service';
 import { Router } from '@angular/router';
+import { UserHubConnection } from '../connections/user.hubconnection';
 
 @Injectable()
 export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
   groupName = this._groupNameSubject.asObservable();
 
-  constructor(public connectionService: HubConnectionService,
+  constructor(public connectionService: HubConnectionService<UserHubConnection>,
      private router: Router) {
 
   }
@@ -18,7 +19,7 @@ export class GroupService {
 
     let promise: Promise<void>;
 
-    promise = this.connectionService.connection.invoke<void>('JoinGroup', groupName).then(() => {
+    promise = this.connectionService.hub.connection.invoke<void>('JoinGroup', groupName).then(() => {
       that._groupNameSubject.next(groupName);
       console.log(groupName);
     });
@@ -32,7 +33,7 @@ export class GroupService {
 
     this.connectionService.isConnected.subscribe(isConnected => {
       if (isConnected) {
-        that.connectionService.connection.invoke('LeaveGroup', groupName).then(() => {
+        that.connectionService.hub.connection.invoke('LeaveGroup', groupName).then(() => {
           that.router.navigate(['/']);
         });
       }

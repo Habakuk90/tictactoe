@@ -9,7 +9,9 @@ import { map, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { HubConnectionService } from './hubconnection.service';
-import { environment } from 'src/environments/environment.prod';
+import { UserHubConnection } from '../connections/user.hubconnection';
+import { Hub } from '../connections/base.hubconnection';
+import { SpinnerService } from 'src/app/spinner/spinner.service';
 
 @Injectable()
 export class UserService extends BaseService {
@@ -20,14 +22,27 @@ export class UserService extends BaseService {
 
   currentUserName = '';
 
+  hub: Hub<UserHubConnection>;
+
   constructor(private http: HttpClient, private router: Router,
               configService: ConfigService,
-              private connectionService: HubConnectionService) {
+              private connectionService: HubConnectionService<UserHubConnection>,
+              spinnerService: SpinnerService) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
     // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
     // header component resulting in authed user nav links disappearing despite the fact user is still logged in
     this.baseUrl = configService._apiURI;
+    spinnerService.toggleSpinner();
+    this.getUserName().subscribe(x => this.currentUserName = x);
+    const hub = new UserHubConnection(connectionService.buildConnection('/signalR'), 'userhub');
+
+    connectionService.createHubConnection(hub)
+      .then((x) => {
+        spinnerService.toggleSpinner();
+        this.hub = x;
+      })
+      .catch(() => window.location.href = window.location.host);
   }
 
   register(userName: string, password: string, confirmPassword: string) {

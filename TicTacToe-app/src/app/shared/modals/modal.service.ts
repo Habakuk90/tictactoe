@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from '../../../../node_modules/rxjs';
-import { HubConnectionService } from '../services/hubconnection.service';
-import { ConfigService } from '../utils/config.service';
 import { HubConnection } from '@aspnet/signalr';
+import { UserService } from '../services/user.service';
 
 @Injectable()
 export class ModalService {
@@ -10,7 +9,7 @@ export class ModalService {
   modalArgs = new BehaviorSubject<object>({});
   connection: HubConnection;
 
-  constructor(public connectionService: HubConnectionService) {
+  constructor(public userService: UserService) {
   }
 
   openModal(modalName: string, args: object) {
@@ -23,14 +22,14 @@ export class ModalService {
   }
 
   onOpenModal(method: (...args: any[]) => void) {
-    this.connectionService.connection.on('OpenModal', method);
+    this.userService.hub.connection.on('OpenModal', method);
   }
 
   challengeResponse(...args: any[]) {
-    this.connectionService.connection.invoke('ChallengeResponse', ...args);
+    this.userService.hub.connection.invoke('ChallengeResponse', ...args);
   }
 
   startGame(...args: any[]): Promise<any> {
-    return this.connectionService.connection.invoke('StartGame', ...args);
+    return this.userService.hub.connection.invoke('StartGame', ...args);
   }
 }

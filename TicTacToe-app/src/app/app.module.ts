@@ -43,6 +43,7 @@ import { SelectPlayerComponent } from './home/select-player/select-player.compon
     ModalModule
   ],
   providers: [
+    // TODOANDI: aufrumen bidde
     ConfigService, HubConnectionService, SpinnerService,
     TicTacToeService, AuthGuard, GroupService, GameService],
   bootstrap: [AppComponent]

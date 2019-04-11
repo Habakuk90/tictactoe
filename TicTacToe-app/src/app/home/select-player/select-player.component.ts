@@ -1,11 +1,8 @@
 import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
 import { HubConnectionService } from 'src/app/shared/services/hubconnection.service';
 import { UserService } from 'src/app/shared/services/user.service';
-import { ModalService } from 'src/app/shared/modals/modal.service';
-import { GroupService } from 'src/app/shared/services/group.service';
-import { SpinnerService } from 'src/app/spinner/spinner.service';
-import { Router } from '@angular/router';
 import { IGame } from 'src/app/shared/models/game.interface';
+import { UserHubConnection } from 'src/app/shared/connections/user.hubconnection';
 
 @Component({
   selector: 'app-select-player',
@@ -20,35 +17,33 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
   currentUser: string;
   selectedPlayer: string;
 
-  constructor(private connectionService: HubConnectionService, userService: UserService,
-    private groupService: GroupService, private modalService: ModalService,
-    private spinnerService: SpinnerService,
-    private router: Router) {
+  constructor(private connectionService: HubConnectionService<UserHubConnection>, userService: UserService) {
       userService.getUserName().subscribe(res => {
         this.currentUser =  res.toString();
       }, err => userService.logout());
 
+      const connectionMethods = userService.hub;
       connectionService.isConnected.subscribe(isConnected => {
         if (isConnected) {
-          this.connectionService.updateUserList(userOnline => {
+          connectionMethods.hub.updateUserList(userOnline => {
             this.userOnline = userOnline;
           });
 
         }
       });
 
-      this.connectionService.onStartGame((groupName, gameName) => {
-        const that = this;
+      // this.connectionService.onStartGame((groupName, gameName) => {
+      //   const that = this;
 
-        that.spinnerService.toggleSpinner();
-        that.groupService.joinGroup(groupName).then(() => {
-          that.router.navigate([gameName]);
-          that.spinnerService.toggleSpinner();
-          that.modalService.closeModal();
-        });
-      });
+      //   that.spinnerService.toggleSpinner();
+      //   that.groupService.joinGroup(groupName).then(() => {
+      //     that.router.navigate([gameName]);
+      //     that.spinnerService.toggleSpinner();
+      //     that.modalService.closeModal();
+      //   });
+      // });
 
-      this.connectionService.addCurrentUser(userService.currentUserName);
+      connectionMethods.hub.addCurrentUser(userService.currentUserName);
   }
 
   enemyClicked(user: string) {
@@ -66,9 +61,9 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.connectionService.connection.off('StartGame');
-    this.connectionService.connection.off('UpdateUserList');
+    this.connectionService.hub.connection.off('StartGame');
+    this.connectionService.hub.connection.off('UpdateUserList');
     // this.connectionService.connection.off('SwitchTurn');
-    this.connectionService.connection.off('JoinGroup');
+    this.connectionService.hub.connection.off('JoinGroup');
   }
 }

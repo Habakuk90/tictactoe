@@ -14,8 +14,4 @@ export class ConfigService {
         // this._apiURI = environment.baseUrl + '/api';
         this._apiURI = 'http://' + hostname + ':8081' + '/api';
      }
-
-     getApiURI() {
-         return this._apiURI;
-     }
 }

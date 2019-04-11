@@ -102,7 +102,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         public void AddCurrentUser(string userName)
         {
             bool userExists = this._userserService.UserExists(userName);
-
+            System.Console.WriteLine(userName);
             GameUserModel user =
                 userExists ?
                 this._userserService.GetUserByName(userName) :

@@ -14,19 +14,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedInSubscription: Subscription;
   homeState: number;
   homeStateSubscription: Subscription;
-  constructor(private userService: UserService, private gameService: GameService) {
+  constructor(private userService: UserService) {
 
   }
 
   back() {
-    this.gameService._HomeStateSubject.next(0);
+    this.userService._HomeStateSubject.next(0);
   }
 
   ngOnInit() {
     this.isLoggedInSubscription = this.userService.isLoggedIn
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
 
-    this.homeStateSubscription = this.gameService._HomeStateSubject
+    this.homeStateSubscription = this.userService._HomeStateSubject
       .subscribe(x => this.homeState = x);
   }
 

@@ -26,7 +26,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   private boxHandler: BoxHandler = new BoxHandler();
   public boxes: Box[];
 
-  constructor(private connectionService: HubConnectionService, private router: Router,
+  constructor(private router: Router,
     private tictactoeService: TicTacToeService,
     private modalService: ModalService, private groupService: GroupService,
     private userService: UserService
@@ -36,13 +36,11 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
     tictactoeService.onTileChange((tileId) => {
       const box: Box = that.boxHandler.findById(tileId);
-debugger;
       box.state = that.gameTile;
       box.locked = true;
     });
 
     tictactoeService.onSwitchTurn(() => {
-      debugger;
       tictactoeService.switchTurn();
       if (that.gameTile === 'circle') {
         that.gameTile = 'cross';
@@ -51,7 +49,8 @@ debugger;
       }
     });
 
-    connectionService.onStartGame((groupName: string) => {
+    // FIXME
+    tictactoeService.hub.hub.onStartGame((groupName: string) => {
       console.log('start');
       this.boxes = this.boxHandler.createBoxes();
       this.boxHandler.setAllUnlocked();
@@ -61,7 +60,7 @@ debugger;
       that.modalService.closeModal();
     });
 
-    connectionService.connection.on('GameOver', (winningTileId, winningLine) => {
+    tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
       this.endGame(winningTileId, winningLine);
     });
 
@@ -85,7 +84,7 @@ debugger;
       return;
     }
     console.log(this.groupName);
-    this.connectionService.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
+    this.tictactoeService.hub.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
       const clickedBox: Box = this.boxHandler.findById(tileId);
 
       if (this.boxHandler.checkWin(clickedBox)) {
@@ -155,9 +154,9 @@ debugger;
   }
 
   ngOnDestroy() {
-    this.connectionService.connection.off('TileChange');
-    this.connectionService.connection.off('SwitchTurn');
-    this.connectionService.connection.off('StartGame');
+    this.tictactoeService.hub.connection.off('TileChange');
+    this.tictactoeService.hub.connection.off('SwitchTurn');
+    this.tictactoeService.hub.connection.off('StartGame');
     this.tictactoeService.reset();
     if (this.groupName) {
       this.groupService.leaveGroup(this.groupName);

@@ -1,57 +1,48 @@
 import { Injectable } from '@angular/core';
-import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import { ConfigService } from '../utils/config.service';
 import { BehaviorSubject } from 'rxjs';
+import { Hub, IBaseHubConnection } from '../connections/base.hubconnection';
+
 @Injectable()
-export class HubConnectionService {
-  connection: HubConnection;
+export class HubConnectionService<T extends IBaseHubConnection> {
   _connectionBehaviour = new BehaviorSubject<boolean>(false);
   isConnected = this._connectionBehaviour.asObservable();
+  hub: Hub<T>;
 
   constructor(private configService: ConfigService) {
-
   }
 
-  getConnection(): HubConnection {
-    return this.connection;
-  }
+  async createHubConnection (hub: T) {
+    const connection = new Hub<T>(hub);
 
-  async startConnection(socketUri: string) {
-    let tokenValue = '';
-    const token = localStorage.getItem('auth_token');
-    if (token !== '') {
-        tokenValue = '?token=' + token;
-    }
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(this.configService.getApiURI() + socketUri + tokenValue)
-      .configureLogging(signalR.LogLevel.Information)
-      .build();
-
-    await this.connection.start();
+    // this.hub = connection;
     this._connectionBehaviour.next(true);
+
+    return connection;
   }
 
   async stopConnection() {
-    await this.connection.stop();
+    await this.hub.connection.stop();
     this._connectionBehaviour.next(false);
   }
 
-  updateUserList(method: (...args: any[]) => void) {
-    this.connection.on('UpdateUserList', method);
+  buildConnection(socketUri: string): signalR.HubConnection {
+    let url = this.configService._apiURI + socketUri + this.getToken('auth_token');
+
+    return new signalR.HubConnectionBuilder()
+      .withUrl(url)
+      .configureLogging(signalR.LogLevel.Information)
+      .build();
   }
 
-  onStartGame(method: (...args: any[]) => void) {
-    this.connection.on('StartGame', method);
-  }
+  private getToken(tokenName: string) {
+    let tokenValue = '';
+    const token = localStorage.getItem('auth_token'); //<= insert tokenname
+    if (token !== '') {
+        tokenValue = '?token=' + token;
+    }
 
-  addCurrentUser(...args: any[]): Promise<any> {
-console.log('hi2');
-
-    return this.connection.invoke('AddCurrentUser', ...args);
-  }
-
-  challengePlayer(...args: any[]): Promise<any> {
-    return this.connection.invoke('ChallengePlayer', ...args);
+    return tokenValue;
   }
 }
