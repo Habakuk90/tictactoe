@@ -48,6 +48,5 @@ export class TicTacToeService extends GameService {
   reset() {
     this._turnSubject.next(false);
     this.hub.stop();
-
   }
 }
