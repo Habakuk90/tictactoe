@@ -15,7 +15,7 @@ export class UserService extends BaseService {
 
   private _isLoggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn = this._isLoggedInSubject.asObservable();
-
+  userName = new BehaviorSubject<string>('');
   currentUserName = '';
   userOnline = [];
 
@@ -84,6 +84,10 @@ export class UserService extends BaseService {
     return this.http.get(
       this.baseUrl + '/values/getUserName',
       {headers: headers}
-    ).pipe(map(res => res), map(res => this.currentUserName = res.toString()));
+    ).pipe(map(res => res), map(res => {
+        this.userName.next(res.toString());
+        return this.currentUserName = res.toString()
+      }
+    ));
   }
 }

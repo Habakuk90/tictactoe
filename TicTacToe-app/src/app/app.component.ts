@@ -11,7 +11,9 @@ export class AppComponent implements OnDestroy {
 
     userService.isLoggedIn.subscribe(isLoggedIn => {
       if (isLoggedIn) {
-        userService.getUserName().subscribe(res => userService.currentUserName = res.toString(), err => userService.logout());
+        userService.getUserName().subscribe(res => {
+          this.userName = res.toString();
+        }, err => userService.logout());
       }
     });
    }

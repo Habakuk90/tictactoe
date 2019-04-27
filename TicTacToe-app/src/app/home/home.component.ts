@@ -8,7 +8,7 @@ import { HomeService } from './home.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy {
   isGameSelected = false;
   isPlayerSelected = false;
   selectionState = 0;
@@ -17,9 +17,12 @@ export class HomeComponent implements OnDestroy {
 
   constructor(private userService: UserService, private homeService: HomeService) {
     this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
+  }
 
-
-    this.homeService.hub.addCurrentUser(userService.currentUserName)
+  ngOnInit() {
+    this.userService.userName.subscribe(x => {
+      this.homeService.hub.addCurrentUser(x);
+    });
 
     this.homeService.hub.onUpdateUserList(userOnline => {
         this.userService.userOnline = userOnline;
