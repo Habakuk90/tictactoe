@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
 import { HomeService } from './home.service';
