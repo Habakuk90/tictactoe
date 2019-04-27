@@ -13,7 +13,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     /// <summary>
     /// Access to 
     /// </summary>
-    public class UserService : IUserService
+    public class UserService : BaseService, IUserService
     {
         #region private properties
 
@@ -26,12 +26,13 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         public UserService(
             AppDbContext context,
             IHubContext<GameHub, IGameHub> gameHub)
+            : base(context)
         {
             this._context = context;
             this._gameHub = gameHub;
         }
 
-        public GameUserModel GetUserByConnection(string connectionId)
+        public override GameUserModel GetUserByConnection(string connectionId)
         {
             // instead of first => by group name || first
             GameUserModel userModel = _context.AppUser.Where(x =>
@@ -70,7 +71,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             _context.AppUser.Add(user);
             user.Status = Constants.Status.ONLINE;
             user.ConnectionIds.Add(user.CurrentConnectionId);
-            Console.WriteLine(user);
+            Console.WriteLine("new",user);
             this.ApplyUserChange();
         }
 
@@ -91,7 +92,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             }
         }
 
-        public void RemoveUser(GameUserModel currentUser, string currentConnectionId)
+        public override void RemoveUser(GameUserModel currentUser, string currentConnectionId)
         {
             if (currentUser == null || currentUser.ConnectionIds == null) return;
             // FIXME: Multiple Connections for one user should be possible
@@ -105,7 +106,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// Invoke Update current Online Users to all
         /// </summary>
         /// <clientMethod>UpdateUserList</clientMethod>
-        public async void UpdateUserList()
+        public override async void UpdateUserList()
         {
             IEnumerable<string> userOnline = this.GetOnlineUsers()
                 .Select(x => x.Name);

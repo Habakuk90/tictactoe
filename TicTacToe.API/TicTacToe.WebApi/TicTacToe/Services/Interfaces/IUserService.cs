@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
-    public interface IUserService 
+    public interface IUserService : IBaseService
     {
-        GameUserModel GetUserByConnection(string connectionId);
-        
         GameUserModel GetUserByName(string userName);
         
         void AddNewUser(GameUserModel user);
@@ -14,10 +13,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         void UpdateUser(GameUserModel user, string status);
 
         void UpdateUser(ICollection<GameUserModel> userList, string status);
-
-        void RemoveUser(GameUserModel user, string currentConnectionId);
-        
-        void UpdateUserList();
 
         bool UserExists(string userName);
     }

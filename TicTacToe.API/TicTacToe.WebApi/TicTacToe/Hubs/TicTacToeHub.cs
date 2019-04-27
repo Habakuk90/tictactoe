@@ -6,11 +6,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
+        private readonly IUserService _userService;
 
-        public TicTacToeHub(IUserService userService,
-            IGroupService groupService) : base(userService, groupService)
+        public TicTacToeHub(IUserService baseService) : base(baseService)
         {
-
+            this._userService = baseService;
         }
 
         /// <summary>
@@ -21,6 +21,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         {
             await Clients.Group(room).SwitchTurn();
             await Clients.Group(room).TileChange(tileId);
+            
         }
 
         /// <summary>

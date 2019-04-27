@@ -8,24 +8,13 @@
     using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
 
-    public class BaseHub<T> : Hub<T> where T : class, IBaseHub
+    public abstract class BaseHub<T> : Hub<T> where T : class, IBaseHub
     {
-        public IGroupService _groupService
-        {
-            get;
-            set;
-        }
+        private readonly IBaseService _baseService;
 
-        public IUserService _userserService
+        protected BaseHub(IBaseService baseService)
         {
-            get;
-            set;
-        }
-        public BaseHub(IUserService userService,
-            IGroupService groupService)
-        {
-            this._userserService = userService;
-            this._groupService = groupService;
+            this._baseService = baseService;
         }
 
 
@@ -37,25 +26,25 @@
         /// <returns></returns>
         public void JoinGroup(string groupName)
         {
-            GameUserModel currentUser = this._userserService
+            GameUserModel currentUser = this._baseService
                 .GetUserByConnection(Context.ConnectionId);
 
             if (currentUser.GroupName == groupName)
             {
-                this._groupService.LeaveGroupAsync(currentUser, groupName);
+                this._baseService.LeaveGroupAsync(currentUser, groupName);
             }
 
-            this._groupService.JoinGroupAsync(currentUser, groupName);
-            this._userserService.UpdateUserList();
+            this._baseService.JoinGroupAsync(currentUser, groupName);
+            this._baseService.UpdateUserList();
         }
 
 
         public void LeaveGroup(string groupName)
         {
-            GameUserModel currentUser = this._userserService
+            GameUserModel currentUser = this._baseService
                 .GetUserByConnection(Context.ConnectionId);
 
-            this._groupService.LeaveGroupAsync(currentUser, groupName);
+            this._baseService.LeaveGroupAsync(currentUser, groupName);
         }
         
         /// <summary>
@@ -74,11 +63,11 @@
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            GameUserModel currentUser = this._userserService
+            GameUserModel currentUser = this._baseService
                 .GetUserByConnection(Context.ConnectionId);
 
-            this._userserService.RemoveUser(currentUser, Context.ConnectionId);
-            await this._groupService.LeaveGroupAsync(currentUser, currentUser.GroupName);
+            this._baseService.RemoveUser(currentUser, Context.ConnectionId);
+            await this._baseService.LeaveGroupAsync(currentUser, currentUser.GroupName);
             await base.OnDisconnectedAsync(exception);
         }
     }

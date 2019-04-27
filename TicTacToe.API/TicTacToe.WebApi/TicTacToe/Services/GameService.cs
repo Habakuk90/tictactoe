@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.User;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class GameService
+    public class GameService : BaseService
     {
         public IHubContext<GameHub> _gameHub;
         public UserHandler _userHandler;
 
-
-        public GameService(IHubContext<GameHub> gameHub)
+        public GameService(AppDbContext context, IHubContext<GameHub> gameHub)
+            : base(context)
         {
             this._gameHub = gameHub;
             this._userHandler = new UserHandler(gameHub);
