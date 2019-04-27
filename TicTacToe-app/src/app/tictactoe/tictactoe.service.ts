@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { GameService } from '../shared/services/game.service';
 import { ModalService } from '../shared/modals/modal.service';
-import { GameHubConnection } from '../shared/connections/game.hubconnection';
 
 @Injectable()
 export class TicTacToeService extends GameService {
@@ -15,9 +13,8 @@ export class TicTacToeService extends GameService {
   hasWon = this._hasWonSubject.asObservable();
 
 
-  constructor(public connectionService: HubConnectionService<GameHubConnection>,
-      modalService: ModalService) {
-    super(connectionService, modalService);
+  constructor(modalService: ModalService) {
+    super(modalService);
   }
 
   switchTurn() {
@@ -29,24 +26,25 @@ export class TicTacToeService extends GameService {
       this._hasWonSubject.next(true);
     }
 
-    this.connectionService.isConnected.subscribe(isConnected => {
+    this.hub.isConnected.subscribe(isConnected => {
       if (isConnected) {
-        this.hub.connection
+        this.hub.getConnection()
           .invoke('GameOver', groupName, winningTileId, winningLine);
       }
     });
   }
 
   onTileChange(method: (...args: any[]) => void) {
-    this.hub.connection.on('TileChange', method);
+    this.hub.getConnection().on('TileChange', method);
   }
 
   onSwitchTurn(method: (...args: any[]) => void) {
-    this.hub.connection.on('SwitchTurn', method);
+    this.hub.getConnection().on('SwitchTurn', method);
   }
 
   reset() {
     this._turnSubject.next(false);
-    this.hub.stop();
+    // TODOANDI stop
+    // this.hub.stop();
   }
 }

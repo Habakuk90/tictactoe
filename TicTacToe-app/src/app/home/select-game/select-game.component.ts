@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { IGame } from 'src/app/shared/models/game.interface';
-import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-select-game',
@@ -9,8 +8,9 @@ import { UserService } from 'src/app/shared/services/user.service';
 })
 export class SelectGameComponent {
   @Output() gameSelected: EventEmitter<Array<IGame>> = new EventEmitter<Array<IGame>>();
+  @Output() nextButton: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private userService: UserService) {
+  constructor() {
   }
 
   games: Array<IGame> =
@@ -24,8 +24,8 @@ export class SelectGameComponent {
       this.gameSelected.emit(this.games);
     }
 
-  nextStep() {
-    this.userService._HomeStateSubject.next(1);
+    nextStep() {
+    this.nextButton.emit(1);
   }
 
   isGameSelected(): boolean {

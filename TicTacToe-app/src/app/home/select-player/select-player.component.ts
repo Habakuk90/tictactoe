@@ -1,12 +1,7 @@
 import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
-import { HubConnectionService } from 'src/app/shared/services/hubconnection.service';
-import { UserService } from 'src/app/shared/services/user.service';
 import { IGame } from 'src/app/shared/models/game.interface';
-import { UserHubConnection } from 'src/app/shared/connections/user.hubconnection';
-import { GroupService } from 'src/app/shared/services/group.service';
-import { ModalService } from 'src/app/shared/modals/modal.service';
-import { SpinnerService } from 'src/app/spinner/spinner.service';
-import { Router } from '@angular/router';
+import { HomeService } from '../home.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-select-player',
@@ -17,42 +12,14 @@ import { Router } from '@angular/router';
 export class SelectPlayerComponent implements OnDestroy, OnInit {
   @Output() playerSelected: EventEmitter<string> = new EventEmitter<string>();
   @Input() selectedGames: Array<IGame>;
-  userOnline: Array<string>;
-  currentUser: string;
   selectedPlayer: string;
 
-  constructor(private connectionService: HubConnectionService<UserHubConnection>,
-     private userService: UserService,
-     private groupService: GroupService,
-     private modalService: ModalService,
-     private spinnerService: SpinnerService,
-     private router: Router) {
-      userService.getUserName().subscribe(res => {
-        this.currentUser =  res.toString();
-      }, err => userService.logout());
+  userOnline: Array<string>;
+  currentUser: string;
 
-      const connectionMethods = userService.hub;
-      userService.hub.hub.isConnected.subscribe(isConnected => {
-        if (isConnected) {
-          connectionMethods.hub.updateUserList(userOnline => {
-            this.userOnline = userOnline;
-          });
-
-        }
-      });
-
-      this.userService.hub.hub.onStartGame((groupName, gameName) => {
-        const that = this;
-
-        that.spinnerService.toggleSpinner();
-        that.groupService.joinGroup(groupName).then(() => {
-          that.router.navigate([gameName]);
-          that.spinnerService.toggleSpinner();
-          that.modalService.closeModal();
-        });
-      });
-
-      connectionMethods.hub.addCurrentUser(userService.currentUserName);
+  constructor(private userService: UserService) {
+      this.currentUser = this.userService.currentUserName;
+      this.userOnline = this.userService.userOnline;
   }
 
   enemyClicked(user: string) {
@@ -70,9 +37,10 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    this.connectionService.hub.connection.off('StartGame');
-    this.connectionService.hub.connection.off('UpdateUserList');
-    // this.connectionService.connection.off('SwitchTurn');
-    this.connectionService.hub.connection.off('JoinGroup');
+    // TODOANDI Destory listeners implementieren
+    // this.connectionService.hub.connection.off('StartGame');
+    // this.connectionService.hub.connection.off('UpdateUserList');
+    // // this.connectionService.connection.off('SwitchTurn');
+    // this.connectionService.hub.connection.off('JoinGroup');
   }
 }

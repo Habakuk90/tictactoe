@@ -6,7 +6,6 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { routing } from './app.routing';
 import { AccountModule } from './account/account.module';
-import { HubConnectionService } from './shared/services/hubconnection.service';
 import { ConfigService } from './shared/utils/config.service';
 import { AuthGuard } from './auth.guard';
 import { TestSiteComponent } from './test-site/test-site.component';
@@ -21,6 +20,7 @@ import { GameService } from './shared/services/game.service';
 import { RPSComponent } from './rps/rps.component';
 import { SelectGameComponent } from './home/select-game/select-game.component';
 import { SelectPlayerComponent } from './home/select-player/select-player.component';
+import { HomeService } from './home/home.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +44,7 @@ import { SelectPlayerComponent } from './home/select-player/select-player.compon
   ],
   providers: [
     // TODOANDI: aufrumen bidde
-    ConfigService, HubConnectionService, SpinnerService,
+    ConfigService, HomeService, SpinnerService,
     TicTacToeService, AuthGuard, GroupService, GameService],
   bootstrap: [AppComponent]
 })

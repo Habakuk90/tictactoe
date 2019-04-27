@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { HubConnectionService } from '../shared/services/hubconnection.service';
 import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
 import { ModalService } from '../shared/modals/modal.service';
@@ -29,38 +28,37 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
     private tictactoeService: TicTacToeService,
     private modalService: ModalService, private groupService: GroupService,
-    private userService: UserService
-    ) {
-    const that = this;
-    that.boxes = that.boxHandler.boxes;
+    private userService: UserService) {
+      const that = this;
+      that.boxes = that.boxHandler.boxes;
 
-    // FIXME
-    // tictactoeService.hub.hub.onStartGame((groupName: string) => {
-    //   console.log('start');
-    //   this.boxes = this.boxHandler.createBoxes();
-    //   this.boxHandler.setAllUnlocked();
-    //   this.setLine(null, null);
-    //   this.ngOnInit();
-    //   // that.spinner
-    //   that.modalService.closeModal();
-    // });
+      // FIXME
+      // tictactoeService.hub.hub.onStartGame((groupName: string) => {
+      //   console.log('start');
+      //   this.boxes = this.boxHandler.createBoxes();
+      //   this.boxHandler.setAllUnlocked();
+      //   this.setLine(null, null);
+      //   this.ngOnInit();
+      //   // that.spinner
+      //   that.modalService.closeModal();
+      // });
 
-    // tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
-    //   this.endGame(winningTileId, winningLine);
-    // });
+      // tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
+      //   this.endGame(winningTileId, winningLine);
+      // });
 
-  tictactoeService.hasWon.subscribe(x => that.hasWon = x);
-  tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
-  groupService.groupName
-    .subscribe(groupName => {
-      this.groupName = groupName;
-      if (this.groupName === undefined ||
-        this.groupName === '') {
-        this.router.navigate(['/']);
-        return;
-      }
-    });
-  }
+      tictactoeService.hasWon.subscribe(x => that.hasWon = x);
+      tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
+      groupService.groupName
+        .subscribe(groupName => {
+          this.groupName = groupName;
+          if (this.groupName === undefined ||
+            this.groupName === '') {
+            this.router.navigate(['/']);
+            return;
+          }
+        });
+    }
 
   changeField(tileId: string) {
     const that = this;
@@ -69,7 +67,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       return;
     }
     console.log(this.groupName);
-    this.tictactoeService.hub.connection.invoke('TileClicked', this.groupName, tileId).then(() => {
+    this.tictactoeService.hub.getConnection().invoke('TileClicked', this.groupName, tileId).then(() => {
       const clickedBox: Box = this.boxHandler.findById(tileId);
 
       if (this.boxHandler.checkWin(clickedBox)) {
@@ -134,10 +132,12 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     const that = this;
 
     this.selfTileState = this.turn ? 'cross' : 'circle';
+
+    // TODOANDI start besser definieren
     if (this.groupName.startsWith(this.userService.currentUserName)) {
       this.tictactoeService.switchTurn();
     }
-    this.tictactoeService.hub.hub.isConnected.subscribe(x => {
+    this.tictactoeService.hub.isConnected.subscribe(x => {
       if (x) {
         this.tictactoeService.onTileChange((tileId) => {
           const box: Box = that.boxHandler.findById(tileId);
@@ -158,10 +158,11 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.tictactoeService.hub.connection.off('TileChange');
-    this.tictactoeService.hub.connection.off('SwitchTurn');
-    this.tictactoeService.hub.connection.off('StartGame');
-    this.tictactoeService.reset();
+    // TODOANDI connection .off
+    // this.tictactoeService.hub.connection.off('TileChange');
+    // this.tictactoeService.hub.connection.off('SwitchTurn');
+    // this.tictactoeService.hub.connection.off('StartGame');
+    // this.tictactoeService.reset();
     if (this.groupName) {
       this.groupService.leaveGroup(this.groupName);
     }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
 import { GroupService } from '../services/group.service';
+import { HomeService } from 'src/app/home/home.service';
 
 @Component({
   selector: 'app-modal',
@@ -29,15 +30,15 @@ export class ModalComponent implements OnInit {
 
   groupName: string;
 
-  constructor(private modalService: ModalService, private groupService: GroupService) {
-    groupService.groupName.subscribe(x => this.groupName = x);
+  constructor(private modalService: ModalService, private groupService: GroupService, private homeService: HomeService) {
+    this.groupService.groupName.subscribe(x => this.groupName = x);
   }
 
   ngOnInit() {
     // FIXME isConnected
-    this.groupService.connectionService.isConnected.subscribe((isConnected => {
+    this.homeService.hub.isConnected.subscribe((isConnected => {
       if (isConnected) {
-        this.modalService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+        this.homeService.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
           this.selectedGame = gameName;
           this.modalService.openModal(modalName, {enemyUserName: enemy});
         });
@@ -53,14 +54,14 @@ export class ModalComponent implements OnInit {
   }
 
   onChallengeResponse(status: any) {
-    this.modalService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
-    this.modalService.startGame(this.groupName);
+    this.homeService.hub.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
+    // this.modalService.startGame(this.groupName);
     this.modalService.closeModal();
   }
 
   gameRestart() {
-    this.modalService.startGame(this.groupName).then(() => {
-      this.modalService.closeModal();
-    });
+    // this.modalService.startGame(this.groupName).then(() => {
+    //   this.modalService.closeModal();
+    // });
   }
 }

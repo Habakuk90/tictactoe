@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
-import { HubConnectionService } from './hubconnection.service';
 import { ModalService } from '../modals/modal.service';
 import { GameHubConnection } from '../connections/game.hubconnection';
-import { Hub } from '../connections/hub';
 
 @Injectable()
 export class GameService {
   // homeState = this._HomeStateSubject.asObservable();
-  hub: Hub<GameHubConnection>;
+  hub: GameHubConnection;
 
   constructor(
-    public connectionService: HubConnectionService<GameHubConnection>,
-    public modalService: ModalService
-  ) {
-    const hub = new GameHubConnection(
-      connectionService.buildConnection('/tictactoe'),
-      'gamehub'
+    public modalService: ModalService) {
+    // const hub = new GameHubConnection(
+    //   connectionService.buildConnection('/tictactoe'),
+    //   'gamehub'
+    // );
+
+    this.hub = new GameHubConnection(
+      '/tictactoe', 'gamehub'
     );
+
     // this.connectionService._connectionBehaviour.next(false);
-    this.connectionService.createHubConnection(hub).then(x => {
-      this.hub = x;
-      this.connectionService._connectionBehaviour.next(true);
-    });
+    // this.connectionService.createHubConnection(hub).then(x => {
+    //   this.hub = x;
+    //   this.connectionService._connectionBehaviour.next(true);
+    // });
   }
 
   public startGame(groupName: string) {
     let promise: Promise<string>;
 
-    this.connectionService.isConnected.subscribe(isConnected => {
+    this.hub.isConnected.subscribe(isConnected => {
       if (isConnected) {
-        promise = this.hub.connection.invoke('StartGame', groupName);
+        promise = this.hub.startGame(groupName);
       }
     });
 

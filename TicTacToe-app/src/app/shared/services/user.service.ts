@@ -8,10 +8,6 @@ import { BehaviorSubject } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
-import { HubConnectionService } from './hubconnection.service';
-import { UserHubConnection } from '../connections/user.hubconnection';
-import { SpinnerService } from 'src/app/spinner/spinner.service';
-import { Hub } from '../connections/hub';
 
 @Injectable()
 export class UserService extends BaseService {
@@ -21,29 +17,13 @@ export class UserService extends BaseService {
   isLoggedIn = this._isLoggedInSubject.asObservable();
 
   currentUserName = '';
-
-  hub: Hub<UserHubConnection>;
+  userOnline = [];
 
   constructor(private http: HttpClient, private router: Router,
-              configService: ConfigService,
-              private connectionService: HubConnectionService<UserHubConnection>,
-              spinnerService: SpinnerService) {
+              configService: ConfigService) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
-    // ?? not sure if this the best way to broadcast the status but seems to resolve issue on page refresh where auth status is lost in
-    // header component resulting in authed user nav links disappearing despite the fact user is still logged in
     this.baseUrl = configService._apiURI;
-    spinnerService.toggleSpinner();
-    this.getUserName().subscribe(x => this.currentUserName = x);
-    const hub = new UserHubConnection(connectionService.buildConnection('/signalR'), 'userhub');
-
-    connectionService.createHubConnection(hub)
-      .then((x) => {
-        spinnerService.toggleSpinner();
-        this.hub = x;
-        this.connectionService._connectionBehaviour.next(true);
-      })
-      .catch(() => window.location.href = window.location.host);
   }
 
   register(userName: string, password: string, confirmPassword: string) {
@@ -88,7 +68,7 @@ export class UserService extends BaseService {
     localStorage.removeItem('auth_token');
     this._isLoggedInSubject.next(false);
     this.router.navigate(['login']);
-    this.connectionService.stopConnection();
+    // this.connectionService.stopConnection();
   }
 
   getUserName() {
@@ -96,23 +76,14 @@ export class UserService extends BaseService {
     headers = headers.set('Content-Type', 'application/json');
 
     const authToken = localStorage.getItem('auth_token');
+
+    if(!authToken) { this.logout(); }
+
     headers = headers.set('Authorization', `Bearer ${authToken}`);
 
     return this.http.get(
       this.baseUrl + '/values/getUserName',
       {headers: headers}
     ).pipe(map(res => res), map(res => this.currentUserName = res.toString()));
-  }
-
-  public startGame(groupName: string) {
-    let promise: Promise<string>;
-
-    this.connectionService.isConnected.subscribe(isConnected => {
-      if (isConnected) {
-        promise = this.hub.connection.invoke('StartGame', groupName);
-      }
-    });
-
-    return promise;
   }
 }

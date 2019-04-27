@@ -1,42 +1,47 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { HubConnectionService } from './hubconnection.service';
 import { Router } from '@angular/router';
-import { UserHubConnection } from '../connections/user.hubconnection';
 
 @Injectable()
 export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
   groupName = this._groupNameSubject.asObservable();
 
-  constructor(public connectionService: HubConnectionService<UserHubConnection>,
-     private router: Router) {
+  constructor(private router: Router) {
 
   }
 
-  joinGroup(groupName: string): Promise<void> {
-    const that = this;
+  // TODOANDI join Group über service/hubconnection implementieren
+  // joinGroup(groupName: string): Promise<void> {
+  //   const that = this;
 
-    let promise: Promise<void>;
+  //   let promise: Promise<void>;
 
-    promise = this.connectionService.hub.connection.invoke<void>('JoinGroup', groupName).then(() => {
-      that._groupNameSubject.next(groupName);
-      console.log(groupName);
-    });
+  //   promise = this.connectionService.hub.connection.invoke<void>('JoinGroup', groupName).then(() => {
+  //     that._groupNameSubject.next(groupName);
+  //     console.log(groupName);
+  //   });
 
-    return promise;
+  //   return promise;
+  // }
+  // TODOANDI join Group über service/hubconnection implementieren
+  // leaveGroup(groupName: string) {
+  //   const that = this;
+  //   that._groupNameSubject.next('');
+
+  //   this.connectionService.isConnected.subscribe(isConnected => {
+  //     if (isConnected) {
+  //       that.connectionService.hub.connection.invoke('LeaveGroup', groupName).then(() => {
+  //         that.router.navigate(['/']);
+  //       });
+  //     }
+  //   });
+  // }
+  leaveGroup(x: string): Promise<void> {
+    throw new Error('Not Implemented');
   }
 
-  leaveGroup(groupName: string) {
-    const that = this;
-    that._groupNameSubject.next('');
-
-    this.connectionService.isConnected.subscribe(isConnected => {
-      if (isConnected) {
-        that.connectionService.hub.connection.invoke('LeaveGroup', groupName).then(() => {
-          that.router.navigate(['/']);
-        });
-      }
-    });
+  joinGroup(x: string): Promise<void> {
+    throw new Error('not Implemented');
   }
 }

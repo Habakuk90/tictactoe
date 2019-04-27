@@ -1,6 +1,7 @@
 import { Component, OnDestroy } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
+import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
@@ -14,14 +15,24 @@ export class HomeComponent implements OnDestroy {
   selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private homeService: HomeService) {
     this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
 
+
+    this.homeService.hub.addCurrentUser(userService.currentUserName)
+
+    this.homeService.hub.onUpdateUserList(userOnline => {
+        this.userService.userOnline = userOnline;
+    });
   }
 
   gameSelected(games: Array<IGame>) {
     this.selectedGames = games;
     this.isGameSelected = this.selectedGames.length > 0;
+  }
+
+  nextStep(step: number) {
+    this.userService._HomeStateSubject.next(step);
   }
 
   enemySelected(enemy: string) {
@@ -39,8 +50,8 @@ export class HomeComponent implements OnDestroy {
 
   challengeSelectedPlayer() {
     // todoandi
-    // this.userService.startGame('tictactoe').catch(e => console.log(e));
-    this.userService.hub.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
+    // this.homeService.hub.startGame('tictactoe').catch(e => console.log(e));
+    this.homeService.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
   }
 
   ngOnDestroy() {
