@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
@@ -112,6 +113,15 @@ namespace TicTacToe.WebApi.TicTacToe.Services
                 .Select(x => x.Name);
 
             await this._gameHub.Clients.All.UpdateUserList(userOnline);
+        }
+
+        public override async Task JoinGroupAsync(GameUserModel user, string groupName)
+        {
+            user.GroupName = groupName;
+            await _gameHub.Groups
+                .AddToGroupAsync(user.CurrentConnectionId, groupName);
+
+            _context.SaveChanges();
         }
 
         #region private methods 

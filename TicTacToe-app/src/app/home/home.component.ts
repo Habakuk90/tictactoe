@@ -20,8 +20,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.userName.subscribe(x => {
-      this.homeService.hub.addCurrentUser(x);
+    this.userService.userName.subscribe((x: string) => {
+      if (x.trim().length > 0) {
+        this.homeService.hub.addCurrentUser(x);
+      }
     });
 
     this.homeService.hub.onUpdateUserList(userOnline => {

@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Logging;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Services;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -14,8 +11,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     public class GameHub : BaseHub<IGameHub>
     {
         public enum ModalStates { Accepted, Declined };
-
-        private readonly ILogger _logger;
 
         private readonly IUserService _userService;
 
@@ -90,6 +85,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             }
         }
 
+        //TODOANDI Different naming
         public async Task StartGame(string groupName)
         {
             

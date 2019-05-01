@@ -16,7 +16,7 @@ export class GameOverModalComponent {
 
   public tryAgain() {
     this.restartGame.emit();
-    // connection.invoke('StartGame', groupName, )
+    // restartGame needed Hub (which hub?)
   }
 
   public back() {

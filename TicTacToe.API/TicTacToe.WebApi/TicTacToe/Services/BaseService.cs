@@ -1,11 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Entities;
-using TicTacToe.WebApi.TicTacToe.Hubs;
-using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 

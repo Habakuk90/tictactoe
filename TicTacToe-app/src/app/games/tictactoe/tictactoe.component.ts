@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
-import { ModalService } from '../shared/modals/modal.service';
 import { Box } from './box';
 import { BoxHandler } from './boxHandler';
-import { GroupService } from '../shared/services/group.service';
-import { UserService } from '../shared/services/user.service';
+import { ModalService } from 'src/app/shared/modals/modal.service';
+import { UserService } from 'src/app/shared/services/user.service';
+import { GroupService } from 'src/app/shared/services/group.service';
 
 @Component({
   selector: 'app-tictactoe',
@@ -66,7 +66,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       that.boxHandler.findById(tileId).locked === true) {
       return;
     }
-    console.log(this.groupName);
+
     this.tictactoeService.hub.getConnection().invoke('TileClicked', this.groupName, tileId).then(() => {
       const clickedBox: Box = this.boxHandler.findById(tileId);
 

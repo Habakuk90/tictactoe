@@ -1,16 +1,18 @@
 ﻿namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
-    using System;
-    using System.Threading.Tasks;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Models;
-    using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
+    using Microsoft.Extensions.Logging;
+    using System;
+    using System.Threading.Tasks;
 
     public abstract class BaseHub<T> : Hub<T> where T : class, IBaseHub
     {
         private readonly IBaseService _baseService;
+
+        public readonly ILogger _logger;
 
         protected BaseHub(IBaseService baseService)
         {

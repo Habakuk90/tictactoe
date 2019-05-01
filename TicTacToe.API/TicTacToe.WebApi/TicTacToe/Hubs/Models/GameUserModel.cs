@@ -35,7 +35,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
 
                 return blob;
             }
-            set { this.ConnectionIds = value.Split(',').ToList(); }
+            set { this.ConnectionIds = value.Split(',').Distinct().ToList(); }
         }
 
     }

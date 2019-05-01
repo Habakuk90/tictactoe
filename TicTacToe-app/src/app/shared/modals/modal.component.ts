@@ -3,6 +3,7 @@ import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { HomeService } from 'src/app/home/home.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -30,7 +31,10 @@ export class ModalComponent implements OnInit {
 
   groupName: string;
 
-  constructor(private modalService: ModalService, private groupService: GroupService, private homeService: HomeService) {
+  constructor(private modalService: ModalService,
+              private groupService: GroupService,
+              private homeService: HomeService,
+              private router: Router) {
     this.groupService.groupName.subscribe(x => this.groupName = x);
   }
 
@@ -41,6 +45,14 @@ export class ModalComponent implements OnInit {
         this.homeService.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
           this.selectedGame = gameName;
           this.modalService.openModal(modalName, {enemyUserName: enemy});
+        });
+
+        // TODOANDI belongs to modal?
+        this.homeService.hub.onStartGame((groupName, gameName) => {
+          this.groupService.joinGroup(groupName).then(() => {
+            this.router.navigate(['/' + gameName]);
+            this.modalService.closeModal();
+          });
         });
       }
     }));
@@ -55,7 +67,6 @@ export class ModalComponent implements OnInit {
 
   onChallengeResponse(status: any) {
     this.homeService.hub.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
-    // this.modalService.startGame(this.groupName);
     this.modalService.closeModal();
   }
 

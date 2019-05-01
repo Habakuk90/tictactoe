@@ -7,6 +7,7 @@ export interface IBaseHubConnection {
   name: string;
   isConnected: BehaviorSubject<boolean>;
   getConnection(): HubConnection;
+  stopConnection(): Promise<void>;
 }
 
 
@@ -24,14 +25,18 @@ export class BaseHubConnection implements IBaseHubConnection {
     });
   }
 
-  public getConnection() {
+  public getConnection(): HubConnection {
     return this.connection;
+  }
+
+  public stopConnection(): Promise<void> {
+    return this.connection.stop();
   }
 
   private buildConnection(socketUri: string): signalR.HubConnection {
     const configService = new ConfigService();
 
-    let url = configService._apiURI + socketUri + this.getToken('auth_token');
+    const url = configService._apiURI + socketUri + this.getToken('auth_token');
 
     return new signalR.HubConnectionBuilder()
       .withUrl(url)
@@ -39,7 +44,7 @@ export class BaseHubConnection implements IBaseHubConnection {
       .build();
   }
 
-  private getToken(tokenName: string) {
+  private getToken(tokenName: string): string {
     let tokenValue = '';
     const token = localStorage.getItem(tokenName);
 

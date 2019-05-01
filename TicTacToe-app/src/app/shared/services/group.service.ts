@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
+import { HomeService } from 'src/app/home/home.service';
 
 @Injectable()
 export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
   groupName = this._groupNameSubject.asObservable();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private homeService: HomeService) {
 
   }
 
   // TODOANDI join Group über service/hubconnection implementieren
-  // joinGroup(groupName: string): Promise<void> {
-  //   const that = this;
+  joinGroup(groupName: string): Promise<void> {
+    const that = this;
 
-  //   let promise: Promise<void>;
+    let promise: Promise<void>;
 
-  //   promise = this.connectionService.hub.connection.invoke<void>('JoinGroup', groupName).then(() => {
-  //     that._groupNameSubject.next(groupName);
-  //     console.log(groupName);
-  //   });
+    promise = this.homeService.hub.getConnection().invoke<void>('JoinGroup', groupName).then(() => {
+      that._groupNameSubject.next(groupName);
+      console.log(groupName);
+    });
 
-  //   return promise;
-  // }
+    return promise;
+  }
   // TODOANDI join Group über service/hubconnection implementieren
   // leaveGroup(groupName: string) {
   //   const that = this;
@@ -41,7 +42,7 @@ export class GroupService {
     throw new Error('Not Implemented');
   }
 
-  joinGroup(x: string): Promise<void> {
-    throw new Error('not Implemented');
-  }
+  // joinGroup(x: string): Promise<void> {
+  //   throw new Error('not Implemented');
+  // }
 }

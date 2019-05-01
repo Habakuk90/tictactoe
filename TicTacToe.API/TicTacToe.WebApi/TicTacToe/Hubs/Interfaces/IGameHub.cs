@@ -16,7 +16,5 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
         Task StartGame(string groupName);
 
         Task GameOver(string winningTileId, string winningLine);
-
-        //Task UpdateUserList(IEnumerable<string> onlineUsers);
     }
 }

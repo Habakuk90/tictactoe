@@ -11,16 +11,16 @@ import { AuthGuard } from './auth.guard';
 import { TestSiteComponent } from './test-site/test-site.component';
 import { SharedModule } from './shared/modules/shared.module';
 import { ModalModule } from './shared/modals/modal.module';
-import { TicTacToeComponent } from './tictactoe/tictactoe.component';
-import { TicTacToeService } from './tictactoe/tictactoe.service';
 import { GroupService } from './shared/services/group.service';
 import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
-import { GameService } from './shared/services/game.service';
-import { RPSComponent } from './rps/rps.component';
 import { SelectGameComponent } from './home/select-game/select-game.component';
 import { SelectPlayerComponent } from './home/select-player/select-player.component';
 import { HomeService } from './home/home.service';
+import { TicTacToeComponent } from './games/tictactoe/tictactoe.component';
+import { RPSComponent } from './games/rps/rps.component';
+import { TicTacToeService } from './games/tictactoe/tictactoe.service';
+import { GameService } from './games/game.service';
 
 @NgModule({
   declarations: [
@@ -29,9 +29,10 @@ import { HomeService } from './home/home.service';
     HomeComponent,
     SelectGameComponent,
     SelectPlayerComponent,
-    TicTacToeComponent,
     SpinnerComponent,
     TestSiteComponent,
+    // Todo move to game module
+    TicTacToeComponent,
     RPSComponent
   ],
   imports: [
@@ -40,7 +41,7 @@ import { HomeService } from './home/home.service';
     routing,
     AccountModule,
     SharedModule,
-    ModalModule
+    ModalModule,
   ],
   providers: [
     // TODOANDI: aufrumen bidde
