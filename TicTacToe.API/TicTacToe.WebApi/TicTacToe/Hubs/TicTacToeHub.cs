@@ -1,15 +1,15 @@
 ﻿using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
-        private readonly IUserService _userService;
+        private readonly IGameService _gameService;
 
-        public TicTacToeHub(IUserService baseService) : base(baseService)
+        public TicTacToeHub(IGameService baseService) : base(baseService)
         {
-            this._userService = baseService;
+            this._gameService = baseService;
         }
 
         /// <summary>

@@ -19,14 +19,13 @@
             this._baseService = baseService;
         }
 
-
         /// <summary>
         /// Join Group after a challenge happend
         /// </summary>
         /// <param name="enemyName">User who got challenged</param>
         /// <param name="groupName">represents as currentUserName + enemyUserName</param>
         /// <returns></returns>
-        public void JoinGroup(string groupName)
+        public string JoinGroup(string groupName)
         {
             GameUserModel currentUser = this._baseService
                 .GetUserByConnection(Context.ConnectionId);
@@ -38,6 +37,8 @@
 
             this._baseService.JoinGroupAsync(currentUser, groupName);
             this._baseService.UpdateUserList();
+
+            return groupName;
         }
 
 
@@ -48,7 +49,36 @@
 
             this._baseService.LeaveGroupAsync(currentUser, groupName);
         }
-        
+
+        /// <summary>
+        /// Marks Current user as online, if new user, add to DB
+        /// </summary>
+        /// <param name="userName">
+        /// userName of current User.
+        /// </param>
+        public void AddCurrentUser(string userName)
+        {
+            bool userExists = this._baseService.UserExists(userName);
+            System.Console.WriteLine("current", userName);
+            GameUserModel user =
+                userExists ?
+                this._baseService.GetUserByName(userName) :
+                new GameUserModel { Name = userName };
+
+            user.CurrentConnectionId = Context.ConnectionId;
+
+            if (userExists)
+            {
+                this._baseService.UpdateUser(
+                    this._baseService.GetUserByName(userName),
+                    Constants.Status.ONLINE);
+            }
+            else
+            {
+                this._baseService.AddNewUser(user);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

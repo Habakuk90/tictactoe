@@ -113,8 +113,7 @@ namespace TicTacToe.WebApi
             services.AddMvc();
             services.AddSignalR();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IGroupService, GroupService>();
-            services.AddSingleton<GameService>();
+            services.AddTransient<IGameService, GameService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>

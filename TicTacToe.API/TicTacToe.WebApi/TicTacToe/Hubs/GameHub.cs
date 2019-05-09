@@ -91,35 +91,5 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             
             await Clients.Group(groupName).StartGame(groupName);
         }
-
-        /// <summary>
-        /// Marks Current user as online, if new user, add to DB
-        /// </summary>
-        /// <param name="userName">
-        /// userName of current User.
-        /// </param>
-        public void AddCurrentUser(string userName)
-        {
-            bool userExists = this._userService.UserExists(userName);
-            System.Console.WriteLine("current", userName);
-            GameUserModel user =
-                userExists ?
-                this._userService.GetUserByName(userName) :
-                new GameUserModel { Name = userName };
-
-            user.CurrentConnectionId = Context.ConnectionId;
-
-            if (userExists)
-            {
-                this._userService.UpdateUser(
-                    this._userService.GetUserByName(userName),
-                    Constants.Status.ONLINE);
-            }
-            else
-            {
-                this._userService.AddNewUser(user);
-            }
-        }
     }
 }
-

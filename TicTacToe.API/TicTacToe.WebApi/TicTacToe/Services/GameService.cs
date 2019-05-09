@@ -1,31 +1,21 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
-using TicTacToe.WebApi.TicTacToe.User;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class GameService : BaseService
+    public class GameService : BaseService<TicTacToeHub, ITicTacToeHub>, IGameService
     {
-        public IHubContext<GameHub> _gameHub;
-        public UserHandler _userHandler;
+        public IHubContext<TicTacToeHub, ITicTacToeHub> _gameHub;
+        private readonly AppDbContext _context;
 
-        public GameService(AppDbContext context, IHubContext<GameHub> gameHub)
-            : base(context)
+        public GameService(AppDbContext context,
+            IHubContext<TicTacToeHub, ITicTacToeHub> gameHub)
+            : base(context, gameHub)
         {
+            this._context = context;
             this._gameHub = gameHub;
-            this._userHandler = new UserHandler(gameHub);
-        }
-
-        public async Task SendMessage()
-        {
-            await _gameHub.Clients.All.SendAsync("hallo", "waaaaaaaaat");
-        }
-
-        public string SendMessage2()
-        {
-            return "AHHHHHHHH";
         }
     }
 }
