@@ -7,13 +7,18 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
+    /// <summary>
+    /// Represents a SignalR Hub with <see cref="IGameHub"/> client methods.
+    /// </summary>
     [Authorize(AuthenticationSchemes = "Bearer")]
     public class GameHub : BaseHub<IGameHub>
     {
-        public enum ModalStates { Accepted, Declined };
-
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// GameHub ctor.
+        /// </summary>
+        /// <param name="baseService"></param>
         public GameHub(IUserService baseService)
             : base(baseService)
         {
@@ -21,9 +26,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// Player selected enemy and send Request
+        /// Challenge Player client Hub method.
         /// </summary>
-        /// <param name="selectedPlayer"></param>
+        /// <param name="enemyName">
+        /// Name of the challenged player.
+        /// </param>
+        /// <param name="gameName">
+        /// Name of the selected Game
+        /// </param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
             GameUserModel currentUser = this._userService
@@ -47,11 +57,17 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// Invoke Modal to challenger and invoke Response to enemy
+        /// ChallengeResponse client Hub method.
         /// </summary>
-        /// <param name="enemyName">enemy</param>
-        /// <param name="response"></param>
-        /// <clientMethod></clientMethod>
+        /// <param name="enemyName">
+        /// Name of the challenging player.
+        /// </param>
+        /// <param name="gameName">
+        /// Name of the selected game.
+        /// </param>
+        /// <param name="response">
+        /// Response of the challenged player.
+        /// </param>
         public async Task ChallengeResponse(string enemyName, string gameName, ModalStates response)
         {
             GameUserModel currentUser = this._userService.GetUserByConnection(Context.ConnectionId);
