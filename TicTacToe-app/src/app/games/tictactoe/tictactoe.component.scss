@@ -40,6 +40,7 @@ $border-tictactoe: 5px solid black;
 
       &.circle {
           background: url("/assets/icons/circle.svg") no-repeat 50% 50%;
+          border-radius: 0;
       }
 
       &.circle, &.cross {
