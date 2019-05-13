@@ -24,7 +24,7 @@ export class ModalComponent implements OnInit {
   activeModal = this.modals.none;
   activeModalSubscription: Subscription;
 
-  // statt object ein Interface verwenden
+  // TODOANDI statt object ein Interface verwenden
   modalArgs: object;
   modalArgsSubscription: Subscription;
 
@@ -39,11 +39,12 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    // FIXME isConnected
+    // TODOANDO isConnected: is there any better way?
     this.homeService.hub.isConnected.subscribe((isConnected => {
       if (isConnected) {
         this.homeService.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
           this.selectedGame = gameName;
+
           this.modalService.openModal(modalName, {enemyUserName: enemy});
         });
       }
@@ -60,5 +61,9 @@ export class ModalComponent implements OnInit {
   onChallengeResponse(status: any) {
     this.homeService.hub.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
     this.modalService.closeModal();
+  }
+
+  gameRestart() {
+    throw new Error('not implemented');
   }
 }

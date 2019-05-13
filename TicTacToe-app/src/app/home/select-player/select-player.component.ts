@@ -1,6 +1,5 @@
 import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
 import { IGame } from 'src/app/shared/models/game.interface';
-import { HomeService } from '../home.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({

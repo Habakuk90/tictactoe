@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { ModalService } from 'src/app/shared/modals/modal.service';
 import { GameService } from '../game.service';
-import { GroupService } from 'src/app/shared/services/group.service';
 
 @Injectable()
 export class TicTacToeService extends GameService {
