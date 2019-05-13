@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
 import { HomeService } from './home.service';
+import { stringify } from '@angular/core/src/render3/util';
+import { Router } from '@angular/router';
+import { GroupService } from '../shared/services/group.service';
 
 @Component({
   selector: 'app-home',
@@ -15,13 +18,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  constructor(private userService: UserService, private homeService: HomeService) {
+  constructor(private router: Router,
+              private groupService: GroupService,
+              private userService: UserService,
+              private homeService: HomeService) {
     this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
   }
 
   ngOnInit() {
-
+    var that = this;
     /// TODOANDI waaaay too much || is there a equivalent to vuex store and automated watching.
+    // TODOANDI do not use .hub.
     this.userService.userName.subscribe((userName: string) => {
       if (userName.trim().length > 0) {
         this.homeService.hub.isConnected.subscribe((isConnected: boolean) => {
@@ -33,8 +40,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.homeService.hub.onUpdateUserList(userOnline => {
+    this.homeService.onUpdateUserList(userOnline => {
         this.userService.userOnline = userOnline;
+    });
+
+    this.homeService.onStartGame((groupName: string, gameName: string) => {
+      that.groupService._groupNameSubject.next(groupName);
+      this.router.navigate(['/' + gameName]);
     });
   }
 
@@ -63,7 +75,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   challengeSelectedPlayer() {
     // todoandi
     // this.homeService.hub.startGame('tictactoe').catch(e => console.log(e));
-    this.homeService.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
+    this.homeService.challengePlayer(this.selectedPlayer, 'tictactoe');
   }
 
   ngOnDestroy() {

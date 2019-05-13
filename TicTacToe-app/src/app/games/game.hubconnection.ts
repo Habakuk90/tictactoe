@@ -5,24 +5,8 @@ interface IGameHubConnection {
   startGame(...args: any[]): Promise<any>;
 }
 
-export class GameHubConnection extends BaseHubConnection implements IGameHubConnection {
+export class GameHubConnection extends BaseHubConnection {
   constructor(connection: string, name: string) {
     super(connection, name);
-  }
-
-  public challengePlayer(...args: any[]): Promise<any> {
-    return this.getConnection().invoke('ChallengePlayer', ...args);
-  }
-
-  public startGame(...args: any[]): Promise<any> {
-    return this.getConnection().invoke('StartGame', ...args);
-  }
-
-  public onStartGame(method: (...args: any[]) => void) {
-    this.isConnected.subscribe(x => {
-      if (x) {
-        this.getConnection().on('StartGame', method);
-      }
-    });
   }
 }

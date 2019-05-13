@@ -10,7 +10,6 @@ export class TicTacToeService extends GameService {
   private _hasWonSubject = new BehaviorSubject<boolean>(false);
   hasWon = this._hasWonSubject.asObservable();
 
-
   constructor() {
     super();
   }

@@ -27,37 +27,22 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
     private tictactoeService: TicTacToeService,
-    private modalService: ModalService, private groupService: GroupService,
-    private userService: UserService) {
+    private userService: UserService,
+    private modalService: ModalService) {
       const that = this;
       that.boxes = that.boxHandler.boxes;
 
-      // FIXME
-      // tictactoeService.hub.hub.onStartGame((groupName: string) => {
-      //   console.log('start');
-      //   this.boxes = this.boxHandler.createBoxes();
-      //   this.boxHandler.setAllUnlocked();
-      //   this.setLine(null, null);
-      //   this.ngOnInit();
-      //   // that.spinner
-      //   that.modalService.closeModal();
-      // });
-
-      // tictactoeService.hub.connection.on('GameOver', (winningTileId, winningLine) => {
-      //   this.endGame(winningTileId, winningLine);
-      // });
-
       tictactoeService.hasWon.subscribe(x => that.hasWon = x);
       tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
-      groupService.groupName
-        .subscribe(groupName => {
-          // this.groupName = groupName;
-          // if (this.groupName === undefined ||
-          //   this.groupName === '') {
-          //   this.router.navigate(['/']);
-          //   return;
-          // }
-        });
+      // groupService.groupName
+      //   .subscribe(groupName => {
+      //     // this.groupName = groupName;
+      //     // if (this.groupName === undefined ||
+      //     //   this.groupName === '') {
+      //     //   this.router.navigate(['/']);
+      //     //   return;
+      //     // }
+      //   });
     }
 
   changeField(tileId: string) {
@@ -88,7 +73,6 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     if (winningTileId != null) {
       this.setLine(winningTileId, winningLine);
     }
-
     this.modalService.openModal('gameover', {
       hasWon: this.hasWon
     });
@@ -123,6 +107,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       svgLineAxes.x2.value = '0';
       svgLineAxes.y1.value = '0';
       svgLineAxes.y2.value = '100%';
+    } else {
+      return;
     }
 
     this.svg.nativeElement.classList.toggle('active');
@@ -149,19 +135,26 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
           }
         });
 
+        this.boxes = this.boxHandler.createBoxes();
+        this.boxHandler.setAllUnlocked();
+        this.setLine(null, null);
+        that.modalService.closeModal();
+
+
         /// TODOANDI waaaay too much || is there a equivalent to vuex store and automated watching.
         this.userService.userName.subscribe((userName: string) => {
           if (userName.trim().length > 0) {
             this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
               if (isConnected) {
                 this.tictactoeService.hub.addCurrentUser(userName).then(x => {
-                  this.tictactoeService.hub.joinGroup('TESTGROUPNAME' || x)
-                  .then(groupName => {
-                    that.groupName = groupName;
-                        // TODOANDI start besser definieren
-                    if (that.groupName.startsWith(that.userService.currentUserName)) {
-                      that.tictactoeService.switchTurn();
-                    }
+                  console.log(x);
+                  this.tictactoeService.hub.joinGroup('UserHallo' || x)
+                    .then(groupName => {
+                      that.groupName = groupName;
+                          // TODOANDI start besser definieren
+                      if (that.groupName.startsWith(that.userService.currentUserName)) {
+                        that.tictactoeService.switchTurn();
+                      }
                   });
                 });
               }

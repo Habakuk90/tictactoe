@@ -3,7 +3,6 @@ import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
 import { GroupService } from '../services/group.service';
 import { HomeService } from 'src/app/home/home.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-modal',
@@ -40,9 +39,10 @@ export class ModalComponent implements OnInit {
 
   ngOnInit() {
     // TODOANDO isConnected: is there any better way?
+    // aaaand .hub. do not use if possible
     this.homeService.hub.isConnected.subscribe((isConnected => {
       if (isConnected) {
-        this.homeService.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+        this.homeService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
           this.selectedGame = gameName;
 
           this.modalService.openModal(modalName, {enemyUserName: enemy});
@@ -59,7 +59,7 @@ export class ModalComponent implements OnInit {
   }
 
   onChallengeResponse(status: any) {
-    this.homeService.hub.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
+    this.homeService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
     this.modalService.closeModal();
   }
 
