@@ -12,7 +12,8 @@ import { Router } from '@angular/router';
 })
 export class ModalComponent implements OnInit {
   connection;
-  // TODO modals auslagern und typeFest machen
+
+  // TODOANDI modals auslagern und typeFest machen
   modals = {
     none: '',
     challengedModal: 'challenged',
@@ -33,8 +34,7 @@ export class ModalComponent implements OnInit {
 
   constructor(private modalService: ModalService,
               private groupService: GroupService,
-              private homeService: HomeService,
-              private router: Router) {
+              private homeService: HomeService) {
     this.groupService.groupName.subscribe(x => this.groupName = x);
   }
 
@@ -45,14 +45,6 @@ export class ModalComponent implements OnInit {
         this.homeService.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
           this.selectedGame = gameName;
           this.modalService.openModal(modalName, {enemyUserName: enemy});
-        });
-
-        // TODOANDI belongs to modal?
-        this.homeService.hub.onStartGame((groupName, gameName) => {
-          this.groupService.joinGroup(groupName).then(() => {
-            this.router.navigate(['/' + gameName]);
-            this.modalService.closeModal();
-          });
         });
       }
     }));
@@ -68,11 +60,5 @@ export class ModalComponent implements OnInit {
   onChallengeResponse(status: any) {
     this.homeService.hub.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
     this.modalService.closeModal();
-  }
-
-  gameRestart() {
-    // this.modalService.startGame(this.groupName).then(() => {
-    //   this.modalService.closeModal();
-    // });
   }
 }

@@ -9,3 +9,4 @@ TicTacToe-app/dist/
 TicTacToe.API/TicTacToe.WebApi/bin/
 TicTacToe.API/.vs/
 .env
+TicTacToe-app/npm-debug.log

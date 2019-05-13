@@ -20,9 +20,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.userService.userName.subscribe((x: string) => {
-      if (x.trim().length > 0) {
-        this.homeService.hub.addCurrentUser(x);
+
+    /// TODOANDI waaaay too much || is there a equivalent to vuex store and automated watching.
+    this.userService.userName.subscribe((userName: string) => {
+      if (userName.trim().length > 0) {
+        this.homeService.hub.isConnected.subscribe((isConnected: boolean) => {
+          if (isConnected) {
+           this.homeService.hub.addCurrentUser(userName);
+          }
+        });
+
       }
     });
 

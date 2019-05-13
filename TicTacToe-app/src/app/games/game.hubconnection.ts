@@ -1,4 +1,4 @@
-import { BaseHubConnection } from './base.hubconnection';
+import { BaseHubConnection } from '../shared/connections/base.hubconnection';
 
 interface IGameHubConnection {
   challengePlayer(...args: any[]): Promise<any>;

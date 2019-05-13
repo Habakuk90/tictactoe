@@ -1,8 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Migrations\20180714154038_InitialCreate.cs" />
@@ -18,7 +25,6 @@
   <ItemGroup>
     <Folder Include="TicTacToe\Attributes\" />
     <Folder Include="TicTacToe\User\Models\" />
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>

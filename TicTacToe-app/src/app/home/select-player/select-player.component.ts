@@ -37,10 +37,6 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
-    // TODOANDI Destory listeners implementieren
-    // this.connectionService.hub.connection.off('StartGame');
-    // this.connectionService.hub.connection.off('UpdateUserList');
-    // // this.connectionService.connection.off('SwitchTurn');
-    // this.connectionService.hub.connection.off('JoinGroup');
+    // TODO are 'off listeners needed here?
   }
 }

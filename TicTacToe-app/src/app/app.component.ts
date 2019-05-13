@@ -13,13 +13,15 @@ export class AppComponent implements OnDestroy {
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => {
           this.userName = res.toString();
-        }, err => userService.logout());
+        }, err => {
+          userService.logout();
+          console.log(err);
+        });
       }
     });
    }
 
    ngOnDestroy() {
-     // TODOANDI stopconnection an richtiger stelle implementieren
     //  this.connectionService.stopConnection();
    }
 }

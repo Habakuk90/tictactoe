@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ModalService } from 'src/app/shared/modals/modal.service';
 import { GameService } from '../game.service';
+import { GroupService } from 'src/app/shared/services/group.service';
 
 @Injectable()
 export class TicTacToeService extends GameService {
-  // Group Service?
   private _turnSubject = new BehaviorSubject<boolean>(false);
   isTurn = this._turnSubject.asObservable();
 
@@ -13,8 +13,8 @@ export class TicTacToeService extends GameService {
   hasWon = this._hasWonSubject.asObservable();
 
 
-  constructor(modalService: ModalService) {
-    super(modalService);
+  constructor() {
+    super();
   }
 
   switchTurn() {
@@ -44,7 +44,10 @@ export class TicTacToeService extends GameService {
 
   reset() {
     this._turnSubject.next(false);
-    // TODOANDI stop
-    // this.hub.stop();
+    this.hub.off('SwitchTurn');
+    this.hub.off('TileChange');
+    this.hub.off('SwitchTurn');
+    this.hub.off('GameOver');
+    this.hub.getConnection().stop();
   }
 }

@@ -51,12 +51,12 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
       groupService.groupName
         .subscribe(groupName => {
-          this.groupName = groupName;
-          if (this.groupName === undefined ||
-            this.groupName === '') {
-            this.router.navigate(['/']);
-            return;
-          }
+          // this.groupName = groupName;
+          // if (this.groupName === undefined ||
+          //   this.groupName === '') {
+          //   this.router.navigate(['/']);
+          //   return;
+          // }
         });
     }
 
@@ -130,13 +130,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const that = this;
-
     this.selfTileState = this.turn ? 'cross' : 'circle';
 
-    // TODOANDI start besser definieren
-    if (this.groupName.startsWith(this.userService.currentUserName)) {
-      this.tictactoeService.switchTurn();
-    }
     this.tictactoeService.hub.isConnected.subscribe(x => {
       if (x) {
         this.tictactoeService.onTileChange((tileId) => {
@@ -153,18 +148,35 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
             that.gameTile = 'circle';
           }
         });
+
+        /// TODOANDI waaaay too much || is there a equivalent to vuex store and automated watching.
+        this.userService.userName.subscribe((userName: string) => {
+          if (userName.trim().length > 0) {
+            this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
+              if (isConnected) {
+                this.tictactoeService.hub.addCurrentUser(userName).then(x => {
+                  this.tictactoeService.hub.joinGroup('TESTGROUPNAME' || x)
+                  .then(groupName => {
+                    that.groupName = groupName;
+                        // TODOANDI start besser definieren
+                    if (that.groupName.startsWith(that.userService.currentUserName)) {
+                      that.tictactoeService.switchTurn();
+                    }
+                  });
+                });
+              }
+            });
+          }
+        });
       }
     });
   }
 
   ngOnDestroy() {
-    // TODOANDI connection .off
-    // this.tictactoeService.hub.connection.off('TileChange');
-    // this.tictactoeService.hub.connection.off('SwitchTurn');
-    // this.tictactoeService.hub.connection.off('StartGame');
-    // this.tictactoeService.reset();
+    this.tictactoeService.reset();
+
     if (this.groupName) {
-      this.groupService.leaveGroup(this.groupName);
+      this.tictactoeService.hub.leaveGroup(this.groupName);
     }
   }
 }

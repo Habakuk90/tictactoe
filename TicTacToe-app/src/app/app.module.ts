@@ -31,7 +31,7 @@ import { GameService } from './games/game.service';
     SelectPlayerComponent,
     SpinnerComponent,
     TestSiteComponent,
-    // Todo move to game module
+    // Todoandi move to game module
     TicTacToeComponent,
     RPSComponent
   ],
