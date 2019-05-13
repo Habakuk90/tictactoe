@@ -11,7 +11,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// Represents a SignalR Hub with <see cref="IGameHub"/> client methods.
     /// </summary>
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class GameHub : BaseHub<IGameHub>
+    public class HomeHub : BaseHub<IGameHub>
     {
         private readonly IUserService _userService;
 
@@ -19,7 +19,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// GameHub ctor.
         /// </summary>
         /// <param name="baseService"></param>
-        public GameHub(IUserService baseService)
+        public HomeHub(IUserService baseService)
             : base(baseService)
         {
             this._userService = baseService;
@@ -50,6 +50,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             this._userService.UpdateUser(allUser, Constants.Status.INGAME);
 
+            // fixme dont call all connection ids but only one.
             await Clients.Clients(enemyUser.ConnectionIds)
                 .OpenModal(currentUser.Name, gameName, Constants.ModalStatus.CHALLENGED);
             //call self

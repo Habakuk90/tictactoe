@@ -17,4 +17,12 @@ export class GameHubConnection extends BaseHubConnection implements IGameHubConn
   public startGame(...args: any[]): Promise<any> {
     return this.getConnection().invoke('StartGame', ...args);
   }
+
+  public onStartGame(method: (...args: any[]) => void) {
+    this.isConnected.subscribe(x => {
+      if (x) {
+        this.getConnection().on('StartGame', method);
+      }
+    });
+  }
 }

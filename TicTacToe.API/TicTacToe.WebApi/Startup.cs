@@ -143,7 +143,7 @@ namespace TicTacToe.WebApi
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<GameHub>("/api/signalR");
+                routes.MapHub<HomeHub>("/api/signalR");
                 routes.MapHub<TicTacToeHub>("/api/tictactoe");
             });
             // Enable middleware to serve generated Swagger as a JSON endpoint.
