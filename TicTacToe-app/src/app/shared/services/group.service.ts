@@ -5,9 +5,11 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
-  groupName = this._groupNameSubject.asObservable();
+  groupName: string;
 
   constructor() {
-
+    this._groupNameSubject.subscribe((groupName) => {
+      this.groupName = groupName;
+    });
   }
 }

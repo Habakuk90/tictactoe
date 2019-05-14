@@ -18,25 +18,24 @@ export class TicTacToeService extends GameService {
     this._turnSubject.next(!this._turnSubject.value);
   }
 
-  gameOver(groupName: string, winningTileId: string, winningLine: string) {
-    if (winningTileId != null) {
-      this._hasWonSubject.next(true);
-    }
-
-    this.hub.isConnected.subscribe(isConnected => {
-      if (isConnected) {
-        this.hub.getConnection()
-          .invoke('GameOver', groupName, winningTileId, winningLine);
-      }
-    });
+  public gameOver(...args: any[]) {
+    return this.hub.getConnection().invoke('GameOver', ...args);
   }
 
-  onTileChange(method: (...args: any[]) => void) {
-    this.hub.getConnection().on('TileChange', method);
+  public tileClicked(...args: any[]): Promise<any> {
+    return this.hub.getConnection().invoke('TileClicked', ...args);
   }
 
-  onSwitchTurn(method: (...args: any[]) => void) {
+  public onTileChange(method: (...args: any[]) => void) {
+    return this.hub.getConnection().on('TileChange', method);
+  }
+
+  public onSwitchTurn(method: (...args: any[]) => void) {
     this.hub.getConnection().on('SwitchTurn', method);
+  }
+
+  public onGameOver(method: (...args: any[]) => void) {
+    this.hub.getConnection().on('GameOver', method);
   }
 
   reset() {

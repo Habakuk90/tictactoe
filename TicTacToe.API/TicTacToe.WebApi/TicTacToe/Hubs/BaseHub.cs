@@ -79,7 +79,6 @@
         public void AddCurrentUser(string userName)
         {
             bool userExists = this._baseService.UserExists(userName);
-            System.Console.WriteLine("current", userName);
             GameUserModel user =
                 userExists ?
                 this._baseService.GetUserByName(userName) :

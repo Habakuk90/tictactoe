@@ -1,12 +1,12 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ModalService } from '../modal.service';
 
 @Component({
   selector: 'app-gameover-modal',
   templateUrl: './modal.gameover.component.html'
-  // styleUrls: ['./modal.challenged.component.scss']
 })
 export class GameOverModalComponent {
+  // todo declare modal interface
   @Input() args: any;
   @Output() restartGame: EventEmitter<string> = new EventEmitter<string>();
 
@@ -16,7 +16,6 @@ export class GameOverModalComponent {
 
   public tryAgain() {
     this.restartGame.emit();
-    // restartGame needed Hub (which hub?)
   }
 
   public back() {

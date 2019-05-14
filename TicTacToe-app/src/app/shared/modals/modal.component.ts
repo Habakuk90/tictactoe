@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
-import { GroupService } from '../services/group.service';
 import { HomeService } from 'src/app/home/home.service';
 
 @Component({
@@ -29,12 +28,8 @@ export class ModalComponent implements OnInit {
 
   selectedGame: string;
 
-  groupName: string;
-
   constructor(private modalService: ModalService,
-              private groupService: GroupService,
               private homeService: HomeService) {
-    this.groupService.groupName.subscribe(x => this.groupName = x);
   }
 
   ngOnInit() {

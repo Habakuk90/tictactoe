@@ -1,7 +1,7 @@
 import { Box } from './box';
 
 export class BoxHandler {
-  boxes: Box[];
+  public boxes: Box[];
   winningLine: string;
   constructor() {
     this.boxes = this.createBoxes();
@@ -19,7 +19,8 @@ export class BoxHandler {
     return this.boxes.forEach(box => box.locked = false);
   }
 
-  public checkWin(box: Box): boolean {
+  public checkWin(tileId: string): boolean {
+    const box = this.findById(tileId);
     const columns = [];
     const rows = [];
     const diagonalTopLeft = [];

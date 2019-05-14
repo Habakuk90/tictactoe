@@ -9,4 +9,12 @@ export class GameService {
   constructor() {
     this.hub = new GameHubConnection('/tictactoe', 'gamehub');
   }
+
+  public onGameOver(method: (...args: any[]) => void) {
+    this.hub.getConnection().on('GameOver', method);
+  }
+
+  public gameOver(...args: any[]) {
+    return this.hub.getConnection().invoke('GameOver', ...args);
+  }
 }

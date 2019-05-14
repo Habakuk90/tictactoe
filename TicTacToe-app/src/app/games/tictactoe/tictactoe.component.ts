@@ -19,30 +19,31 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
   public turn: boolean;
   public selfTileState = 'circle';
-  private groupName: string;
   private gameTile = 'circle';
   private hasWon: boolean;
   private boxHandler: BoxHandler = new BoxHandler();
-  public boxes: Box[];
+
+  public get boxes(): Box[]{
+    return this.boxHandler.boxes;
+  }
 
   constructor(private router: Router,
     private tictactoeService: TicTacToeService,
     private userService: UserService,
-    private modalService: ModalService) {
+    private modalService: ModalService,
+    private groupService: GroupService) {
       const that = this;
-      that.boxes = that.boxHandler.boxes;
 
-      tictactoeService.hasWon.subscribe(x => that.hasWon = x);
-      tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
-      // groupService.groupName
-      //   .subscribe(groupName => {
-      //     // this.groupName = groupName;
-      //     // if (this.groupName === undefined ||
-      //     //   this.groupName === '') {
-      //     //   this.router.navigate(['/']);
-      //     //   return;
-      //     // }
-      //   });
+      this.tictactoeService.hasWon.subscribe(x => that.hasWon = x);
+      this.tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
+      this.groupService._groupNameSubject
+        .subscribe(groupName => {
+          if (groupName === undefined ||
+            groupName === '') {
+            router.navigate(['/']);
+            return;
+          }
+        });
     }
 
   changeField(tileId: string) {
@@ -52,36 +53,75 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.tictactoeService.hub.getConnection().invoke('TileClicked', this.groupName, tileId).then(() => {
-      const clickedBox: Box = this.boxHandler.findById(tileId);
+    this.tictactoeService.tileClicked(this.groupService.groupName, tileId).then(() => {
+      this.hasWon = this.boxHandler.checkWin(tileId);
 
-      if (this.boxHandler.checkWin(clickedBox)) {
+      if (this.boxHandler.checkWin(tileId)) {
         this.tictactoeService
-          .gameOver(this.groupName, tileId, this.boxHandler.winningLine);
+          .gameOver(this.groupService.groupName, tileId, this.boxHandler.winningLine);
       } else if (this.boxes.filter(x => !x.state).length === 0) {
-        this.tictactoeService.gameOver(this.groupName, null, null);
+        this.tictactoeService.gameOver(this.groupService.groupName, null, null);
       }
     });
   }
 
-  private endGame(winningTileId: any, winningLine: any) {
+  ngOnInit() {
+    const that = this;
+    this.selfTileState = this.turn ? 'cross' : 'circle';
+
+    this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
+      if (isConnected) {
+        this.registerOnMethods();
+        this.setLine(null, null);
+        that.modalService.closeModal();
+
+        this.tictactoeService.hub.addCurrentUser(that.userService.currentUserName).then(() => {
+          this.tictactoeService.hub.joinGroup(that.groupService.groupName)
+            .then(groupName => {
+              // FIXME start besser definieren
+              if (groupName.startsWith(that.userService.currentUserName)) {
+                that.tictactoeService.switchTurn();
+              }
+          });
+        });
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.tictactoeService.reset();
+
+    if (this.groupService.groupName) {
+      this.tictactoeService.hub.leaveGroup(this.groupService.groupName);
+    }
+  }
+
+  private registerOnMethods() {
     const that = this;
 
-    that.boxHandler.setAllLocked();
-    that.turn = false;
+    this.tictactoeService.onTileChange((tileId) => {
+      const box: Box = that.boxHandler.findById(tileId);
+      box.state = that.gameTile;
+      box.locked = true;
+    });
 
-    if (winningTileId != null) {
-      this.setLine(winningTileId, winningLine);
-    }
-    this.modalService.openModal('gameover', {
-      hasWon: this.hasWon
+    this.tictactoeService.onSwitchTurn(() => {
+      that.tictactoeService.switchTurn();
+
+      if (that.gameTile === 'circle') {
+        that.gameTile = 'cross';
+      } else {
+        that.gameTile = 'circle';
+      }
+    });
+
+    this.tictactoeService.onGameOver((winningTileId, winningLine) => {
+      this.endGame(winningTileId, winningLine);
     });
   }
 
   private setLine(tileId: string, winningLine: string) {
     const svgLineAxes = this.svg.nativeElement.firstChild.attributes;
-    // const winningLine = this.winningLine;
-    // const tileId = this.winningTileId;
 
     if (winningLine === 'column') {
       // column number * 2 - 1 = (1/3/5) * 16.3333333%
@@ -111,65 +151,20 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.svg.nativeElement.classList.toggle('active');
+    this.svg.nativeElement.classList.add('active');
   }
 
-  ngOnInit() {
+  private endGame(winningTileId: string, winningLine: string): void {
     const that = this;
-    this.selfTileState = this.turn ? 'cross' : 'circle';
 
-    this.tictactoeService.hub.isConnected.subscribe(x => {
-      if (x) {
-        this.tictactoeService.onTileChange((tileId) => {
-          const box: Box = that.boxHandler.findById(tileId);
-          box.state = that.gameTile;
-          box.locked = true;
-        });
+    that.boxHandler.setAllLocked();
+    that.turn = false;
 
-        this.tictactoeService.onSwitchTurn(() => {
-          this.tictactoeService.switchTurn();
-          if (that.gameTile === 'circle') {
-            that.gameTile = 'cross';
-          } else {
-            that.gameTile = 'circle';
-          }
-        });
-
-        this.boxes = this.boxHandler.createBoxes();
-        this.boxHandler.setAllUnlocked();
-        this.setLine(null, null);
-        that.modalService.closeModal();
-
-
-        /// TODOANDI waaaay too much || is there a equivalent to vuex store and automated watching.
-        this.userService.userName.subscribe((userName: string) => {
-          if (userName.trim().length > 0) {
-            this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
-              if (isConnected) {
-                this.tictactoeService.hub.addCurrentUser(userName).then(x => {
-                  console.log(x);
-                  this.tictactoeService.hub.joinGroup('UserHallo' || x)
-                    .then(groupName => {
-                      that.groupName = groupName;
-                          // TODOANDI start besser definieren
-                      if (that.groupName.startsWith(that.userService.currentUserName)) {
-                        that.tictactoeService.switchTurn();
-                      }
-                  });
-                });
-              }
-            });
-          }
-        });
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.tictactoeService.reset();
-
-    if (this.groupName) {
-      this.tictactoeService.hub.leaveGroup(this.groupName);
+    if (winningTileId != null) {
+      this.setLine(winningTileId, winningLine);
     }
+    this.modalService.openModal('gameover', {
+      hasWon: this.hasWon
+    });
   }
 }
