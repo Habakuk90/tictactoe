@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
 import { HomeService } from './home.service';
-import { stringify } from '@angular/core/src/render3/util';
 import { Router } from '@angular/router';
 import { GroupService } from '../shared/services/group.service';
 

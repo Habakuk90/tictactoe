@@ -18,10 +18,6 @@ export class TicTacToeService extends GameService {
     this._turnSubject.next(!this._turnSubject.value);
   }
 
-  public gameOver(...args: any[]) {
-    return this.hub.getConnection().invoke('GameOver', ...args);
-  }
-
   public tileClicked(...args: any[]): Promise<any> {
     return this.hub.getConnection().invoke('TileClicked', ...args);
   }
@@ -32,10 +28,6 @@ export class TicTacToeService extends GameService {
 
   public onSwitchTurn(method: (...args: any[]) => void) {
     this.hub.getConnection().on('SwitchTurn', method);
-  }
-
-  public onGameOver(method: (...args: any[]) => void) {
-    this.hub.getConnection().on('GameOver', method);
   }
 
   reset() {

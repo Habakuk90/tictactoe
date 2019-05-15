@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { TicTacToeService } from './tictactoe.service';
 import { Box } from './box';
 import { BoxHandler } from './boxHandler';
@@ -27,8 +26,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     return this.boxHandler.boxes;
   }
 
-  constructor(private router: Router,
-    private tictactoeService: TicTacToeService,
+  constructor(private tictactoeService: TicTacToeService,
     private userService: UserService,
     private modalService: ModalService,
     private groupService: GroupService) {
