@@ -8,10 +8,10 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     /// <summary>
-    /// Represents a SignalR Hub with <see cref="IGameHub"/> client methods.
+    /// Represents a SignalR Hub with <see cref="IHomeHub"/> client methods.
     /// </summary>
     [Authorize(AuthenticationSchemes = "Bearer")]
-    public class HomeHub : BaseHub<IGameHub>
+    public class HomeHub : BaseHub<IHomeHub>
     {
         private readonly IUserService _userService;
 

@@ -107,7 +107,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         public virtual void RemoveUser(GameUserModel user, string currentConnectionId)
         {
             if (user == null || user.ConnectionIds == null) return;
-            // FIXME: Multiple Connections for one user should be possible
+            // #9: Multiple Connections for one user should be possible
             user.ConnectionIds.RemoveAll(conn => conn == currentConnectionId);
             user.Status = Constants.Status.OFFLINE;
 
