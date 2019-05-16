@@ -4,18 +4,8 @@ import { GameService } from '../game.service';
 
 @Injectable()
 export class TicTacToeService extends GameService {
-  private _turnSubject = new BehaviorSubject<boolean>(false);
-  isTurn = this._turnSubject.asObservable();
-
-  private _hasWonSubject = new BehaviorSubject<boolean>(false);
-  hasWon = this._hasWonSubject.asObservable();
-
   constructor() {
     super();
-  }
-
-  switchTurn() {
-    this._turnSubject.next(!this._turnSubject.value);
   }
 
   public tileClicked(...args: any[]): Promise<any> {
@@ -31,7 +21,6 @@ export class TicTacToeService extends GameService {
   }
 
   reset() {
-    this._turnSubject.next(false);
     this.hub.off('SwitchTurn');
     this.hub.off('TileChange');
     this.hub.off('SwitchTurn');

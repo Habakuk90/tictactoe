@@ -18,7 +18,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     read: ElementRef
   }) svg: ElementRef;
 
-  public turn: boolean;
+  public turn: boolean = false;
   public selfTileState = 'circle';
   private gameTile = 'circle';
   private hasWon: boolean;
@@ -35,13 +35,11 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     private router: Router) {
       const that = this;
 
-      this.tictactoeService.hasWon.subscribe(x => that.hasWon = x);
-      this.tictactoeService.isTurn.subscribe(isTurn => that.turn = isTurn);
       this.groupService._groupNameSubject
         .subscribe(groupName => {
           if (groupName === undefined ||
             groupName === '') {
-            router.navigate(['/']);
+            that.router.navigate(['/']);
             return;
           }
         });
@@ -81,7 +79,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
             .then(groupName => {
               // FIXME start besser definieren
               if (groupName.startsWith(that.userService.currentUserName)) {
-                that.tictactoeService.switchTurn();
+                that.turn = !that.turn;
               }
           });
         });
@@ -107,7 +105,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     });
 
     this.tictactoeService.onSwitchTurn(() => {
-      that.tictactoeService.switchTurn();
+      that.turn = !that.turn;
 
       if (that.gameTile === 'circle') {
         that.gameTile = 'cross';
