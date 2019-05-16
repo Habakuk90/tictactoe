@@ -17,10 +17,7 @@ import { SpinnerService } from './spinner/spinner.service';
 import { SelectGameComponent } from './home/select-game/select-game.component';
 import { SelectPlayerComponent } from './home/select-player/select-player.component';
 import { HomeService } from './home/home.service';
-import { TicTacToeComponent } from './games/tictactoe/tictactoe.component';
-import { RPSComponent } from './games/rps/rps.component';
-import { TicTacToeService } from './games/tictactoe/tictactoe.service';
-import { GameService } from './games/game.service';
+import { GameModule } from './games/game.module';
 
 @NgModule({
   declarations: [
@@ -31,9 +28,6 @@ import { GameService } from './games/game.service';
     SelectPlayerComponent,
     SpinnerComponent,
     TestSiteComponent,
-    // Todoandi move to game module
-    TicTacToeComponent,
-    RPSComponent
   ],
   imports: [
     BrowserModule,
@@ -42,11 +36,12 @@ import { GameService } from './games/game.service';
     AccountModule,
     SharedModule,
     ModalModule,
+    GameModule
   ],
   providers: [
     // TODOANDI: aufrumen bidde
     ConfigService, HomeService, SpinnerService,
-    TicTacToeService, AuthGuard, GroupService, GameService],
+    AuthGuard, GroupService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

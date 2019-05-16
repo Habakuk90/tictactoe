@@ -1,11 +1,11 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserService } from './shared/services/user.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   userName = '';
   constructor(userService: UserService) {
 
@@ -19,10 +19,6 @@ export class AppComponent implements OnDestroy {
         });
       }
     });
-   }
-
-   ngOnDestroy() {
-    //  this.connectionService.stopConnection();
    }
 }
 

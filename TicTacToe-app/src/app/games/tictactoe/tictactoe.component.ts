@@ -5,13 +5,15 @@ import { BoxHandler } from './boxHandler';
 import { ModalService } from 'src/app/shared/modals/modal.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { GroupService } from 'src/app/shared/services/group.service';
+import { Router } from '@angular/router';
+import { HubComponent } from 'src/app/shared/connections/base.hubconnection';
 
 @Component({
   selector: 'app-tictactoe',
   templateUrl: './tictactoe.component.html',
   styleUrls: ['./tictactoe.component.scss']
 })
-export class TicTacToeComponent implements OnInit, OnDestroy {
+export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   @ViewChild('winSvg', {
     read: ElementRef
   }) svg: ElementRef;
@@ -29,7 +31,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
   constructor(private tictactoeService: TicTacToeService,
     private userService: UserService,
     private modalService: ModalService,
-    private groupService: GroupService) {
+    private groupService: GroupService,
+    private router: Router) {
       const that = this;
 
       this.tictactoeService.hasWon.subscribe(x => that.hasWon = x);
@@ -69,12 +72,12 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
 
     this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
       if (isConnected) {
-        this.registerOnMethods();
+        that.registerOnMethods();
         this.setLine(null, null);
         that.modalService.closeModal();
 
         this.tictactoeService.hub.addCurrentUser(that.userService.currentUserName).then(() => {
-          this.tictactoeService.hub.joinGroup(that.groupService.groupName)
+          that.tictactoeService.hub.joinGroup(that.groupService.groupName)
             .then(groupName => {
               // FIXME start besser definieren
               if (groupName.startsWith(that.userService.currentUserName)) {
@@ -94,7 +97,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     }
   }
 
-  private registerOnMethods() {
+  registerOnMethods() {
     const that = this;
 
     this.tictactoeService.onTileChange((tileId) => {
@@ -114,7 +117,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy {
     });
 
     this.tictactoeService.onGameOver((winningTileId, winningLine) => {
-      this.endGame(winningTileId, winningLine);
+      that.endGame(winningTileId, winningLine);
     });
   }
 

@@ -11,6 +11,9 @@ export interface IBaseHubConnection {
   stopConnection(): Promise<void>;
 }
 
+export interface HubComponent {
+  registerOnMethods(): void;
+}
 
 export class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
