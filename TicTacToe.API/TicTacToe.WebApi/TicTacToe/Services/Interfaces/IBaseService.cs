@@ -6,8 +6,6 @@ namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
 {
     public interface IBaseService
     {
-        void UpdateUserList();
-
         /// <summary>
         /// Adds new User to DB.
         /// </summary>
@@ -104,5 +102,11 @@ namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
         /// Group name which will be left.
         /// </param>
         Task LeaveGroupAsync(GameUserModel userModel, string groupName);
+
+        /// <summary>
+        /// Updates the UserList for all Clients.
+        /// </summary>
+        void UpdateUserList();
+
     }
 }
