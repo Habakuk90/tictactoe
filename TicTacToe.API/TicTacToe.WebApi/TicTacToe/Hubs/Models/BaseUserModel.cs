@@ -2,6 +2,9 @@
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
 {
+    /// <summary>
+    /// Represents a base user.
+    /// </summary>
     public class BaseUserModel
     {
         [Key]

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.prod';
 
-@Injectable()
 export class ConfigService {
 
     _apiURI: String;
@@ -13,9 +12,5 @@ export class ConfigService {
       }
         // this._apiURI = environment.baseUrl + '/api';
         this._apiURI = 'http://' + hostname + ':8081' + '/api';
-     }
-
-     getApiURI() {
-         return this._apiURI;
      }
 }

@@ -1,32 +1,52 @@
 ﻿using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
+    /// <summary>
+    /// Represents a SignalR Hub with the <see cref="ITicTacToeHub"/> Methods.
+    /// </summary>
     public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
+        private readonly IGameService _gameService;
 
-        public TicTacToeHub(IUserService userService,
-            IGroupService groupService) : base(userService, groupService)
+        /// <summary>
+        /// Hub ctor.
+        /// </summary>
+        /// <param name="baseService"></param>
+        public TicTacToeHub(IGameService baseService) : base(baseService)
         {
-
+            this._gameService = baseService;
         }
 
         /// <summary>
-        /// 
+        /// Client Method where a TicTacToe tile got clicked.
         /// </summary>
-        /// <param name="room">id:number, name:string, List<GameUserModel></param>
-        public async void TileClicked(string room, string tileId)
+        /// <param name="groupName">
+        /// Name of group given by client.
+        /// </param>
+        /// <param name="tileId">
+        /// Id of the Tile which got clicked on TicTacToe.
+        /// </param>
+        public async void TileClicked(string groupName, string tileId)
         {
-            await Clients.Group(room).SwitchTurn();
-            await Clients.Group(room).TileChange(tileId);
+            await Clients.Group(groupName).SwitchTurn();
+            await Clients.Group(groupName).TileChange(tileId);
+            
         }
 
         /// <summary>
-        /// Send GameOver to specific Group
+        /// Client Method when the game is over.
         /// </summary>
-        /// <param name="groupName">Group Name given by the frontend</param>
+        /// <param name="groupName">
+        /// Name of the group given by front end.
+        /// </param>
+        /// <param name="winningTileId">
+        /// The winning Tile id of tictactoe game.
+        /// </param>
+        /// <param name="winningLine">
+        /// the winning Line to be updated for all player in Group.
+        /// </param>
         public async void GameOver(
             string groupName,
             string winningTileId, 

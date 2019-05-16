@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
 {
     public class GameUserModel : BaseUserModel
     {
-
         public ICollection<FriendUserModel> Friends
         {
             get;
@@ -35,7 +32,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Models
 
                 return blob;
             }
-            set { this.ConnectionIds = value.Split(',').ToList(); }
+            set { this.ConnectionIds = value.Split(',').Distinct().ToList(); }
         }
 
     }

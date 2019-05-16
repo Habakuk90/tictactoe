@@ -2,6 +2,7 @@
   <app-select-game
     class="t-fullscreen__content select-game"
     (gameSelected)="gameSelected($event)"
+    (nextButton)="nextStep($event)"
     *ngIf="selectionState === 0">
   </app-select-game>
 

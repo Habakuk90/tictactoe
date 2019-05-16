@@ -113,8 +113,7 @@ namespace TicTacToe.WebApi
             services.AddMvc();
             services.AddSignalR();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IGroupService, GroupService>();
-            services.AddSingleton<GameService>();
+            services.AddTransient<IGameService, GameService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -144,13 +143,13 @@ namespace TicTacToe.WebApi
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<GameHub>("/api/signalR");
+                routes.MapHub<HomeHub>("/api/signalR");
                 routes.MapHub<TicTacToeHub>("/api/tictactoe");
             });
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();
 
-            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
