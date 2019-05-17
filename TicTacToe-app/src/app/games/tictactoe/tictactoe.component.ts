@@ -77,7 +77,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
         this.tictactoeService.hub.addCurrentUser(that.userService.currentUserName).then(() => {
           that.tictactoeService.hub.joinGroup(that.groupService.groupName)
             .then(groupName => {
-              // FIXME start besser definieren
+              // #9 start besser definieren
               if (groupName.startsWith(that.userService.currentUserName)) {
                 that.turn = !that.turn;
               }
