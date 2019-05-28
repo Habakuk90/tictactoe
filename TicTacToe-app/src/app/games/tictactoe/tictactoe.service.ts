@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
 import { GameService } from '../game.service';
+
+enum TTTConnMethods {
+  TileClicked = 'TileClicked',
+  TileChange = 'TileChange',
+  SwitchTurn = 'SwitchTurn'
+}
+
 
 @Injectable()
 export class TicTacToeService extends GameService {
@@ -9,15 +15,15 @@ export class TicTacToeService extends GameService {
   }
 
   public tileClicked(...args: any[]): Promise<any> {
-    return this.hub.getConnection().invoke('TileClicked', ...args);
+    return this.hub.getConnection().invoke(TTTConnMethods.TileClicked, ...args);
   }
 
   public onTileChange(method: (...args: any[]) => void) {
-    return this.hub.getConnection().on('TileChange', method);
+    return this.hub.getConnection().on(TTTConnMethods.TileChange, method);
   }
 
   public onSwitchTurn(method: (...args: any[]) => void) {
-    this.hub.getConnection().on('SwitchTurn', method);
+    this.hub.getConnection().on(TTTConnMethods.SwitchTurn, method);
   }
 
   reset() {

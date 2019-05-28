@@ -2,6 +2,10 @@
 import { Injectable } from '@angular/core';
 import { GameHubConnection } from './game.hubconnection';
 
+enum GameConnMethods {
+  GameOver = 'GameOver'
+}
+
 @Injectable()
 export class GameService {
   hub: GameHubConnection;
@@ -11,10 +15,10 @@ export class GameService {
   }
 
   public onGameOver(method: (...args: any[]) => void) {
-    this.hub.getConnection().on('GameOver', method);
+    this.hub.getConnection().on(GameConnMethods.GameOver, method);
   }
 
   public gameOver(...args: any[]) {
-    return this.hub.getConnection().invoke('GameOver', ...args);
+    return this.hub.getConnection().invoke(GameConnMethods.GameOver, ...args);
   }
 }

@@ -16,7 +16,6 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi
 {
@@ -32,7 +31,6 @@ namespace TicTacToe.WebApi
                     optional: true)
                 .AddEnvironmentVariables()
                 .Build();
-
         }
 
         public IConfiguration Configuration { get; }
@@ -50,7 +48,7 @@ namespace TicTacToe.WebApi
                                             .AllowCredentials());
 
                     options.AddPolicy("ProdCorsPolicy",
-                        builder => builder.WithOrigins("http://app.andkra.eu")
+                        builder => builder.WithOrigins("https://ttt-app.azurewebsites.net")
                                             .AllowAnyMethod()
                                             .AllowAnyHeader()
                                             .AllowCredentials());
@@ -105,8 +103,8 @@ namespace TicTacToe.WebApi
                         },
                         OnAuthenticationFailed = context =>
                         {
-                            Exception te = context.Exception;
-                            return Task.CompletedTask;
+                            Console.WriteLine(context.Exception);
+                            return Task.FromResult(context.Exception);
                         }
                     };
                 });
