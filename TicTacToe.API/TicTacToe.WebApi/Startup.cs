@@ -31,9 +31,6 @@ namespace TicTacToe.WebApi
                     optional: true)
                 .AddEnvironmentVariables()
                 .Build();
-            Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
-            Console.WriteLine(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
-
         }
 
         public IConfiguration Configuration { get; }
@@ -97,7 +94,7 @@ namespace TicTacToe.WebApi
                             // enables authorization for the websocket via token
                             if ((contextPathValue.StartsWith("/api/signalR") ||
                             contextPathValue.StartsWith("/api/tictactoe")) &&
-                    context.Request.Query.TryGetValue("token", out StringValues token) && (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
+                    context.Request.Query.TryGetValue("token", out StringValues token))
                             {
                                 context.Token = token;
                             }
