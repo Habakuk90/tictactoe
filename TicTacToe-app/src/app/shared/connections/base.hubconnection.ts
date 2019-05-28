@@ -15,6 +15,12 @@ export interface HubComponent {
   registerOnMethods(): void;
 }
 
+enum BaseConnMethods {
+  JoinGroup = 'JoinGroup',
+  LeaveGroup = 'LeaveGroup',
+  AddCurrentUser = 'AddCurrentUser'
+}
+
 export class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
   public name: string;
@@ -38,17 +44,17 @@ export class BaseHubConnection implements IBaseHubConnection {
   public stopConnection(): Promise<void> {
     return this.connection.stop();
   }
-// magic strings => enum
+
   public joinGroup(...args: any[]): Promise<any> {
-    return this.getConnection().invoke('JoinGroup', ...args);
+    return this.getConnection().invoke(BaseConnMethods.JoinGroup, ...args);
   }
 
   public leaveGroup(...args: any[]): Promise<any> {
-    return this.getConnection().invoke('LeaveGroup', ...args);
+    return this.getConnection().invoke(BaseConnMethods.LeaveGroup, ...args);
   }
 
   public addCurrentUser(...args: any[]): Promise<any> {
-      return this.getConnection().invoke('AddCurrentUser', ...args);
+      return this.getConnection().invoke(BaseConnMethods.AddCurrentUser, ...args);
   }
 
   public off(methodName: string): void {
