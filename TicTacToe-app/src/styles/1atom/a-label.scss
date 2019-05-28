@@ -12,11 +12,10 @@ label {
       margin: 0 auto;
       font-size: 27px;
 
-      //auslagern bidde
       &::before {
-          @include icon("\f067");
-          transition: transform .3s ease-in-out;
-          padding-right: 16px;
+        @include icon("\f067");
+        transition: transform .3s ease-in-out;
+        padding-right: 16px;
       }
   }
 }
