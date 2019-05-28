@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment.prod';
+import { environment } from 'src/environments/environment';
 
 export class ConfigService {
 
@@ -11,6 +11,8 @@ export class ConfigService {
         hostname = hostname.substr(0, hostname.indexOf(':'));
       }
         // this._apiURI = environment.baseUrl + '/api';
-        this._apiURI = 'http://' + hostname + ':8081' + '/api';
+        // this._apiURI = 'http://' + hostname + ':8081' + '/api';
+        this._apiURI = environment.baseUrl;
+
      }
 }

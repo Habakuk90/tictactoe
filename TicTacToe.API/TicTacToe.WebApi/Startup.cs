@@ -16,7 +16,6 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi
 {
@@ -32,6 +31,8 @@ namespace TicTacToe.WebApi
                     optional: true)
                 .AddEnvironmentVariables()
                 .Build();
+            Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
+            Console.WriteLine(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
 
         }
 
@@ -50,7 +51,7 @@ namespace TicTacToe.WebApi
                                             .AllowCredentials());
 
                     options.AddPolicy("ProdCorsPolicy",
-                        builder => builder.WithOrigins("http://app.andkra.eu")
+                        builder => builder.WithOrigins("https://ttt-app.azurewebsites.net")
                                             .AllowAnyMethod()
                                             .AllowAnyHeader()
                                             .AllowCredentials());
@@ -96,7 +97,7 @@ namespace TicTacToe.WebApi
                             // enables authorization for the websocket via token
                             if ((contextPathValue.StartsWith("/api/signalR") ||
                             contextPathValue.StartsWith("/api/tictactoe")) &&
-                    context.Request.Query.TryGetValue("token", out StringValues token))
+                    context.Request.Query.TryGetValue("token", out StringValues token) && (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
                             {
                                 context.Token = token;
                             }
@@ -105,8 +106,8 @@ namespace TicTacToe.WebApi
                         },
                         OnAuthenticationFailed = context =>
                         {
-                            Exception te = context.Exception;
-                            return Task.CompletedTask;
+                            Console.WriteLine(context.Exception);
+                            return Task.FromResult(context.Exception);
                         }
                     };
                 });

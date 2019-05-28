@@ -1,12 +1,15 @@
-@import 'materialize-src/sass/materialize.scss';
-@import 'overridematerial.scss';
 /* You can add global styles to this file, and also import other style files */
 @import '_base';
 @import '_buttons';
 @import '_variables';
-@import '_normalize';
 
 @import '_auth';
 
-@import 'atomic-poc/global';
+/* Atomic try */
+@import '0base/base.scss';
+@import '1atom/atoms.scss';
+@import '2molecule/molecules.scss';
+@import '3organism/organisms.scss';
+@import '4template/templates.scss';
+@import '5page/pages.scss';
 

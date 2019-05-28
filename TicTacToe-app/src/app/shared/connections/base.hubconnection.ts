@@ -26,6 +26,8 @@ export class BaseHubConnection implements IBaseHubConnection {
     this.connection = this.buildConnection(connection);
     this.connection.start().then(() => {
       this.isConnected.next(true);
+    }, err => {
+      console.log(err);
     });
   }
 
@@ -36,7 +38,7 @@ export class BaseHubConnection implements IBaseHubConnection {
   public stopConnection(): Promise<void> {
     return this.connection.stop();
   }
-
+// magic strings => enum
   public joinGroup(...args: any[]): Promise<any> {
     return this.getConnection().invoke('JoinGroup', ...args);
   }

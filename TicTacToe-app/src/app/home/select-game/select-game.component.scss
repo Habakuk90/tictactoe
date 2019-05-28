@@ -29,21 +29,5 @@ $max-height: 40vh;
         background-image: url(../../../assets/images/TicTacToe_thumbnail.png);
       }
     }
-
-    .m-card {
-      cursor: pointer;
-      border: 18px transparent solid;
-
-      &__checkbox {
-        width: 100%;
-        border: none;
-
-        .a-label {
-          &--checkbox {
-            max-width: 1px;
-          }
-        }
-      }
-    }
   }
 }

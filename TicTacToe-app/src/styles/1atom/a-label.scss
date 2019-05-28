@@ -1,0 +1,22 @@
+label {
+}
+
+.a-label {
+    cursor: inherit;
+
+    &--checkbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      margin: 0 auto;
+      font-size: 27px;
+
+      //auslagern bidde
+      &::before {
+          @include icon("\f067");
+          transition: transform .3s ease-in-out;
+          padding-right: 16px;
+      }
+  }
+}

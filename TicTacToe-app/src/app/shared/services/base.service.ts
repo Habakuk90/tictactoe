@@ -7,6 +7,8 @@ export abstract class BaseService {
 
   protected handleError(error: any) {
     const applicationError = error.headers.get('Application-Error');
+
+    console.log(applicationError);
     // [TODO] Error richtig auswerten
     if (applicationError) {
       return throwError(applicationError);
