@@ -33,7 +33,8 @@ export class BaseHubConnection implements IBaseHubConnection {
     this.connection.start().then(() => {
       this.isConnected.next(true);
     }, err => {
-      console.log(err);
+      this.isConnected.next(false);
+      throw new Error(err);
     });
   }
 

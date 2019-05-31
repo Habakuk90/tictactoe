@@ -9,7 +9,7 @@ import { HomeService } from 'src/app/home/home.service';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  connection;
+  connection: any;
 
   // TODOANDI modals auslagern und typeFest machen
   modals = {
