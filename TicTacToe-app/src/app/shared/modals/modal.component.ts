@@ -9,7 +9,7 @@ import { HomeService } from 'src/app/home/home.service';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  connection;
+  connection: any;
 
   // TODOANDI modals auslagern und typeFest machen
   modals = {
@@ -33,8 +33,6 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    // TODOANDO isConnected: is there any better way?
-    // aaaand .hub. do not use if possible
     this.homeService.hub.isConnected.subscribe((isConnected => {
       if (isConnected) {
         this.homeService.onOpenModal((enemy: string, gameName: string, modalName: string) => {

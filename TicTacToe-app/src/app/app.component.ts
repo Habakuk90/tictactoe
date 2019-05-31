@@ -7,9 +7,11 @@ import { UserService } from './shared/services/user.service';
 })
 export class AppComponent {
   userName = '';
+  isLoggedIn = false;
   constructor(userService: UserService) {
 
     userService.isLoggedIn.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
         userService.getUserName().subscribe(res => {
           this.userName = res.toString();
