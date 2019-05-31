@@ -3,7 +3,7 @@
 <div>
   <router-outlet></router-outlet>
   <app-spinner></app-spinner>
-  <app-modal></app-modal>
+  <app-modal *ngIf="isLoggedIn"></app-modal>
 
 </div>
 
