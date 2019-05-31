@@ -6,9 +6,9 @@ import { OnInit, OnDestroy, Component, ViewChild, ElementRef } from '@angular/co
   styleUrls: ['./rps.component.scss']
 })
 export class RPSComponent implements OnInit, OnDestroy {
-  @ViewChild('rock', {read: ElementRef}) rockElement: ElementRef;
-  @ViewChild('paper', {read: ElementRef}) paperElement: ElementRef;
-  @ViewChild('scissors', {read: ElementRef}) scissorsElement: ElementRef;
+  @ViewChild('rock', {static: false, read: ElementRef}) rockElement: ElementRef;
+  @ViewChild('paper', {static: false, read: ElementRef}) paperElement: ElementRef;
+  @ViewChild('scissors', {static: false, read: ElementRef}) scissorsElement: ElementRef;
 
   selectTile(event) {
   }
