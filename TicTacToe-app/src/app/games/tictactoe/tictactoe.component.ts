@@ -15,6 +15,7 @@ import { HubComponent } from 'src/app/shared/connections/base.hubconnection';
 })
 export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   @ViewChild('winSvg', {
+    static: false,
     read: ElementRef
   }) svg: ElementRef;
 
