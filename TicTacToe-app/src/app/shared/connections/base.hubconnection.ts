@@ -34,6 +34,7 @@ export class BaseHubConnection implements IBaseHubConnection {
       this.isConnected.next(true);
     }, err => {
       this.isConnected.next(false);
+      // error handling disconnect / reconnect / logout
       throw new Error(err);
     });
   }
