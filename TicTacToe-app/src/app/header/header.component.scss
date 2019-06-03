@@ -1,7 +1,6 @@
 @import "../../styles/_variables.scss";
 
 .nav-list {
-
   &__container {
     display: flex;
     list-style: none;
@@ -18,11 +17,21 @@
 
     &:hover {
       background-color: lightgray;
-
     }
 
     &:first-child {
       margin-right: auto;
     }
   }
+}
+
+.anonymous:after {
+  content: "anonymous";
+  font-size: 12px;
+  position: relative;
+  top: -15px;
+  color: white;
+  border: 1px solid white;
+  border-radius: 25px;
+  padding: 3px;
 }

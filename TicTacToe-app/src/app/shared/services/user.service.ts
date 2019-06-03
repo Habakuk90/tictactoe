@@ -17,6 +17,7 @@ export class UserService extends BaseService {
 
   userName = new BehaviorSubject<string>('');
   currentUserName = '';
+  isAnonymous: boolean;
   userOnline = [];
 
   constructor(private http: HttpClient, private router: Router,
@@ -83,6 +84,7 @@ export class UserService extends BaseService {
   logout() {
     localStorage.removeItem('auth_token');
     this._isLoggedInSubject.next(false);
+    this.isAnonymous = false;
     this.router.navigate(['login']);
     // this.connectionService.stopConnection();
   }

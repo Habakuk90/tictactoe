@@ -21,11 +21,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.userService._HomeStateSubject.next(0);
   }
 
+  get isAnonymous(): boolean {
+    return this.userService.isAnonymous;
+  }
+
   ngOnInit() {
-    this.isLoggedInSubscription = this.userService._isLoggedInSubject
+    this.userService._isLoggedInSubject
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
 
-    this.homeStateSubscription = this.userService._HomeStateSubject
+    this.userService._HomeStateSubject
       .subscribe(x => this.homeState = x);
   }
 
