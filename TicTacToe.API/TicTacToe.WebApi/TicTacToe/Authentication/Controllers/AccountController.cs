@@ -1,24 +1,38 @@
 ﻿using TicTacToe.WebApi.TicTacToe.Authentication.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
-using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using TicTacToe.WebApi.TicTacToe.Authentication.Repository;
 
 namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
+    using System.Threading.Tasks;
+    /// <summary>
+    /// Represents the AccountController
+    /// </summary>
     [Route("api/[controller]/[action]")]
     public class AccountController : Controller
     {
+        #region Private readonly properties
+
+        /// <summary>
+        /// SigninManager where T is <see cref="IdentityUser"/>
+        /// </summary>
         private readonly SignInManager<IdentityUser> _signInManager;
+
+        /// <summary>
+        /// UserManager where T is <see cref="IdentityUser"/>
+        /// </summary>
         private readonly UserManager<IdentityUser> _userManager;
+
+        /// <summary>
+        /// App Configuration
+        /// </summary>
         private readonly IConfiguration _configuration;
+
+        #endregion
+
+        #region Public methods
 
         /// <summary>
         /// Set SignInManager and UserManager through Dependency Injection
@@ -37,26 +51,32 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// <summary>
         /// Register User with UserManager
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="registerModel">
+        /// User Data for the registration Process <see cref="RegisterModel"/>
+        /// </param>
         /// <returns></returns>
-        public async Task<object> RegisterUser([FromBody]RegisterModel registerModel)
+        [HttpPost]
+        public async Task<IActionResult> RegisterUser([FromBody]RegisterModel registerModel)
         {
-            var user = new IdentityUser
+            IdentityUser user = new IdentityUser
             {
                 UserName = registerModel.UserName,
             };
-            var result = await _userManager.CreateAsync(user, registerModel.Password);
 
-            if (result.Succeeded)
+            IdentityResult result = await _userManager
+                .CreateAsync(user, registerModel.Password);
+
+            if (!result.Succeeded)
             {
-                await _signInManager.SignInAsync(user, false);
-                return await GenerateJwtToken(user.UserName, user);
+                return new BadRequestObjectResult(
+                    Errors.AddErrorsToModelState(result, ModelState));
             }
-            //[TODO] better error message for user to know what happened
-            throw new ApplicationException("UNKNOWN_ERROR");
 
-            //var result = await _userManager.CreateAsync(user.Identity, user.Password);
-            //return result;
+            await _signInManager.SignInAsync(user, false);
+            string jwtToken = Tokens
+                .GenerateJwtToken(user.UserName, user, _configuration);
+
+            return new OkObjectResult(jwtToken);
         }
 
         /// <summary>
@@ -64,65 +84,41 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public async Task<object> LoginUser([FromBody]LoginModel user)
+        [HttpPost]
+        public async Task<IActionResult> LoginUser([FromBody]LoginModel user)
         {
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, user.Password, false, false);
-
-            if (result.Succeeded)
+            if (!ModelState.IsValid)
             {
-                var appUser = _userManager.Users.SingleOrDefault(r => r.UserName == user.UserName);
-                return await GenerateJwtToken(user.UserName, appUser);
+                return BadRequest(ModelState);
             }
-            //[TODO] better error message for user to know what happened
 
-            throw new ApplicationException("INVALID_LOGIN_ATTEMPT");
+            var result = await _signInManager
+                .PasswordSignInAsync(user.UserName, user.Password, false, false);
 
-            // old stuff
-            //SignInResult result = new SignInResult();
+            if (!result.Succeeded)
+            {
+                return BadRequest(Errors.AddErrorToModelState(
+                    "login_failure", "Invalid username or password.", ModelState));
+            }
 
-            //if (user != null && user.Identity != null && user.Identity.UserName != null)
-            //{
-            //    IdentityUser signedUser = await _userManager.FindByNameAsync(user.Identity.UserName);
-            //    result = await _signInManager.PasswordSignInAsync(signedUser.UserName, user.Password, true, lockoutOnFailure: true);
-            //    return result;
-            //}
-            //return result;
+            IdentityUser appUser = await _userManager.FindByNameAsync(user.UserName);
+            string jwtToken = Tokens.GenerateJwtToken(user.UserName, appUser, _configuration);
+
+            return new OkObjectResult(jwtToken);
         }
 
-        
+
         /// <summary>
         /// Logs Out User with SignInManager
         /// </summary>
+        [HttpPost]
         public async void LogoutUser()
         {
             await _signInManager.SignOutAsync();
-            //logger implementieren irgendwann
         }
 
+        #endregion
 
-
-        private async Task<object> GenerateJwtToken(string email, IdentityUser user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var expires = DateTime.Now.AddDays(Convert.ToDouble(_configuration["Jwt:ExpireDays"]));
-
-            var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Issuer"],
-                claims,
-                expires: expires,
-                signingCredentials: creds
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
     }
 
 }

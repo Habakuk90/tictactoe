@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using TicTacToe.WebApi.TicTacToe.Entities;
-using Microsoft.AspNetCore.Cors;
-using TicTacToe.WebApi.TicTacToe.Hubs;
 using Microsoft.Extensions.Primitives;
-using TicTacToe.WebApi.TicTacToe.Hubs.Repository;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using TicTacToe.WebApi.TicTacToe.Entities;
+using TicTacToe.WebApi.TicTacToe.Hubs;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services;
 
 namespace TicTacToe.WebApi
 {
@@ -25,7 +23,14 @@ namespace TicTacToe.WebApi
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(
+                    $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development"}.json",
+                    optional: true)
+                .AddEnvironmentVariables()
+                .Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -34,13 +39,22 @@ namespace TicTacToe.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             // ===== Add Policy ========
-            services.AddCors(options => options.AddPolicy("LocalCorsPolicy",
-                builder =>
+            services.AddCors(options =>
                 {
-                    builder.AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-                           .AllowAnyOrigin();
-                }));
-            // DB Connection DefaultConnection to be found in launchsettings.json
+                    options.AddPolicy("LocalCorsPolicy",
+                        builder => builder.WithOrigins("http://localhost:4200")
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader()
+                                            .AllowCredentials());
+
+                    options.AddPolicy("ProdCorsPolicy",
+                        builder => builder.WithOrigins("https://ttt-app.azurewebsites.net")
+                                            .AllowAnyMethod()
+                                            .AllowAnyHeader()
+                                            .AllowCredentials());
+                });
+
+            // DB Connection DefaultConnection to be found in appsettings.json
             // ===== Add our DbContext ========
             services.AddDbContext<AppDbContext>(options =>
                 options
@@ -51,13 +65,14 @@ namespace TicTacToe.WebApi
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequiredLength = 7;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 5;
             }).AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
 
             // ===== Add JWT Authentication ======== //
             // Workaround for apsnetcore.signalR need to send token via request
+            // FIXME: Auslagern
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -75,7 +90,10 @@ namespace TicTacToe.WebApi
                     {
                         OnMessageReceived = context =>
                         {
-                            if (context.Request.Path.Value.StartsWith("/api/signalR") &&
+                            var contextPathValue = context.Request.Path.Value;
+                            // enables authorization for the websocket via token
+                            if ((contextPathValue.StartsWith("/api/signalR") ||
+                            contextPathValue.StartsWith("/api/tictactoe")) &&
                     context.Request.Query.TryGetValue("token", out StringValues token))
                             {
                                 context.Token = token;
@@ -85,15 +103,21 @@ namespace TicTacToe.WebApi
                         },
                         OnAuthenticationFailed = context =>
                         {
-                            var te = context.Exception;
-                            return Task.CompletedTask;
+                            Console.WriteLine(context.Exception);
+                            return Task.FromResult(context.Exception);
                         }
                     };
                 });
             services.AddMvc();
             services.AddSignalR();
-            services.AddTransient<IGameUserService, GameUserService>();
-            services.AddTransient<IGroupService, GroupService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IGameService, GameService>();
+
+            // Register the Swagger generator, defining 1 or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,13 +127,32 @@ namespace TicTacToe.WebApi
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("LocalCorsPolicy");
+
             }
-            app.UseCors("LocalCorsPolicy");
+            else
+            {
+                // TODO: Test Production
+                app.UseCors("ProdCorsPolicy");
+            }
 
             // JWT Bearer Token Authentication
             app.UseAuthentication();
 
-            app.UseSignalR(routes => routes.MapHub<GameHub>("/api/signalR"));
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<HomeHub>("/api/signalR");
+                routes.MapHub<TicTacToeHub>("/api/tictactoe");
+            });
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc();
 

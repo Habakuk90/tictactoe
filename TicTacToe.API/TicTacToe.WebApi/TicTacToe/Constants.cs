@@ -9,17 +9,22 @@ namespace TicTacToe.WebApi.TicTacToe
     {
         public static class ModalStatus
         {
-            public static readonly string Challenged = "challenged";
-            public static readonly string Waiting = "waiting";
+            public static readonly string CHALLENGED = "challenged";
+            public static readonly string WAITING = "waiting";
+            public static readonly string DECLINED = "declined";
 
         }
 
         public static class Status
         {
-            public static readonly string Online = "Online";
-            public static readonly string Offline = "Offline";
-            public static readonly string Ingame = "Ingame";
+            public static readonly string ONLINE = "Online";
+            public static readonly string OFFLINE = "Offline";
+            public static readonly string INGAME = "Ingame";
+        }
 
+        public static class GameName
+        {
+            public static readonly string TICTACTOE = "tictactoe";
         }
     }
 }

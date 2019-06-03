@@ -11,16 +11,18 @@ import { UserService } from '../../shared/services/user.service';
 export class RegistrationFormComponent {
   constructor(private userService: UserService, private router: Router) { }
 
+  errors;
+
   register({value, valid}: {value: UserRegistration, valid: boolean}) {
     if (valid) {
-      this.userService.register(value.userName, value.password)
-        // .finally(() => this.isRequesting = false)
+      this.userService.register(value.userName, value.password, value.confirmPassword)
         .subscribe(
-        result => {
-          if (result) {
+        (result) => {
             this.router.navigate(['']);
-          }
-        }, error => console.log(error));
+        },
+        error => {
+          this.errors = error;
+        });
     }
   }
 }

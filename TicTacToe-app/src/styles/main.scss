@@ -4,3 +4,12 @@
 @import '_variables';
 
 @import '_auth';
+
+/* Atomic try */
+@import '0base/base.scss';
+@import '1atom/atoms.scss';
+@import '2molecule/molecules.scss';
+@import '3organism/organisms.scss';
+@import '4template/templates.scss';
+@import '5page/pages.scss';
+

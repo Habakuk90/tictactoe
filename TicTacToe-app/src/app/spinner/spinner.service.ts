@@ -9,6 +9,5 @@ export class SpinnerService {
 
   toggleSpinner() {
     this._spinnerSubject.next(!this._spinnerSubject.value);
-    console.log(this._spinnerSubject.value);
   }
 }

@@ -6,7 +6,6 @@
 
   .authorization-form {
 
-
       &__container {
           display: flex;
           flex-direction: column;
@@ -16,18 +15,21 @@
           border-radius: 3px 3px 3px 3px;
           border: 1px solid rgba(0,0,0,0.2);
 
-          input {
+          > input {
               padding: 10px;
               border: none;
-              border-bottom-width: medium;
-              border-bottom-style: none;
-              border-bottom-color: currentcolor;
               border-bottom: 1px solid rgba(0,0,0,0.2);
           }
 
-          input:last-of-type {
+          > input:last-of-type {
               margin-bottom: 15px;
           }
+      }
+
+      &__errors {
+        text-align: left;
+        padding-top: 20px;
+        color: red;
       }
   }
 }

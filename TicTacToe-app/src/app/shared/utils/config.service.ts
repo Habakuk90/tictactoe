@@ -1,15 +1,14 @@
-import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
-@Injectable()
 export class ConfigService {
 
     _apiURI: String;
 
     constructor() {
-        this._apiURI = 'http://localhost:50809/api';
-     }
-
-     getApiURI() {
-         return this._apiURI;
+      let hostname = location.host;
+      if (hostname.indexOf(':') > 0) {
+        hostname = hostname.substr(0, hostname.indexOf(':'));
+      }
+        this._apiURI = environment.baseUrl;
      }
 }

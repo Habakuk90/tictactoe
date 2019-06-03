@@ -1,27 +1,26 @@
-import { Component, OnDestroy } from '@angular/core';
-import { HubConnectionService } from './shared/services/hubconnection.service';
+import { Component } from '@angular/core';
 import { UserService } from './shared/services/user.service';
-import { SpinnerService } from './spinner/spinner.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnDestroy {
+export class AppComponent {
   userName = '';
-  constructor(private connectionService: HubConnectionService, userService: UserService, spinnerService: SpinnerService) {
+  isLoggedIn = false;
+  constructor(userService: UserService) {
+
     userService.isLoggedIn.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
       if (isLoggedIn) {
-        userService.getUserName().subscribe(res => this.userName =  res.toString());
-        spinnerService.toggleSpinner();
-        connectionService.startConnection().then(() => spinnerService.toggleSpinner());
+        userService.getUserName().subscribe(res => {
+          this.userName = res.toString();
+        }, err => {
+          userService.logout();
+          console.log(err);
+        });
       }
     });
-   }
-
-   ngOnDestroy() {
-     this.connectionService.stopConnection();
    }
 }
 
