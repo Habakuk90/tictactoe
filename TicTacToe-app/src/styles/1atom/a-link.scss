@@ -1,11 +1,47 @@
 .a-link {
     text-decoration: none;
     color: black;
-    
-    :active {
-        color:inherit;
+    cursor: pointer;
+
+    &:active {
+        color: inherit;
     }
-    :visited{
-        color:inherit;
+
+    &:visited {
+        color: inherit;
     }
+
+    &:hover {
+        color: inherit;
+    }
+
+    &:after {
+      content: '';
+      width: 0px;
+      height: 1px;
+      display: block;
+      background: black;
+      transition: 300ms;
+    }
+
+    &:hover:after {
+      width: 100%;
+    }
+}
+
+@mixin a-link($color, $hoverColor: $color)
+{
+  .a-link {
+    color: $color;
+
+    &:hover {
+      color: $hoverColor;
+    }
+
+    &:after {
+      background-color: $hoverColor;
+    }
+
+    @content;
+  }
 }

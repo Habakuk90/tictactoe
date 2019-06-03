@@ -10,16 +10,10 @@ export class AppComponent {
   isLoggedIn = false;
   constructor(userService: UserService) {
 
-    userService.isLoggedIn.subscribe(isLoggedIn => {
+    userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-      if (isLoggedIn) {
-        userService.getUserName().subscribe(res => {
-          this.userName = res.toString();
-        }, err => {
-          userService.logout();
-          console.log(err);
-        });
-      }
+
+      this.userName = userService.currentUserName;
     });
    }
 }

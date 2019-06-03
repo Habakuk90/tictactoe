@@ -1,0 +1,5 @@
+@import '../../../styles/1atom/a-link.scss';
+
+@include a-link(blue) {
+  display: inline-block;
+}

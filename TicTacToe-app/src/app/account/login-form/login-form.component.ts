@@ -10,18 +10,23 @@ import { UserRegistration } from '../../shared/models/user.registration.inteface
 })
 
 export class LoginFormComponent {
-  errors;
+  errors: Array<string> = [];
+  anonymousUser = false;
 
   constructor(private userService: UserService, private router: Router) { }
   login({ value, valid }: {value: UserRegistration, valid: Boolean}) {
-    // this.submitted = true;
-    // this.isRequesting = true;
-    this.errors = '';
+    if (this.anonymousUser) {
+      this.userService.currentUserName = value.userName;
+      this.userService._isLoggedInSubject.next(true);
+
+      // fixme: required out of input if anonymous
+      valid = true;
+    }
+
     if (valid) {
-      this.userService.login(value.userName, value.password)
+      this.userService.login(value.userName, value.password, this.anonymousUser)
         // .finally(() => this.isRequesting = false)
-        .subscribe(
-        result => {
+        .subscribe(result => {
           if (result) {
             this.router.navigate(['']);
             this.userService.currentUserName = value.userName;

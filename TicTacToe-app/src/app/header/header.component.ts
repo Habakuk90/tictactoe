@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isLoggedInSubscription = this.userService.isLoggedIn
+    this.isLoggedInSubscription = this.userService._isLoggedInSubject
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
 
     this.homeStateSubscription = this.userService._HomeStateSubject

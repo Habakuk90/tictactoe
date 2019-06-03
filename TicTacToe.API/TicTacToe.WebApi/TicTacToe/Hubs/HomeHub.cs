@@ -10,7 +10,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// <summary>
     /// Represents a SignalR Hub with <see cref="IHomeHub"/> client methods.
     /// </summary>
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     public class HomeHub : BaseHub<IHomeHub>
     {
         private readonly IUserService _userService;
