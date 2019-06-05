@@ -1,4 +1,6 @@
-@import '../../../styles/1atom/a-link.scss';
+// TODOANDI: double declaration of a-link styles. global and scoped angular.
+// maybe declare own mixin files
+@import '1atom/a-link.scss';
 
 @include a-link(blue) {
   // extra styles here

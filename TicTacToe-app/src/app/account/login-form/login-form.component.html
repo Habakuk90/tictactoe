@@ -1,22 +1,38 @@
 <!-- [TODO] Validation text fields -->
 <section class="authorization">
-<form #form="ngForm" (ngSubmit)="login(form)"class="authorization-form">
+  <form #form="ngForm" (ngSubmit)="login(form)" class="authorization-form">
     <div class="authorization-form__container">
-        <input type="text" name="userName" value="User"
-          ngModel required #userName="ngModel" />
-        <input *ngIf="!anonymousUser" type="password" name="password" placeholder="Password"
-          [attr.required]="!anonymousUser" ngModel />
-        <button type="submit" class="a-button" [disabled]="form.invalid">
-          Login
-        </button>
+      <input type="text" name="userName" value="User" ngModel required #userName="ngModel" />
+      <input *ngIf="!anonymousUser" type="password" name="password" placeholder="Password"
+        [attr.required]="!anonymousUser" ngModel />
+      <button type="submit" class="a-button" [disabled]="form.invalid">
+        Login
+      </button>
     </div>
-</form>
-<span>If you haven't yet registred <a class="a-link" routerLink="/register">register here</a></span>
+  </form>
+  <div class="authorization-options">
+    <div>
+      If you haven't yet registred
+      <a class="a-link" routerLink="/register">
+        register here
+      </a>
+    </div>
 
-<span>Or try anonymous <a class="a-link" (click)="anonymousUser = true">by clicking here</a></span>
-<ul class="authorization-form__errors">
-  <ng-template ngFor let-error [ngForOf]="errors">
-    <li>{{error}}</li>
-  </ng-template>
-</ul>
+    <div *ngIf="!anonymousUser">
+      Or try anonymous
+      <a class="a-link" (click)="anonymousUser = true">
+        by clicking here</a>
+      </div>
+    <div *ngIf="anonymousUser">
+      Switch back to Login form
+      <a class="a-link" (click)="anonymousUser = false">
+        by clicking here
+      </a>
+    </div>
+  </div>
+  <ul class="authorization-form__errors">
+    <ng-template ngFor let-error [ngForOf]="errors">
+      <li>{{error}}</li>
+    </ng-template>
+  </ul>
 </section>

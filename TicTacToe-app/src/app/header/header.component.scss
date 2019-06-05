@@ -1,26 +1,29 @@
-@import "../../styles/_variables.scss";
+@import '0base/colors';
+@import 'variables';
+// TODOANDI: double declaration of o-nav styles. global and scoped angular.
+// @import '../../styles/3organism/o-nav';
 
-.nav-list {
-  &__container {
-    display: flex;
-    list-style: none;
-    justify-content: flex-end;
-    box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
-    height: 100%;
+header {
+  background-color: $color-green;
+  box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
+  height: $nav-height;
+  > * {
+    max-width: 1440px;
+    margin: 0 auto;
   }
+}
 
+.m-list {
   &__item {
-    min-width: 80px;
     padding: 10px;
-    text-align: center;
-    cursor: pointer;
-
-    &:hover {
-      background-color: lightgray;
-    }
 
     &:first-child {
       margin-right: auto;
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
     }
   }
 }

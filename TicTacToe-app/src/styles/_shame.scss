@@ -8,17 +8,6 @@ body {
     box-sizing: border-box;
 }
 
-header {
-    background-color: $color-green;
-}
-
-header, section {
-    > * {
-        max-width: 1440px;
-        margin: 0 auto;
-    }
-}
-
 section {
     > * {
         margin: 52px auto 0;

@@ -1,5 +1,5 @@
 // TODOANDI: research if possible without these imports in angular component
-@import "../0base/colors";
+@import "0base/colors";
 
 $link-color: $black !default;
 $link-hover-color: $black !default;
@@ -10,6 +10,7 @@ $link-hover-color: $black !default;
   cursor: pointer;
   // needed everywhere? fixes underline hover
   display: inline-block;
+
   &:active {
     color: inherit;
   }
