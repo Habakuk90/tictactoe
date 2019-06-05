@@ -26,8 +26,9 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   ngOnInit() {
-    var that = this;
+    const that = this;
 
+    // TODOANDI test if observable username is necessary.
     this.userService.userName.subscribe((userName: string) => {
       if (userName.trim().length > 0) {
         that.homeService.hub.isConnected.subscribe((isConnected: boolean) => {
@@ -68,6 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   ngOnDestroy() {
+    // TODOANDI homestate refactorn
     this.userService._HomeStateSubject.next(0);
   }
 

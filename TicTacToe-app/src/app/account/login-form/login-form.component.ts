@@ -25,9 +25,6 @@ export class LoginFormComponent {
 
   login({ value, valid }: {value: UserRegistration, valid: Boolean}) {
     if (this.anonymousUser) {
-      this.userService.currentUserName = value.userName;
-      this.userService._isLoggedInSubject.next(true);
-
       // fixme: required out of input if anonymous
       valid = true;
     }
@@ -37,7 +34,6 @@ export class LoginFormComponent {
         .subscribe(result => {
           if (result) {
             this.router.navigate(['']);
-            this.userService.currentUserName = value.userName;
           }
         },
         error => this.errors = error);

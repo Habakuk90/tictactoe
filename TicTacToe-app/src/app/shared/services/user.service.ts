@@ -17,7 +17,7 @@ export class UserService extends BaseService {
 
   userName = new BehaviorSubject<string>('');
   currentUserName = '';
-  isAnonymous: boolean;
+  isAnonymous = false;
   userOnline = [];
 
   constructor(private http: HttpClient, private router: Router,
@@ -51,12 +51,14 @@ export class UserService extends BaseService {
     headers = headers.set('Content-Type', 'application/json');
 
     return this.userExists(userName).pipe(switchMap((userExists: boolean) => {
-      if (userExists) {
+      this.currentUserName = userName;
+      this.userName.next(userName);
+
+      if (userExists && isAnonymous) {
         return throwError(['User name is already taken, choose a different one.']);
       } else if (isAnonymous) {
-        this.currentUserName = userName;
-        this.userName.next(userName);
         this.router.navigate(['']);
+        this._isLoggedInSubject.next(true);
 
         return new Observable(null);
       } else {

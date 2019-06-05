@@ -6,7 +6,7 @@
           ngModel required #userName="ngModel" />
         <input *ngIf="!anonymousUser" type="password" name="password" placeholder="Password"
           [attr.required]="!anonymousUser" ngModel />
-        <button type="submit" class="button button__submit" [disabled]="form.invalid">
+        <button type="submit" class="a-button" [disabled]="form.invalid">
           Login
         </button>
     </div>

@@ -1,31 +1,51 @@
 .a-button {
-    &--start {
-        border: 50px $steel-blue solid;
-        max-height: 400px;
-        max-width: 800px;
-        height: 100%;
-        width: 100%;
-        margin: auto;
-        border-radius: 20px;
-        transition: border 1s linear;
+  $this: &;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  letter-spacing: 2px;
+  font-size: 1.125rem;
+  color: $white;
+  background-color: $color-blue;
+  cursor: pointer;
 
-        &:hover {
-            transition: border 1s linear;
-            border-color: $white;
-        }
+  &--big {
+    width: 180px;
+  }
+
+  &--accept {
+    background-color: $color-green-dark;
+  }
+
+  &--decline {
+    background-color: $color-red;
+  }
+
+  // todoandi colors
+  &--start {
+    background-color: $color-orange;
+  }
+
+  &:not(:disabled) {
+    &:active {
+      transform: translateY(1px);
     }
 
-    &--back {
-      // FIXME media queries
-      width: 65px;
-      height: 65px;
-      position: absolute;
-      &:before {
-        @include icon("\f104");
-      }
+    &:hover,
+    &:active {
+      filter: saturate(90%);
     }
+  }
 
-    &--next {
-      margin-top: 20px;
-    }
+  // todoandi colors
+  &:disabled {
+    background-color: gray;
+  }
+}
+
+// TODOANDI: work with color sets / list?
+@mixin a-button($color) {
+  color: $color;
+
+  @content;
 }
