@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
-import { HomeService } from 'src/app/home/home.service';
+
+enum Modals {
+  None = '',
+  ChallengeModal = 'challenged'
+}
 
 @Component({
   selector: 'app-modal',
@@ -9,8 +13,6 @@ import { HomeService } from 'src/app/home/home.service';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  connection: any;
-
   // TODOANDI modals auslagern und typeFest machen
   modals = {
     none: '',
@@ -22,37 +24,19 @@ export class ModalComponent implements OnInit {
   activeModal = this.modals.none;
   activeModalSubscription: Subscription;
 
-  // TODOANDI statt object ein Interface verwenden
-  modalArgs: object;
-  modalArgsSubscription: Subscription;
-
   selectedGame: string;
 
-  constructor(private modalService: ModalService,
-              private homeService: HomeService) {
+  constructor(private modalService: ModalService) {
   }
 
   ngOnInit() {
-    this.homeService.hub.isConnected.subscribe((isConnected => {
-      if (isConnected) {
-        this.homeService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
-          this.selectedGame = gameName;
-
-          this.modalService.openModal(modalName, {enemyUserName: enemy});
-        });
-      }
-    }));
-
     this.activeModalSubscription = this.modalService.activeModal
       .subscribe(activeModal => {
-        this.activeModal = activeModal;
+        this.activeModal = activeModal.name;
       });
-    this.modalArgsSubscription = this.modalService.modalArgs
-      .subscribe(args => this.modalArgs = args);
   }
 
   onChallengeResponse(status: any) {
-    this.homeService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
     this.modalService.closeModal();
   }
 

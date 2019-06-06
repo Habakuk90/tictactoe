@@ -1,10 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
-import { HomeService } from './home.service';
 import { Router } from '@angular/router';
 import { GroupService } from '../shared/services/group.service';
-import { HubComponent } from '../shared/connections/base.hubconnection';
+import { HubComponent, HubFactory } from '../shared/connections/base.hubconnection';
+import { HomeHubConnection, ChallengeResponse } from './home.hubconnection';
+import { ModalService } from '../shared/modals/modal.service';
+import { Modal, IModal } from '../shared/modals/modal';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +20,19 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   selectedGames: Array<IGame>;
   selectedPlayer: string;
 
+  hub: HomeHubConnection;
+
   constructor(private router: Router,
-              private groupService: GroupService,
-              private userService: UserService,
-              private homeService: HomeService) {
+    private groupService: GroupService,
+    private userService: UserService,
+    private modalService: ModalService) {
+
     this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
+    this.hub = new HubFactory('/signalR', 'homehub').createConnection<HomeHubConnection>(HomeHubConnection);
+  }
+
+  selectedGame(game: IGame): IGame {
+    return this.selectedGames.filter(x => x === game)[0];
   }
 
   ngOnInit() {
@@ -31,9 +41,16 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     // TODOANDI test if observable username is necessary.
     this.userService.userName.subscribe((userName: string) => {
       if (userName.trim().length > 0) {
-        that.homeService.hub.isConnected.subscribe((isConnected: boolean) => {
+        that.hub.isConnected.subscribe((isConnected: boolean) => {
           if (isConnected) {
-           that.homeService.hub.addCurrentUser(userName);
+            that.hub.addCurrentUser(userName);
+
+            this.modalService.activeModal.subscribe(x => {
+              if (x.name.length === 0) {
+                const response = new ChallengeResponse(x.args.enemyUserName, 'tictactoe', 'status');
+                that.hub.challengeResponse(response);
+              }
+            });
           }
         });
       }
@@ -65,7 +82,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   challengeSelectedPlayer() {
-    this.homeService.challengePlayer(this.selectedPlayer, 'tictactoe');
+    this.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
   }
 
   ngOnDestroy() {
@@ -75,13 +92,21 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   registerOnMethods() {
     const that = this;
-    this.homeService.onUpdateUserList(userOnline => {
-        that.userService.userOnline = userOnline;
+    this.hub.onUpdateUserList(userOnline => {
+      that.userService.userOnline = userOnline;
     });
 
-    this.homeService.onStartGame((groupName: string, gameName: string) => {
+    this.hub.onStartGame((groupName: string, gameName: string) => {
       that.groupService._groupNameSubject.next(groupName);
       that.router.navigate(['/' + gameName]);
+    });
+
+    this.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+      console.log(that.selectedGames);
+      that.selectedGames.find(x => x.name === gameName).selected = true;
+
+      const modal: IModal = new Modal(modalName, { enemyUserName: enemy });
+      that.modalService.openModal(modal);
     });
   }
 }

@@ -69,10 +69,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="response">
         /// Response of the challenged player.
         /// </param>
-        public async Task ChallengeResponse(string enemyName, string gameName, ModalStates response)
+        public async Task ChallengeResponse(ChallengeResponse response)
         {
             GameUserModel currentUser = this._userService.GetUserByConnection(Context.ConnectionId);
-            GameUserModel enemyUser = this._userService.GetUserByName(enemyName);
+            GameUserModel enemyUser = this._userService.GetUserByName(response.EnemyName);
 
             List<GameUserModel> allUser = new List<GameUserModel>
             {
@@ -80,21 +80,21 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 enemyUser
             };
 
-            switch (response)
+            switch (response.Response)
             {
                 case (ModalStates.Accepted):
                     //[TODO] More Games
                     string groupName = currentUser.Name + enemyUser.Name;
 
                     await this.Clients.Clients(enemyUser.ConnectionIds).
-                        StartGame(groupName, gameName);
+                        StartGame(groupName, response.GameName);
 
-                    await this.Clients.Caller.StartGame(groupName, gameName);
+                    await this.Clients.Caller.StartGame(groupName, response.GameName);
 
                     break;
                 case (ModalStates.Declined):
                     await Clients.Clients(enemyUser.ConnectionIds)
-                        .OpenModal(enemyName, gameName, Constants.ModalStatus.DECLINED);
+                        .OpenModal(response.EnemyName, response.GameName, Constants.ModalStatus.DECLINED);
 
                     this._userService.UpdateUser(allUser, Constants.Status.ONLINE);
 
@@ -108,5 +108,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             
             await Clients.Group(groupName).StartGame(groupName);
         }
+    }
+    public class ChallengeResponse
+    {
+        public string EnemyName { get; set; }
+
+        public string GameName { get; set; }
+
+        public ModalStates Response { get; set; }
     }
 }

@@ -5,29 +5,24 @@
     </h2>
   </div>
   <div class="o-grid m-multiselect">
-    <ng-template ngFor let-game [ngForOf]="games">
-      <div class="o-grid__element m-card"
-           (click)="gameClicked(game)"
-           [class.selected]="game.selected">
-        <div class="select-game__image m-card__image {{game.cssClass}}">
-          <img class="a-image" >
-        </div>
-        <div class="m-card__title">{{game.name}}</div>
-
-        <div class="m-card__checkbox">
-          <input class="a-checkbox" [checked]="game.selected" type="checkbox" name="{{game.name}}" id="{{game.name}}">
-          <label class="a-label a-label--checkbox" for="{{game.name}}"></label>
-        </div>
-
-        <div>
-            <a href="#">This is a link</a>
-        </div>
+    <div class="o-grid__element m-card" *ngFor="let game of games; let i=index; trackBy:i;" (click)="gameClicked(game)"
+      [class.selected]="game.selected">
+      <div class="select-game__image m-card__image {{game.cssClass}}">
+        <img class="a-image">
       </div>
-    </ng-template>
+      <div class="m-card__title">{{game.name}}</div>
+
+      <div class="m-card__checkbox">
+        <input class="a-checkbox" [checked]="game.selected" type="checkbox" name="{{game.name}}" id="{{game.name}}">
+        <label class="a-label a-label--checkbox" for="{{game.name}}"></label>
+      </div>
+
+      <div>
+        <a href="#">This is a link</a>
+      </div>
+    </div>
   </div>
-  <button class="btn-small a-button a-button--next"
-          [disabled]="!isGameSelected()"
-          (click)="nextStep()">
+  <button class="btn-small a-button a-button--next" [disabled]="!isGameSelected()" (click)="nextStep()">
     Next
   </button>
 </div>

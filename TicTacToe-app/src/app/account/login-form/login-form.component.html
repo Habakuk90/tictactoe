@@ -31,8 +31,6 @@
     </div>
   </div>
   <ul class="authorization-form__errors">
-    <ng-template ngFor let-error [ngForOf]="errors">
-      <li>{{error}}</li>
-    </ng-template>
+      <li *ngFor="let error of errors; let i=index; trackBy:i;">{{error}}</li>
   </ul>
 </section>

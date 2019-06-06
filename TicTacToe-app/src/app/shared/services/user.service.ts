@@ -88,7 +88,6 @@ export class UserService extends BaseService {
     this._isLoggedInSubject.next(false);
     this.isAnonymous = false;
     this.router.navigate(['login']);
-    // this.connectionService.stopConnection();
   }
 
   getUserName() {

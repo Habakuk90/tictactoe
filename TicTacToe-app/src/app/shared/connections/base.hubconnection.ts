@@ -12,6 +12,7 @@ export interface IBaseHubConnection {
 }
 
 export interface HubComponent {
+  hub: IBaseHubConnection;
   registerOnMethods(): void;
 }
 
@@ -27,9 +28,9 @@ export class BaseHubConnection implements IBaseHubConnection {
 
   isConnected = new BehaviorSubject<boolean>(false);
 
-  constructor(connection: string, name: string) {
+  constructor(route: string, name: string) {
     this.name = name;
-    this.connection = this.buildConnection(connection);
+    this.connection = this.buildConnection(route);
     this.connection.start().then(() => {
       this.isConnected.next(true);
     }, err => {
@@ -67,9 +68,9 @@ export class BaseHubConnection implements IBaseHubConnection {
     return this.getConnection().stop();
   }
 
-  private buildConnection(socketUri: string): signalR.HubConnection {
+  private buildConnection(route: string): signalR.HubConnection {
     const configService = new ConfigService();
-    const url = configService._apiURI + socketUri + this.getToken('auth_token');
+    const url = configService._apiURI + route + this.getToken('auth_token');
 
     return new signalR.HubConnectionBuilder()
       .withUrl(url)
@@ -89,3 +90,10 @@ export class BaseHubConnection implements IBaseHubConnection {
   }
 }
 
+export class HubFactory {
+  constructor(private route: string, private name: string) {}
+  createConnection<T extends BaseHubConnection>(type: new(route: string, name: string) => T): T {
+    const conn = new type(this.route, this.name);
+    return conn;
+  }
+}

@@ -9,7 +9,7 @@
 
   </app-waiting-modal>
 
-  <app-declined-modal class="modal__container" [args]="modalArgs"
+  <app-declined-modal class="modal__container" [args]="activeModal.args"
     *ngIf="activeModal === modals.declinedModal">
 
   </app-declined-modal>

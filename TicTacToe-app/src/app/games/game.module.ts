@@ -1,8 +1,6 @@
 import { RPSComponent } from './rps/rps.component';
 import { TicTacToeComponent } from './tictactoe/tictactoe.component';
 import { NgModule } from '@angular/core';
-import { GameService } from './game.service';
-import { TicTacToeService } from './tictactoe/tictactoe.service';
 import { SharedModule } from '../shared/modules/shared.module';
 
 @NgModule({
@@ -13,9 +11,7 @@ import { SharedModule } from '../shared/modules/shared.module';
   imports: [
     SharedModule
   ],
-  providers: [
-    TicTacToeService, GameService
-  ],
+  providers: [],
 })
 
 export class GameModule { }

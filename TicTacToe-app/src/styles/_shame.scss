@@ -10,6 +10,7 @@ body {
 
 section {
     > * {
+        max-width: $content-max-width;
         margin: 52px auto 0;
     }
 }

@@ -1,17 +1,10 @@
-<div>
-
-<ng-template ngFor let-game [ngForOf]="selectedGames">
-    {{game.name}}
-</ng-template>
-</div>
-
 <table class="m-table">
   <tr class="m-table__row m-table__row--header">
     <th class="m-table__header">Name</th>
     <th class="m-table__header">Status</th>
     <th class="m-table__header"></th>
   </tr>
-  <ng-template ngFor let-user [ngForOf]="userOnline">
+  <ng-container *ngFor="let user of userOnline; let i=index; trackBy:i;">
     <tr class="m-table__row" *ngIf="user !== currentUser" (click)="enemyClicked(user)">
       <td class="m-table__data">{{user}}</td>
       <td class="m-table__data">Online</td>
@@ -20,5 +13,5 @@
           <label class="a-label a-label--checkbox" for="{{user}}"></label>
       </td>
     </tr>
-  </ng-template>
+  </ng-container>
 </table>
