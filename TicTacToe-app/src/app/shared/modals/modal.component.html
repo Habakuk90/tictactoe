@@ -1,22 +1,22 @@
-<section class="modal" *ngIf="activeModal !== modals.none">
-  <app-challenged-modal class="modal__container" [args]="modalArgs"
+<section class="modal" [ngSwitch]="activeModal.name"
+         *ngIf="activeModal.name !== modals.empty">
+  <app-challenged-modal class="modal__container"
     (challengeResponse)="onChallengeResponse($event)"
-    *ngIf="activeModal === modals.challengedModal">
+    *ngSwitchCase="modals.challenged" [args]="activeModal.args">
 
   </app-challenged-modal>
   <app-waiting-modal class="modal__container"
-    *ngIf="activeModal === modals.waitingModal">
+    *ngSwitchCase="modals.waiting">
 
   </app-waiting-modal>
 
-  <app-declined-modal class="modal__container" [args]="activeModal.args"
-    *ngIf="activeModal === modals.declinedModal">
+  <app-declined-modal class="modal__container"
+    *ngSwitchCase="modals.declined">
 
   </app-declined-modal>
 
-  <app-gameover-modal class="modal__container" [args]="modalArgs"
+  <app-gameover-modal class="modal__container"
     (restartGame)="gameRestart()"
-    *ngIf="activeModal === modals.gameoverModal">
-
+    *ngSwitchCase="modals.gameover">
   </app-gameover-modal>
 </section>

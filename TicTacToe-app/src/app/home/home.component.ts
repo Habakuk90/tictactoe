@@ -6,7 +6,7 @@ import { GroupService } from '../shared/services/group.service';
 import { HubComponent, HubFactory } from '../shared/connections/base.hubconnection';
 import { HomeHubConnection, ChallengeResponse } from './home.hubconnection';
 import { ModalService } from '../shared/modals/modal.service';
-import { Modal, IModal } from '../shared/modals/modal';
+import { Modal, IModal, Modals } from '../shared/modals/modal';
 
 @Component({
   selector: 'app-home',
@@ -44,15 +44,16 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
         that.hub.isConnected.subscribe((isConnected: boolean) => {
           if (isConnected) {
             that.hub.addCurrentUser(userName);
-
-            this.modalService.activeModal.subscribe(x => {
-              if (x.name.length === 0) {
-                const response = new ChallengeResponse(x.args.enemyUserName, 'tictactoe', 'status');
-                that.hub.challengeResponse(response);
-              }
-            });
           }
         });
+      }
+    });
+
+    // somehow make this work
+    this.modalService.activeModal.subscribe((activeModal: Modal) => {
+      if (activeModal.name === 'challenged') {
+        const response = new ChallengeResponse(activeModal.args.enemyUserName, 'tictactoe', 'status');
+        that.hub.challengeResponse(response);
       }
     });
 
@@ -102,10 +103,13 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     });
 
     this.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
-      console.log(that.selectedGames);
-      that.selectedGames.find(x => x.name === gameName).selected = true;
+      if (that.selectedGames) {
+        that.selectedGames.find(x => x.name.toLowerCase() === gameName.toLowerCase()).selected = true;
+      }
+      const modals = Modals;
+      const name: Modals = modals[modalName];
 
-      const modal: IModal = new Modal(modalName, { enemyUserName: enemy });
+      const modal: IModal = new Modal(name, { enemyUserName: enemy });
       that.modalService.openModal(modal);
     });
   }

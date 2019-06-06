@@ -7,7 +7,7 @@ import { GroupService } from 'src/app/shared/services/group.service';
 import { Router } from '@angular/router';
 import { HubComponent, HubFactory } from 'src/app/shared/connections/base.hubconnection';
 import { GameHubConnection } from '../game.hubconnection';
-import { Modal } from 'src/app/shared/modals/modal';
+import { Modal, Modals } from 'src/app/shared/modals/modal';
 
 @Component({
   selector: 'app-tictactoe',
@@ -169,7 +169,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
       this.setLine(winningTileId, winningLine);
     }
 
-    const modal = new Modal('gameover', {hasWon: this.hasWon});
+    const modal = new Modal(Modals.gameover, {hasWon: this.hasWon});
     this.modalService.openModal(modal);
   }
 }

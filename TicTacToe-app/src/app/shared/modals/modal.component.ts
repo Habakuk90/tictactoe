@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
-
-enum Modals {
-  None = '',
-  ChallengeModal = 'challenged'
-}
+import { Modal, Modals } from './modal';
 
 @Component({
   selector: 'app-modal',
@@ -13,17 +9,9 @@ enum Modals {
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  // TODOANDI modals auslagern und typeFest machen
-  modals = {
-    none: '',
-    challengedModal: 'challenged',
-    waitingModal: 'waiting',
-    declinedModal: 'declined',
-    gameoverModal: 'gameover'
-  };
-  activeModal = this.modals.none;
+  activeModal = new Modal(Modals.empty, {});
   activeModalSubscription: Subscription;
-
+  modals = Modals;
   selectedGame: string;
 
   constructor(private modalService: ModalService) {
@@ -32,7 +20,7 @@ export class ModalComponent implements OnInit {
   ngOnInit() {
     this.activeModalSubscription = this.modalService.activeModal
       .subscribe(activeModal => {
-        this.activeModal = activeModal.name;
+        this.activeModal = activeModal;
       });
   }
 
