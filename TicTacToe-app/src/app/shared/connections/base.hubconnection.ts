@@ -22,9 +22,10 @@ enum BaseConnMethods {
   AddCurrentUser = 'AddCurrentUser'
 }
 
-export class BaseHubConnection implements IBaseHubConnection {
+export abstract class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
   public name: string;
+  abstract connectionMethods: object;
 
   isConnected = new BehaviorSubject<boolean>(false);
 
@@ -45,6 +46,9 @@ export class BaseHubConnection implements IBaseHubConnection {
   }
 
   public stopConnection(): Promise<void> {
+    Object.keys(this.connectionMethods).forEach(x => {
+      this.off(x);
+    });
     return this.connection.stop();
   }
 
@@ -62,10 +66,6 @@ export class BaseHubConnection implements IBaseHubConnection {
 
   public off(methodName: string): void {
     this.getConnection().off(methodName);
-  }
-
-  public stop(): Promise<void> {
-    return this.getConnection().stop();
   }
 
   private buildConnection(route: string): signalR.HubConnection {

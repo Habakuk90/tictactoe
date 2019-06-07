@@ -7,8 +7,12 @@ class HubFactory {
   constructor(private route: string, private name: string) { }
 
   createConnection<T extends BaseHubConnection>(type: new (route: string, name: string) => T): T {
-    const conn = new type(this.route, this.name);
-    return conn;
+    if (type != null && typeof type === typeof BaseHubConnection) {
+      const conn = new type(this.route, this.name);
+      return conn;
+    } else {
+      throw new Error('Error with given type');
+    }
   }
 }
 
@@ -18,20 +22,7 @@ export class HubService {
 
   constructor() { }
 
-  private add(hub: BaseHubConnection) {
-    this.hubs.push(hub);
-  }
-
-  private remove(hub: BaseHubConnection) {
-    const index = this.hubs.indexOf(hub);
-    if (index > -1) {
-      this.hubs = this.hubs.splice(index, 1);
-    } else {
-      debuglog('couldn\'t remove, because hub does not exists.');
-    }
-  }
-
-  public get(hub: BaseHubConnection) {
+  public getByHub(hub: BaseHubConnection): BaseHubConnection {
     return this.hubs.filter(x => x === hub)[0] || null;
   }
 
@@ -39,21 +30,49 @@ export class HubService {
     return <T>this.hubs.filter(x => x.name === name)[0] || null;
   }
 
+  public getByType<T extends BaseHubConnection>(type: T): T {
+    return <T>this.hubs.filter(x => typeof type === typeof x)[0] || null;
+  }
+
   public createConnection<T extends BaseHubConnection>(
     route: string, name: string,
     type: new (route: string, name: string) => T): T {
 
-    const hubConnection = new HubFactory(route, name).createConnection(type);
-    this.add(hubConnection);
-    return hubConnection;
+    if (route.length > 0 && name.length > 0) {
+      const hubConnection = new HubFactory(route, name).createConnection(type);
+      this.add(hubConnection);
+
+      return hubConnection;
+    } else {
+      throw new Error(`could not create connection. route: ${route}; name: ${name}`);
+    }
   }
 
   public stopConnection(hub: BaseHubConnection): void {
     const that = this;
-    hub.stopConnection().then(x => {
-      this.remove(hub);
-      console.log(x);
-    });
+    if (hub) {
+      hub.stopConnection().then(() => {
+        hub.isConnected.next(false);
+        that.remove(hub);
+      });
+    }
+  }
+
+  private add(hub: BaseHubConnection): void {
+    if (hub) {
+      this.hubs.push(hub);
+    } else {
+      debuglog('could not add, because given hub is empty');
+    }
+  }
+
+  private remove(hub: BaseHubConnection): void {
+    const index = this.hubs.indexOf(hub);
+    if (index > -1) {
+      this.hubs = this.hubs.splice(index, 1);
+    } else {
+      debuglog('couldn\'t remove, because hub does not exists.');
+    }
   }
 }
 

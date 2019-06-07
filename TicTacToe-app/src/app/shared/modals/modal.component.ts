@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Modal, Modals } from './modal';
 import { HubService } from '../connections/hub.service';
 import { HomeHubConnection, ChallengeResponse } from 'src/app/home/home.hubconnection';
+import { BaseHubConnection } from '../connections/base.hubconnection';
 
 @Component({
   selector: 'app-modal',
@@ -28,12 +29,16 @@ export class ModalComponent implements OnInit {
 
   onChallengeResponse(status: any) {
     // TODOANDI magic strings
-    const hub: HomeHubConnection = this.hubService.getByName('homehub');
+    const hub: HomeHubConnection = this.hubService.getByType(HomeHubConnection.prototype);
+    // const hub: HomeHubConnection = this.hubService.getByName('homehub');
+
     const resp: ChallengeResponse =
       new ChallengeResponse(this.activeModal.args.enemyUserName, 'tictactoe', status);
 
-    hub.challengeResponse(resp);
-    this.modalService.closeModal();
+    if (hub.isConnected.value) {
+      hub.challengeResponse(resp);
+      this.modalService.closeModal();
+    }
   }
 
   gameRestart() {

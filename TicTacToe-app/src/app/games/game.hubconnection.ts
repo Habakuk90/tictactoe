@@ -8,6 +8,8 @@ enum TTTConnMethods {
 }
 
 export class GameHubConnection extends BaseHubConnection {
+  connectionMethods = TTTConnMethods;
+
   constructor(connection: string, name: string) {
     super(connection, name);
   }

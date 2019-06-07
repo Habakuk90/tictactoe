@@ -18,6 +18,7 @@ enum HomeConnMethods {
 }
 
 export class HomeHubConnection extends BaseHubConnection {
+  connectionMethods = HomeConnMethods;
 
   constructor(route: string, name: string) {
     super(route, name);

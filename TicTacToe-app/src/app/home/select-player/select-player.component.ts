@@ -8,17 +8,18 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrls: ['./select-player.component.scss']
 })
 
-export class SelectPlayerComponent implements OnDestroy, OnInit {
+export class SelectPlayerComponent implements OnInit {
   @Output() playerSelected: EventEmitter<string> = new EventEmitter<string>();
   @Input() selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  userOnline: Array<string>;
+  get userOnline(): Array<string> {
+    return this.userService.userOnline;
+  }
   currentUser: string;
 
   constructor(private userService: UserService) {
       this.currentUser = this.userService.currentUserName;
-      this.userOnline = this.userService.userOnline;
   }
 
   enemyClicked(user: string) {
@@ -33,9 +34,5 @@ export class SelectPlayerComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.selectedGames = this.selectedGames.filter(x => x.selected);
-  }
-
-  ngOnDestroy() {
-    // TODO are 'off listeners needed here?
   }
 }

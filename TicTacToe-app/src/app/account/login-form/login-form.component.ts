@@ -29,7 +29,7 @@ export class LoginFormComponent {
     }
 
     if (valid) {
-      this.userService.login(value.userName, value.password, this.anonymousUser)
+      this.userService.login(value.userName, value.password)
         .subscribe(result => {
           if (result) {
             this.router.navigate(['']);

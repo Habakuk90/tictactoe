@@ -11,12 +11,12 @@
   </app-waiting-modal>
 
   <app-declined-modal class="modal__container"
-    *ngSwitchCase="modals.declined">
+    *ngSwitchCase="modals.declined" [args]="activeModal.args">
 
   </app-declined-modal>
 
   <app-gameover-modal class="modal__container"
     (restartGame)="gameRestart()"
-    *ngSwitchCase="modals.gameover">
+    *ngSwitchCase="modals.gameover" [args]="activeModal.args">
   </app-gameover-modal>
 </section>

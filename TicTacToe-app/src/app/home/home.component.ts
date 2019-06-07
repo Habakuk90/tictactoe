@@ -37,21 +37,17 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     return this.selectedGames.filter(x => x === game)[0];
   }
 
+  public get userName() {return this.userService.currentUserName; }
+
   ngOnInit() {
     const that = this;
 
-    // TODOANDI test if observable username is necessary.
-    this.userService.userName.subscribe((userName: string) => {
-      if (userName.trim().length > 0) {
-        that.hub.isConnected.subscribe((isConnected: boolean) => {
-          if (isConnected) {
-            that.hub.addCurrentUser(userName);
-          }
-        });
+    that.hub.isConnected.subscribe((isConnected: boolean) => {
+      if (isConnected) {
+        that.hub.addCurrentUser(that.userService.currentUserName);
+        that.registerOnMethods();
       }
     });
-
-    that.registerOnMethods();
   }
 
   gameSelected(games: Array<IGame>) {
@@ -83,7 +79,9 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   ngOnDestroy() {
     // TODOANDI homestate refactorn
     this.userService._HomeStateSubject.next(0);
-    this.hubService.stopConnection(this.hub);
+    // FIXME will the conneciton be stabel at all times, maybe yes because of chat and other functionality
+    // evaluate if more socketuris are an option.
+    // this.hubService.stopConnection(this.hub);
   }
 
   registerOnMethods() {

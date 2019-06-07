@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-
-// Add the RxJS Observable operators we need in this app.
-// import '../../rxjs-operators';
 import { ConfigService } from '../utils/config.service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
@@ -14,11 +11,18 @@ export class UserService extends BaseService {
   baseUrl: String = '';
 
   _isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private userName = new BehaviorSubject<string>('');
 
-  userName = new BehaviorSubject<string>('');
-  currentUserName = '';
   isAnonymous = true;
   userOnline = [];
+
+  public get currentUserName() {
+    return this.userName.value;
+  }
+
+  public set currentUserName(value: string) {
+    this.userName.next(value);
+  }
 
   constructor(private http: HttpClient, private router: Router,
     configService: ConfigService) {
@@ -46,7 +50,7 @@ export class UserService extends BaseService {
       );
   }
 
-  login(userName: string, password: string = '', isAnonymous: boolean = false) {
+  login(userName: string, password: string = '') {
     let headers = new HttpHeaders();
     headers = headers.set('Content-Type', 'application/json');
 
@@ -54,15 +58,15 @@ export class UserService extends BaseService {
       this.currentUserName = userName;
       this.userName.next(userName);
 
-      if (userExists && isAnonymous) {
+      if (userExists && this.isAnonymous) {
         return throwError(['User name is already taken, choose a different one.']);
-      } else if (isAnonymous) {
+      } else if (this.isAnonymous) {
         this.router.navigate(['']);
         this._isLoggedInSubject.next(true);
 
         return new Observable(null);
       } else {
-        if (password && password.trim().length <= 0 && !isAnonymous) {
+        if (password && password.trim().length <= 0 && !this.isAnonymous) {
           return new Observable(null);
         }
 
@@ -86,7 +90,7 @@ export class UserService extends BaseService {
   logout() {
     localStorage.removeItem('auth_token');
     this._isLoggedInSubject.next(false);
-    this.isAnonymous = false;
+    this.isAnonymous = true;
     this.router.navigate(['login']);
   }
 
@@ -103,9 +107,9 @@ export class UserService extends BaseService {
     return this.http.get(
       this.baseUrl + '/values/getUserName',
       { headers: headers }
-    ).pipe(map(res => res), map(res => {
+    ).pipe(map(res => {
       this.userName.next(res.toString());
-      return this.currentUserName = res.toString()
+      return res.toString();
     }
     ));
   }

@@ -13,9 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedInSubscription: Subscription;
   homeState: number;
   homeStateSubscription: Subscription;
-  constructor(private userService: UserService) {
-
-  }
+  constructor(private userService: UserService) {}
 
   back() {
     this.userService._HomeStateSubject.next(0);
