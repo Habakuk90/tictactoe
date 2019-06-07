@@ -16,9 +16,3 @@
     }
   }
 }
-
-@mixin o-nav() {
-  .o-nav {
-    @content;
-  }
-}

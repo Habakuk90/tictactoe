@@ -36,19 +36,3 @@ $link-hover-color: $black !default;
     width: 100%;
   }
 }
-
-@mixin a-link($color, $hover-color: $color) {
-  .a-link {
-    color: $color;
-
-    &:hover {
-      color: $hover-color;
-    }
-
-    &:after {
-      background-color: $hover-color;
-    }
-
-    @content;
-  }
-}

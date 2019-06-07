@@ -1,0 +1,22 @@
+// TODOANDI: work with color sets / list?
+@mixin a-button($color) {
+  color: $color;
+
+  @content;
+}
+
+@mixin a-link($color, $hover-color: $color) {
+  .a-link {
+    color: $color;
+
+    &:hover {
+      color: $hover-color;
+    }
+
+    &:after {
+      background-color: $hover-color;
+    }
+
+    @content;
+  }
+}
