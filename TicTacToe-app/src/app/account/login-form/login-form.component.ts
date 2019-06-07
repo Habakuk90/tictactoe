@@ -11,7 +11,6 @@ import { UserRegistration } from '../../shared/models/user.registration.inteface
 
 export class LoginFormComponent {
   errors: Array<string> = [];
-  // anonymousUser = false;
 
   public get anonymousUser(): boolean {
     return this.userService.isAnonymous;

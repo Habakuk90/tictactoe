@@ -17,7 +17,7 @@ export class UserService extends BaseService {
 
   userName = new BehaviorSubject<string>('');
   currentUserName = '';
-  isAnonymous = false;
+  isAnonymous = true;
   userOnline = [];
 
   constructor(private http: HttpClient, private router: Router,

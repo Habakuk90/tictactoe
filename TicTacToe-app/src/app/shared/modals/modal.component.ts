@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
 import { Modal, Modals } from './modal';
+import { HubService } from '../connections/hub.service';
+import { HomeHubConnection, ChallengeResponse } from 'src/app/home/home.hubconnection';
 
 @Component({
   selector: 'app-modal',
@@ -14,7 +16,7 @@ export class ModalComponent implements OnInit {
   modals = Modals;
   selectedGame: string;
 
-  constructor(private modalService: ModalService) {
+  constructor(private modalService: ModalService, private hubService: HubService) {
   }
 
   ngOnInit() {
@@ -25,6 +27,12 @@ export class ModalComponent implements OnInit {
   }
 
   onChallengeResponse(status: any) {
+    // TODOANDI magic strings
+    const hub: HomeHubConnection = this.hubService.getByName('homehub');
+    const resp: ChallengeResponse =
+      new ChallengeResponse(this.activeModal.args.enemyUserName, 'tictactoe', status);
+
+    hub.challengeResponse(resp);
     this.modalService.closeModal();
   }
 

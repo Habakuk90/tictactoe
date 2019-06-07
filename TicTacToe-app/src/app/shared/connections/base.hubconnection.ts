@@ -89,11 +89,3 @@ export class BaseHubConnection implements IBaseHubConnection {
     return tokenValue;
   }
 }
-
-export class HubFactory {
-  constructor(private route: string, private name: string) {}
-  createConnection<T extends BaseHubConnection>(type: new(route: string, name: string) => T): T {
-    const conn = new type(this.route, this.name);
-    return conn;
-  }
-}

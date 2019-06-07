@@ -57,6 +57,5 @@ export class HomeHubConnection extends BaseHubConnection {
 }
 
 export class ChallengeResponse {
-
-  constructor(private enemeyUserName: string, private selectedGame: string, response: string) {}
+  constructor(public enemyName: string, public gameName: string, public response: string) {}
 }

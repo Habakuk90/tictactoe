@@ -3,10 +3,11 @@ import { IGame } from '../shared/models/game.interface';
 import { UserService } from '../shared/services/user.service';
 import { Router } from '@angular/router';
 import { GroupService } from '../shared/services/group.service';
-import { HubComponent, HubFactory } from '../shared/connections/base.hubconnection';
-import { HomeHubConnection, ChallengeResponse } from './home.hubconnection';
+import { HubComponent } from '../shared/connections/base.hubconnection';
+import { HomeHubConnection } from './home.hubconnection';
 import { ModalService } from '../shared/modals/modal.service';
 import { Modal, IModal, Modals } from '../shared/modals/modal';
+import { HubService } from '../shared/connections/hub.service';
 
 @Component({
   selector: 'app-home',
@@ -25,10 +26,11 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   constructor(private router: Router,
     private groupService: GroupService,
     private userService: UserService,
-    private modalService: ModalService) {
+    private modalService: ModalService,
+    private hubService: HubService) {
 
     this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
-    this.hub = new HubFactory('/signalR', 'homehub').createConnection<HomeHubConnection>(HomeHubConnection);
+    this.hub = this.hubService.createConnection('/signalR', 'homehub', HomeHubConnection);
   }
 
   selectedGame(game: IGame): IGame {
@@ -46,14 +48,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
             that.hub.addCurrentUser(userName);
           }
         });
-      }
-    });
-
-    // somehow make this work
-    this.modalService.activeModal.subscribe((activeModal: Modal) => {
-      if (activeModal.name === 'challenged') {
-        const response = new ChallengeResponse(activeModal.args.enemyUserName, 'tictactoe', 'status');
-        that.hub.challengeResponse(response);
       }
     });
 
@@ -89,6 +83,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   ngOnDestroy() {
     // TODOANDI homestate refactorn
     this.userService._HomeStateSubject.next(0);
+    this.hubService.stopConnection(this.hub);
   }
 
   registerOnMethods() {
@@ -106,9 +101,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
       if (that.selectedGames) {
         that.selectedGames.find(x => x.name.toLowerCase() === gameName.toLowerCase()).selected = true;
       }
-      const modals = Modals;
-      const name: Modals = modals[modalName];
 
+      const name: Modals = Modals[modalName];
       const modal: IModal = new Modal(name, { enemyUserName: enemy });
       that.modalService.openModal(modal);
     });

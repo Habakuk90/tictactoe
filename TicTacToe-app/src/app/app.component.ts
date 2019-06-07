@@ -12,7 +12,6 @@ export class AppComponent {
 
     userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-
       this.userName = userService.currentUserName;
     });
    }

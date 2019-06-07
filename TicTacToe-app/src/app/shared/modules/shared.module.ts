@@ -6,12 +6,13 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HubService } from '../connections/hub.service';
 
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [CommonModule],
-  providers:    []
+  providers:    [HubService]
 })
 export class SharedModule { }

@@ -5,9 +5,10 @@ import { ModalService } from 'src/app/shared/modals/modal.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { Router } from '@angular/router';
-import { HubComponent, HubFactory } from 'src/app/shared/connections/base.hubconnection';
+import { HubComponent } from 'src/app/shared/connections/base.hubconnection';
 import { GameHubConnection } from '../game.hubconnection';
 import { Modal, Modals } from 'src/app/shared/modals/modal';
+import { HubService } from 'src/app/shared/connections/hub.service';
 
 @Component({
   selector: 'app-tictactoe',
@@ -35,12 +36,12 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   constructor(private userService: UserService,
     private modalService: ModalService,
     private groupService: GroupService,
+    private hubService: HubService,
     private router: Router) {
       const that = this;
 
 
-      this.hub = new HubFactory('/tictactoe', 'tictactoe')
-        .createConnection<GameHubConnection>(GameHubConnection);
+      this.hub = this.hubService.createConnection('/tictactoe', 'tictactoe', GameHubConnection);
 
       this.groupService._groupNameSubject
         .subscribe(groupName => {
