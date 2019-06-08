@@ -23,11 +23,6 @@ export class LoginFormComponent {
   constructor(private userService: UserService, private router: Router) { }
 
   login({ value, valid }: {value: UserRegistration, valid: Boolean}) {
-    if (this.anonymousUser) {
-      // fixme: required out of input if anonymous
-      valid = true;
-    }
-
     if (valid) {
       this.userService.login(value.userName, value.password)
         .subscribe(result => {

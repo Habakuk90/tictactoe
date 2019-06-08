@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TicTacToe\User\**" />
     <Compile Remove="wwwroot\**" />
+    <Content Remove="TicTacToe\User\**" />
     <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="TicTacToe\User\**" />
     <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="TicTacToe\User\**" />
     <None Remove="wwwroot\**" />
   </ItemGroup>
 
@@ -24,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="TicTacToe\Attributes\" />
-    <Folder Include="TicTacToe\User\Models\" />
   </ItemGroup>
 
   <ItemGroup>

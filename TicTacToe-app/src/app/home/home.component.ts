@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     return this.selectedGames.filter(x => x === game)[0];
   }
 
-  public get userName() {return this.userService.currentUserName; }
+  public get userName() { return this.userService.currentUserName; }
 
   ngOnInit() {
     const that = this;

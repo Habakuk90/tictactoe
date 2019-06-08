@@ -109,12 +109,4 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await Clients.Group(groupName).StartGame(groupName);
         }
     }
-    public class ChallengeResponse
-    {
-        public string EnemyName { get; set; }
-
-        public string GameName { get; set; }
-
-        public ModalStates Response { get; set; }
-    }
 }

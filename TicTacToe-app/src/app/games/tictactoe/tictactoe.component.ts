@@ -38,9 +38,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     private groupService: GroupService,
     private hubService: HubService,
     private router: Router) {
+
       const that = this;
-
-
       this.hub = this.hubService.createConnection('/tictactoe', 'tictactoe', GameHubConnection);
 
       this.groupService._groupNameSubject
