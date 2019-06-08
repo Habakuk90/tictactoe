@@ -27,6 +27,7 @@ export class LoginFormComponent {
       this.userService.login(value.userName, value.password)
         .subscribe(result => {
           if (result) {
+            this.anonymousUser = false;
             this.router.navigate(['']);
           }
         },
