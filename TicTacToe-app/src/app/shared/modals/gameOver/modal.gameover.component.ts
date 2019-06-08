@@ -1,13 +1,13 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ModalService } from '../modal.service';
+import { IModalArgs } from '../modal';
 
 @Component({
   selector: 'app-gameover-modal',
   templateUrl: './modal.gameover.component.html'
 })
 export class GameOverModalComponent {
-  // todo declare modal interface
-  @Input() args: any;
+  @Input() args: IModalArgs;
   @Output() restartGame: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private modalService: ModalService) {

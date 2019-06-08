@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { IModalArgs } from '../modal';
 
 @Component({
   selector: 'app-challenged-modal',
@@ -6,7 +7,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
   // styleUrls: ['./modal.challenged.component.scss']
 })
 export class ChallengedModalComponent {
-  @Input() args;
+  @Input() args: IModalArgs;
   @Output() challengeResponse: EventEmitter<string> = new EventEmitter<string>();
   constructor() {}
 

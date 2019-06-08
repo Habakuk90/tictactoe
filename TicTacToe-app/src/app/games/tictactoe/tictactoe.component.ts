@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { TicTacToeService } from './tictactoe.service';
 import { Box } from './box';
 import { BoxHandler } from './boxHandler';
 import { ModalService } from 'src/app/shared/modals/modal.service';
@@ -7,6 +6,9 @@ import { UserService } from 'src/app/shared/services/user.service';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { Router } from '@angular/router';
 import { HubComponent } from 'src/app/shared/connections/base.hubconnection';
+import { GameHubConnection } from '../game.hubconnection';
+import { Modal, Modals } from 'src/app/shared/modals/modal';
+import { HubService } from 'src/app/shared/connections/hub.service';
 
 @Component({
   selector: 'app-tictactoe',
@@ -25,16 +27,20 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   private hasWon: boolean;
   private boxHandler: BoxHandler = new BoxHandler();
 
+  hub: GameHubConnection;
+
   public get boxes(): Box[]{
     return this.boxHandler.boxes;
   }
 
-  constructor(private tictactoeService: TicTacToeService,
-    private userService: UserService,
+  constructor(private userService: UserService,
     private modalService: ModalService,
     private groupService: GroupService,
+    private hubService: HubService,
     private router: Router) {
+
       const that = this;
+      this.hub = this.hubService.createConnection('/tictactoe', 'tictactoe', GameHubConnection);
 
       this.groupService._groupNameSubject
         .subscribe(groupName => {
@@ -53,14 +59,13 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
       return;
     }
 
-    this.tictactoeService.tileClicked(this.groupService.groupName, tileId).then(() => {
+    this.hub.tileClicked(this.groupService.groupName, tileId).then(() => {
       this.hasWon = this.boxHandler.checkWin(tileId);
 
       if (this.boxHandler.checkWin(tileId)) {
-        this.tictactoeService
-          .gameOver(this.groupService.groupName, tileId, this.boxHandler.winningLine);
+        this.hub.gameOver(this.groupService.groupName, tileId, this.boxHandler.winningLine);
       } else if (this.boxes.filter(x => !x.state).length === 0) {
-        this.tictactoeService.gameOver(this.groupService.groupName, null, null);
+        this.hub.gameOver(this.groupService.groupName, null, null);
       }
     });
   }
@@ -69,14 +74,14 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     const that = this;
     this.selfTileState = this.turn ? 'cross' : 'circle';
 
-    this.tictactoeService.hub.isConnected.subscribe((isConnected: boolean) => {
+    this.hub.isConnected.subscribe((isConnected: boolean) => {
       if (isConnected) {
         that.registerOnMethods();
         this.setLine(null, null);
         that.modalService.closeModal();
 
-        this.tictactoeService.hub.addCurrentUser(that.userService.currentUserName).then(() => {
-          that.tictactoeService.hub.joinGroup(that.groupService.groupName)
+        this.hub.addCurrentUser(that.userService.currentUserName).then(() => {
+          that.hub.joinGroup(that.groupService.groupName)
             .then(groupName => {
               // #9 start besser definieren
               if (groupName.startsWith(that.userService.currentUserName)) {
@@ -89,23 +94,29 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   ngOnDestroy() {
-    this.tictactoeService.reset();
+    const that = this;
+    let leaveGroup: Promise<void>;
 
     if (this.groupService.groupName) {
-      this.tictactoeService.hub.leaveGroup(this.groupService.groupName);
+      leaveGroup = this.hub.leaveGroup(this.groupService.groupName);
+    }
+    if (leaveGroup) {
+      leaveGroup.then(() => {
+        that.hub.stopConnection();
+      });
     }
   }
 
   registerOnMethods() {
     const that = this;
 
-    this.tictactoeService.onTileChange((tileId) => {
+    this.hub.onTileChange((tileId) => {
       const box: Box = that.boxHandler.findById(tileId);
       box.state = that.gameTile;
       box.locked = true;
     });
 
-    this.tictactoeService.onSwitchTurn(() => {
+    this.hub.onSwitchTurn(() => {
       that.turn = !that.turn;
 
       if (that.gameTile === 'circle') {
@@ -115,7 +126,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
       }
     });
 
-    this.tictactoeService.onGameOver((winningTileId, winningLine) => {
+    this.hub.onGameOver((winningTileId, winningLine) => {
       that.endGame(winningTileId, winningLine);
     });
   }
@@ -163,8 +174,8 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     if (winningTileId != null) {
       this.setLine(winningTileId, winningLine);
     }
-    this.modalService.openModal('gameover', {
-      hasWon: this.hasWon
-    });
+
+    const modal = new Modal(Modals.gameover, {hasWon: this.hasWon});
+    this.modalService.openModal(modal);
   }
 }

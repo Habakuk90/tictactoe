@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from '../../../../node_modules/rxjs';
+import { IModal, Modal, Modals } from './modal';
 
 @Injectable()
 export class ModalService {
-  activeModal = new BehaviorSubject<string>('');
-  modalArgs = new BehaviorSubject<object>({});
+  activeModal = new BehaviorSubject<Modal>(new Modal(Modals.empty, {}));
 
   constructor() {
   }
 
-  openModal(modalName: string, args: object) {
-    this.activeModal.next(modalName);
-    this.modalArgs.next(args);
+  openModal(modal: IModal) {
+    this.activeModal.next(modal);
   }
 
   closeModal() {
-    this.activeModal.next('');
+    this.activeModal.next(new Modal(Modals.empty, {}));
   }
 }

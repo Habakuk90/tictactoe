@@ -1,0 +1,44 @@
+.a-button {
+  $this: &;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  letter-spacing: 2px;
+  font-size: 1.125rem;
+  color: $white;
+  background-color: $color-blue;
+  cursor: pointer;
+
+  &--big {
+    width: 180px;
+  }
+
+  &--accept {
+    background-color: $color-green-dark;
+  }
+
+  &--decline {
+    background-color: $color-red;
+  }
+
+  // todoandi colors
+  &--start {
+    background-color: $color-orange;
+  }
+
+  &:not(:disabled) {
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:hover,
+    &:active {
+      filter: saturate(90%);
+    }
+  }
+
+  // todoandi colors
+  &:disabled {
+    background-color: gray;
+  }
+}

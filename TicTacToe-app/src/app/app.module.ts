@@ -16,7 +16,6 @@ import { SpinnerComponent } from './spinner/spinner.component';
 import { SpinnerService } from './spinner/spinner.service';
 import { SelectGameComponent } from './home/select-game/select-game.component';
 import { SelectPlayerComponent } from './home/select-player/select-player.component';
-import { HomeService } from './home/home.service';
 import { GameModule } from './games/game.module';
 
 @NgModule({
@@ -40,7 +39,7 @@ import { GameModule } from './games/game.module';
   ],
   providers: [
     // TODOANDI: aufrumen bidde
-    ConfigService, HomeService, SpinnerService,
+    ConfigService, SpinnerService,
     AuthGuard, GroupService],
   bootstrap: [AppComponent]
 })

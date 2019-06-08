@@ -12,7 +12,7 @@ namespace TicTacToe.WebApi.TicTacToe
             public static readonly string CHALLENGED = "challenged";
             public static readonly string WAITING = "waiting";
             public static readonly string DECLINED = "declined";
-
+            public static readonly string GAMEOVER = "gameover";
         }
 
         public static class Status

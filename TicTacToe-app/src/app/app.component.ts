@@ -6,21 +6,16 @@ import { UserService } from './shared/services/user.service';
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  userName = '';
   isLoggedIn = false;
-  constructor(userService: UserService) {
 
-    userService.isLoggedIn.subscribe(isLoggedIn => {
+  get userName() {
+    return this.userService.currentUserName;
+  }
+
+  constructor(private userService: UserService) {
+    userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
-      if (isLoggedIn) {
-        userService.getUserName().subscribe(res => {
-          this.userName = res.toString();
-        }, err => {
-          userService.logout();
-          console.log(err);
-        });
-      }
     });
-   }
+  }
 }
 

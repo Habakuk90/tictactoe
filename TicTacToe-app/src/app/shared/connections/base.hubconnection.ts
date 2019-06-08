@@ -12,6 +12,7 @@ export interface IBaseHubConnection {
 }
 
 export interface HubComponent {
+  hub: IBaseHubConnection;
   registerOnMethods(): void;
 }
 
@@ -21,15 +22,16 @@ enum BaseConnMethods {
   AddCurrentUser = 'AddCurrentUser'
 }
 
-export class BaseHubConnection implements IBaseHubConnection {
+export abstract class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
   public name: string;
+  abstract connectionMethods: object;
 
   isConnected = new BehaviorSubject<boolean>(false);
 
-  constructor(connection: string, name: string) {
+  constructor(route: string, name: string) {
     this.name = name;
-    this.connection = this.buildConnection(connection);
+    this.connection = this.buildConnection(route);
     this.connection.start().then(() => {
       this.isConnected.next(true);
     }, err => {
@@ -44,6 +46,9 @@ export class BaseHubConnection implements IBaseHubConnection {
   }
 
   public stopConnection(): Promise<void> {
+    Object.keys(this.connectionMethods).forEach(x => {
+      this.off(x);
+    });
     return this.connection.stop();
   }
 
@@ -63,13 +68,9 @@ export class BaseHubConnection implements IBaseHubConnection {
     this.getConnection().off(methodName);
   }
 
-  public stop(): Promise<void> {
-    return this.getConnection().stop();
-  }
-
-  private buildConnection(socketUri: string): signalR.HubConnection {
+  private buildConnection(route: string): signalR.HubConnection {
     const configService = new ConfigService();
-    const url = configService._apiURI + socketUri + this.getToken('auth_token');
+    const url = configService._apiURI + route + this.getToken('auth_token');
 
     return new signalR.HubConnectionBuilder()
       .withUrl(url)
@@ -88,4 +89,3 @@ export class BaseHubConnection implements IBaseHubConnection {
     return tokenValue;
   }
 }
-

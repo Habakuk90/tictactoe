@@ -1,3 +1,9 @@
+@import '../1atom/a-mixins';
+@import '../2molecule/m-mixins';
+@import '../3organism/o-mixins';
+@import '../4template/t-mixins';
+@import '../5page/p-mixins';
+
 @mixin icon($icon) {
   font-style: normal;
   font-variant: normal;
@@ -5,4 +11,16 @@
   font-family: "Font Awesome 5 Free";
   font-weight: 900;
   content: $icon;
+}
+
+@mixin tablet {
+  @media (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$tablet-width - 1px}) {
+    @content;
+  }
 }

@@ -8,20 +8,9 @@ body {
     box-sizing: border-box;
 }
 
-header {
-    background-color: $steel-blue;
-    // height: $header-height;
-}
-
-header, section {
-    > * {
-        max-width: 1440px;
-        margin: 0 auto;
-    }
-}
-
 section {
     > * {
+        max-width: $content-max-width;
         margin: 52px auto 0;
     }
 }

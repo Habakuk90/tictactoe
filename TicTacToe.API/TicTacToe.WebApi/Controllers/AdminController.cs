@@ -39,6 +39,13 @@ namespace TicTacToe.WebApi.Controllers
 
             return Json("success");
         }
+
+        [Route("userExists")]
+        [HttpGet]
+        public JsonResult UserExists(string name)
+        {
+            return Json(_context.Users.Any(x => x.UserName == name) || _context.AppUser.Any(x => x.Name == name));
+        }
     }
 
 }

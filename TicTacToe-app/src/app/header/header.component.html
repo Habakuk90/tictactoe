@@ -1,14 +1,14 @@
 <header>
   <nav class="o-nav">
     <div [hidden]="homeState <= 0">
-        <button class="a-button a-button--back btn-floating" (click)="back()">
+        <button class="a-button a-button--back" (click)="back()">
         </button>
     </div>
     <ul class="o-nav__list m-list">
       <li class="m-list__item" routerLink="">
         Home
       </li>
-      <li *ngIf="isLoggedIn; else auth" class="m-list__item" (click)="logout()">
+      <li *ngIf="isLoggedIn; else auth" [class.anonymous]="isAnonymous" class="m-list__item" (click)="logout()">
         Logout {{userName}}
       </li>
       <ng-template #auth>

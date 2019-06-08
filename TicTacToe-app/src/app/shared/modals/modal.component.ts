@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalService } from './modal.service';
 import { Subscription } from 'rxjs';
-import { HomeService } from 'src/app/home/home.service';
+import { Modal, Modals } from './modal';
+import { HubService } from '../connections/hub.service';
+import { HomeHubConnection, ChallengeResponse } from 'src/app/home/home.hubconnection';
+import { BaseHubConnection } from '../connections/base.hubconnection';
 
 @Component({
   selector: 'app-modal',
@@ -9,51 +12,33 @@ import { HomeService } from 'src/app/home/home.service';
   styleUrls: ['./modal.component.scss']
 })
 export class ModalComponent implements OnInit {
-  connection: any;
-
-  // TODOANDI modals auslagern und typeFest machen
-  modals = {
-    none: '',
-    challengedModal: 'challenged',
-    waitingModal: 'waiting',
-    declinedModal: 'declined',
-    gameoverModal: 'gameover'
-  };
-  activeModal = this.modals.none;
+  activeModal = new Modal(Modals.empty, {});
   activeModalSubscription: Subscription;
-
-  // TODOANDI statt object ein Interface verwenden
-  modalArgs: object;
-  modalArgsSubscription: Subscription;
-
+  modals = Modals;
   selectedGame: string;
 
-  constructor(private modalService: ModalService,
-              private homeService: HomeService) {
+  constructor(private modalService: ModalService, private hubService: HubService) {
   }
 
   ngOnInit() {
-    this.homeService.hub.isConnected.subscribe((isConnected => {
-      if (isConnected) {
-        this.homeService.onOpenModal((enemy: string, gameName: string, modalName: string) => {
-          this.selectedGame = gameName;
-
-          this.modalService.openModal(modalName, {enemyUserName: enemy});
-        });
-      }
-    }));
-
     this.activeModalSubscription = this.modalService.activeModal
       .subscribe(activeModal => {
         this.activeModal = activeModal;
       });
-    this.modalArgsSubscription = this.modalService.modalArgs
-      .subscribe(args => this.modalArgs = args);
   }
 
   onChallengeResponse(status: any) {
-    this.homeService.challengeResponse(this.modalArgs['enemyUserName'], this.selectedGame, status);
-    this.modalService.closeModal();
+    // TODOANDI magic strings
+    const hub: HomeHubConnection = this.hubService.getByType(HomeHubConnection.prototype);
+    // const hub: HomeHubConnection = this.hubService.getByName('homehub');
+
+    const resp: ChallengeResponse =
+      new ChallengeResponse(this.activeModal.args.enemyUserName, 'tictactoe', status);
+
+    if (hub.isConnected.value) {
+      hub.challengeResponse(resp);
+      this.modalService.closeModal();
+    }
   }
 
   gameRestart() {

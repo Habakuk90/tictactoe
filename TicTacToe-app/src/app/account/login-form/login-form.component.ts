@@ -10,21 +10,24 @@ import { UserRegistration } from '../../shared/models/user.registration.inteface
 })
 
 export class LoginFormComponent {
-  errors;
+  errors: Array<string> = [];
+
+  public get anonymousUser(): boolean {
+    return this.userService.isAnonymous;
+  }
+
+  public set anonymousUser(value: boolean) {
+    this.userService.isAnonymous = value;
+  }
 
   constructor(private userService: UserService, private router: Router) { }
+
   login({ value, valid }: {value: UserRegistration, valid: Boolean}) {
-    // this.submitted = true;
-    // this.isRequesting = true;
-    this.errors = '';
     if (valid) {
       this.userService.login(value.userName, value.password)
-        // .finally(() => this.isRequesting = false)
-        .subscribe(
-        result => {
+        .subscribe(result => {
           if (result) {
             this.router.navigate(['']);
-            this.userService.currentUserName = value.userName;
           }
         },
         error => this.errors = error);

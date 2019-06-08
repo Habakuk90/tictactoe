@@ -14,34 +14,6 @@
         width: 180px;
     }
 
-    &__accept {
-        background-color: $color-green-dark;
-
-        &:active {
-            background-color: $color-green-dark;
-        }
-    }
-
-    &__decline {
-        background-color: $color-red;
-
-        &:active {
-            background-color: $color-red;
-        }
-    }
-
-    &__game {
-        background-color: green;
-    }
-
-    &__start {
-        background-color: orange;
-
-        &:active {
-            background-color: lightsalmon;
-        }
-    }
-
     &__submit {
         align-self: flex-end;
         width: 80px;
