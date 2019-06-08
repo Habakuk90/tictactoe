@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
+using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
