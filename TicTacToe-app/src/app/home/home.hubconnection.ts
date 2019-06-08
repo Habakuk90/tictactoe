@@ -1,7 +1,5 @@
 import { BaseHubConnection } from '../shared/connections/base.hubconnection';
-import { IGame } from '../shared/models/game.interface';
 
-// TODO define args model
 interface IHomeHubConnection {
   challengePlayer(...args: any[]): void;
   challengeResponse(...args: any[]): Promise<any>;
