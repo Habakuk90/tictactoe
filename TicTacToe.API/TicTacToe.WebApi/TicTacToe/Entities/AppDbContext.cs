@@ -16,10 +16,27 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
         }
 
-        public DbSet<GameUserModel> AppUser { get; set; }
+        public DbSet<BaseUser> AppUser { get; set; }
+
+        public DbSet<BaseGroup> Groups { get; set; }
+
+        public DbSet<UserGroups> UserGroups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // configures one-to-many relationship
+            builder.Entity<UserGroups>().HasKey(ug => new { ug.GroupId, ug.UserId });
+
+            builder.Entity<UserGroups>()
+                .HasOne<BaseUser>(x => x.User)
+                .WithMany(s => s.UserGroups)
+                .HasForeignKey(x => x.GroupId);
+
+            builder.Entity<UserGroups>()
+                .HasOne<BaseGroup>(g => g.Group)
+                .WithMany(ug => ug.UserGroups)
+                .HasForeignKey(x => x.UserId);
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

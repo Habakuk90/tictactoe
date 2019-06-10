@@ -1,5 +1,5 @@
 ﻿using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Services;
+using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -8,15 +8,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// </summary>
     public class TicTacToeHub : BaseHub<ITicTacToeHub>
     {
-        private readonly IGameService _gameService;
+        private readonly IUserService _userService;
 
         /// <summary>
         /// Hub ctor.
         /// </summary>
         /// <param name="baseService"></param>
-        public TicTacToeHub(IGameService baseService) : base(baseService)
+        public TicTacToeHub(IUserService baseService) : base(baseService)
         {
-            this._gameService = baseService;
+            this._userService = baseService;
         }
 
         /// <summary>

@@ -2,6 +2,8 @@
 {
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Models;
+    using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+    using global::TicTacToe.WebApi.TicTacToe.Services;
     using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Logging;
@@ -16,19 +18,21 @@
     /// </typeparam>
     public abstract class BaseHub<T> : Hub<T> where T : class, IBaseHub
     {
-        private readonly IBaseService _baseService;
+        private readonly IUserService _service;
 
         public readonly ILogger _logger;
+
+        private BaseUser _currentUser;
 
         /// <summary>
         /// Base hub ctor
         /// </summary>
-        /// <param name="baseService">
+        /// <param name="service">
         /// Service for User based methods.
         /// </param>
-        protected BaseHub(IBaseService baseService)
+        protected BaseHub(IUserService service)
         {
-            this._baseService = baseService;
+            this._service = service;
         }
 
         /// <summary>
@@ -42,16 +46,14 @@
         /// </returns>
         public string JoinGroup(string groupName)
         {
-            GameUserModel currentUser = this._baseService
-                .GetUserByConnection(Context.ConnectionId);
+            // TODOANDI: add or update group, if last member => remove;
 
-            if (currentUser.GroupName == groupName)
-            {
-                this._baseService.LeaveGroupAsync(currentUser, groupName);
-            }
+            //if (currentUser.GroupName == groupName)
+            //{
+            //    this._baseService.LeaveGroupAsync(currentUser, groupName);
+            //}
 
-            this._baseService.JoinGroupAsync(currentUser, groupName);
-            this._baseService.UpdateUserList();
+            //this._baseService.JoinGroupAsync(currentUser, groupName);
 
             return groupName;
         }
@@ -64,10 +66,8 @@
         /// </param>
         public void LeaveGroup(string groupName)
         {
-            GameUserModel currentUser = this._baseService
-                .GetUserByConnection(Context.ConnectionId);
-
-            this._baseService.LeaveGroupAsync(currentUser, groupName);
+            // TODOANDI: update or remove group, if last member => remove;
+            //this._baseService.LeaveGroupAsync(currentUser, groupName);
         }
 
         /// <summary>
@@ -76,26 +76,18 @@
         /// <param name="userName">
         /// userName of current User.
         /// </param>
-        public void AddCurrentUser(string userName)
+        public void AddCurrentUser(string userName, bool isAnonymous = true)
         {
-            bool userExists = this._baseService.UserExists(userName);
-            GameUserModel user =
-                userExists ?
-                this._baseService.GetUserByName(userName) :
-                new GameUserModel { Name = userName };
-
-            user.CurrentConnectionId = Context.ConnectionId;
-
-            if (userExists)
+            this._currentUser = new BaseUser
             {
-                this._baseService.UpdateUser(
-                    this._baseService.GetUserByName(userName),
-                    Constants.Status.ONLINE);
-            }
-            else
-            {
-                this._baseService.AddNewUser(user);
-            }
+                Name = userName,
+                CurrentConnectionId = Context.ConnectionId,
+                isAnonymous = isAnonymous,
+                Status = Constants.Status.ONLINE
+            };
+
+            // TODOANDI: Add or update current user, if anonymous => add flag, to be removed
+            this._currentUser = this._service.UpdateUser(this._currentUser);
         }
 
         /// <summary>
@@ -114,11 +106,14 @@
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            GameUserModel currentUser = this._baseService
-                .GetUserByConnection(Context.ConnectionId);
+            //BaseUser currentUser = this._baseService
+            //    .GetUserByConnection(Context.ConnectionId);
 
-            this._baseService.RemoveUser(currentUser, Context.ConnectionId);
-            await this._baseService.LeaveGroupAsync(currentUser, currentUser.GroupName);
+            // wo anders zuweisen bidde todoandi
+            this._currentUser.CurrentConnectionId = Context.ConnectionId;
+            // leave group and remove user from connection
+            this._service.RemoveUser(this._currentUser);
+            //await this._baseService.LeaveGroupAsync(this._currentUser, currentUser.GroupName);
             await base.OnDisconnectedAsync(exception);
         }
     }

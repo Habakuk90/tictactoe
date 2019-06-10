@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -19,11 +19,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <summary>
         /// GameHub ctor.
         /// </summary>
-        /// <param name="baseService"></param>
-        public HomeHub(IUserService baseService)
-            : base(baseService)
+        /// <param name="userService"></param>
+        public HomeHub(IUserService userService)
+            : base(userService)
         {
-            this._userService = baseService;
+            this._userService = userService;
         }
 
         /// <summary>
@@ -37,13 +37,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            GameUserModel currentUser = this._userService
+            BaseUser currentUser = this._userService
                 .GetUserByConnection(Context.ConnectionId);
 
-            GameUserModel enemyUser = this._userService
+            BaseUser enemyUser = this._userService
                 .GetUserByName(enemyName);
 
-            List<GameUserModel> allUser = new List<GameUserModel>
+            List<BaseUser> allUser = new List<BaseUser>
             {
                 currentUser,
                 enemyUser
@@ -72,10 +72,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengeResponse(ChallengeResponse response)
         {
-            GameUserModel currentUser = this._userService.GetUserByConnection(Context.ConnectionId);
-            GameUserModel enemyUser = this._userService.GetUserByName(response.EnemyName);
+            BaseUser currentUser = this._userService.GetUserByConnection(Context.ConnectionId);
+            BaseUser enemyUser = this._userService.GetUserByName(response.EnemyName);
 
-            List<GameUserModel> allUser = new List<GameUserModel>
+            List<BaseUser> allUser = new List<BaseUser>
             {
                 currentUser,
                 enemyUser

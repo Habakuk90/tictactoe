@@ -44,7 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
     that.hub.isConnected.subscribe((isConnected: boolean) => {
       if (isConnected) {
-        that.hub.addCurrentUser(that.userService.currentUserName);
+        that.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous);
         that.registerOnMethods();
       }
     });
