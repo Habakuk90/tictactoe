@@ -42,6 +42,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
             foreach (var item in items)
             {
+                //TODOANDI if given list, there will be an sql context generated for each entry.
                 await this.AddOrUpdate(item);
             }
         }

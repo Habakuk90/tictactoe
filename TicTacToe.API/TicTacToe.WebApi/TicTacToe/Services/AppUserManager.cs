@@ -24,10 +24,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             await base.AddOrUpdate(item);
 
             // todoandi consider updating userobjects to frontend
-            IEnumerable<string> userOnline = this.GetAllUsers().Result
-                .Select(x => x.Name);
+            IEnumerable<BaseUser> userOnline = await this.GetAllUsers();
 
-            await this._clients.All.UpdateUserList(userOnline);
+            await this._clients.All.UpdateUserList(userOnline.Select(user => user.Name));
         }
 
         /// <summary>

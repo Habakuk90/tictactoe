@@ -15,7 +15,6 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     {
         #region private properties
 
-        private IHubContext<BaseHub<IBaseHub>, IBaseHub> _hub;
         private readonly AppUserManager<IBaseHub> _manager;
         public BaseUser _currentUser;
 
@@ -27,8 +26,6 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             IHubContext<BaseHub<IBaseHub>, IBaseHub> hub)
             : base(factory, hub)
         {
-            this._hub = hub;
-
             // TODOANDI: fix workaround
             this._manager = new AppUserManager<IBaseHub>(factory, hub.Clients);
         }
