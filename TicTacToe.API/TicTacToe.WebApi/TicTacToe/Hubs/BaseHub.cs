@@ -22,8 +22,6 @@
 
         public readonly ILogger _logger;
 
-        private BaseUser _currentUser;
-
         /// <summary>
         /// Base hub ctor
         /// </summary>
@@ -78,16 +76,16 @@
         /// </param>
         public void AddCurrentUser(string userName, bool isAnonymous = true)
         {
-            this._currentUser = new BaseUser
+            var currentUser = new BaseUser
             {
                 Name = userName,
                 CurrentConnectionId = Context.ConnectionId,
-                isAnonymous = isAnonymous,
+                IsAnonymous = isAnonymous,
                 Status = Constants.Status.ONLINE
             };
 
             // TODOANDI: Add or update current user, if anonymous => add flag, to be removed
-            this._currentUser = this._service.UpdateUser(this._currentUser);
+            this._service.UpdateUser(currentUser);
         }
 
         /// <summary>
@@ -110,9 +108,8 @@
             //    .GetUserByConnection(Context.ConnectionId);
 
             // wo anders zuweisen bidde todoandi
-            this._currentUser.CurrentConnectionId = Context.ConnectionId;
             // leave group and remove user from connection
-            this._service.RemoveUser(this._currentUser);
+            await this._service.RemoveUser(this._service.GetUserByConnection(Context.ConnectionId));
             //await this._baseService.LeaveGroupAsync(this._currentUser, currentUser.GroupName);
             await base.OnDisconnectedAsync(exception);
         }

@@ -14,7 +14,7 @@
     {
         public string Status { get; set; }
 
-        public bool isAnonymous { get; set; }
+        public bool IsAnonymous { get; set; }
 
         public IList<UserGroups> UserGroups { get; set; }
 

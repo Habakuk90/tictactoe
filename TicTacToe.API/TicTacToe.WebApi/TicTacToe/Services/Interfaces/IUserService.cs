@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
@@ -37,7 +38,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// <param name="currentConnectionId">
         /// current connection Id of user which should be removed.
         /// </param>
-        void RemoveUser(BaseUser user);
+        Task RemoveUser(BaseUser user);
 
         /// <summary>
         /// Updates user in DB.
@@ -49,7 +50,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// Status <see cref="Constants.Status"/> of user.
         /// </param>
         //BaseUser UpdateUser(string userName, string connectionId, string status);
-        BaseUser UpdateUser(BaseUser user);
+        Task UpdateUser(BaseUser user);
 
 
         /// <summary>

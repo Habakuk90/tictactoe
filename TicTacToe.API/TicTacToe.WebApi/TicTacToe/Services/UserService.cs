@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
@@ -16,7 +17,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 
         private AppDbContext _context;
         private IHubContext<BaseHub<IBaseHub>, IBaseHub> _hub;
-
+        private readonly AppUserManager<IBaseHub> _manager;
         public BaseUser _currentUser;
 
         #endregion
@@ -28,6 +29,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             this._context = context;
             this._hub = hub;
+            this._manager = new AppUserManager<IBaseHub>(context, hub.Clients);
         }
 
         public virtual BaseUser GetUserByConnection(string connectionId)
@@ -62,27 +64,23 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="currentConnectionId">
         /// current connection Id of user which should be removed.
         /// </param>
-        public void RemoveUser(BaseUser user)
+        public async Task RemoveUser(BaseUser user)
         {
-            var manager = new
-                AppUserManager<IBaseHub>(this._context, this._hub.Clients);
 
-            using (manager)
+            if (user.IsAnonymous)
             {
-                if (user.isAnonymous)
-                {
-                    manager.Remove(user);
-                }
-                
-                // #9: Multiple Connections for one user should be possible
-                user.ConnectionIds.Remove(user.CurrentConnectionId);
-                if (!user.ConnectionIds.Any())
-                {
-                    user.Status = Constants.Status.OFFLINE;
-                }
-
-                manager.AddOrUpdate(user);
+                await this._manager.Remove(user);
             }
+
+            // #9: Multiple Connections for one user should be possible
+            user.ConnectionIds.RemoveAll(x => x.Contains(user.CurrentConnectionId));
+            
+            if (!user.ConnectionIds.Any())
+            {
+                user.Status = Constants.Status.OFFLINE;
+            }
+
+            await _manager.AddOrUpdate(user);
         }
 
         /// <summary>
@@ -96,28 +94,20 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
 
         //public BaseUser UpdateUser(string userName, string connectionId, string status)
-        public BaseUser UpdateUser(BaseUser user)
+        public async Task UpdateUser(BaseUser user)
         {
-            var manager = new
-                AppUserManager<IBaseHub>(this._context, this._hub.Clients);
+            BaseUser dbUser = _manager.GetUserByName(user.Name);
 
-            using (manager)
+            if (!dbUser.ID.Equals(Guid.Empty))
             {
-                BaseUser dbUser = manager.GetUserByName(user.Name);
-
-                if (!dbUser.ID.Equals(Guid.Empty))
-                {
-                    user = dbUser;
-                    dbUser.isAnonymous = false;
-                }
-
-                user.ConnectionIds.Add(user.CurrentConnectionId);
-                user.ConnectionIds = user.ConnectionIds.Distinct().ToList();
-
-                base.AddOrUpdate<BaseUser>(user);
+                user = dbUser;
+                dbUser.IsAnonymous = false;
             }
 
-            return user;
+            user.ConnectionIds.Add(user.CurrentConnectionId);
+            user.ConnectionIds = user.ConnectionIds.Distinct().ToList();
+
+            await _manager.AddOrUpdate(user);
         }
 
 

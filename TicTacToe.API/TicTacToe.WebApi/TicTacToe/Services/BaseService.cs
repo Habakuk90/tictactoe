@@ -25,7 +25,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 
         #endregion
 
-        public BaseService(AppDbContext context, IHubContext<THub, T> baseHub)
+        public BaseService(
+            AppDbContext context,
+            IHubContext<THub, T> baseHub)
         {
             this._dbContext = context;
             this._baseHub = baseHub;
@@ -35,10 +37,10 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 
         public virtual void AddOrUpdate<I>(I item) where I : BaseEntity, new()
         {
-            using (var manager = new EntityManager<I>(_dbContext))
-            {
-                manager.AddOrUpdate(item);
-            }
+            //using (var manager = new EntityManager<I>(_dbContext))
+            //{
+                //_manager.AddOrUpdate(item);
+            //}
         }
 
         /// <summary>

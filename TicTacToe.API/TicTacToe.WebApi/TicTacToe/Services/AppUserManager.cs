@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
@@ -11,24 +13,25 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 {
     public class AppUserManager<T> : EntityManager<BaseUser> where T : class, IBaseHub
     {
-        private readonly AppDbContext _context;
+        //private readonly AppDbContext _context;
         private readonly IHubClients<T> _clients;
 
         public AppUserManager(AppDbContext context, IHubClients<T> clients) : base(context)
         {
-            this._context = context;
+            //this._context = context;
             this._clients = clients;
         }
 
-        public override async void Dispose()
+        public override async Task AddOrUpdate(BaseUser item)
         {
+            // todoandi consider updating userobjects to frontend
             IEnumerable<string> userOnline = this.GetAllUsers()
                 .Select(x => x.Name);
 
             await this._clients.All.UpdateUserList(userOnline);
-            base.Dispose();
-        }
 
+            await base.AddOrUpdate(item);
+        }
 
         /// <summary>
         /// Gets user by name from DB.
@@ -40,7 +43,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <see cref="BaseUser"/> in DB with given userName.
         public BaseUser GetUserByName(string userName)
         {
-            return this._context.AppUser.Where(x => x.Name == userName).First() 
+            return this._context.AppUser.Where(x => x.Name == userName).FirstOrDefaultAsync().Result 
                 ?? new BaseUser{ ID = Guid.Empty, Name = userName };
         }
 
