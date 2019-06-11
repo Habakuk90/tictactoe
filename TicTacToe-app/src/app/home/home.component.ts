@@ -81,7 +81,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.userService._HomeStateSubject.next(0);
     // FIXME will the conneciton be stabel at all times, maybe yes because of chat and other functionality
     // evaluate if more socketuris are an option.
-    // this.hubService.stopConnection(this.hub);
+    this.hub.stopConnection();
   }
 
   registerOnMethods() {

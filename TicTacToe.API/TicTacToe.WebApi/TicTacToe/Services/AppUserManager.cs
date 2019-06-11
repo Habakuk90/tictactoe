@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using TicTacToe.WebApi.TicTacToe.Entities;
-using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
@@ -13,24 +12,22 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 {
     public class AppUserManager<T> : EntityManager<BaseUser> where T : class, IBaseHub
     {
-        //private readonly AppDbContext _context;
         private readonly IHubClients<T> _clients;
 
         public AppUserManager(AppDbContext context, IHubClients<T> clients) : base(context)
         {
-            //this._context = context;
             this._clients = clients;
         }
 
         public override async Task AddOrUpdate(BaseUser item)
         {
+            await base.AddOrUpdate(item);
+
             // todoandi consider updating userobjects to frontend
-            IEnumerable<string> userOnline = this.GetAllUsers()
+            IEnumerable<string> userOnline = this.GetAllUsers().Result
                 .Select(x => x.Name);
 
             await this._clients.All.UpdateUserList(userOnline);
-
-            await base.AddOrUpdate(item);
         }
 
         /// <summary>
@@ -41,10 +38,12 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         /// <returns>
         /// <see cref="BaseUser"/> in DB with given userName.
-        public BaseUser GetUserByName(string userName)
+        public async Task<BaseUser> GetUserByName(string userName)
         {
-            return this._context.AppUser.Where(x => x.Name == userName).FirstOrDefaultAsync().Result 
-                ?? new BaseUser{ ID = Guid.Empty, Name = userName };
+            var user = await this._context.AppUser.Where(x => x.Name == userName)
+                .FirstOrDefaultAsync();
+
+            return user ?? new BaseUser{ ID = Guid.Empty, Name = userName };
         }
 
         /// <summary>
@@ -56,11 +55,11 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <returns>
         /// <see cref="BaseUser"/> in DB with given connectionID or NULL if no user was found.
         /// </returns>
-        public virtual BaseUser GetUserByConnection(string connectionId)
+        public async Task<BaseUser> GetUserByConnection(string connectionId)
         {
             // instead of first => by group name || first
-            BaseUser userModel = _context.AppUser.Where(x =>
-                x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
+            BaseUser userModel = await _context.AppUser.Where(x =>
+                x.ConnectionIds.Contains(connectionId)).FirstOrDefaultAsync();
 
             if (userModel == null)
             {
@@ -71,14 +70,18 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             return userModel;
         }
 
-        public bool UserNameExists(string name)
+        public async Task<bool> UserNameExists(string name)
         {
-            return this._context.AppUser.Any(x => x.Name == name);
+            var userExists = await this._context.AppUser.AnyAsync(x => x.Name == name);
+
+            return userExists;
         }
 
-        private IEnumerable<BaseUser> GetAllUsers()
+        private async Task<IEnumerable<BaseUser>> GetAllUsers()
         {
-            return _context.AppUser.ToList();
+            var allUser = await _context.AppUser.ToListAsync<BaseUser>();
+
+            return allUser;
         }
     }
 }

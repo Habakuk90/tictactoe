@@ -201,11 +201,11 @@ namespace TicTacToe.WebApi.Migrations
 
                     b.Property<string>("ConnectionIdsString");
 
+                    b.Property<bool>("IsAnonymous");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("Status");
-
-                    b.Property<bool>("isAnonymous");
 
                     b.HasKey("ID");
 

@@ -64,16 +64,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// </param>
         void UpdateUser(ICollection<BaseUser> users, string status);
 
-        /// <summary>
-        /// Checks if User exists in DB.
-        /// </summary>
-        /// <param name="userName">
-        /// Given name of user to check.
-        /// </param>
-        /// <returns>
-        /// Whether user exists in DB or not.
-        /// </returns>
-        bool UserExists(string userName);
+        ///// <summary>
+        ///// Checks if User exists in DB.
+        ///// </summary>
+        ///// <param name="userName">
+        ///// Given name of user to check.
+        ///// </param>
+        ///// <returns>
+        ///// Whether user exists in DB or not.
+        ///// </returns>
+        //bool UserExists(string userName);
 
     }
 }

@@ -7,7 +7,7 @@ namespace TicTacToe.WebApi.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<bool>(
-                name: "isAnonymous",
+                name: "IsAnonymous",
                 table: "AppUser",
                 nullable: false,
                 defaultValue: false);
@@ -16,7 +16,7 @@ namespace TicTacToe.WebApi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "isAnonymous",
+                name: "IsAnonymous",
                 table: "AppUser");
         }
     }

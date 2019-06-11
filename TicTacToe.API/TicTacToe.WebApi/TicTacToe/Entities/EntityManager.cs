@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
+using Microsoft.EntityFrameworkCore;
 
 namespace TicTacToe.WebApi.TicTacToe.Entities
 {
@@ -16,16 +18,31 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
 
         public virtual async Task AddOrUpdate(T item)
         {
-            if (this.ItemExists(item))
-            {
-                this._context.Set<T>().Update(item);
-            }
-            else
-            {
-                this._context.Set<T>().Add(item);
-            }
+            //using (var transaction = this._context.Database.BeginTransaction())
+            //{
+                try
+                {
+                    if (this.ItemExists(item).Result)
+                    {
+                        this._context.Set<T>().Update(item);
+                    }
+                    else
+                    {
+                        this._context.Set<T>().Add(item);
+                    }
 
-            await this._context.SaveChangesAsync();
+                    await this._context.SaveChangesAsync();
+
+
+                    //transaction.Commit();
+                }
+                catch (Exception exception)
+                {
+                //this._context.
+                    //transaction.Rollback();
+                    throw exception;
+                }
+            //}
         }
 
         public virtual async Task AddOrUpdate(IList<T> items)
@@ -38,13 +55,27 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
 
         public virtual async Task Remove(T item)
         {
-            this._context.Set<T>().Remove(item);
-            await this._context.SaveChangesAsync();
+            using (var transaction = this._context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    this._context.Set<T>().Remove(item);
+                    await this._context.SaveChangesAsync();
+                    transaction.Result.Commit();
+                }
+                catch (Exception exception)
+                {
+                    transaction.Result.Rollback();
+                    throw exception;
+                }
+            }
         }
 
-        private bool ItemExists(T item)
+        private async Task<bool> ItemExists(T item)
         {
-            return this._context.Set<T>().Any(i => i.ID == item.ID);
+            var itemExists = await this._context.Set<T>().AnyAsync(i => i.ID == item.ID);
+
+            return itemExists;
         }
     }
 }

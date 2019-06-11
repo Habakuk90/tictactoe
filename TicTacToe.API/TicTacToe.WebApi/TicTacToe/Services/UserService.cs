@@ -96,7 +96,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         //public BaseUser UpdateUser(string userName, string connectionId, string status)
         public async Task UpdateUser(BaseUser user)
         {
-            BaseUser dbUser = _manager.GetUserByName(user.Name);
+            BaseUser dbUser = _manager.GetUserByName(user.Name).Result;
 
             if (!dbUser.ID.Equals(Guid.Empty))
             {
@@ -128,18 +128,18 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             }
         }
 
-        /// <summary>
-        /// Checks if User exists in DB.
-        /// </summary>
-        /// <param name="userName">
-        /// Given name of user to check.
-        /// </param>
-        /// <returns>
-        /// Whether user exists in DB or not.
-        /// </returns>
-        public virtual bool UserExists(string userName)
-        {
-            return _context.AppUser.Any(x => x.Name == userName);
-        }
+        ///// <summary>
+        ///// Checks if User exists in DB.
+        ///// </summary>
+        ///// <param name="userName">
+        ///// Given name of user to check.
+        ///// </param>
+        ///// <returns>
+        ///// Whether user exists in DB or not.
+        ///// </returns>
+        //public virtual bool UserExists(string userName)
+        //{
+        //    return _context.AppUser.Any(x => x.Name == userName);
+        //}
     }
 }

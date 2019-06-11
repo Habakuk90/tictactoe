@@ -10,7 +10,7 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 namespace TicTacToe.WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190610161542_Anonymous")]
+    [Migration("20190611105409_Anonymous")]
     partial class Anonymous
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,11 +203,11 @@ namespace TicTacToe.WebApi.Migrations
 
                     b.Property<string>("ConnectionIdsString");
 
+                    b.Property<bool>("IsAnonymous");
+
                     b.Property<string>("Name");
 
                     b.Property<string>("Status");
-
-                    b.Property<bool>("isAnonymous");
 
                     b.HasKey("ID");
 
