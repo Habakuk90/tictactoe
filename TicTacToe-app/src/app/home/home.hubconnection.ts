@@ -1,12 +1,5 @@
 import { BaseHubConnection } from '../shared/connections/base.hubconnection';
 
-interface IHomeHubConnection {
-  challengePlayer(...args: any[]): void;
-  challengeResponse(...args: any[]): Promise<any>;
-  onOpenModal(method: (...args: any[]) => void): void;
-  onUpdateUserList(method: (...args: any[]) => void): void;
-}
-
 enum HomeConnMethods {
   ChallengePlayer = 'ChallengePlayer',
   ChallengeResponse = 'ChallengeResponse',

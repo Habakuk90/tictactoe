@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { IGame } from 'src/app/shared/models/game.interface';
 import { UserService } from 'src/app/shared/services/user.service';
 
