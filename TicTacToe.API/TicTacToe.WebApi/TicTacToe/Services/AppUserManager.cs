@@ -14,7 +14,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     {
         private readonly IHubClients<T> _clients;
 
-        public AppUserManager(AppDbContext context, IHubClients<T> clients) : base(context)
+        public AppUserManager(IAppDbContextFactory<AppDbContext> factory, IHubClients<T> clients) : base(factory)
         {
             this._clients = clients;
         }
@@ -40,10 +40,15 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <see cref="BaseUser"/> in DB with given userName.
         public async Task<BaseUser> GetUserByName(string userName)
         {
-            var user = await this._context.AppUser.Where(x => x.Name == userName)
-                .FirstOrDefaultAsync();
+            BaseUser user;
 
-            return user ?? new BaseUser{ ID = Guid.Empty, Name = userName };
+            using (var context = this._factory.CreateDbContext())
+            {
+                user = await context.AppUser.Where(x => x.Name == userName)
+                    .FirstOrDefaultAsync();
+
+            }
+            return user ?? new BaseUser { ID = Guid.Empty, Name = userName };
         }
 
         /// <summary>
@@ -57,29 +62,41 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </returns>
         public async Task<BaseUser> GetUserByConnection(string connectionId)
         {
-            // instead of first => by group name || first
-            BaseUser userModel = await _context.AppUser.Where(x =>
-                x.ConnectionIds.Contains(connectionId)).FirstOrDefaultAsync();
+            BaseUser user;
 
-            if (userModel == null)
+            using (var context = this._factory.CreateDbContext())
             {
-                return null;
-            }
+                // instead of first => by group name || first
+                user = await context.AppUser.Where(x =>
+                    x.ConnectionIds.Contains(connectionId)).FirstOrDefaultAsync();
 
-            userModel.CurrentConnectionId = connectionId;
-            return userModel;
+                if (user != null)
+                {
+                    user.CurrentConnectionId = connectionId;
+                }
+            }
+            return user ?? new BaseUser { ID = Guid.Empty, CurrentConnectionId = connectionId };
         }
 
         public async Task<bool> UserNameExists(string name)
         {
-            var userExists = await this._context.AppUser.AnyAsync(x => x.Name == name);
+            bool exists = false;
 
-            return userExists;
+            using (var context = this._factory.CreateDbContext())
+            {
+                exists = await context.AppUser.AnyAsync(x => x.Name == name);
+            }
+            return exists;
         }
 
         private async Task<IEnumerable<BaseUser>> GetAllUsers()
         {
-            var allUser = await _context.AppUser.ToListAsync<BaseUser>();
+            IEnumerable<BaseUser> allUser;
+
+            using (var context = this._factory.CreateDbContext())
+            {
+                allUser = await context.AppUser.ToListAsync<BaseUser>();
+            }
 
             return allUser;
         }

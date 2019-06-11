@@ -1,4 +1,5 @@
-﻿using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+﻿using System.Threading.Tasks;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
@@ -28,7 +29,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="tileId">
         /// Id of the Tile which got clicked on TicTacToe.
         /// </param>
-        public async void TileClicked(string groupName, string tileId)
+        public async Task TileClicked(string groupName, string tileId)
         {
             await Clients.Group(groupName).SwitchTurn();
             await Clients.Group(groupName).TileChange(tileId);
@@ -47,7 +48,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="winningLine">
         /// the winning Line to be updated for all player in Group.
         /// </param>
-        public async void GameOver(
+        public async Task GameOver(
             string groupName,
             string winningTileId, 
             string winningLine)

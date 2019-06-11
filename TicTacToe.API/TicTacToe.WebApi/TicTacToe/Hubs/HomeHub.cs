@@ -4,7 +4,6 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -37,19 +36,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            BaseUser currentUser = this._userService
-                .GetUserByConnection(Context.ConnectionId);
+            BaseUser currentUser = await this._userService
+                .GetUser(connectionId: Context.ConnectionId);
 
-            BaseUser enemyUser = this._userService
-                .GetUserByName(enemyName);
-
+            BaseUser enemyUser = await this._userService
+                .GetUser(name: enemyName);
+            
             List<BaseUser> allUser = new List<BaseUser>
             {
                 currentUser,
                 enemyUser
             };
 
-            this._userService.UpdateUser(allUser, Constants.Status.INGAME);
+            await this._userService.UpdateUser(allUser, Constants.Status.INGAME);
 
             // fixme dont call all connection ids but only one.
             await Clients.Clients(enemyUser.ConnectionIds)
@@ -72,8 +71,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengeResponse(ChallengeResponse response)
         {
-            BaseUser currentUser = this._userService.GetUserByConnection(Context.ConnectionId);
-            BaseUser enemyUser = this._userService.GetUserByName(response.EnemyName);
+            BaseUser currentUser = await this._userService
+                .GetUser(connectionId: Context.ConnectionId);
+            BaseUser enemyUser = await this._userService
+                .GetUser(name: response.EnemyName);
 
             List<BaseUser> allUser = new List<BaseUser>
             {
@@ -97,7 +98,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Clients.Clients(enemyUser.ConnectionIds)
                         .OpenModal(response.EnemyName, response.GameName, Constants.ModalStatus.DECLINED);
 
-                    this._userService.UpdateUser(allUser, Constants.Status.ONLINE);
+                    await this._userService.UpdateUser(allUser, Constants.Status.ONLINE);
 
                     break;
             }

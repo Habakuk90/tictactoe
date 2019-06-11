@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Entities
@@ -42,6 +38,5 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
-
     }
 }

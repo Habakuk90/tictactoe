@@ -20,28 +20,18 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     {
         #region private properties
 
-        private readonly AppDbContext _dbContext;
         private readonly IHubContext<THub, T> _baseHub;
 
         #endregion
 
         public BaseService(
-            AppDbContext context,
+            IAppDbContextFactory<AppDbContext> factory,
             IHubContext<THub, T> baseHub)
         {
-            this._dbContext = context;
             this._baseHub = baseHub;
         }
 
         #region public virtual methods 
-
-        public virtual void AddOrUpdate<I>(I item) where I : BaseEntity, new()
-        {
-            //using (var manager = new EntityManager<I>(_dbContext))
-            //{
-                //_manager.AddOrUpdate(item);
-            //}
-        }
 
         /// <summary>
         /// Join Group for connection and database
@@ -83,8 +73,8 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             //}
 
             //this.ApplyUserChange(user);
-            _dbContext.Attach(user);
-            _dbContext.SaveChanges();
+            //_dbContext.Attach(user);
+            //_dbContext.SaveChanges();
         }
 
         ///// <summary>

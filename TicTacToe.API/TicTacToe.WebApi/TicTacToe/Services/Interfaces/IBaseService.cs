@@ -1,14 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using TicTacToe.WebApi.TicTacToe.Entities;
+﻿using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
 {
     public interface IBaseService
     {
-        void AddOrUpdate<M>(M item) where M: BaseEntity, new();
-
         /// <summary>
         /// Join Group for connection and database
         /// </summary>

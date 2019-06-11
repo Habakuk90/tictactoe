@@ -1,14 +1,12 @@
 ﻿namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
+    using System;
+    using System.Threading.Tasks;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Models;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-    using global::TicTacToe.WebApi.TicTacToe.Services;
-    using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Logging;
-    using System;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Represents an abstract BaseHub with all User relevant connection Methods
@@ -42,7 +40,7 @@
         /// <returns>
         /// Same groupname
         /// </returns>
-        public string JoinGroup(string groupName)
+        public async Task<string> JoinGroup(string groupName)
         {
             // TODOANDI: add or update group, if last member => remove;
 
@@ -62,7 +60,7 @@
         /// <param name="groupName">
         /// Given name for group from frontend.
         /// </param>
-        public void LeaveGroup(string groupName)
+        public async Task LeaveGroup(string groupName)
         {
             // TODOANDI: update or remove group, if last member => remove;
             //this._baseService.LeaveGroupAsync(currentUser, groupName);
@@ -74,7 +72,7 @@
         /// <param name="userName">
         /// userName of current User.
         /// </param>
-        public void AddCurrentUser(string userName, bool isAnonymous = true)
+        public async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
             var currentUser = new BaseUser
             {
@@ -84,8 +82,7 @@
                 Status = Constants.Status.ONLINE
             };
 
-            // TODOANDI: Add or update current user, if anonymous => add flag, to be removed
-            this._service.UpdateUser(currentUser);
+            await this._service.UpdateUser(currentUser);
         }
 
         /// <summary>
@@ -104,13 +101,7 @@
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            //BaseUser currentUser = this._baseService
-            //    .GetUserByConnection(Context.ConnectionId);
-
-            // wo anders zuweisen bidde todoandi
-            // leave group and remove user from connection
-            await this._service.RemoveUser(this._service.GetUserByConnection(Context.ConnectionId));
-            //await this._baseService.LeaveGroupAsync(this._currentUser, currentUser.GroupName);
+            await this._service.RemoveUser(Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
     }

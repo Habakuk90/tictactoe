@@ -7,38 +7,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
     public interface IUserService : IBaseService
     {
-        /// <summary>
-        /// Gets user by connection from DB.
-        /// </summary>
-        /// <param name="connectionId">
-        /// connection ID which should be searched by in DB.
-        /// </param>
-        /// <returns>
-        /// <see cref="BaseUser"/> in DB with given connectionID.
-        /// </returns>s
-        BaseUser GetUserByConnection(string connectionId);
-
-        /// <summary>
-        /// Gets user by name from DB.
-        /// </summary>
-        /// <param name="userName">
-        /// username which should be searched by in DB.
-        /// </param>
-        /// <returns>
-        /// <see cref="BaseUser"/> in DB with given userName.
-        BaseUser GetUserByName(string userName);
-
+        Task<BaseUser> GetUser(string name = "", string connectionId = "");
 
         /// <summary>
         /// Removes all connection ID's and sets <see cref="BaseUser"/> as offline
         /// </summary>
-        /// <param name="user">
+        /// <param name="connectionId">
         /// User which should be removed.
         /// </param>
         /// <param name="currentConnectionId">
         /// current connection Id of user which should be removed.
         /// </param>
-        Task RemoveUser(BaseUser user);
+        Task RemoveUser(string connectionId);
 
         /// <summary>
         /// Updates user in DB.
@@ -62,18 +42,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// <param name="status">
         /// <see cref="Constants.Status"/> of users.
         /// </param>
-        void UpdateUser(ICollection<BaseUser> users, string status);
-
-        ///// <summary>
-        ///// Checks if User exists in DB.
-        ///// </summary>
-        ///// <param name="userName">
-        ///// Given name of user to check.
-        ///// </param>
-        ///// <returns>
-        ///// Whether user exists in DB or not.
-        ///// </returns>
-        //bool UserExists(string userName);
-
+        Task UpdateUser(ICollection<BaseUser> users, string status);
     }
 }

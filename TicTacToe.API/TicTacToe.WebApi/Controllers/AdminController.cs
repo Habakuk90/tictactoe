@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using TicTacToe.WebApi.TicTacToe.Entities;
-using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.Controllers
 {
@@ -13,9 +9,9 @@ namespace TicTacToe.WebApi.Controllers
     {
         private AppDbContext _context;
 
-        public AdminController(AppDbContext context)
+        public AdminController()
         {
-            _context = context;
+            _context = new AppDbContextFactory().CreateDbContext();
         }
 
         [HttpGet]

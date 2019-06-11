@@ -15,44 +15,43 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     {
         #region private properties
 
-        private AppDbContext _context;
         private IHubContext<BaseHub<IBaseHub>, IBaseHub> _hub;
         private readonly AppUserManager<IBaseHub> _manager;
         public BaseUser _currentUser;
 
+
         #endregion
 
         public UserService(
-            AppDbContext context,
+            IAppDbContextFactory<AppDbContext> factory,
             IHubContext<BaseHub<IBaseHub>, IBaseHub> hub)
-            : base(context, hub)
+            : base(factory, hub)
         {
-            this._context = context;
             this._hub = hub;
-            this._manager = new AppUserManager<IBaseHub>(context, hub.Clients);
+
+            // TODOANDI: fix workaround
+            this._manager = new AppUserManager<IBaseHub>(factory, hub.Clients);
         }
 
-        public virtual BaseUser GetUserByConnection(string connectionId)
+        public virtual async Task<BaseUser> GetUser(string name = "", string connectionId = "")
         {
-            // instead of first => by group name || first
-            BaseUser userModel = _context.AppUser.Where(x =>
-                x.ConnectionIds.Contains(connectionId)).FirstOrDefault();
-
-            if (userModel == null)
+            BaseUser user = new BaseUser
             {
-                return null;
+                Name = name,
+                CurrentConnectionId = connectionId
+            };
+
+            if (!string.IsNullOrEmpty(connectionId))
+            {
+                user = await this._manager.GetUserByConnection(connectionId);
             }
 
-            userModel.CurrentConnectionId = connectionId;
-            return userModel;
-        }
+            if (user == null && !string.IsNullOrEmpty(user.Name))
+            {
+                user = await this._manager.GetUserByName(user.Name);
+            }
 
-        public virtual BaseUser GetUserByName(string userName)
-        {
-            BaseUser userModel = _context.AppUser
-                .FirstOrDefault(x => x.Name == userName);
-
-            return userModel;
+            return user;
         }
 
         /// <summary>
@@ -64,17 +63,23 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="currentConnectionId">
         /// current connection Id of user which should be removed.
         /// </param>
-        public async Task RemoveUser(BaseUser user)
+        public async Task RemoveUser(string connectionId)
         {
+            BaseUser user = this._manager.GetUserByConnection(connectionId).Result;
+
+            if (user == null)
+            {
+                throw new Exception($"Couldn\'t Remove User with ConnectionId: {connectionId}");
+            }
 
             if (user.IsAnonymous)
             {
+                //this._logger.LogInformation($"Removed {user.Name} from DB, since he is Anonymous");
                 await this._manager.Remove(user);
             }
 
-            // #9: Multiple Connections for one user should be possible
             user.ConnectionIds.RemoveAll(x => x.Contains(user.CurrentConnectionId));
-            
+
             if (!user.ConnectionIds.Any())
             {
                 user.Status = Constants.Status.OFFLINE;
@@ -92,11 +97,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="status">
         /// Status <see cref="Constants.Status"/> of user.
         /// </param>
-
-        //public BaseUser UpdateUser(string userName, string connectionId, string status)
         public async Task UpdateUser(BaseUser user)
         {
-            BaseUser dbUser = _manager.GetUserByName(user.Name).Result;
+            BaseUser dbUser = await this.GetUser(connectionId: user.CurrentConnectionId);
 
             if (!dbUser.ID.Equals(Guid.Empty))
             {
@@ -120,26 +123,12 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="status">
         /// <see cref="Constants.Status"/> of users.
         /// </param>
-        public virtual void UpdateUser(ICollection<BaseUser> users, string status)
+        public virtual async Task UpdateUser(ICollection<BaseUser> users, string status)
         {
-            foreach (BaseUser userModel in users)
+            foreach (BaseUser user in users)
             {
-                //this.UpdateUser(userModel, status);
+                await this.UpdateUser(user);
             }
         }
-
-        ///// <summary>
-        ///// Checks if User exists in DB.
-        ///// </summary>
-        ///// <param name="userName">
-        ///// Given name of user to check.
-        ///// </param>
-        ///// <returns>
-        ///// Whether user exists in DB or not.
-        ///// </returns>
-        //public virtual bool UserExists(string userName)
-        //{
-        //    return _context.AppUser.Any(x => x.Name == userName);
-        //}
     }
 }
