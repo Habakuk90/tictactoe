@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
@@ -41,7 +42,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
             BaseUser enemyUser = await this._userService
                 .GetUser(name: enemyName);
-            
+
             List<BaseUser> allUser = new List<BaseUser>
             {
                 currentUser,
@@ -103,12 +104,35 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     break;
             }
         }
+        public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
+        {
+            var currentUser = new BaseUser
+            {
+                Name = userName,
+                CurrentConnectionId = Context.ConnectionId,
+                IsAnonymous = isAnonymous,
+                Status = Constants.Status.ONLINE
+            };
+
+            await this._userService.UpdateUser(currentUser);
+        }
 
         //TODOANDI Different naming
         public async Task StartGame(string groupName)
         {
-            
+
             await Clients.Group(groupName).StartGame(groupName);
+        }
+
+        /// <summary>
+        /// Defines what happens when frontend user disconnects
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public override async Task OnDisconnectedAsync(Exception e)
+        { 
+            await this._userService.RemoveUser(Context.ConnectionId);
+            await base.OnDisconnectedAsync(e);
         }
     }
 }

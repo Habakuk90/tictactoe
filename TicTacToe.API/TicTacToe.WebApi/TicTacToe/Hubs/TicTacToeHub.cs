@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
@@ -54,6 +56,30 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             string winningLine)
         {
             await Clients.Group(groupName).GameOver(winningTileId, winningLine);
+        }
+
+        public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
+        {
+            var currentUser = new BaseUser
+            {
+                Name = userName,
+                CurrentConnectionId = Context.ConnectionId,
+                IsAnonymous = isAnonymous,
+                Status = Constants.Status.ONLINE
+            };
+
+            await this._userService.UpdateUser(currentUser);
+        }
+
+        /// <summary>
+        /// Defines what happens when frontend user disconnects
+        /// </summary>
+        /// <param name="exception"></param>
+        /// <returns></returns>
+        public override async Task OnDisconnectedAsync(Exception e)
+        {
+            await this._userService.RemoveUser(Context.ConnectionId);
+            await base.OnDisconnectedAsync(e);
         }
     }
 }

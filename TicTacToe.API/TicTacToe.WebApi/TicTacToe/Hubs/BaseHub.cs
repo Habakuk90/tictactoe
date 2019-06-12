@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-    using global::TicTacToe.WebApi.TicTacToe.Hubs.Models;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Logging;
@@ -72,18 +71,7 @@
         /// <param name="userName">
         /// userName of current User.
         /// </param>
-        public async Task AddCurrentUser(string userName, bool isAnonymous = true)
-        {
-            var currentUser = new BaseUser
-            {
-                Name = userName,
-                CurrentConnectionId = Context.ConnectionId,
-                IsAnonymous = isAnonymous,
-                Status = Constants.Status.ONLINE
-            };
-
-            await this._service.UpdateUser(currentUser);
-        }
+        public abstract Task AddCurrentUser(string userName, bool isAnonymous = true);
 
         /// <summary>
         /// Defines what happens when frontend user connects.
@@ -101,7 +89,6 @@
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            await this._service.RemoveUser(Context.ConnectionId);
             await base.OnDisconnectedAsync(exception);
         }
     }

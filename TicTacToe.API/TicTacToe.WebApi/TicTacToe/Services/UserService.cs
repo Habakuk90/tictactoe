@@ -18,17 +18,12 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         // now HomeHub and UserService have to be open at all times to accept all user changes
         // OR MAYBE not => test pls;
         private readonly IAppUserManager<HomeHub, IHomeHub> _manager;
-        public BaseUser _currentUser;
-
 
         #endregion
 
-        public UserService(
-            IAppUserManager<HomeHub, IHomeHub> manager)
+        public UserService(IAppUserManager<HomeHub, IHomeHub> manager)
         {
             this._manager = manager;
-            // TODOANDI: fix workaround
-            //this._manager = new AppUserManager<IBaseHub>(factory, hub.Clients);
         }
 
         public virtual async Task<BaseUser> GetUser(string name = "", string connectionId = "")
