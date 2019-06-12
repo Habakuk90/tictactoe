@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using global::TicTacToe.WebApi.TicTacToe.Entities;
 
-    public class BaseGroup : Entity
+    public class Group : Entity
     {
         public string Type { get; set; }
 
