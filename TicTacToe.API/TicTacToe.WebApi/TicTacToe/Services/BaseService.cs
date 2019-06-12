@@ -16,19 +16,14 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     /// <typeparam name="T">
     /// <see cref="IBaseHub"/> to be implemented in <see cref="IHubContext{THub, T}"/>
     /// </typeparam>
-    public abstract class BaseService<THub, T> : IBaseService where THub : Hub<T> where T : class, IBaseHub
+    public abstract class BaseService : IBaseService
     {
         #region private properties
 
-        private readonly IHubContext<THub, T> _baseHub;
-
         #endregion
 
-        public BaseService(
-            IAppDbContextFactory<AppDbContext> factory,
-            IHubContext<THub, T> baseHub)
+        public BaseService()
         {
-            this._baseHub = baseHub;
         }
 
         #region public virtual methods 
@@ -46,8 +41,8 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             //user.GroupName = groupName;
             //TODoandi
-            await this._baseHub.Groups
-                .AddToGroupAsync(user.CurrentConnectionId, groupName);
+            //await this._baseHub.Groups
+            //    .AddToGroupAsync(user.CurrentConnectionId, groupName);
 
             //this.ApplyUserChange();
         }

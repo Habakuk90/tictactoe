@@ -29,7 +29,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// <param name="status">
         /// Status <see cref="Constants.Status"/> of user.
         /// </param>
-        //BaseUser UpdateUser(string userName, string connectionId, string status);
         Task UpdateUser(BaseUser user);
 
 

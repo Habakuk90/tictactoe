@@ -7,34 +7,31 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
 {
     public class EntityManager<T> where T : BaseEntity
     {
-        public readonly IAppDbContextFactory<AppDbContext> _factory;
+        public readonly AppDbContext _context;
 
-        public EntityManager(IAppDbContextFactory<AppDbContext> factory)
+        public EntityManager(AppDbContext context)
         {
-            this._factory = factory;
+            this._context = context;
         }
 
         public virtual async Task AddOrUpdate(T item)
         {
-            using (var context = this._factory.CreateDbContext())
+            try
             {
-                try
+                if (this.ItemExists(item).Result)
                 {
-                    if (this.ItemExists(item).Result)
-                    {
-                       context.Set<T>().Update(item);
-                    }
-                    else
-                    {
-                        context.Set<T>().Add(item);
-                    }
+                    _context.Set<T>().Update(item);
+                }
+                else
+                {
+                    _context.Set<T>().Add(item);
+                }
 
-                    await context.SaveChangesAsync();
-                }
-                catch (Exception exception)
-                {
-                    throw exception;
-                }
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                throw exception;
             }
         }
 
@@ -49,17 +46,14 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
 
         public virtual async Task Remove(T item)
         {
-            using (var context = this._factory.CreateDbContext())
+            try
             {
-                try
-                {
-                    context.Set<T>().Remove(item);
-                    await context.SaveChangesAsync();
-                }
-                catch (Exception exception)
-                {
-                    throw exception;
-                }
+                _context.Set<T>().Remove(item);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                throw exception;
             }
         }
 
@@ -67,10 +61,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
             bool itemExists = false;
 
-            using(var context = this._factory.CreateDbContext())
-            {
-                itemExists = await context.Set<T>().AnyAsync(i => i.ID == item.ID);
-            }
+            itemExists = await _context.Set<T>().AnyAsync(i => i.ID == item.ID);
 
             return itemExists;
         }

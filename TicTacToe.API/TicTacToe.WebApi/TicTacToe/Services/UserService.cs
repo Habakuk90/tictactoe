@@ -2,32 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
-using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class UserService : BaseService<BaseHub<IBaseHub>, IBaseHub>, IUserService
+    public class UserService : BaseService, IUserService
     {
         #region private properties
 
-        private readonly AppUserManager<IBaseHub> _manager;
+        // somehow it is needed to specify the hub, future build it generic if possible 
+        // now HomeHub and UserService have to be open at all times to accept all user changes
+        // OR MAYBE not => test pls;
+        private readonly IAppUserManager<HomeHub, IHomeHub> _manager;
         public BaseUser _currentUser;
 
 
         #endregion
 
         public UserService(
-            IAppDbContextFactory<AppDbContext> factory,
-            IHubContext<BaseHub<IBaseHub>, IBaseHub> hub)
-            : base(factory, hub)
+            IAppUserManager<HomeHub, IHomeHub> manager)
         {
+            this._manager = manager;
             // TODOANDI: fix workaround
-            this._manager = new AppUserManager<IBaseHub>(factory, hub.Clients);
+            //this._manager = new AppUserManager<IBaseHub>(factory, hub.Clients);
         }
 
         public virtual async Task<BaseUser> GetUser(string name = "", string connectionId = "")
@@ -73,6 +74,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             {
                 //this._logger.LogInformation($"Removed {user.Name} from DB, since he is Anonymous");
                 await this._manager.Remove(user);
+                return;
             }
 
             user.ConnectionIds.RemoveAll(x => x.Contains(user.CurrentConnectionId));
@@ -96,7 +98,8 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         public async Task UpdateUser(BaseUser user)
         {
-            BaseUser dbUser = await this.GetUser(connectionId: user.CurrentConnectionId);
+            var connectionId = user.CurrentConnectionId;
+            BaseUser dbUser = await this.GetUser(name: user.Name);
 
             if (!dbUser.ID.Equals(Guid.Empty))
             {
@@ -104,9 +107,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
                 dbUser.IsAnonymous = false;
             }
 
-            user.ConnectionIds.Add(user.CurrentConnectionId);
+            user.ConnectionIds.Add(connectionId);
             user.ConnectionIds = user.ConnectionIds.Distinct().ToList();
-
+            user.CurrentConnectionId = connectionId;
             await _manager.AddOrUpdate(user);
         }
 

@@ -7,16 +7,17 @@ using Microsoft.EntityFrameworkCore;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class AppUserManager<T> : EntityManager<BaseUser> where T : class, IBaseHub
+    public class AppUserManager<THub, T> : EntityManager<BaseUser>, IAppUserManager<THub, T> where THub : Hub<T> where T : class, IBaseHub
     {
-        private readonly IHubClients<T> _clients;
+        private readonly IHubContext<THub, T> _hub;
 
-        public AppUserManager(IAppDbContextFactory<AppDbContext> factory, IHubClients<T> clients) : base(factory)
+        public AppUserManager(AppDbContext context, IHubContext<THub, T> hub) : base(context)
         {
-            this._clients = clients;
+            this._hub = hub;
         }
 
         public override async Task AddOrUpdate(BaseUser item)
@@ -26,7 +27,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             // todoandi consider updating userobjects to frontend
             IEnumerable<BaseUser> userOnline = await this.GetAllUsers();
 
-            await this._clients.All.UpdateUserList(userOnline.Select(user => user.Name));
+            await this._hub.Clients.All.UpdateUserList(userOnline);
         }
 
         /// <summary>
@@ -41,12 +42,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             BaseUser user;
 
-            using (var context = this._factory.CreateDbContext())
-            {
-                user = await context.AppUser.Where(x => x.Name == userName)
-                    .FirstOrDefaultAsync();
+            user = await _context.AppUser.Where(x => x.Name == userName)
+                .FirstOrDefaultAsync();
 
-            }
             return user ?? new BaseUser { ID = Guid.Empty, Name = userName };
         }
 
@@ -63,16 +61,13 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             BaseUser user;
 
-            using (var context = this._factory.CreateDbContext())
-            {
-                // instead of first => by group name || first
-                user = await context.AppUser.Where(x =>
-                    x.ConnectionIds.Contains(connectionId)).FirstOrDefaultAsync();
+            // instead of first => by group name || first
+            user = await _context.AppUser.Where(x =>
+                x.ConnectionIds.Contains(connectionId)).FirstOrDefaultAsync();
 
-                if (user != null)
-                {
-                    user.CurrentConnectionId = connectionId;
-                }
+            if (user != null)
+            {
+                user.CurrentConnectionId = connectionId;
             }
             return user ?? new BaseUser { ID = Guid.Empty, CurrentConnectionId = connectionId };
         }
@@ -81,10 +76,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             bool exists = false;
 
-            using (var context = this._factory.CreateDbContext())
-            {
-                exists = await context.AppUser.AnyAsync(x => x.Name == name);
-            }
+            exists = await _context.AppUser.AnyAsync(x => x.Name == name);
             return exists;
         }
 
@@ -92,10 +84,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             IEnumerable<BaseUser> allUser;
 
-            using (var context = this._factory.CreateDbContext())
-            {
-                allUser = await context.AppUser.ToListAsync<BaseUser>();
-            }
+            allUser = await _context.AppUser.ToListAsync<BaseUser>();
 
             return allUser;
         }

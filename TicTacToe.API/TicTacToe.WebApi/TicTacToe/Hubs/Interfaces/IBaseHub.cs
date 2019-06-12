@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
@@ -16,6 +17,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
         /// List of current online Users.
         /// </param>
         /// <returns></returns>
-        Task UpdateUserList(IEnumerable<string> onlineUsers);
+        Task UpdateUserList(IEnumerable<BaseUser> onlineUsers);
     }
 }

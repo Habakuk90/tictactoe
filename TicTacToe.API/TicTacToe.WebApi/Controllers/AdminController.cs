@@ -9,9 +9,9 @@ namespace TicTacToe.WebApi.Controllers
     {
         private AppDbContext _context;
 
-        public AdminController(IAppDbContextFactory<AppDbContext> factory)
+        public AdminController(AppDbContext context)
         {
-            _context = factory.CreateDbContext();
+            _context = context;
         }
 
         [HttpGet]

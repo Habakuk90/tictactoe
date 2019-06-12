@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
@@ -15,6 +16,7 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi
 {
@@ -55,9 +57,9 @@ namespace TicTacToe.WebApi
 
             // DB Connection DefaultConnection to be found in appsettings.json
             // ===== Add our DbContext ========
-            //services.AddDbContext<AppDbContext>(options =>
-            //    options
-            //        .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<AppDbContext>(options =>
+                options
+                    .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             // ===== Add Identity ========
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -110,7 +112,7 @@ namespace TicTacToe.WebApi
             services.AddMvc();
             services.AddSignalR();
             services.AddTransient<IUserService, UserService>();
-            services.AddSingleton<IAppDbContextFactory<AppDbContext>, AppDbContextFactory>();
+            services.AddScoped(typeof(IAppUserManager<,>), typeof(AppUserManager<,>));
 
 
             // Register the Swagger generator, defining 1 or more Swagger documents
