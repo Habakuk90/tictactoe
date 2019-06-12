@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
-    public interface ITicTacToeHub : IBaseHub
+    public interface ITicTacToeHub : IAppHub
     {
         Task SwitchTurn();
 

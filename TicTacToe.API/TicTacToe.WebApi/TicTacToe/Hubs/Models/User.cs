@@ -8,7 +8,7 @@
     /// <summary>
     /// Represents a base user.
     /// </summary>
-    public class BaseUser : BaseEntity
+    public class User : Entity
     {
         public string Status { get; set; }
 

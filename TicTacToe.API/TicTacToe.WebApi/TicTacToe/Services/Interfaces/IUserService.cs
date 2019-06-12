@@ -7,10 +7,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
     public interface IUserService : IBaseService
     {
-        Task<BaseUser> GetUser(string name = "", string connectionId = "");
+        Task<User> GetUser(string name = "", string connectionId = "");
 
         /// <summary>
-        /// Removes all connection ID's and sets <see cref="BaseUser"/> as offline
+        /// Removes all connection ID's and sets <see cref="User"/> as offline
         /// </summary>
         /// <param name="connectionId">
         /// User which should be removed.
@@ -24,12 +24,12 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// Updates user in DB.
         /// </summary>
         /// <param name="user">
-        /// <see cref="BaseUser"/> which should be updated in DB.
+        /// <see cref="User"/> which should be updated in DB.
         /// </param>
         /// <param name="status">
         /// Status <see cref="Constants.Status"/> of user.
         /// </param>
-        Task UpdateUser(BaseUser user);
+        Task UpdateUser(User user);
 
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
         /// <param name="status">
         /// <see cref="Constants.Status"/> of users.
         /// </param>
-        Task UpdateUser(ICollection<BaseUser> users, string status);
+        Task UpdateUser(ICollection<User> users, string status);
     }
 }

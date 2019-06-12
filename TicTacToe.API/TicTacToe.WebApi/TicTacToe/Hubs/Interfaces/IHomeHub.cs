@@ -2,7 +2,7 @@
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
 {
-    public interface IHomeHub : IBaseHub
+    public interface IHomeHub : IAppHub
     {
         Task SwitchTurn();
 

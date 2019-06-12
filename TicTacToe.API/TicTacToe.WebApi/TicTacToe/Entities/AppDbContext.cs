@@ -12,7 +12,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
         }
 
-        public DbSet<BaseUser> AppUser { get; set; }
+        public DbSet<User> AppUser { get; set; }
 
         public DbSet<BaseGroup> Groups { get; set; }
 
@@ -24,7 +24,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
             builder.Entity<UserGroups>().HasKey(ug => new { ug.GroupId, ug.UserId });
 
             builder.Entity<UserGroups>()
-                .HasOne<BaseUser>(x => x.User)
+                .HasOne<User>(x => x.User)
                 .WithMany(s => s.UserGroups)
                 .HasForeignKey(x => x.GroupId);
 

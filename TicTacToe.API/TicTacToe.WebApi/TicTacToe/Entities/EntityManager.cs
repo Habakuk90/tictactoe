@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TicTacToe.WebApi.TicTacToe.Entities
 {
-    public class EntityManager<T> where T : BaseEntity
+    public class EntityManager<T> where T : Entity
     {
         public readonly AppDbContext _context;
 

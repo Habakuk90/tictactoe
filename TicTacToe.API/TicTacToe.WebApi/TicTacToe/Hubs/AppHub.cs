@@ -13,7 +13,7 @@
     /// <typeparam name="T">
     /// Hub class.
     /// </typeparam>
-    public abstract class BaseHub<T> : Hub<T> where T : class, IBaseHub
+    public abstract class AppHub<T> : Hub<T> where T : class, IAppHub
     {
         private readonly IUserService _service;
 
@@ -25,7 +25,7 @@
         /// <param name="service">
         /// Service for User based methods.
         /// </param>
-        protected BaseHub(IUserService service)
+        protected AppHub(IUserService service)
         {
             this._service = service;
         }

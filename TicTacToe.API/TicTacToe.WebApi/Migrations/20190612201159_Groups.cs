@@ -2,7 +2,7 @@
 
 namespace TicTacToe.WebApi.Migrations
 {
-    public partial class Anonymous : Migration
+    public partial class Groups : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

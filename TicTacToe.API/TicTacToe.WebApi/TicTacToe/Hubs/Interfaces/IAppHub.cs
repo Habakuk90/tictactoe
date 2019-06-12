@@ -8,7 +8,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
     /// <summary>
     /// Represents Base Hub methods for <see cref="Hub{T}"/>.
     /// </summary>
-    public interface IBaseHub
+    public interface IAppHub
     {
         /// <summary>
         /// Invokes the UpdateUserList method to Clients.
@@ -17,6 +17,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
         /// List of current online Users.
         /// </param>
         /// <returns></returns>
-        Task UpdateUserList(IEnumerable<BaseUser> onlineUsers);
+        Task UpdateUserList(IEnumerable<User> onlineUsers);
     }
 }

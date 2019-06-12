@@ -26,9 +26,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             this._manager = manager;
         }
 
-        public virtual async Task<BaseUser> GetUser(string name = "", string connectionId = "")
+        public virtual async Task<User> GetUser(string name = "", string connectionId = "")
         {
-            BaseUser user = null;
+            User user = null;
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -44,7 +44,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         }
 
         /// <summary>
-        /// Removes all connection ID's and sets <see cref="BaseUser"/> as offline
+        /// Removes all connection ID's and sets <see cref="User"/> as offline
         /// </summary>
         /// <param name="user">
         /// User which should be removed.
@@ -54,7 +54,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         public async Task RemoveUser(string connectionId)
         {
-            BaseUser user = await this._manager.GetUserByConnection(connectionId);
+            User user = await this._manager.GetUserByConnection(connectionId);
 
             if (user == null)
             {
@@ -82,16 +82,16 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// Updates user in DB.
         /// </summary>
         /// <param name="user">
-        /// <see cref="BaseUser"/> which should be updated in DB.
+        /// <see cref="User"/> which should be updated in DB.
         /// </param>
         /// <param name="status">
         /// Status <see cref="Constants.Status"/> of user.
         /// </param>
-        public async Task UpdateUser(BaseUser user)
+        public async Task UpdateUser(User user)
         {
             var status = user.Status;
             var connectionId = user.CurrentConnectionId;
-            BaseUser dbUser = await this.GetUser(name: user.Name);
+            User dbUser = await this.GetUser(name: user.Name);
 
             if (dbUser != null)
             {
@@ -117,9 +117,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="status">
         /// <see cref="Constants.Status"/> of users.
         /// </param>
-        public virtual async Task UpdateUser(ICollection<BaseUser> users, string status)
+        public virtual async Task UpdateUser(ICollection<User> users, string status)
         {
-            foreach (BaseUser user in users)
+            foreach (User user in users)
             {
                 await this.UpdateUser(user);
             }

@@ -12,7 +12,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// Represents a SignalR Hub with <see cref="IHomeHub"/> client methods.
     /// </summary>
     //[Authorize(AuthenticationSchemes = "Bearer")]
-    public class HomeHub : BaseHub<IHomeHub>
+    public class HomeHub : AppHub<IHomeHub>
     {
         private readonly IUserService _userService;
 
@@ -37,13 +37,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            BaseUser currentUser = await this._userService
+            User currentUser = await this._userService
                 .GetUser(connectionId: Context.ConnectionId);
 
-            BaseUser enemyUser = await this._userService
+            User enemyUser = await this._userService
                 .GetUser(name: enemyName);
 
-            List<BaseUser> allUser = new List<BaseUser>
+            List<User> allUser = new List<User>
             {
                 currentUser,
                 enemyUser
@@ -72,12 +72,12 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengeResponse(ChallengeResponse response)
         {
-            BaseUser currentUser = await this._userService
+            User currentUser = await this._userService
                 .GetUser(connectionId: Context.ConnectionId);
-            BaseUser enemyUser = await this._userService
+            User enemyUser = await this._userService
                 .GetUser(name: response.EnemyName);
 
-            List<BaseUser> allUser = new List<BaseUser>
+            List<User> allUser = new List<User>
             {
                 currentUser,
                 enemyUser
@@ -106,7 +106,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
-            var currentUser = new BaseUser
+            var currentUser = new User
             {
                 Name = userName,
                 CurrentConnectionId = Context.ConnectionId,

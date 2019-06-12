@@ -194,7 +194,7 @@ namespace TicTacToe.WebApi.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.BaseUser", b =>
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
@@ -272,7 +272,7 @@ namespace TicTacToe.WebApi.Migrations
 
             modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.UserGroups", b =>
                 {
-                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.BaseUser", "User")
+                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);

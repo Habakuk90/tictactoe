@@ -6,11 +6,11 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
 {
-    public interface IAppUserManager<THub, T> : IEntityManager<BaseUser> where THub : Hub<T> where T : class, IBaseHub
+    public interface IAppUserManager<THub, T> : IEntityManager<User> where THub : Hub<T> where T : class, IAppHub
     {
-        Task<BaseUser> GetUserByName(string userName);
+        Task<User> GetUserByName(string userName);
 
-        Task<BaseUser> GetUserByConnection(string connectionId);
+        Task<User> GetUserByConnection(string connectionId);
 
         Task<bool> UserNameExists(string name);
     }

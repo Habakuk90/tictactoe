@@ -14,7 +14,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     /// <see cref="Hub{T}"/> to be implemented in <see cref="IHubContext{THub, T}"/>
     /// </typeparam>
     /// <typeparam name="T">
-    /// <see cref="IBaseHub"/> to be implemented in <see cref="IHubContext{THub, T}"/>
+    /// <see cref="IAppHub"/> to be implemented in <see cref="IHubContext{THub, T}"/>
     /// </typeparam>
     public abstract class BaseService : IBaseService
     {
@@ -37,7 +37,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="groupName">
         /// The group name
         /// </param>
-        public virtual async Task JoinGroupAsync(BaseUser user, string groupName)
+        public virtual async Task JoinGroupAsync(User user, string groupName)
         {
             //user.GroupName = groupName;
             //TODoandi
@@ -56,7 +56,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// <param name="groupName">
         /// Group name which will be left.
         /// </param>
-        public virtual async Task LeaveGroupAsync(BaseUser user, string groupName)
+        public virtual async Task LeaveGroupAsync(User user, string groupName)
         {
             // TODoandi
             //if (!string.IsNullOrWhiteSpace(user.GroupName))

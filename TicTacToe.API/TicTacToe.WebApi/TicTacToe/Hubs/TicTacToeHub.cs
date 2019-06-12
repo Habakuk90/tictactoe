@@ -9,7 +9,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// <summary>
     /// Represents a SignalR Hub with the <see cref="ITicTacToeHub"/> Methods.
     /// </summary>
-    public class TicTacToeHub : BaseHub<ITicTacToeHub>
+    public class TicTacToeHub : AppHub<ITicTacToeHub>
     {
         private readonly IUserService _userService;
 
@@ -60,7 +60,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
-            var currentUser = new BaseUser
+            var currentUser = new User
             {
                 Name = userName,
                 CurrentConnectionId = Context.ConnectionId,
