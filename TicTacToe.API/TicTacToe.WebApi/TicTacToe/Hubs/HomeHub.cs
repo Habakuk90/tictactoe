@@ -5,6 +5,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -15,15 +16,17 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     public class HomeHub : AppHub<IHomeHub>
     {
         private readonly IUserService _userService;
+        private readonly IGroupService _groupService;
 
         /// <summary>
         /// GameHub ctor.
         /// </summary>
         /// <param name="userService"></param>
-        public HomeHub(IUserService userService)
-            : base(userService)
+        public HomeHub(IUserService userService, IGroupService groupService)
+            : base(userService, groupService)
         {
             this._userService = userService;
+            this._groupService = groupService;
         }
 
         /// <summary>

@@ -13,21 +13,14 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 {
     public class AppUserManager<THub, T> : EntityManager<User>, IAppUserManager<THub, T> where THub : Hub<T> where T : class, IAppHub
     {
-        private readonly IHubContext<THub, T> _hub;
-
-        public AppUserManager(AppDbContext context, IHubContext<THub, T> hub) : base(context)
+        public AppUserManager(AppDbContext context) : base(context)
         {
-            this._hub = hub;
+            
         }
 
         public override async Task AddOrUpdate(User item)
         {
             await base.AddOrUpdate(item);
-
-            // todoandi consider updating userobjects to frontend
-            IEnumerable<User> userOnline = await this.GetAllUsers();
-
-            await this._hub.Clients.All.UpdateUserList(userOnline);
         }
 
         /// <summary>

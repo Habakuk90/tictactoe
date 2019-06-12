@@ -10,7 +10,7 @@ using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class UserService : BaseService, IUserService
+    public class UserService : IUserService
     {
         #region private properties
 

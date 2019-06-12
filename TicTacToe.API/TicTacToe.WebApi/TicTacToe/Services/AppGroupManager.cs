@@ -7,26 +7,15 @@ using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    /// <summary>
-    /// BaseService 
-    /// </summary>
-    /// <typeparam name="THub">
-    /// <see cref="Hub{T}"/> to be implemented in <see cref="IHubContext{THub, T}"/>
-    /// </typeparam>
-    /// <typeparam name="T">
-    /// <see cref="IAppHub"/> to be implemented in <see cref="IHubContext{THub, T}"/>
-    /// </typeparam>
-    public abstract class BaseService : IBaseService
+    public class AppGroupManager<THub, T> : EntityManager<Group>, IAppGroupManager<THub, T> where THub : Hub<T> where T : class, IAppHub
     {
-        #region private properties
+        private readonly IHubContext<THub, T> _hub;
 
-        #endregion
-
-        public BaseService()
+        public AppGroupManager(AppDbContext context, IHubContext<THub, T> hub) : base(context)
         {
+            this._hub = hub;
         }
 
-        #region public virtual methods 
 
         /// <summary>
         /// Join Group for connection and database
@@ -71,41 +60,5 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             //_dbContext.Attach(user);
             //_dbContext.SaveChanges();
         }
-
-        ///// <summary>
-        ///// Updates the UserList for all Clients.
-        ///// </summary>
-        //public virtual async void UpdateUserList()
-        //{
-        //    IEnumerable<string> userOnline = this.GetOnlineUsers()
-        //        .Select(x => x.Name);
-
-        //    await this._baseHub.Clients.All.UpdateUserList(userOnline);
-        //}
-
-        #endregion
-
-        #region private methods 
-        
-        /// <summary>
-        /// Applys user changes to DB and for all Clients.
-        /// </summary>
-        //private void ApplyUserChange()
-        //{
-        //    this._dbContext.SaveChanges();
-        //    this.UpdateUserList();
-        //}
-
-        /// <summary>
-        /// Applys user changes to DB and for all Clients.
-        /// </summary>
-        /// <param name="user"></param>
-        //private void ApplyUserChange(BaseUser user = null)
-        //{
-        //    this._dbContext.SaveChanges();
-        //    //this.UpdateUserList();
-        //}
-
-        #endregion
     }
 }

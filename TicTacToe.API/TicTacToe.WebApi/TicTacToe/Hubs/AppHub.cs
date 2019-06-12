@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
     using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
+    using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
     using Microsoft.AspNetCore.SignalR;
     using Microsoft.Extensions.Logging;
 
@@ -15,19 +16,20 @@
     /// </typeparam>
     public abstract class AppHub<T> : Hub<T> where T : class, IAppHub
     {
-        private readonly IUserService _service;
-
+        private readonly IUserService _userService;
+        private readonly IGroupService _groupService;
         public readonly ILogger _logger;
 
         /// <summary>
         /// Base hub ctor
         /// </summary>
-        /// <param name="service">
+        /// <param name="userService">
         /// Service for User based methods.
         /// </param>
-        protected AppHub(IUserService service)
+        protected AppHub(IUserService userService, IGroupService groupService)
         {
-            this._service = service;
+            this._userService = userService;
+            this._groupService = groupService;
         }
 
         /// <summary>
@@ -43,13 +45,9 @@
         {
             // TODOANDI: add or update group, if last member => remove;
 
-            //if (currentUser.GroupName == groupName)
-            //{
-            //    this._baseService.LeaveGroupAsync(currentUser, groupName);
-            //}
+            //this._groupService.
 
-            //this._baseService.JoinGroupAsync(currentUser, groupName);
-
+            
             return groupName;
         }
 

@@ -111,8 +111,12 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
+
             services.AddTransient<IUserService, UserService>();
             services.AddScoped(typeof(IAppUserManager<,>), typeof(AppUserManager<,>));
+
+            services.AddTransient<IGroupService, GroupService>();
+            services.AddScoped(typeof(IAppGroupManager<,>), typeof(AppGroupManager<,>));
 
 
             // Register the Swagger generator, defining 1 or more Swagger documents
