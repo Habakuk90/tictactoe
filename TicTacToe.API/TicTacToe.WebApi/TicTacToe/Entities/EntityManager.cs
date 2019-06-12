@@ -18,7 +18,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
             try
             {
-                if (this.ItemExists(item).Result)
+                if (await this.ItemExists(item))
                 {
                     _context.Set<T>().Update(item);
                 }

@@ -28,20 +28,16 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 
         public virtual async Task<BaseUser> GetUser(string name = "", string connectionId = "")
         {
-            BaseUser user = new BaseUser
-            {
-                Name = name,
-                CurrentConnectionId = connectionId
-            };
+            BaseUser user = null;
 
-            if (!string.IsNullOrEmpty(connectionId))
+            if (!string.IsNullOrEmpty(name))
             {
-                user = await this._manager.GetUserByConnection(connectionId);
+                user = await this._manager.GetUserByName(name);
             }
 
-            if (user == null && !string.IsNullOrEmpty(user.Name))
+            if (user == null && !string.IsNullOrEmpty(connectionId))
             {
-                user = await this._manager.GetUserByName(user.Name);
+                user = await this._manager.GetUserByConnection(connectionId);
             }
 
             return user;
@@ -58,7 +54,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         public async Task RemoveUser(string connectionId)
         {
-            BaseUser user = this._manager.GetUserByConnection(connectionId).Result;
+            BaseUser user = await this._manager.GetUserByConnection(connectionId);
 
             if (user == null)
             {
@@ -93,18 +89,21 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         public async Task UpdateUser(BaseUser user)
         {
+            var status = user.Status;
             var connectionId = user.CurrentConnectionId;
             BaseUser dbUser = await this.GetUser(name: user.Name);
 
-            if (!dbUser.ID.Equals(Guid.Empty))
+            if (dbUser != null)
             {
                 user = dbUser;
-                dbUser.IsAnonymous = false;
+                user.IsAnonymous = false;
             }
 
             user.ConnectionIds.Add(connectionId);
             user.ConnectionIds = user.ConnectionIds.Distinct().ToList();
             user.CurrentConnectionId = connectionId;
+            user.Status = status;
+
             await _manager.AddOrUpdate(user);
         }
 
@@ -125,5 +124,31 @@ namespace TicTacToe.WebApi.TicTacToe.Services
                 await this.UpdateUser(user);
             }
         }
+    }
+}
+
+public static class Extensions
+{
+    //Consider Using this
+    public static void CopyPropertiesTo<T, TU>(this T source, TU dest)
+    {
+        var sourceProps = typeof(T).GetProperties().Where(x => x.CanRead).ToList();
+        var destProps = typeof(TU).GetProperties()
+                .Where(x => x.CanWrite)
+                .ToList();
+
+        foreach (var sourceProp in sourceProps)
+        {
+            if (destProps.Any(x => x.Name == sourceProp.Name))
+            {
+                var p = destProps.First(x => x.Name == sourceProp.Name);
+                if (p.CanWrite)
+                { // check if the property can be set or no.
+                    p.SetValue(dest, sourceProp.GetValue(source, null), null);
+                }
+            }
+
+        }
+
     }
 }

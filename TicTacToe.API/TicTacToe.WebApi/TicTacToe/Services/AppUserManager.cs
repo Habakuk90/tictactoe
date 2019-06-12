@@ -45,7 +45,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             user = await _context.AppUser.Where(x => x.Name == userName)
                 .FirstOrDefaultAsync();
 
-            return user ?? new BaseUser { ID = Guid.Empty, Name = userName };
+            return user;
         }
 
         /// <summary>
@@ -69,7 +69,8 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             {
                 user.CurrentConnectionId = connectionId;
             }
-            return user ?? new BaseUser { ID = Guid.Empty, CurrentConnectionId = connectionId };
+
+            return user;
         }
 
         public async Task<bool> UserNameExists(string name)

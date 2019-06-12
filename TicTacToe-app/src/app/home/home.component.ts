@@ -8,6 +8,7 @@ import { HomeHubConnection } from './home.hubconnection';
 import { ModalService } from '../shared/modals/modal.service';
 import { Modal, IModal, Modals } from '../shared/modals/modal';
 import { HubService } from '../shared/connections/hub.service';
+import { IUser } from '../shared/models/user.interface';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   isPlayerSelected = false;
   selectionState = 0;
   selectedGames: Array<IGame>;
-  selectedPlayer: string;
+  selectedPlayer: IUser;
 
   hub: HomeHubConnection;
 
@@ -59,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.userService._HomeStateSubject.next(step);
   }
 
-  enemySelected(enemy: string) {
+  enemySelected(enemy: IUser) {
     this.selectedPlayer = enemy;
     this.isPlayerSelected = enemy != null;
     this.userService._HomeStateSubject.next(2);
@@ -73,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   challengeSelectedPlayer() {
-    this.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
+    this.hub.challengePlayer(this.selectedPlayer.name, 'tictactoe');
   }
 
   ngOnDestroy() {
@@ -86,7 +87,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   registerOnMethods() {
     const that = this;
-    this.hub.onUpdateUserList(userOnline => {
+    this.hub.onUpdateUserList((userOnline: Array<IUser>) => {
       that.userService.userOnline = userOnline;
     });
 
