@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Hubs.Manager;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
-using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -15,18 +14,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     //[Authorize(AuthenticationSchemes = "Bearer")]
     public class HomeHub : AppHub<IHomeHub>
     {
-        private readonly IUserService _userService;
-        private readonly IGroupService _groupService;
-
+        // TODOANDI: check if there's a better way than AppHub<IHomeHub> 
+        private readonly IHubManager<HomeHub, IHomeHub> _manager;
         /// <summary>
         /// GameHub ctor.
         /// </summary>
         /// <param name="userService"></param>
-        public HomeHub(IUserService userService, IGroupService groupService)
-            : base(userService, groupService)
+        public HomeHub(HubManagerFactory<HomeHub, IHomeHub> factory)
         {
-            this._userService = userService;
-            this._groupService = groupService;
+            this._manager = factory.Create();
         }
 
         /// <summary>
@@ -40,10 +36,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengePlayer(string enemyName, string gameName)
         {
-            User currentUser = await this._userService
+            User currentUser = await this._manager
                 .GetUser(connectionId: Context.ConnectionId);
 
-            User enemyUser = await this._userService
+            User enemyUser = await this._manager
                 .GetUser(name: enemyName);
 
             List<User> allUser = new List<User>
@@ -52,7 +48,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 enemyUser
             };
 
-            await this._userService.UpdateUser(allUser, Constants.Status.INGAME);
+            allUser.ForEach(x => x.Status = Constants.Status.INGAME);
+
+            await this._manager.UpdateUser(allUser);
 
             // fixme dont call all connection ids but only one.
             await Clients.Clients(enemyUser.ConnectionIds)
@@ -75,9 +73,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// </param>
         public async Task ChallengeResponse(ChallengeResponse response)
         {
-            User currentUser = await this._userService
+            User currentUser = await this._manager
                 .GetUser(connectionId: Context.ConnectionId);
-            User enemyUser = await this._userService
+            User enemyUser = await this._manager
                 .GetUser(name: response.EnemyName);
 
             List<User> allUser = new List<User>
@@ -102,11 +100,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                     await Clients.Clients(enemyUser.ConnectionIds)
                         .OpenModal(response.EnemyName, response.GameName, Constants.ModalStatus.DECLINED);
 
-                    await this._userService.UpdateUser(allUser, Constants.Status.ONLINE);
+                    allUser.ForEach(x => x.Status = Constants.Status.ONLINE);
+
+                    await this._manager.UpdateUser(allUser);
 
                     break;
             }
         }
+
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
             var currentUser = new User
@@ -117,7 +118,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
                 Status = Constants.Status.ONLINE
             };
 
-            await this._userService.UpdateUser(currentUser);
+            await this._manager.UpdateUser(currentUser);
         }
 
         //TODOANDI Different naming
@@ -134,8 +135,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns></returns>
         public override async Task OnDisconnectedAsync(Exception e)
         { 
-            await this._userService.RemoveUser(Context.ConnectionId);
+            await this._manager.RemoveUser(Context.ConnectionId);
             await base.OnDisconnectedAsync(e);
+        }
+
+        public override Task<string> JoinGroup(string groupName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Task LeaveGroup(string groupName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

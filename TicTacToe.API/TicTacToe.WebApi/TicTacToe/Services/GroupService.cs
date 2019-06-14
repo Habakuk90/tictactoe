@@ -1,18 +1,15 @@
 ﻿using System.Threading.Tasks;
-using TicTacToe.WebApi.TicTacToe.Hubs;
-using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
+using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Services
 {
-    public class GroupService : IGroupService
+    public class GroupService<T> : EntityManager<Group>, IGroupService<T>
     {
-        private readonly IAppGroupManager<HomeHub, IHomeHub> _manager;
 
-        public GroupService(IAppGroupManager<HomeHub, IHomeHub> manager)
+        public GroupService(AppDbContext context) : base(context)
         {
-            this._manager = manager;
         }
 
 

@@ -1,13 +1,11 @@
-﻿namespace TicTacToe.WebApi.TicTacToe.Hubs
-{
-    using System;
-    using System.Threading.Tasks;
-    using global::TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
-    using global::TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
-    using global::TicTacToe.WebApi.TicTacToe.Services.Interfaces;
-    using Microsoft.AspNetCore.SignalR;
-    using Microsoft.Extensions.Logging;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
+using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 
+namespace TicTacToe.WebApi.TicTacToe.Hubs
+{
     /// <summary>
     /// Represents an abstract BaseHub with all User relevant connection Methods
     /// </summary>
@@ -16,8 +14,6 @@
     /// </typeparam>
     public abstract class AppHub<T> : Hub<T> where T : class, IAppHub
     {
-        private readonly IUserService _userService;
-        private readonly IGroupService _groupService;
         public readonly ILogger _logger;
 
         /// <summary>
@@ -26,10 +22,8 @@
         /// <param name="userService">
         /// Service for User based methods.
         /// </param>
-        protected AppHub(IUserService userService, IGroupService groupService)
+        public AppHub()
         {
-            this._userService = userService;
-            this._groupService = groupService;
         }
 
         /// <summary>
@@ -41,15 +35,7 @@
         /// <returns>
         /// Same groupname
         /// </returns>
-        public async Task<string> JoinGroup(string groupName)
-        {
-            // TODOANDI: add or update group, if last member => remove;
-
-            //this._groupService.
-
-            
-            return groupName;
-        }
+        public abstract Task<string> JoinGroup(string groupName);
 
         /// <summary>
         /// Leave Group Hub method.
@@ -57,11 +43,7 @@
         /// <param name="groupName">
         /// Given name for group from frontend.
         /// </param>
-        public async Task LeaveGroup(string groupName)
-        {
-            // TODOANDI: update or remove group, if last member => remove;
-            //this._baseService.LeaveGroupAsync(currentUser, groupName);
-        }
+        public abstract Task LeaveGroup(string groupName);
 
         /// <summary>
         /// Marks Current user as online, if new user, add to DB

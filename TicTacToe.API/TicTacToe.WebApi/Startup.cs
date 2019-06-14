@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
+using TicTacToe.WebApi.TicTacToe.Hubs.Manager;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
 using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
@@ -112,11 +113,10 @@ namespace TicTacToe.WebApi
             services.AddMvc();
             services.AddSignalR();
 
-            services.AddTransient<IUserService, UserService>();
-            services.AddScoped(typeof(IAppUserManager<,>), typeof(AppUserManager<,>));
+            services.AddScoped(typeof(HubManagerFactory<,>));
 
-            services.AddTransient<IGroupService, GroupService>();
-            services.AddScoped(typeof(IAppGroupManager<,>), typeof(AppGroupManager<,>));
+            services.AddTransient(typeof(IUserService<>), typeof(UserService<>));
+            services.AddTransient(typeof(IGroupService<>), typeof(GroupService<>));
 
 
             // Register the Swagger generator, defining 1 or more Swagger documents

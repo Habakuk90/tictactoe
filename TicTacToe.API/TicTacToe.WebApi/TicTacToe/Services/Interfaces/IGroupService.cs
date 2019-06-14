@@ -3,7 +3,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
 {
-    public interface IGroupService : IBaseService
+    public interface IGroupService<T> : IBaseService<Group>
     {
         /// <summary>
         /// Join Group for connection and database

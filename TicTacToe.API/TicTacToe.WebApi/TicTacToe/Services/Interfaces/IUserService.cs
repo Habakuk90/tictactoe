@@ -5,42 +5,13 @@ using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces
 {
-    public interface IUserService : IBaseService
+    public interface IUserService<T> : IBaseService<User>
     {
-        Task<User> GetUser(string name = "", string connectionId = "");
+        //Task<User> GetUser(string name = "", string connectionId = "");
+        Task<User> GetUserByName(string userName);
 
-        /// <summary>
-        /// Removes all connection ID's and sets <see cref="User"/> as offline
-        /// </summary>
-        /// <param name="connectionId">
-        /// User which should be removed.
-        /// </param>
-        /// <param name="currentConnectionId">
-        /// current connection Id of user which should be removed.
-        /// </param>
-        Task RemoveUser(string connectionId);
-
-        /// <summary>
-        /// Updates user in DB.
-        /// </summary>
-        /// <param name="user">
-        /// <see cref="User"/> which should be updated in DB.
-        /// </param>
-        /// <param name="status">
-        /// Status <see cref="Constants.Status"/> of user.
-        /// </param>
-        Task UpdateUser(User user);
-
-
-        /// <summary>
-        /// Updates list of user in DB.
-        /// </summary>
-        /// <param name="users">
-        /// Collection of user which should be updated in DB.
-        /// </param>
-        /// <param name="status">
-        /// <see cref="Constants.Status"/> of users.
-        /// </param>
-        Task UpdateUser(ICollection<User> users, string status);
+        Task<User> GetUserByConnection(string connectionId);
+        
+        Task<IEnumerable<User>> GetAllUsers();
     }
 }
