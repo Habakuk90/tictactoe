@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Logging;
 using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
@@ -14,18 +13,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// </typeparam>
     public abstract class AppHub<T> : Hub<T> where T : class, IAppHub
     {
-        public readonly ILogger _logger;
-
-        /// <summary>
-        /// Base hub ctor
-        /// </summary>
-        /// <param name="userService">
-        /// Service for User based methods.
-        /// </param>
-        public AppHub()
-        {
-        }
-
         /// <summary>
         /// Join Group hub method.
         /// </summary>

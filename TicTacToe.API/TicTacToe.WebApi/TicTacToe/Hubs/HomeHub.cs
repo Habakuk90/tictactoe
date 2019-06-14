@@ -14,12 +14,14 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     //[Authorize(AuthenticationSchemes = "Bearer")]
     public class HomeHub : AppHub<IHomeHub>
     {
-        // TODOANDI: check if there's a better way than AppHub<IHomeHub> 
         private readonly IHubManager<HomeHub, IHomeHub> _manager;
+
         /// <summary>
         /// GameHub ctor.
         /// </summary>
-        /// <param name="userService"></param>
+        /// <param name="factory">
+        /// create the <see cref="IHubManager{THub, T}"/>.
+        /// </param>
         public HomeHub(HubManagerFactory<HomeHub, IHomeHub> factory)
         {
             this._manager = factory.Create();
@@ -108,6 +110,18 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             }
         }
 
+        /// <summary>
+        /// Adds the currently connected User into database
+        /// </summary>
+        /// <param name="userName">
+        /// Name of the connected User.
+        /// </param>
+        /// <param name="isAnonymous">
+        /// flag if the connected user is anonymous.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
             var currentUser = new User

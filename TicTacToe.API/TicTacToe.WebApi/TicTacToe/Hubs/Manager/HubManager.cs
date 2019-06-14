@@ -10,11 +10,24 @@ using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
 {
+    /// <summary>
+    /// Represents a Hubmanager which will handle users and groups inside the app.
+    /// </summary>
+    /// <typeparam name="THub">
+    /// Object which inherit from <see cref="AppHub{T}"
+    /// </typeparam>
+    /// <typeparam name="T">
+    /// Interfaces which inherit from <see cref="IAppHub"/> .
+    /// </typeparam>
     public class HubManager<THub, T> : IHubManager<THub, T> where THub : Hub<T> where T : class, IAppHub
     {
+        #region private properties
+
         private readonly IUserService<T> _userService;
         private readonly IHubContext<THub, T> _clients;
         private readonly IGroupService<T> _groupService;
+
+        #endregion
 
         public HubManager(ManagerProperties<THub, T> hubM)
         {
@@ -23,11 +36,26 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             this._clients = hubM.Clients;
         }
 
+        /// <summary>
+        /// Get the <see cref="IHubClients{T}"/> object of the current <see cref="IHubContext{THub, T}"/>
+        /// </summary>
+        /// <returns>
+        /// <see cref="IHubClients{T}"/> object of the current websocket hub connection
+        /// </returns>
         public virtual IHubClients<T> GetClients()
         {
             return this._clients.Clients;
         }
 
+        /// <summary>
+        /// Add or updates user in Database.
+        /// </summary>
+        /// <param name="user">
+        /// <see cref="User"/> which should be added or updated.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         public virtual async Task UpdateUser(User user)
         {
             user = await this.PrepareUser(user);
@@ -35,6 +63,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             await this.GetClients().All.UpdateUserList(await this._userService.GetAllUsers());
         }
 
+        /// <summary>
+        /// Adds or updates a <see cref="IList{User}"/> in the database.
+        /// </summary>
+        /// <param name="users">
+        /// List of users which should be updated.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         public virtual async Task UpdateUser(IList<User> users)
         {
             foreach (var user in users)
@@ -47,6 +84,16 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             await this.UpdateUserList();
         }
 
+        /// <summary>
+        /// Removes <see cref="User"/> from Database. If the user is not anonymous then if not the last connectionId of user.
+        /// Remove only the connectionId of the user.
+        /// </summary>
+        /// <param name="connectionId">
+        /// Given connectionId of user which should be removed.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         public virtual async Task RemoveUser(string connectionId)
         {
             User user = await this.GetUser(connectionId: connectionId);
@@ -64,6 +111,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
                 return;
             }
 
+            // this seems buggy please verify
             user.ConnectionIds.RemoveAll(x => x.Contains(user.CurrentConnectionId) || string.IsNullOrEmpty(x));
 
             if (!user.ConnectionIds.Any())
@@ -72,10 +120,22 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             }
 
             await this._userService.AddOrUpdate(user);
-            //TODOANDI: is there a better way than calling this method everywhere?
             await this.UpdateUserList();
         }
 
+        /// <summary>
+        /// Gets the user from DB either by name or connectionId.
+        /// If name given user is searched by for name.
+        /// </summary>
+        /// <param name="name">
+        /// Given name of the user which should be searched for.
+        /// </param>
+        /// <param name="connectionId">
+        /// Given connetionId of the user which should be searched for.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task{User}"/> the user or null;
+        /// </returns>
         public async Task<User> GetUser(string name = "", string connectionId = "")
         {
             User user = null;
@@ -93,7 +153,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             return user;
         }
 
-
+        /// <summary>
+        /// Prepare user for add or update.
+        /// </summary>
+        /// <param name="user">
+        /// <see cref="User"/> which should be prepared.
+        /// </param>
+        /// <returns>
+        /// The prepared <see cref="User"/>
+        /// </returns>
         private async Task<User> PrepareUser(User user)
         {
             var status = user.Status;
@@ -114,9 +182,22 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             return user;
         }
 
+        /// <summary>
+        /// Updates userlist for all clients.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         private async Task UpdateUserList()
         {
             await this.GetClients().All.UpdateUserList(await this._userService.GetAllUsers());
+        }
+    }
+    public static class UserExtensions
+    {
+        public static bool IsOnline(this User user)
+        {
+            return false;
         }
     }
 }

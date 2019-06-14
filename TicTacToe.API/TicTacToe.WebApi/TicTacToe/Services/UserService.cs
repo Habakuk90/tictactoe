@@ -18,6 +18,12 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
         }
 
+        /// <summary>
+        /// Gets All Users
+        /// </summary>
+        /// <returns>
+        /// List off all users which are registred in database.
+        /// </returns>
         public async Task<IEnumerable<User>> GetAllUsers()
         {
             IEnumerable<User> allUser;
@@ -30,6 +36,16 @@ namespace TicTacToe.WebApi.TicTacToe.Services
 
         #region private methods
 
+
+        /// <summary>
+        /// Gets a user by name from database
+        /// </summary>
+        /// <param name="userName">
+        /// Name which the user should be searched for.
+        /// </param>
+        /// <returns>
+        /// <see cref="User"/> user with given name.
+        /// </returns>
         public async Task<User> GetUserByName(string userName)
         {
             User user;
@@ -40,6 +56,15 @@ namespace TicTacToe.WebApi.TicTacToe.Services
             return user;
         }
 
+        /// <summary>
+        /// Gets the user by connection from database.
+        /// </summary>
+        /// <param name="connectionId">
+        /// connection id which will be searched for.
+        /// </param>
+        /// <returns>
+        /// <see cref="User"/> with connectionId.
+        /// </returns>
         public async Task<User> GetUserByConnection(string connectionId)
         {
             User user;
@@ -59,19 +84,3 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         #endregion
     }
 }
-
-//public class HubUserManager<T> : HubManager<T>, IHubManager<T> where T : class, IAppHub
-//{
-//    public HubUserManager(IUserService<T> userService, HubM<T> hubM) : base(hubM)
-//    {
-
-//    }
-//}
-
-//public class HubGroupManager<T> : HubManager<T>, IHubManager<T> where T : class, IAppHub
-//{
-//    public HubGroupManager(IGroupService<T> groupService, HubM<T> hubM) : base(hubM)
-//    {
-
-//    }
-//}

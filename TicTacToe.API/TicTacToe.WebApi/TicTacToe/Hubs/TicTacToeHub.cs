@@ -18,9 +18,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="userService"></param>
         public TicTacToeHub(HubManagerFactory<TicTacToeHub, ITicTacToeHub> factory)
         {
-            //this._userService = userService;
-            //this._groupService = groupService;
-            //var factory = new HubManagerFactory<TicTacToeHub, ITicTacToeHub>(userService, groupService);
             this._manager = factory.Create();
         }
 
