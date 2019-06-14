@@ -127,7 +127,7 @@ namespace TicTacToe.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, AppDbContext dbContext)
         {
             if (env.IsDevelopment())
             {
@@ -162,7 +162,7 @@ namespace TicTacToe.WebApi
             app.UseMvc();
 
             // ===== Create tables ======
-            //dbContext.Database.EnsureCreated();
+            dbContext.Database.EnsureCreated();
         }
     }
 }
