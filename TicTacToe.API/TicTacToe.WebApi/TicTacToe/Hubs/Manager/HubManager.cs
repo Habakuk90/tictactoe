@@ -80,6 +80,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
                 userTemp = await this.PrepareUser(user);
             }
 
+            // one call for database and one call for clients, improve?
             await this._userService.AddOrUpdate(users);
             await this.UpdateUserList();
         }
@@ -192,6 +193,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             }
 
             await this._groupService.JoinGroupAsync(user, group);
+            await this._clients.Groups.AddToGroupAsync(user.CurrentConnectionId, group.Name);
         }
 
         /// <summary>
@@ -208,6 +210,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
         {
             Group group = await this.PrepareGroup(groupName);
             await this._groupService.LeaveGroupAsync(user, group);
+            await this._clients.Groups.RemoveFromGroupAsync(user.CurrentConnectionId, group.Name);
+
         }
 
         /// <summary>

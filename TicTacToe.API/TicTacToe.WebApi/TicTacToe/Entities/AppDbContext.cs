@@ -26,12 +26,12 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
             builder.Entity<UserGroups>()
                 .HasOne<User>(x => x.User)
                 .WithMany(s => s.UserGroups)
-                .HasForeignKey(x => x.GroupId);
+                .HasForeignKey(x => x.UserId);
 
             builder.Entity<UserGroups>()
                 .HasOne<Group>(g => g.Group)
                 .WithMany(ug => ug.UserGroups)
-                .HasForeignKey(x => x.UserId);
+                .HasForeignKey(x => x.GroupId);
 
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.

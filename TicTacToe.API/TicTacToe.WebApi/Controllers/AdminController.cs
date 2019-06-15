@@ -31,6 +31,17 @@ namespace TicTacToe.WebApi.Controllers
             {
                 _context.AppUser.Remove(x);
             }
+
+            foreach (var item in _context.Groups.ToList())
+            {
+                _context.Groups.Remove(item);
+            }
+
+            foreach (var item in _context.UserGroups.ToList())
+            {
+                _context.UserGroups.Remove(item);
+            }
+
             _context.SaveChanges();
 
             return Json("success");

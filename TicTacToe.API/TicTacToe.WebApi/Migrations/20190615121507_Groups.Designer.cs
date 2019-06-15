@@ -10,7 +10,7 @@ using TicTacToe.WebApi.TicTacToe.Entities;
 namespace TicTacToe.WebApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190612201159_Groups")]
+    [Migration("20190615121507_Groups")]
     partial class Groups
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,7 +182,7 @@ namespace TicTacToe.WebApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.BaseGroup", b =>
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.Group", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd();
@@ -274,12 +274,12 @@ namespace TicTacToe.WebApi.Migrations
 
             modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.UserGroups", b =>
                 {
-                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", "User")
+                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.Group", "Group")
                         .WithMany("UserGroups")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.BaseGroup", "Group")
+                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", "User")
                         .WithMany("UserGroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);

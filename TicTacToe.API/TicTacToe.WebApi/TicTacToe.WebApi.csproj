@@ -38,6 +38,8 @@
     <Compile Remove="Migrations\20190610161542_Anonymous.Designer.cs" />
     <Compile Remove="Migrations\20190611105409_Anonymous.cs" />
     <Compile Remove="Migrations\20190611105409_Anonymous.Designer.cs" />
+    <Compile Remove="Migrations\20190612201159_Groups.cs" />
+    <Compile Remove="Migrations\20190612201159_Groups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

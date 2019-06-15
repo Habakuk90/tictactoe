@@ -38,7 +38,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         {
             UserGroups userGroup = new UserGroups
             {
+                UserId = user.ID,
                 User = user,
+                GroupId = group.ID,
                 Group = group
             };
 
@@ -61,8 +63,9 @@ namespace TicTacToe.WebApi.TicTacToe.Services
         /// </param>
         public async Task LeaveGroupAsync(User user, Group group)
         {
-            user.UserGroups.ToList().RemoveAll(x => x.Group == group);
-            group.UserGroups.ToList().RemoveAll(x => x.User == user);
+            // TODOANDI: doesnt get removed somehow
+            user.UserGroups.ToList().RemoveAll(x => x.UserId == user.ID);
+            group.UserGroups.ToList().RemoveAll(x => x.GroupId == group.ID);
 
             if (group.UserGroups.Any())
             {
