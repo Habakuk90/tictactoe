@@ -6,7 +6,7 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
 {
-    public interface IHubManager<THub, T> where THub : Hub<T> where T : class, IAppHub
+    public interface IHubManager<THub, T> where THub : Hub<T> where T : class, IAppClient
     {
         /// <summary>
         /// Updates user in DB.
@@ -24,5 +24,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
         Task RemoveUser(string connectionId);
 
         Task<User> GetUser(string name = "", string connectionId = "");
+
+        Task JoinGroup(User user, string groupName);
+
+        Task LeaveGroup(User user, string groupName);
     }
 }

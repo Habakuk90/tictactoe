@@ -26,6 +26,13 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
             this._context = context;
         }
 
+        public virtual async Task<T> Get(T item)
+        {
+            var entity = this._context.Set<T>().Find(item);
+
+            return entity;
+        }
+
         /// <summary>
         /// Adds or updates given <see cref="Entity"/>
         /// </summary>
@@ -69,7 +76,6 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
         {
             foreach (var item in items)
             {
-                //TODOANDI if given list, there will be an sql context generated for each entry.
                 await this.AddOrUpdate(item);
             }
         }

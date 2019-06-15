@@ -8,7 +8,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Interfaces
     /// <summary>
     /// Represents Base Hub methods for <see cref="Hub{T}"/>.
     /// </summary>
-    public interface IAppHub
+    public interface IAppClient
     {
         /// <summary>
         /// Invokes the UpdateUserList method to Clients.

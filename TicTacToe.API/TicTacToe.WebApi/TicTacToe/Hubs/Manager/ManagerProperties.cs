@@ -13,9 +13,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
     /// Object which inherit from <see cref="AppHub{T}"
     /// </typeparam>
     /// <typeparam name="T">
-    /// Interfaces which inherit from <see cref="IAppHub"/> .
+    /// Interfaces which inherit from <see cref="IAppClient"/> .
     /// </typeparam>
-    public class ManagerProperties<THub, T> where THub : Hub<T> where T : class, IAppHub
+    public class ManagerProperties<THub, T> where THub : Hub<T> where T : class, IAppClient
     {
         public IHubContext<THub, T> Clients { get; set; }
 

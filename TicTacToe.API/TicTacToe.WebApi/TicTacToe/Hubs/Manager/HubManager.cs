@@ -17,9 +17,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
     /// Object which inherit from <see cref="AppHub{T}"
     /// </typeparam>
     /// <typeparam name="T">
-    /// Interfaces which inherit from <see cref="IAppHub"/> .
+    /// Interfaces which inherit from <see cref="IAppClient"/> .
     /// </typeparam>
-    public class HubManager<THub, T> : IHubManager<THub, T> where THub : Hub<T> where T : class, IAppHub
+    public class HubManager<THub, T> : IHubManager<THub, T> where THub : Hub<T> where T : class, IAppClient
     {
         #region private properties
 
@@ -153,6 +153,63 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
             return user;
         }
 
+
+        /// <summary>
+        /// Updates userlist for all clients.
+        /// </summary>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
+        private async Task UpdateUserList()
+        {
+            await this.GetClients().All.UpdateUserList(await this._userService.GetAllUsers());
+        }
+
+        /// <summary>
+        /// Given User joins given or new Group
+        /// </summary>
+        /// <param name="user">
+        /// The User which should be added to the group
+        /// </param>
+        /// <param name="groupName">
+        /// The groupname which should be joined
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
+        public async Task JoinGroup(User user, string groupName)
+        {
+            Group group = new Group
+            {
+                Name = groupName
+            };
+
+            Group dbGroup = await this._groupService.GetGroupByName(groupName);
+
+            if (dbGroup != null)
+            {
+                group = dbGroup;    
+            }
+
+            await this._groupService.JoinGroupAsync(user, group);
+        }
+
+        /// <summary>
+        /// Given user leaves given Group
+        /// </summary>
+        /// <param name="user">
+        /// The User which should leave the group.
+        /// </param>
+        /// <param name="groupName">
+        /// Name of the group which should be left.
+        /// </param>
+        /// <returns></returns>
+        public async Task LeaveGroup(User user, string groupName)
+        {
+            Group group = await this.PrepareGroup(groupName);
+            await this._groupService.LeaveGroupAsync(user, group);
+        }
+
         /// <summary>
         /// Prepare user for add or update.
         /// </summary>
@@ -183,14 +240,29 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs.Manager
         }
 
         /// <summary>
-        /// Updates userlist for all clients.
+        /// Prepare the group which should be joined or left.
         /// </summary>
+        /// <param name="groupName">
+        /// Name of the Group
+        /// </param>
         /// <returns>
-        /// <see cref="Task"/>
+        /// <see cref="Task{Group}"/>
         /// </returns>
-        private async Task UpdateUserList()
+        private async Task<Group> PrepareGroup(string groupName)
         {
-            await this.GetClients().All.UpdateUserList(await this._userService.GetAllUsers());
+            Group group = new Group
+            {
+                Name = groupName
+            };
+
+            Group dbGroup = await this._groupService.GetGroupByName(groupName);
+
+            if (dbGroup != null)
+            {
+                group = dbGroup;
+            }
+
+            return group;
         }
     }
     public static class UserExtensions

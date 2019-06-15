@@ -11,8 +11,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// <typeparam name="T">
     /// Hub class.
     /// </typeparam>
-    public abstract class AppHub<T> : Hub<T> where T : class, IAppHub
+    public abstract class AppHub<T> : Hub<T> where T : class, IAppClient
     {
+        #region public abstract
+
         /// <summary>
         /// Join Group hub method.
         /// </summary>
@@ -30,7 +32,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="groupName">
         /// Given name for group from frontend.
         /// </param>
-        public abstract Task LeaveGroup(string groupName);
+        public abstract Task<string> LeaveGroup(string groupName);
 
         /// <summary>
         /// Marks Current user as online, if new user, add to DB
@@ -39,6 +41,10 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// userName of current User.
         /// </param>
         public abstract Task AddCurrentUser(string userName, bool isAnonymous = true);
+
+        #endregion
+
+        #region public override
 
         /// <summary>
         /// Defines what happens when frontend user connects.
@@ -58,5 +64,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         {
             await base.OnDisconnectedAsync(exception);
         }
+
+        #endregion
     }
 }

@@ -14,6 +14,6 @@
         /// Gets or sets the UserGroups in a many to many relation between
         /// <see cref="User"/> and <see cref="Group"/>
         /// </summary>
-        public IList<UserGroups> UserGroups { get; set; }
+        public IList<UserGroups> UserGroups { get; set; } = new List<UserGroups>();
     }
 }

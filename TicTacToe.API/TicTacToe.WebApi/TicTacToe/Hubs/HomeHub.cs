@@ -9,12 +9,12 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     /// <summary>
-    /// Represents a SignalR Hub with <see cref="IHomeHub"/> client methods.
+    /// Represents a SignalR Hub with <see cref="IHomeClient"/> client methods.
     /// </summary>
     //[Authorize(AuthenticationSchemes = "Bearer")]
-    public class HomeHub : AppHub<IHomeHub>
+    public class HomeHub : AppHub<IHomeClient>
     {
-        private readonly IHubManager<HomeHub, IHomeHub> _manager;
+        private readonly IHubManager<HomeHub, IHomeClient> _manager;
 
         /// <summary>
         /// GameHub ctor.
@@ -22,7 +22,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <param name="factory">
         /// create the <see cref="IHubManager{THub, T}"/>.
         /// </param>
-        public HomeHub(HubManagerFactory<HomeHub, IHomeHub> factory)
+        public HomeHub(HubManagerFactory<HomeHub, IHomeClient> factory)
         {
             this._manager = factory.Create();
         }
@@ -110,6 +110,15 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             }
         }
 
+
+        //TODOANDI Different naming
+        public async Task StartGame(string groupName)
+        {
+            await Clients.Group(groupName).StartGame(groupName);
+        }
+
+        #region public override
+
         /// <summary>
         /// Adds the currently connected User into database
         /// </summary>
@@ -135,11 +144,30 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await this._manager.UpdateUser(currentUser);
         }
 
-        //TODOANDI Different naming
-        public async Task StartGame(string groupName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public override async Task<string> JoinGroup(string groupName)
         {
+            var user = await _manager.GetUser(connectionId: Context.ConnectionId);
+            await this._manager.JoinGroup(user, groupName);
 
-            await Clients.Group(groupName).StartGame(groupName);
+            return groupName;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="groupName"></param>
+        /// <returns></returns>
+        public override async Task<string> LeaveGroup(string groupName)
+        {
+            var user = await this._manager.GetUser(connectionId: Context.ConnectionId);
+            await this._manager.LeaveGroup(user, groupName);
+
+            return groupName;
         }
 
         /// <summary>
@@ -153,14 +181,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await base.OnDisconnectedAsync(e);
         }
 
-        public override Task<string> JoinGroup(string groupName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override Task LeaveGroup(string groupName)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
         /// <param name="groupName">
         /// The group name
         /// </param>
-        Task JoinGroupAsync(User userModel, string groupName);
+        Task JoinGroupAsync(User userModel, Group group);
 
         /// <summary>
         /// Leave Group for connection and database.
@@ -25,12 +25,14 @@ namespace TicTacToe.WebApi.TicTacToe.Services.Interfaces
         /// <param name="groupName">
         /// Group name which will be left.
         /// </param>
-        Task LeaveGroupAsync(User userModel, string groupName);
+        Task LeaveGroupAsync(User userModel, Group group);
 
         ///// <summary>
         ///// Updates the UserList for all Clients.
         ///// </summary>
         //void UpdateUserList();
+
+        Task<Group> GetGroupByName(string groupName);
 
     }
 }

@@ -7,16 +7,16 @@ using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
     /// <summary>
-    /// Represents a SignalR Hub with the <see cref="ITicTacToeHub"/> Methods.
+    /// Represents a SignalR Hub with the <see cref="ITicTacToeClient"/> Methods.
     /// </summary>
-    public class TicTacToeHub : AppHub<ITicTacToeHub>
+    public class TicTacToeHub : AppHub<ITicTacToeClient>
     {
-        private readonly IHubManager<TicTacToeHub, ITicTacToeHub> _manager;
+        private readonly IHubManager<TicTacToeHub, ITicTacToeClient> _manager;
         /// <summary>
         /// Hub ctor.
         /// </summary>
         /// <param name="userService"></param>
-        public TicTacToeHub(HubManagerFactory<TicTacToeHub, ITicTacToeHub> factory)
+        public TicTacToeHub(HubManagerFactory<TicTacToeHub, ITicTacToeClient> factory)
         {
             this._manager = factory.Create();
         }
@@ -57,6 +57,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await Clients.Group(groupName).GameOver(winningTileId, winningLine);
         }
 
+        #region public override
+
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
             var currentUser = new User
@@ -70,17 +72,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await this._manager.UpdateUser(currentUser);
         }
 
-        public override async Task LeaveGroup(string groupName)
-        {
-            // TODOANDI: does this belong in here? Not too easy to implement the Factory here in the constructor
-            //this._baseService.LeaveGroupAsync(currentUser, groupName);
-        }
-
         public override async Task<string> JoinGroup(string groupName)
         {
-            // TODOANDI: does this belong in here? Not too easy to implement the Factory here in the constructor
+            var user = await _manager.GetUser(connectionId: Context.ConnectionId);
+            await this._manager.JoinGroup(user, groupName);
 
-            //this._groupService.
+            return groupName;
+        }
+
+        public override async Task<string> LeaveGroup(string groupName)
+        {
+            var user = await this._manager.GetUser(connectionId: Context.ConnectionId);
+            await this._manager.LeaveGroup(user, groupName);
+
             return groupName;
         }
 
@@ -94,5 +98,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await this._manager.RemoveUser(Context.ConnectionId);
             await base.OnDisconnectedAsync(e);
         }
+
+        #endregion
     }
 }
