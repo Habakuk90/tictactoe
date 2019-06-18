@@ -5,11 +5,11 @@
     <th class="m-table__header"></th>
   </tr>
   <ng-container *ngFor="let user of userOnline; let i=index; trackBy:i;">
-    <tr class="m-table__row" *ngIf="user.name !== currentUser.name" (click)="enemyClicked(user)">
+    <tr class="m-table__row" *ngIf="user.name !== currentUserName" (click)="enemyClicked(user)">
       <td class="m-table__data">{{user.name}}</td>
       <td class="m-table__data">{{user.status}}</td>
       <td class="m-table__data">
-          <input class="a-checkbox" [checked]="user === selectedPlayer" type="checkbox" name="{{user.name}}" id="{{user.id}}">
+          <input class="a-checkbox" [checked]="user.name === selectedPlayer" type="checkbox" name="{{user.name}}" id="{{user.id}}">
           <label class="a-label a-label--checkbox" for="{{user.name}}"></label>
       </td>
     </tr>
