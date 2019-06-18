@@ -59,6 +59,19 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         #region public override
 
+
+        /// <summary>
+        /// Adds the currently connected User into database
+        /// </summary>
+        /// <param name="userName">
+        /// Name of the connected User.
+        /// </param>
+        /// <param name="isAnonymous">
+        /// flag if the connected user is anonymous.
+        /// </param>
+        /// <returns>
+        /// <see cref="Task"/>
+        /// </returns>
         public override async Task AddCurrentUser(string userName, bool isAnonymous = true)
         {
             var currentUser = new User
@@ -72,6 +85,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             await this._manager.UpdateUser(currentUser);
         }
 
+        /// <summary>
+        /// Adds current user to a Group with given group name.
+        /// </summary>
+        /// <param name="groupName">
+        /// Name of group which should be joined.
+        /// </param>
+        /// <returns></returns>
         public override async Task<string> JoinGroup(string groupName)
         {
             var user = await _manager.GetUser(connectionId: Context.ConnectionId);
@@ -80,6 +100,13 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
             return groupName;
         }
 
+        /// <summary>
+        /// Removes the current user from a Group with given groupName.
+        /// </summary>
+        /// <param name="groupName">
+        /// Name of group which should be left.
+        /// </param>
+        /// <returns></returns>
         public override async Task<string> LeaveGroup(string groupName)
         {
             var user = await this._manager.GetUser(connectionId: Context.ConnectionId);

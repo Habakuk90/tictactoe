@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
@@ -11,9 +10,17 @@ namespace TicTacToe.WebApi.TicTacToe.Services
     {
         public GroupService(AppDbContext context) : base(context)
         {
-            //this._context = context;
         }
 
+        /// <summary>
+        /// Gets the group by Groupname
+        /// </summary>
+        /// <param name="groupName">
+        /// Name of group which should be Searched for
+        /// </param>
+        /// <returns>
+        /// <see cref="Group"/> hit by name.
+        /// </returns>
         public async Task<Group> GetGroupByName(string groupName)
         {
             Group group;

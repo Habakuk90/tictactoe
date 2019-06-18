@@ -145,9 +145,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// 
+        /// Adds current user to a Group with given group name.
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="groupName">
+        /// Name of group which should be joined.
+        /// </param>
         /// <returns></returns>
         public override async Task<string> JoinGroup(string groupName)
         {
@@ -158,9 +160,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         /// <summary>
-        /// 
+        /// Removes the current user from a Group with given groupName.
         /// </summary>
-        /// <param name="groupName"></param>
+        /// <param name="groupName">
+        /// Name of group which should be left.
+        /// </param>
         /// <returns></returns>
         public override async Task<string> LeaveGroup(string groupName)
         {
