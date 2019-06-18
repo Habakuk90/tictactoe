@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs';
 import { Modal, Modals } from './modal';
 import { HubService } from '../connections/hub.service';
 import { HomeHubConnection, ChallengeResponse } from 'src/app/home/home.hubconnection';
-import { BaseHubConnection } from '../connections/base.hubconnection';
 
 @Component({
   selector: 'app-modal',

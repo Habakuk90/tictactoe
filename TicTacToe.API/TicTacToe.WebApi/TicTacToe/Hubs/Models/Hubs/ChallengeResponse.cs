@@ -1,10 +1,5 @@
 ﻿namespace TicTacToe.WebApi.TicTacToe.Hubs.Models.Hubs
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     public class ChallengeResponse
     {
         /// <summary>

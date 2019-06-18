@@ -4,7 +4,7 @@
     <div class="authorization-form__container">
       <input type="text" name="userName" value="User" ngModel required #userName="ngModel" />
       <input *ngIf="!anonymousUser" type="password" name="password" placeholder="Password"
-        [disabled]="!anonymousUser" ngModel />
+        [disabled]="anonymousUser" ngModel />
       <button type="submit" class="a-button" [disabled]="form.invalid">
         Login
       </button>

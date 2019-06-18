@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -8,14 +12,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
 using TicTacToe.WebApi.TicTacToe.Entities;
 using TicTacToe.WebApi.TicTacToe.Hubs;
+using TicTacToe.WebApi.TicTacToe.Hubs.Manager;
 using TicTacToe.WebApi.TicTacToe.Hubs.Services.Interfaces;
 using TicTacToe.WebApi.TicTacToe.Services;
+using TicTacToe.WebApi.TicTacToe.Services.Interfaces;
 
 namespace TicTacToe.WebApi
 {
@@ -110,8 +112,12 @@ namespace TicTacToe.WebApi
                 });
             services.AddMvc();
             services.AddSignalR();
-            services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IGameService, GameService>();
+
+            services.AddScoped(typeof(HubManagerFactory<,>));
+
+            services.AddTransient(typeof(IUserService<>), typeof(UserService<>));
+            services.AddTransient(typeof(IGroupService<>), typeof(GroupService<>));
+
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -121,8 +127,7 @@ namespace TicTacToe.WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            AppDbContext dbContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, AppDbContext dbContext)
         {
             if (env.IsDevelopment())
             {

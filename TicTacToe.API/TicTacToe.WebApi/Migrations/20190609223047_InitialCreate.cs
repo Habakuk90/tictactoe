@@ -12,11 +12,9 @@ namespace TicTacToe.WebApi.Migrations
                 name: "AppUser",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ID = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Status = table.Column<string>(nullable: true),
-                    GroupName = table.Column<string>(nullable: true),
                     ConnectionIdsString = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -61,6 +59,19 @@ namespace TicTacToe.WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Groups",
+                columns: table => new
+                {
+                    ID = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Type = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Groups", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -169,6 +180,30 @@ namespace TicTacToe.WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserGroups",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(nullable: false),
+                    GroupId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGroups", x => new { x.GroupId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserGroups_AppUser_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "AppUser",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserGroups_Groups_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Groups",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -207,13 +242,15 @@ namespace TicTacToe.WebApi.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroups_UserId",
+                table: "UserGroups",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AppUser");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -230,10 +267,19 @@ namespace TicTacToe.WebApi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "UserGroups");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppUser");
+
+            migrationBuilder.DropTable(
+                name: "Groups");
         }
     }
 }

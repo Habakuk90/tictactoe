@@ -112,7 +112,7 @@ namespace TicTacToe.WebApi.TicTacToe.Authentication.Controllers
         /// Logs Out User with SignInManager
         /// </summary>
         [HttpPost]
-        public async void LogoutUser()
+        public async Task LogoutUser()
         {
             await _signInManager.SignOutAsync();
         }

@@ -1,6 +1,7 @@
-import {Component, Input, OnDestroy, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import { IGame } from 'src/app/shared/models/game.interface';
 import { UserService } from 'src/app/shared/services/user.service';
+import { IUser } from 'src/app/shared/models/user.interface';
 
 @Component({
   selector: 'app-select-player',
@@ -13,7 +14,7 @@ export class SelectPlayerComponent implements OnInit {
   @Input() selectedGames: Array<IGame>;
   selectedPlayer: string;
 
-  get userOnline(): Array<string> {
+  get userOnline(): Array<IUser> {
     return this.userService.userOnline;
   }
   currentUser: string;

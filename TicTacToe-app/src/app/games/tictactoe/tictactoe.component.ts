@@ -79,8 +79,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
         that.registerOnMethods();
         this.setLine(null, null);
         that.modalService.closeModal();
-
-        this.hub.addCurrentUser(that.userService.currentUserName).then(() => {
+        this.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous).then(() => {
           that.hub.joinGroup(that.groupService.groupName)
             .then(groupName => {
               // #9 start besser definieren

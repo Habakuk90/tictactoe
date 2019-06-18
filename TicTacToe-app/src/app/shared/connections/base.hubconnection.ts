@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HubConnection } from '@aspnet/signalr';
 import { ConfigService } from '../utils/config.service';
 import * as signalR from '@aspnet/signalr';
+import { debuglog } from 'util';
 
 export interface IBaseHubConnection {
   name: string;
@@ -32,13 +33,18 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
   constructor(route: string, name: string) {
     this.name = name;
     this.connection = this.buildConnection(route);
-    this.connection.start().then(() => {
-      this.isConnected.next(true);
-    }, err => {
-      this.isConnected.next(false);
-      // error handling disconnect / reconnect / logout
-      throw new Error(err);
-    });
+    if (this.connection.state === signalR.HubConnectionState.Disconnected) {
+      this.connection.start().then(() => {
+        this.isConnected.next(true);
+      }, err => {
+        this.isConnected.next(false);
+        // error handling disconnect / reconnect / logout
+        throw new Error(err);
+      });
+    } else {
+      debuglog('already connected!');
+    }
+
   }
 
   public getConnection(): HubConnection {

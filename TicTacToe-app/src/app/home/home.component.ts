@@ -8,6 +8,7 @@ import { HomeHubConnection } from './home.hubconnection';
 import { ModalService } from '../shared/modals/modal.service';
 import { Modal, IModal, Modals } from '../shared/modals/modal';
 import { HubService } from '../shared/connections/hub.service';
+import { IUser } from '../shared/models/user.interface';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   isPlayerSelected = false;
   selectionState = 0;
   selectedGames: Array<IGame>;
-  selectedPlayer: string;
+  selectedPlayer: IUser;
 
   hub: HomeHubConnection;
 
@@ -44,7 +45,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
     that.hub.isConnected.subscribe((isConnected: boolean) => {
       if (isConnected) {
-        that.hub.addCurrentUser(that.userService.currentUserName);
+        that.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous);
         that.registerOnMethods();
       }
     });
@@ -59,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.userService._HomeStateSubject.next(step);
   }
 
-  enemySelected(enemy: string) {
+  enemySelected(enemy: IUser) {
     this.selectedPlayer = enemy;
     this.isPlayerSelected = enemy != null;
     this.userService._HomeStateSubject.next(2);
@@ -73,7 +74,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   challengeSelectedPlayer() {
-    this.hub.challengePlayer(this.selectedPlayer, 'tictactoe');
+    this.hub.challengePlayer(this.selectedPlayer.name, 'tictactoe');
   }
 
   ngOnDestroy() {
@@ -81,12 +82,12 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.userService._HomeStateSubject.next(0);
     // FIXME will the conneciton be stabel at all times, maybe yes because of chat and other functionality
     // evaluate if more socketuris are an option.
-    // this.hubService.stopConnection(this.hub);
+    this.hub.stopConnection();
   }
 
   registerOnMethods() {
     const that = this;
-    this.hub.onUpdateUserList(userOnline => {
+    this.hub.onUpdateUserList((userOnline: Array<IUser>) => {
       that.userService.userOnline = userOnline;
     });
 
