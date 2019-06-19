@@ -17,10 +17,11 @@ export class SelectPlayerComponent implements OnInit {
   get userOnline(): Array<IUser> {
     return this.userService.userOnline;
   }
-  currentUser: string;
+
+  currentUserName: string;
 
   constructor(private userService: UserService) {
-      this.currentUser = this.userService.currentUserName;
+      this.currentUserName = this.userService.currentUserName;
   }
 
   enemyClicked(user: string) {
