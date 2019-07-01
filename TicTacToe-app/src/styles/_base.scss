@@ -1,5 +1,24 @@
-* {
-  box-sizing: border-box;
-  padding:0;
+@import "_variables.scss";
+
+*,
+*:before,
+*:after {
   margin: 0;
+  padding: 0;
+
+  box-sizing: border-box !important;
+}
+
+body {
+  max-width: 100vw;
+}
+
+section {
+  max-width: $content-max-width;
+  margin: 0 auto;
+
+  // fixnaming content-no-gap
+  > *:not(.content-no-gap) {
+      margin-top: $section-margin;
+  }
 }

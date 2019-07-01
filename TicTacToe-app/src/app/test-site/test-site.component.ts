@@ -17,7 +17,14 @@ export class TestSiteComponent implements OnInit {
   //  }
 
   ngOnInit() {
-
+    // document.querySelectorAll('.main-menu > .m-list__item > span').forEach(x => {
+    //   x.addEventListener('mouseenter', y => {
+    //     x.classList.add('border-around');
+    //   });
+    //   x.addEventListener('mouseleave', y => {
+    //     x.classList.remove('border-around');
+    //   });
+    // });
   }
 
 }
