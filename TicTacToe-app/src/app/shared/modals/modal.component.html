@@ -1,4 +1,4 @@
-<section class="modal" [ngSwitch]="activeModal.name"
+<div class="modal" [ngSwitch]="activeModal.name"
          *ngIf="activeModal.name !== modals.empty">
   <app-challenged-modal class="modal__container"
     (challengeResponse)="onChallengeResponse($event)"
@@ -19,4 +19,4 @@
     (restartGame)="gameRestart()"
     *ngSwitchCase="modals.gameover" [args]="activeModal.args">
   </app-gameover-modal>
-</section>
+</div>

@@ -28,7 +28,7 @@ namespace TicTacToe.WebApi.TicTacToe.Entities
 
         public virtual async Task<T> Get(T item)
         {
-            var entity = this._context.Set<T>().Find(item);
+            var entity = await this._context.Set<T>().FindAsync(item);
 
             return entity;
         }
