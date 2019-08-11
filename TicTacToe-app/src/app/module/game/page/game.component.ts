@@ -10,7 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class GameComponent implements OnInit, OnDestroy {
   selectedGames: Array<IGame>;
-
+  isGameSelected = false;
   constructor(private router: Router) {
   }
 
@@ -32,7 +32,8 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   onGameSelected(games: IGame) {
-    this.router.navigate([this.router.url, games.name])
+    this.isGameSelected = true;
+    this.router.navigate([this.router.url, games.name]);
   }
 
   nextStep(step: number) {

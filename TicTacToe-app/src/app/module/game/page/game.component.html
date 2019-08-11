@@ -1,12 +1,15 @@
 <section>
   <div class="t-fullscreen -vertical">
 
-    <app-select-game class="select-game" (gameSelected)="onGameSelected($event)" (nextButton)="nextStep($event)">
-    </app-select-game>
-
-    <router-outlet></router-outlet>
-    <button class="a-button a-button--start" (click)="challengeSelectedPlayer()">
-      Go!
-    </button>
+    <div *ngIf="!isGameSelected; else showRouter">
+      <app-select-game class="select-game" (gameSelected)="onGameSelected($event)" (nextButton)="nextStep($event)">
+      </app-select-game>
+      <button class="a-button a-button--start" (click)="challengeSelectedPlayer()">
+        Go!
+      </button>
+    </div>
+    <ng-template #showRouter>
+      <router-outlet></router-outlet>
+    </ng-template>
   </div>
 </section>
