@@ -4,6 +4,9 @@
       <li class="m-list__item" routerLink="dashboard">
         Home
       </li>
+      <li class="m-list__item" routerLink="game">
+        Game
+      </li>
       <li *ngIf="isLoggedIn; else auth" [class.anonymous]="isAnonymous" class="m-list__item" (click)="logout()">
         Logout {{userName}}
       </li>

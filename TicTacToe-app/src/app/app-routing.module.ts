@@ -24,6 +24,11 @@ const routes: Routes = [
         path: 'dashboard',
         loadChildren: () =>
           import('./module/home/home.module').then(m => m.HomeModule)
+      },
+      {
+        path: 'game',
+        loadChildren: () =>
+          import('./module/game/game.module').then(m => m.GameModule)
       }
     ]
   },
