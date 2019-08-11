@@ -34,8 +34,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
   constructor(private userService: UserService,
     // private modalService: ModalService,
     private groupService: GroupService,
-    private hubService: HubService,
-    private router: Router) {
+    private hubService: HubService) {
 
       const that = this;
       // this.hub = this.hubService.createConnection('/tictactoe', 'tictactoe', GameHubConnection);
@@ -57,75 +56,80 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
       return;
     }
 
-    this.hub.tileClicked(this.groupService.groupName, tileId).then(() => {
-      this.hasWon = this.boxHandler.checkWin(tileId);
-
-      if (this.boxHandler.checkWin(tileId)) {
-        this.hub.gameOver(this.groupService.groupName, tileId, this.boxHandler.winningLine);
-      } else if (this.boxes.filter(x => !x.state).length === 0) {
-        this.hub.gameOver(this.groupService.groupName, null, null);
-      }
-    });
   }
 
   ngOnInit() {
     const that = this;
     this.selfTileState = this.turn ? 'cross' : 'circle';
 
-    this.hub.isConnected.subscribe((isConnected: boolean) => {
-      if (isConnected) {
-        that.registerOnMethods();
-        this.setLine(null, null);
-        // that.modalService.closeModal();
-        this.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous).then(() => {
-          that.hub.joinGroup(that.groupService.groupName)
-            .then(groupName => {
-              // #9 start besser definieren
-              if (groupName.startsWith(that.userService.currentUserName)) {
-                that.turn = !that.turn;
-              }
-          });
-        });
-      }
-    });
+
   }
 
   ngOnDestroy() {
     const that = this;
     let leaveGroup: Promise<void>;
 
-    if (this.groupService.groupName) {
-      leaveGroup = this.hub.leaveGroup(this.groupService.groupName);
-    }
-    if (leaveGroup) {
-      leaveGroup.then(() => {
-        that.hub.stopConnection();
-      });
-    }
+    // if (this.groupService.groupName) {
+    //   leaveGroup = this.hub.leaveGroup(this.groupService.groupName);
+    // }
+    // if (leaveGroup) {
+    //   leaveGroup.then(() => {
+    //     that.hub.stopConnection();
+    //   });
+    // }
   }
 
   registerOnMethods() {
     const that = this;
 
-    this.hub.onTileChange((tileId) => {
-      const box: Box = that.boxHandler.findById(tileId);
-      box.state = that.gameTile;
-      box.locked = true;
-    });
+    // this.hub.onTileChange((tileId) => {
+    //   const box: Box = that.boxHandler.findById(tileId);
+    //   box.state = that.gameTile;
+    //   box.locked = true;
+    // });
 
-    this.hub.onSwitchTurn(() => {
-      that.turn = !that.turn;
+    // this.hub.onSwitchTurn(() => {
+    //   that.turn = !that.turn;
 
-      if (that.gameTile === 'circle') {
-        that.gameTile = 'cross';
-      } else {
-        that.gameTile = 'circle';
-      }
-    });
+    //   if (that.gameTile === 'circle') {
+    //     that.gameTile = 'cross';
+    //   } else {
+    //     that.gameTile = 'circle';
+    //   }
+    // });
 
-    this.hub.onGameOver((winningTileId, winningLine) => {
-      that.endGame(winningTileId, winningLine);
-    });
+    // this.hub.onGameOver((winningTileId, winningLine) => {
+    //   that.endGame(winningTileId, winningLine);
+    // });
+
+
+
+    // this.hub.tileClicked(this.groupService.groupName, tileId).then(() => {
+    //   this.hasWon = this.boxHandler.checkWin(tileId);
+
+    //   if (this.boxHandler.checkWin(tileId)) {
+    //     this.hub.gameOver(this.groupService.groupName, tileId, this.boxHandler.winningLine);
+    //   } else if (this.boxes.filter(x => !x.state).length === 0) {
+    //     this.hub.gameOver(this.groupService.groupName, null, null);
+    //   }
+    // });
+
+    // this.hub.isConnected.subscribe((isConnected: boolean) => {
+    //   if (isConnected) {
+    //     that.registerOnMethods();
+    //     this.setLine(null, null);
+    //     // that.modalService.closeModal();
+    //     this.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous).then(() => {
+    //       that.hub.joinGroup(that.groupService.groupName)
+    //         .then(groupName => {
+    //           // #9 start besser definieren
+    //           if (groupName.startsWith(that.userService.currentUserName)) {
+    //             that.turn = !that.turn;
+    //           }
+    //       });
+    //     });
+    //   }
+    // });
   }
 
   private setLine(tileId: string, winningLine: string) {

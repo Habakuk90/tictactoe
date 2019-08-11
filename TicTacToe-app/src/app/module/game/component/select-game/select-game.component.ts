@@ -7,7 +7,7 @@ import { IGame } from 'src/app/data/game.interface';
   styleUrls: ['./select-game.component.scss']
 })
 export class SelectGameComponent {
-  @Output() gameSelected: EventEmitter<Array<IGame>> = new EventEmitter<Array<IGame>>();
+  @Output() gameSelected: EventEmitter<IGame> = new EventEmitter<IGame>();
   @Output() nextButton: EventEmitter<number> = new EventEmitter<number>();
 
   constructor() {
@@ -15,13 +15,13 @@ export class SelectGameComponent {
 
   games: Array<IGame> =
     [
-      {name: 'TicTacToe', cssClass: 'ttt', selected: false, playerCount: 2},
+      {name: 'tictactoe', cssClass: 'ttt', selected: false, playerCount: 2},
       {name: 'RPS', cssClass: 'rps', selected: false, playerCount: 2}
     ];
 
   gameClicked(game: IGame) {
       this.games.filter((x: IGame) => x === game).map((x: IGame) => x.selected = !x.selected);
-      this.gameSelected.emit(this.games);
+      this.gameSelected.emit(game);
     }
 
     nextStep() {

@@ -28,8 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     // private modalService: ModalService,
     private hubService: HubService) {
 
-    this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
-    this.hub = this.hubService.createConnection('/signalR', 'homehub', HomeHubConnection);
+    // this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
   }
 
   selectedGame(game: IGame): IGame {
@@ -41,12 +40,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   ngOnInit() {
     const that = this;
 
-    that.hub.isConnected.subscribe((isConnected: boolean) => {
-      if (isConnected) {
-        that.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous);
-        that.registerOnMethods();
-      }
-    });
   }
 
   gameSelected(games: Array<IGame>) {
@@ -72,7 +65,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 
   challengeSelectedPlayer() {
-    this.hub.challengePlayer(this.selectedPlayer.name, 'tictactoe');
   }
 
   ngOnDestroy() {
@@ -85,23 +77,36 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   registerOnMethods() {
     const that = this;
-    this.hub.onUpdateUserList((userOnline: Array<IUser>) => {
-      that.userService.userOnline = userOnline;
-    });
+    // this.hub = this.hubService.createConnection('/signalR', 'homehub', HomeHubConnection);
 
-    this.hub.onStartGame((groupName: string, gameName: string) => {
-      that.groupService._groupNameSubject.next(groupName);
-      that.router.navigate(['/' + gameName]);
-    });
 
-    this.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
-      if (that.selectedGames) {
-        that.selectedGames.find(x => x.name.toLowerCase() === gameName.toLowerCase()).selected = true;
-      }
+    // that.hub.isConnected.subscribe((isConnected: boolean) => {
+    //   if (isConnected) {
+    //     that.hub.addCurrentUser(that.userService.currentUserName, that.userService.isAnonymous);
+    //     that.registerOnMethods();
+    //   }
+    // });
+
+    // this.hub.onUpdateUserList((userOnline: Array<IUser>) => {
+    //   that.userService.userOnline = userOnline;
+    // });
+
+    // this.hub.onStartGame((groupName: string, gameName: string) => {
+    //   that.groupService._groupNameSubject.next(groupName);
+    //   that.router.navigate(['/' + gameName]);
+    // });
+
+    // this.hub.onOpenModal((enemy: string, gameName: string, modalName: string) => {
+    //   if (that.selectedGames) {
+    //     that.selectedGames.find(x => x.name.toLowerCase() === gameName.toLowerCase()).selected = true;
+    //   }
 
       // const name: Modals = Modals[modalName];
       // const modal: IModal = new Modal(name, { enemyUserName: enemy });
       // that.modalService.openModal(modal);
-    });
+
+    // this.hub.challengePlayer(this.selectedPlayer.name, 'tictactoe');
+
+    // });
   }
 }

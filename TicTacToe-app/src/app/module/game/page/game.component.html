@@ -1,22 +1,12 @@
-<section class="t-fullscreen">
-  <app-select-game
-    class="t-fullscreen__content select-game"
-    (gameSelected)="gameSelected($event)"
-    (nextButton)="nextStep($event)"
-    *ngIf="selectionState === 0">
-  </app-select-game>
+<section>
+  <div class="t-fullscreen -vertical">
 
-  <app-select-player class="t-fullscreen__content"
-      (playerSelected)="enemySelected($event)"
-      [selectedGames]="selectedGames"
-      *ngIf="selectionState > 0">
-  </app-select-player>
+    <app-select-game class="select-game" (gameSelected)="onGameSelected($event)" (nextButton)="nextStep($event)">
+    </app-select-game>
 
-  <button
-    *ngIf="selectionState === 2 && isPlayerSelected"
-    class="a-button a-button--start"
-    (click)="challengeSelectedPlayer()"
-    >
-    Go!
-  </button>
+    <router-outlet></router-outlet>
+    <button class="a-button a-button--start" (click)="challengeSelectedPlayer()">
+      Go!
+    </button>
+  </div>
 </section>

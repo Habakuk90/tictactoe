@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from 'src/app/data/game.interface';
 import { IUser } from 'src/app/data/user.interface';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit, OnDestroy {
   selectedGames: Array<IGame>;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   selectedGame(game: IGame): IGame {
@@ -30,8 +31,8 @@ export class GameComponent implements OnInit, OnDestroy {
     // });
   }
 
-  gameSelected(games: Array<IGame>) {
-    this.selectedGames = games;
+  onGameSelected(games: IGame) {
+    this.router.navigate([this.router.url, games.name])
   }
 
   nextStep(step: number) {

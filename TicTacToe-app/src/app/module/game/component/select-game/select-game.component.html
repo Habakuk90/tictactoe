@@ -1,28 +1,12 @@
-<div class="" style="width: 100%;">
-  <div class="t-fullscreen__header">
-    <h2 class="select-game__headline">
-      Select a Game
-    </h2>
-  </div>
-  <div class="o-grid m-multiselect">
-    <div class="o-grid__element m-card" *ngFor="let game of games; trackById" (click)="gameClicked(game)"
-      [class.selected]="game.selected">
-      <div class="select-game__image m-card__image {{game.cssClass}}">
-        <img class="a-image">
-      </div>
-      <div class="m-card__title">{{game.name}}</div>
-
-      <div class="m-card__checkbox">
-        <input class="a-checkbox" [checked]="game.selected" type="checkbox" name="{{game.name}}" id="{{game.name}}">
-        <label class="a-label a-label--checkbox" for="{{game.name}}"></label>
-      </div>
-
-      <div>
-        <a href="#">This is a link</a>
-      </div>
+<h2 class="select-game__headline">
+  Select a Game
+</h2>
+<div class="o-grid ">
+  <div class="o-grid__element m-card" *ngFor="let game of games; trackById" routerLink="tictactoe" (click)="gameClicked(game)"
+    [class.selected]="game.selected">
+    <div class="select-game__image m-card__image {{game.cssClass}}">
+      <img class="a-image">
     </div>
+    <div class="m-card__title">{{game.name}}</div>
   </div>
-  <button class="btn-small a-button a-button--next" [disabled]="!isGameSelected()" (click)="nextStep()">
-    Next
-  </button>
 </div>

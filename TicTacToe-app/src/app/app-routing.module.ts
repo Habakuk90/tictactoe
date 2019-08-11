@@ -39,7 +39,7 @@ const routes: Routes = [
   //     import('./module/auth/auth.module').then(m => m.AuthModule)
   // },
   // Fallback when no prior routes is matched
-  // { path: '**', redirectTo: '/auth/login', pathMatch: 'full' }
+  // { path: '**', component: PageNotFoundComponent }
 ];
 
 

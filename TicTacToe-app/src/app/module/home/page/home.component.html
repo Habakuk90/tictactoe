@@ -1,11 +1,4 @@
 <section class="t-fullscreen">
-  <app-select-game
-    class="t-fullscreen__content select-game"
-    (gameSelected)="gameSelected($event)"
-    (nextButton)="nextStep($event)"
-    *ngIf="selectionState === 0">
-  </app-select-game>
-
   <app-select-player class="t-fullscreen__content"
       (playerSelected)="enemySelected($event)"
       [selectedGames]="selectedGames"

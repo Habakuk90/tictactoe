@@ -22,3 +22,16 @@
     justify-content: center;
   }
 }
+
+.o-grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: ". . . ." ". . . ." ". . . .";
+}
+
+@mixin IE-10 {
+  @media all and (-ms-high-contrast:none) {
+    @content;
+  }
+}
