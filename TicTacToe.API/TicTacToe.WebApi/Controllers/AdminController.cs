@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using TicTacToe.WebApi.TicTacToe.Entities;
-using TicTacToe.WebApi.TicTacToe.Hubs.Models;
 
 namespace TicTacToe.WebApi.Controllers
 {
@@ -35,9 +31,27 @@ namespace TicTacToe.WebApi.Controllers
             {
                 _context.AppUser.Remove(x);
             }
+
+            foreach (var item in _context.Groups.ToList())
+            {
+                _context.Groups.Remove(item);
+            }
+
+            foreach (var item in _context.UserGroups.ToList())
+            {
+                _context.UserGroups.Remove(item);
+            }
+
             _context.SaveChanges();
 
             return Json("success");
+        }
+
+        [Route("userExists")]
+        [HttpGet]
+        public JsonResult UserExists(string name)
+        {
+            return Json(_context.Users.Any(x => x.UserName == name) || _context.AppUser.Any(x => x.Name == name));
         }
     }
 

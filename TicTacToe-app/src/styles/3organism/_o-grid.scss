@@ -1,0 +1,37 @@
+.o-grid {
+  $this: &;
+
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0 -8px;
+
+  &__element {
+    width: 33.33333%;
+    min-height: 200px;
+    margin: 0 8px;
+    flex-grow: 1;
+
+    .a-button {
+      // height: 100%;
+      // width: 100%;
+    }
+  }
+
+  &.-centered-v {
+    align-content: center;
+    justify-content: center;
+  }
+}
+
+.o-grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: ". . . ." ". . . ." ". . . .";
+}
+
+@mixin IE-10 {
+  @media all and (-ms-high-contrast:none) {
+    @content;
+  }
+}

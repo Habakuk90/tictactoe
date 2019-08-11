@@ -1,28 +1,8 @@
 // Media widths
 $tablet-width: 768px;
 $desktop-width: 1024px;
+$content-max-width: 1440px;
 
-/** Colors **/
-
-// As hex codes */
-
-$white: #fff;
-
-$color-green: #3ED571; // Main Primary color */
-$color-green-light: #94EFB3;
-$color-green-dark: #00B03C;
-
-$color-blue: #4390C7; // Main Secondary color (1) */
-$color-blue-light: #96C7E9;
-$color-blue-dark: #095E9A;
-
-$color-orange: #FFB14B; // Main Secondary color (2) */
-$color-orange-light: #FFD59E;
-$color-orange-dark: #F08800;
-
-$color-red: #e84c30; // Main Complement color */
-$color-red-light: #FFAD9E;
-$color-red-dark: #F02500;
 
 $simple-box-shadow: 0 0 8px 3px rgba(17, 17, 17, 0.3);
 
@@ -30,18 +10,7 @@ $simple-box-shadow: 0 0 8px 3px rgba(17, 17, 17, 0.3);
 
 /** Navigation **/
 $nav-height: 40px;
-
+$section-margin: 52px;
 /** ## Dimensions end ## **/
 
-
-@mixin tablet {
-  @media (max-width: #{$desktop-width - 1px}) {
-    @content;
-  }
-}
-
-@mixin mobile {
-  @media (max-width: #{$tablet-width - 1px}) {
-    @content;
-  }
-}
+/* */

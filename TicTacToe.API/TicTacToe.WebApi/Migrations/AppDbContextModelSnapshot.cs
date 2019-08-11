@@ -15,7 +15,7 @@ namespace TicTacToe.WebApi.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -180,15 +180,28 @@ namespace TicTacToe.WebApi.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.GameUserModel", b =>
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.Group", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Type");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", b =>
+                {
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConnectionIdsString");
 
-                    b.Property<string>("GroupName");
+                    b.Property<bool>("IsAnonymous");
 
                     b.Property<string>("Name");
 
@@ -197,6 +210,19 @@ namespace TicTacToe.WebApi.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("AppUser");
+                });
+
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.UserGroups", b =>
+                {
+                    b.Property<Guid>("GroupId");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("GroupId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserGroups");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -240,6 +266,19 @@ namespace TicTacToe.WebApi.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser")
                         .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TicTacToe.WebApi.TicTacToe.Hubs.Models.UserGroups", b =>
+                {
+                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.Group", "Group")
+                        .WithMany("UserGroups")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("TicTacToe.WebApi.TicTacToe.Hubs.Models.User", "User")
+                        .WithMany("UserGroups")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

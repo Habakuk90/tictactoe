@@ -1,0 +1,27 @@
+// scoped styles on tictactoe aren't working
+$grid-columns: 3;
+$grid-rows: 3;
+$border-tictactoe: 5px solid black;
+/*#\31 -2*/
+@for $i from 1 through $grid-columns {
+  @for $j from 1 through $grid-rows {
+      #\3#{$i}-#{$j} {
+          @if $i == 1 or $i == 2 {
+              border-bottom: $border-tictactoe;
+          }
+          @if $j == 1 or $j == 2{
+              border-right: $border-tictactoe;
+          }
+
+      }
+  }
+}
+
+
+
+section {
+  // fixnaming content-no-gap
+  > *:not(.content-no-gap) {
+    margin-top: $section-margin;
+  }
+}

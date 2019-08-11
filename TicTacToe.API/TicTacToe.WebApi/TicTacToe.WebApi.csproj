@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TicTacToe\User\**" />
     <Compile Remove="wwwroot\**" />
+    <Content Remove="TicTacToe\User\**" />
     <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="TicTacToe\User\**" />
     <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="TicTacToe\User\**" />
     <None Remove="wwwroot\**" />
   </ItemGroup>
 
@@ -20,11 +24,26 @@
     <Compile Remove="Migrations\20180714155210_InitialCreate.Designer.cs" />
     <Compile Remove="Migrations\20180718205030_InitialCreate.cs" />
     <Compile Remove="Migrations\20180718205030_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20180718211421_InitialCreate.cs" />
+    <Compile Remove="Migrations\20180718211421_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20190608185942_Groups.cs" />
+    <Compile Remove="Migrations\20190608185942_Groups.Designer.cs" />
+    <Compile Remove="Migrations\20190608192308_Groups_fix.cs" />
+    <Compile Remove="Migrations\20190608192308_Groups_fix.Designer.cs" />
+    <Compile Remove="Migrations\20190608192646_Groups.cs" />
+    <Compile Remove="Migrations\20190608192646_Groups.Designer.cs" />
+    <Compile Remove="Migrations\20190608192917_InitialCreate.cs" />
+    <Compile Remove="Migrations\20190608192917_InitialCreate.Designer.cs" />
+    <Compile Remove="Migrations\20190610161542_Anonymous.cs" />
+    <Compile Remove="Migrations\20190610161542_Anonymous.Designer.cs" />
+    <Compile Remove="Migrations\20190611105409_Anonymous.cs" />
+    <Compile Remove="Migrations\20190611105409_Anonymous.Designer.cs" />
+    <Compile Remove="Migrations\20190612201159_Groups.cs" />
+    <Compile Remove="Migrations\20190612201159_Groups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="TicTacToe\Attributes\" />
-    <Folder Include="TicTacToe\User\Models\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,0 +1,44 @@
+.a-button {
+  $this: &;
+  border: none;
+  padding: 8px;
+  border-radius: 10px;
+  letter-spacing: 2px;
+  font-size: 1.125rem;
+  color: $white;
+  background-color: $color-main-sec;
+  cursor: pointer;
+
+  &--big {
+    width: 180px;
+  }
+
+  &--accept {
+    background-color: $color-main-prim-dark;
+  }
+
+  &--decline {
+    background-color: $color-main-complement;
+  }
+
+  // todoandi colors
+  &--start {
+    background-color: $color-main-sec-2;
+  }
+
+  &:not(:disabled) {
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:hover,
+    &:active {
+      filter: saturate(90%);
+    }
+  }
+
+  // todoandi colors
+  &:disabled {
+    background-color: gray;
+  }
+}
