@@ -1,7 +1,6 @@
-// auth.guard.ts
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
-import { UserService } from './shared/services/user.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
