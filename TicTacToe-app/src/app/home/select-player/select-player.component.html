@@ -4,7 +4,7 @@
     <th class="m-table__header">Status</th>
     <th class="m-table__header"></th>
   </tr>
-  <ng-container *ngFor="let user of userOnline; let i=index; trackBy:i;">
+  <ng-container *ngFor="let user of userOnline; trackById">
     <tr class="m-table__row" *ngIf="user.name !== currentUserName && user.status === 'Online'" (click)="enemyClicked(user)">
       <td class="m-table__data">{{user.name}}</td>
       <td class="m-table__data">{{user.status}}</td>

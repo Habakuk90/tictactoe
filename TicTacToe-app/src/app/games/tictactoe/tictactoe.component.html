@@ -1,5 +1,5 @@
 <div class="tile-wrapper" [class.not-your-turn]="!turn">
-  <div class="box" *ngFor="let box of boxes; let i=index; trackBy:i;">
+  <div class="box" *ngFor="let box of boxes; trackById">
       <div class="box__inner"
             [ngClass]="box.state"
             (click)="changeField(box.id)"

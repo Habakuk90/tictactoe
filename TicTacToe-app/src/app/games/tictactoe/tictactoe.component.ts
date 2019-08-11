@@ -21,7 +21,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
     read: ElementRef
   }) svg: ElementRef;
 
-  public turn: boolean = false;
+  public turn = false;
   public selfTileState = 'circle';
   private gameTile = 'circle';
   private hasWon: boolean;

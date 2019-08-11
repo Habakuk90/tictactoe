@@ -7,12 +7,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HubService } from '../connections/hub.service';
+import { NgForTrackByIdDirective } from '../utils/ng-for-track-by-id.directive';
 
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [CommonModule],
-  providers:    [HubService]
+  providers:    [HubService, NgForTrackByIdDirective]
 })
 export class SharedModule { }

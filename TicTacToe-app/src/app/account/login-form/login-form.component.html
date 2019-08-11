@@ -31,6 +31,6 @@
     </div>
   </div>
   <ul class="authorization-form__errors">
-      <li *ngFor="let error of errors; let i=index; trackBy:i;">{{error}}</li>
+      <li *ngFor="let error of errors; trackById">{{error}}</li>
   </ul>
 </section>

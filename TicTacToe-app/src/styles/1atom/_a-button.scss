@@ -6,7 +6,7 @@
   letter-spacing: 2px;
   font-size: 1.125rem;
   color: $white;
-  background-color: $color-blue;
+  background-color: $color-main-sec;
   cursor: pointer;
 
   &--big {
@@ -14,16 +14,16 @@
   }
 
   &--accept {
-    background-color: $color-green-dark;
+    background-color: $color-main-prim-dark;
   }
 
   &--decline {
-    background-color: $color-red;
+    background-color: $color-main-complement;
   }
 
   // todoandi colors
   &--start {
-    background-color: $color-orange;
+    background-color: $color-main-sec-2;
   }
 
   &:not(:disabled) {
