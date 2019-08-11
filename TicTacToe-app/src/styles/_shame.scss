@@ -16,3 +16,12 @@ $border-tictactoe: 5px solid black;
       }
   }
 }
+
+
+
+section {
+  // fixnaming content-no-gap
+  > *:not(.content-no-gap) {
+    margin-top: $section-margin;
+  }
+}
