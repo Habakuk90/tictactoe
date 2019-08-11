@@ -11,6 +11,10 @@ $link-hover-color: $black !default;
   // needed everywhere? fixes underline hover
   display: inline-block;
 
+  > a {
+    display: block;
+  }
+
   &:active {
     color: inherit;
   }

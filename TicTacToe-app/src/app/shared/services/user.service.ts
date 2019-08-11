@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { ConfigService } from '../utils/config.service';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
 import { BaseService } from './base.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UserService extends BaseService {
   baseUrl: String = '';
 
@@ -24,11 +26,10 @@ export class UserService extends BaseService {
     this.userName.next(value);
   }
 
-  constructor(private http: HttpClient, private router: Router,
-    configService: ConfigService) {
+  constructor(private http: HttpClient, private router: Router) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
-    this.baseUrl = configService._apiURI;
+    this.baseUrl = environment.baseUrl;
   }
 
   register(userName: string, password: string, confirmPassword: string) {

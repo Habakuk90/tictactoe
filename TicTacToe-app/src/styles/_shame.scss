@@ -1,25 +1,3 @@
-*, *:before, *:after {
-	margin: 0;
-    padding: 0;
-
-	box-sizing: border-box !important;
-}
-body {
-    box-sizing: border-box;
-}
-
-section {
-    > * {
-        max-width: $content-max-width;
-        margin: 52px auto 0;
-    }
-}
-
-.a-image {
-    // fixme
-    height: 400px;
-}
-
 // scoped styles on tictactoe aren't working
 $grid-columns: 3;
 $grid-rows: 3;
@@ -36,5 +14,14 @@ $border-tictactoe: 5px solid black;
           }
 
       }
+  }
+}
+
+
+
+section {
+  // fixnaming content-no-gap
+  > *:not(.content-no-gap) {
+    margin-top: $section-margin;
   }
 }

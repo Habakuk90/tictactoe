@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 // TODOANDI still needed?
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class GroupService {
   _groupNameSubject = new BehaviorSubject<string>('');
   groupName: string;

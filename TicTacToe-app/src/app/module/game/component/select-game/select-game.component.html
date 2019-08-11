@@ -1,0 +1,12 @@
+<h2 class="select-game__headline">
+  Select a Game
+</h2>
+<div class="o-grid ">
+  <div class="o-grid__element m-card" *ngFor="let game of games; trackById" routerLink="tictactoe" (click)="gameClicked(game)"
+    [class.selected]="game.selected">
+    <div class="select-game__image m-card__image {{game.cssClass}}">
+      <img class="a-image">
+    </div>
+    <div class="m-card__title">{{game.name}}</div>
+  </div>
+</div>
