@@ -15,3 +15,4 @@ TicTacToe-app/src/styles/atomic-poc/
 TicTacToe-app/src/styles/materialize-src/sass/components/forms/_radio-buttons.scss
 TicTacToe-app/src/styles/materialize-src/
 *.WebApi.csproj.user
+TicTacToe-app/backup/
