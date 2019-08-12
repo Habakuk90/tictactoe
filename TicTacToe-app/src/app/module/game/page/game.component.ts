@@ -11,7 +11,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class GameComponent implements OnInit, OnDestroy {
   selectedGames: Array<IGame>;
   isGameSelected = false;
-  constructor(private router: Router) {
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
   }
 
   selectedGame(game: IGame): IGame {
@@ -33,7 +33,9 @@ export class GameComponent implements OnInit, OnDestroy {
 
   onGameSelected(games: IGame) {
     this.isGameSelected = true;
-    this.router.navigate([this.router.url, games.name]);
+
+    const parentPath = this.activatedRoute.parent.snapshot.url[0].path;
+    this.router.navigate([parentPath, games.name]);
   }
 
   nextStep(step: number) {
