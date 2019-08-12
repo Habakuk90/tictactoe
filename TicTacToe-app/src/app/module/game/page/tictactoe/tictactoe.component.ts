@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Box } from './box';
-import { BoxHandler } from './boxHandler';
 import { UserService } from 'src/app/shared/services/user.service';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { Router } from '@angular/router';
 import { GameHubConnection } from 'src/app/connections/game.hubconnection';
 import { HubService } from 'src/app/connections/hub.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
+import { BoxHandler } from '../../data/boxHandler';
+import { Box } from '../../data/box';
 
 @Component({
   selector: 'app-tictactoe',
