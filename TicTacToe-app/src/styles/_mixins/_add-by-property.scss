@@ -119,6 +119,5 @@
 /// @param {Number} $value sets the font-size value preferred in rem.
 @mixin add-font-size($value)
 {
-  @debug 'hi';
     @include add-by-property($value, font-size)
 }

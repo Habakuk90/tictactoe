@@ -10,7 +10,6 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() userName: string;
   isLoggedIn: boolean;
-  isLoggedInSubscription: Subscription;
   homeState: number;
   homeStateSubscription: Subscription;
   constructor(private userService: UserService) {}
@@ -28,7 +27,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.isLoggedInSubscription.unsubscribe();
   }
 
   logout() {

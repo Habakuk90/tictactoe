@@ -4,21 +4,14 @@ import { TicTacToeComponent } from './page/tictactoe/tictactoe.component';
 import { GameComponent } from './page/game.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: '',
-  //   pathMatch: 'full'
-  // },
   {
     path: '',
     component: GameComponent,
-    children: [
-      {
-        path: 'tictactoe',
-        component: TicTacToeComponent
-      },
-    ]
   },
+  {
+    path: 'tictactoe',
+    component: TicTacToeComponent
+  }
 ];
 
 @NgModule({

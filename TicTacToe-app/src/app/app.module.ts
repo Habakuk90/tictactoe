@@ -8,6 +8,7 @@ import { CoreModule } from './core/core.module';
 import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './layout/content-layout/header/header.component';
 import { FooterComponent } from './layout/content-layout/footer/footer.component';
+import { PageNotFoundComponent } from './layout/content-layout/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { FooterComponent } from './layout/content-layout/footer/footer.component
     ContentLayoutComponent,
     HeaderComponent,
     FooterComponent,
+    PageNotFoundComponent,
     AuthLayoutComponent
   ],
   imports: [
