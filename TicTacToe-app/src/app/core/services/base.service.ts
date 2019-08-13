@@ -1,8 +1,6 @@
 import { throwError, BehaviorSubject } from 'rxjs';
 
 export abstract class BaseService {
-  // todoandi muss das hier?
-  public _HomeStateSubject = new BehaviorSubject<number>(0);
   constructor() {}
 
   protected handleError(error: any) {
