@@ -1,12 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IGame } from 'src/app/data/game.interface';
 import { IUser } from 'src/app/data/user.interface';
-import { HomeHubConnection } from '../home.hubconnection';
 import { Router } from '@angular/router';
 import { GroupService } from 'src/app/shared/services/group.service';
 import { UserService } from 'src/app/shared/services/user.service';
 import { HubService } from 'src/app/connections/hub.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
+import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
+import { IModal, Modal, Modals } from 'src/app/shared/modals/modal';
+import { ModalService } from 'src/app/shared/modals/modal.service';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   constructor(private router: Router,
     private groupService: GroupService,
     private userService: UserService,
-    // private modalService: ModalService,
+    private modalService: ModalService,
     private hubService: HubService) {
 
     // this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
@@ -39,7 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   ngOnInit() {
     const that = this;
-
+    const modal: IModal = new Modal(Modals.challenged, { enemyUserName: 'enemy' });
+    that.modalService.openModal(modal);
   }
 
   gameSelected(games: Array<IGame>) {

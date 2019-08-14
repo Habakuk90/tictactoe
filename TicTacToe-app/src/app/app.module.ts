@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HeaderComponent } from './layout/content-layout/header/header.component';
 import { FooterComponent } from './layout/content-layout/footer/footer.component';
 import { PageNotFoundComponent } from './layout/content-layout/page-not-found/page-not-found.component';
+import { ModalModule } from './shared/modals/modal.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { PageNotFoundComponent } from './layout/content-layout/page-not-found/pa
     CoreModule,
     SharedModule,
 
-    AppRoutingModule
+    AppRoutingModule,
+    ModalModule
   ],
   providers: [
   ],
