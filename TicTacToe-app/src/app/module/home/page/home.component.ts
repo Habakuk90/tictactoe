@@ -41,8 +41,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   ngOnInit() {
     const that = this;
-    const modal: IModal = new Modal(Modals.challenged, { enemyUserName: 'enemy' });
-    that.modalService.openModal(modal);
+    // const modal: IModal = new Modal(Modals.challenged, { enemyUserName: 'enemy' });
+    // that.modalService.openModal(modal);
   }
 
   gameSelected(games: Array<IGame>) {

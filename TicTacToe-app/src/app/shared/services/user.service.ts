@@ -29,7 +29,7 @@ export class UserService extends BaseService {
   constructor(private http: HttpClient, private router: Router) {
     super();
     this._isLoggedInSubject.next(!!localStorage.getItem('auth_token'));
-    this.baseUrl = environment.baseUrl;
+    this.baseUrl = environment.signalR.baseUrl;
   }
 
   register(userName: string, password: string, confirmPassword: string) {

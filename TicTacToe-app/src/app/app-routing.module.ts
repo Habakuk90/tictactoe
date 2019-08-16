@@ -30,6 +30,11 @@ const routes: Routes = [
         path: 'game',
         loadChildren: () =>
           import('./module/game/game.module').then(m => m.GameModule)
+      },
+      {
+        path: 'blog',
+        loadChildren: () =>
+          import('./module/blog/blog.module').then(m => m.BlogModule)
       }
     ]
   },
