@@ -20,10 +20,11 @@ export class BlogComponent implements OnInit {
 
   get() {
     const that = this;
+    // TODOANDI: extend params for activated route
     const p: BrowseParams = {
       include: 'authors',
       limit: 3,
-      page: 2
+      page: 1
     };
 
     const x = new Posts(p);
