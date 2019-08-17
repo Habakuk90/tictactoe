@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { PostResponseParams, PostResponse } from 'src/app/shared/http/response';
+import { PostResponseParams, PostResponse, BrowseParams } from 'src/app/shared/http/response';
 import { ApiService } from 'src/app/shared/http/api.service';
 import { PostParams, Posts } from 'src/app/shared/http/endpoints';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-blog',
@@ -13,14 +15,15 @@ export class BlogComponent implements OnInit {
 
   posts: Array<PostResponseParams> = [];
 
-  constructor(private apiService: ApiService, protected location: Location) {
+  constructor(private apiService: ApiService, protected location: Location, private router: Router) {
   }
 
   get() {
     const that = this;
-    const p: PostParams = {
+    const p: BrowseParams = {
       include: 'authors',
-      limit: 3
+      limit: 3,
+      page: 2
     };
 
     const x = new Posts(p);
@@ -30,8 +33,11 @@ export class BlogComponent implements OnInit {
       this.posts.forEach((element) => {
         element.url = this.location.path() + '/' + element.slug;
       });
-    }, error => {
-      console.log(error);
+    }, (error: HttpErrorResponse) => {
+      if (error.status === 0) {
+        console.log('Unknown error occured please try again later');
+        this.router.navigate(['']);
+      }
     });
   }
 

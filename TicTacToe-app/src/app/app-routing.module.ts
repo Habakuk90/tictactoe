@@ -4,18 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContentLayoutComponent } from './layout/content-layout/content-layout.component';
 import { PageNotFoundComponent } from './layout/content-layout/page-not-found/page-not-found.component';
 
-// const appRoutes: Routes = [
-//   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-//   { path: 'tictactoe', component: TicTacToeComponent, canActivate: [AuthGuard] },
-//   { path: 'rps', component: RPSComponent },
-//   { path: 'test', component: TestSiteComponent }
-// ];
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   redirectTo: '/auth/login',
-  //   pathMatch: 'full'
-  // },
   {
     path: '',
     component: ContentLayoutComponent,
@@ -55,5 +44,3 @@ const routes: Routes = [
   providers: []
 })
 export class AppRoutingModule {}
-
-// export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

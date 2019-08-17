@@ -28,7 +28,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
   get(slug: string) {
     const filter = 'slug:' + slug;
-    const singlePost = new Posts({ include: 'authors,tags' });
+    const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
     this.apiService.browse<PostResponse>(singlePost).pipe(map(x =>
       x.posts.filter(y => y.primary_author.slug === 'ghost')))
       .subscribe(posts => {

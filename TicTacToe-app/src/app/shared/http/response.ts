@@ -1,26 +1,26 @@
-export interface Response {
+export interface BaseResponse {
   meta: MetaResponse;
 }
 
 
-export interface PostResponse extends Response {
+export interface PostResponse extends BaseResponse {
   posts: Array<PostResponseParams>;
 }
 
-export interface PageResponse extends Response {
+export interface PageResponse extends BaseResponse {
   pages: Array<PagesResponeParams>;
 }
 
-export interface TagResponse extends Response {
+export interface TagResponse extends BaseResponse {
   tags: Array<TagsResponseParams>;
 }
 
-export interface AuthorsResponse extends Response {
+export interface AuthorsResponse extends BaseResponse {
   authors: Array<AuthorsResponseParams>;
 }
 
 
-export interface SettingsResponse extends Response {
+export interface SettingsResponse extends BaseResponse {
   settings: SettingsResponseParams;
 }
 
@@ -132,16 +132,11 @@ export interface BaseParams {
   formats?: string;
 }
 
-interface BrowseParams extends BaseParams {
-  filter: string;
-  limit: string;
-  page: string;
-  order: string;
-  debug: boolean;
-  absolute_urls: string;
-}
-
-export interface Params {
-  include?: string;
+export interface BrowseParams extends BaseParams {
+  filter?: string;
   limit?: number;
+  page?: number;
+  order?: string;
+  debug?: boolean;
+  absolute_urls?: string;
 }

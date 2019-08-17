@@ -1,17 +1,17 @@
 import { environment } from 'src/environments/environment';
-import { Params, BaseParams } from './response';
+import { BaseParams } from './response';
 
 export interface IApiEndpoint {
-  params: Params;
+  params: BaseParams;
   url: string;
   fullUrl: string;
 }
 
-export interface PostParams extends Params {
+export interface PostParams extends BaseParams {
   filter?: string;
 }
 
-export interface PagesParams extends Params {
+export interface PagesParams extends BaseParams {
   include?: string;
 }
 
@@ -20,11 +20,11 @@ export abstract class Endpoint implements IApiEndpoint {
   /**
    *
    */
-  constructor(public params: Params = null, public url = 'notfound') {
+  constructor(public params: BaseParams = null, public url = 'notfound') {
     this.fullUrl = this.buildUrl(url, params);
   }
 
-  private buildUrl(endpoint: string, params?: Params) {
+  private buildUrl(endpoint: string, params?: BaseParams) {
     let urlParams = '';
 
     for (const key in params) {
