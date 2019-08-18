@@ -27,7 +27,6 @@ export class ModalComponent implements OnInit {
   }
 
   onChallengeResponse(status: any) {
-    // TODOANDI magic strings
     const hub: HomeHubConnection = this.hubService.getByType(HomeHubConnection.prototype);
     // const hub: HomeHubConnection = this.hubService.getByName('homehub');
 

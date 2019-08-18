@@ -1,3 +1,4 @@
+// TODOANDI cleanup Response Types
 export interface BaseResponse {
   meta: MetaResponse;
 }

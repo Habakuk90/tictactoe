@@ -1,5 +1,5 @@
 import { environment } from 'src/environments/environment';
-import { BaseParams } from './response';
+import { BaseParams, BrowseParams } from './response';
 
 export interface IApiEndpoint {
   params: BaseParams;
@@ -7,6 +7,7 @@ export interface IApiEndpoint {
   fullUrl: string;
 }
 
+// TODOANDI cleanup Params
 export interface PostParams extends BaseParams {
   filter?: string;
 }
@@ -24,6 +25,7 @@ export abstract class Endpoint implements IApiEndpoint {
     this.fullUrl = this.buildUrl(url, params);
   }
 
+  // TODOANDI, get parameters from query in url and build url in ghost/api .service
   private buildUrl(endpoint: string, params?: BaseParams) {
     let urlParams = '';
 
@@ -49,7 +51,7 @@ export class Posts extends Endpoint {
 }
 
 export class Pages extends Endpoint {
-  constructor(public params: PagesParams = null, public endpoint = 'pages') {
+  constructor(public params: BrowseParams = null, public endpoint = 'pages') {
     super(params, endpoint);
   }
 }

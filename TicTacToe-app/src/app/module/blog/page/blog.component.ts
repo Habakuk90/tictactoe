@@ -28,7 +28,7 @@ export class BlogComponent implements OnInit {
     };
 
     const x = new Posts(p);
-
+    //TODOANDI implement ghost.service here and move business logic to there
     this.apiService.browse<PostResponse>(x).subscribe(response => {
       this.posts = response.posts;
       this.posts.forEach((element) => {

@@ -38,7 +38,6 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
           // return here or go to main page or 404 or whatever
           throw Error('no post found plx fix');
         }
-        console.log(posts);
         this.post = posts[0];
         this.container.nativeElement.innerHTML = this.post.html;
       });

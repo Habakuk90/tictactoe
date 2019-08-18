@@ -1,14 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { IGame } from 'src/app/data/game.interface';
 import { IUser } from 'src/app/data/user.interface';
-import { Router } from '@angular/router';
-import { GroupService } from 'src/app/shared/services/group.service';
 import { UserService } from 'src/app/shared/services/user.service';
-import { HubService } from 'src/app/connections/hub.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
 import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
-import { IModal, Modal, Modals } from 'src/app/shared/modals/modal';
-import { ModalService } from 'src/app/shared/modals/modal.service';
+import { PageResponse } from 'src/app/shared/http/response';
+import { GhostService } from 'src/app/shared/services/ghost.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,12 +21,10 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   selectedPlayer: IUser;
 
   hub: HomeHubConnection;
-
-  constructor(private router: Router,
-    private groupService: GroupService,
+  ghostPage: Observable<PageResponse>;
+  constructor(
     private userService: UserService,
-    private modalService: ModalService,
-    private hubService: HubService) {
+    private ghost: GhostService) {
 
     // this.userService._HomeStateSubject.subscribe(x => this.selectionState = x);
   }
@@ -41,45 +37,15 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   ngOnInit() {
     const that = this;
-    // const modal: IModal = new Modal(Modals.challenged, { enemyUserName: 'enemy' });
-    // that.modalService.openModal(modal);
-  }
-
-  gameSelected(games: Array<IGame>) {
-    this.selectedGames = games;
-    this.isGameSelected = this.selectedGames.length > 0;
-  }
-
-  nextStep(step: number) {
-    this.userService._HomeStateSubject.next(step);
-  }
-
-  enemySelected(enemy: IUser) {
-    this.selectedPlayer = enemy;
-    this.isPlayerSelected = enemy != null;
-    this.userService._HomeStateSubject.next(2);
-    this.selectionState = 2;
-  }
-
-  back() {
-    this.selectionState = this.selectionState > 0 ? --this.selectionState : 0;
-    this.isGameSelected = false;
-    this.isPlayerSelected = false;
-  }
-
-  challengeSelectedPlayer() {
+    that.ghostPage = this.ghost.getHomePage();
   }
 
   ngOnDestroy() {
-    // TODOANDI homestate refactorn
-    this.userService._HomeStateSubject.next(0);
-    // FIXME will the conneciton be stabel at all times, maybe yes because of chat and other functionality
     // evaluate if more socketuris are an option.
     // this.hub.stopConnection();
   }
 
   registerOnMethods() {
-    const that = this;
     // this.hub = this.hubService.createConnection('/signalR', 'homehub', HomeHubConnection);
 
 
