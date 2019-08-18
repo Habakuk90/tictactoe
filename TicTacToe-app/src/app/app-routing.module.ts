@@ -11,7 +11,7 @@ const routes: Routes = [
     // canActivate: [AuthGuard], // Should be replaced with actual auth guard
     children: [
       {
-        path: 'home',
+        path: '',
         loadChildren: () =>
           import('./module/home/home.module').then(m => m.HomeModule)
       },
@@ -24,7 +24,8 @@ const routes: Routes = [
         path: 'blog',
         loadChildren: () =>
           import('./module/blog/blog.module').then(m => m.BlogModule)
-      }
+      },
+      { path: '**', component: PageNotFoundComponent }
     ]
   },
   // {
@@ -34,7 +35,6 @@ const routes: Routes = [
   //     import('./module/auth/auth.module').then(m => m.AuthModule)
   // },
   // Fallback when no prior routes is matched
-  { path: '**', component: PageNotFoundComponent }
 ];
 
 
