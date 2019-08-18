@@ -70,12 +70,36 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     //     that.selectedGames.find(x => x.name.toLowerCase() === gameName.toLowerCase()).selected = true;
     //   }
 
-      // const name: Modals = Modals[modalName];
-      // const modal: IModal = new Modal(name, { enemyUserName: enemy });
-      // that.modalService.openModal(modal);
+    // const name: Modals = Modals[modalName];
+    // const modal: IModal = new Modal(name, { enemyUserName: enemy });
+    // that.modalService.openModal(modal);
 
     // this.hub.challengePlayer(this.selectedPlayer.name, 'tictactoe');
 
     // });
+  }
+}
+
+
+
+@Component({
+  selector: 'ghost-page',
+  template: `
+    <div #container>
+
+    </div>
+  `
+})
+export class GhostPageComponent implements OnInit {
+  @Input() ghostPage: Observable<PageResponse>;
+
+  @ViewChild('container', { static: false }) container: ElementRef;
+
+  ngOnInit() {
+    // TODOANDI use the root component to implement innerHTML
+    this.ghostPage.subscribe(page => {
+      this.container.nativeElement.innerHTML = page.pages[0].html;
+    });
+
   }
 }

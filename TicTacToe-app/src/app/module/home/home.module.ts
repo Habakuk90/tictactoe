@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 
-import { HomeComponent } from './page/home.component';
+import { HomeComponent, GhostPageComponent } from './page/home.component';
 import { HomeRoutingModule } from './home.routing';
 
 import { SharedModule } from '../../shared/shared.module';
@@ -10,7 +10,8 @@ import { SelectPlayerComponent } from './page/select-player/select-player.compon
 @NgModule({
     declarations: [
         HomeComponent,
-        SelectPlayerComponent
+        SelectPlayerComponent,
+        GhostPageComponent
     ],
     imports: [
         SharedModule,
