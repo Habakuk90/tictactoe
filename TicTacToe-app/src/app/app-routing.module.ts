@@ -4,7 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { ContentLayoutComponent } from './layout/content-layout/content-layout.component';
 import { PageNotFoundComponent } from './layout/content-layout/page-not-found/page-not-found.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     component: ContentLayoutComponent,

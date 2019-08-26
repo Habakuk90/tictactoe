@@ -7,6 +7,7 @@ import { RegistrationFormComponent } from './page/registration-form/registration
 import { UserService } from 'src/app/shared/services/user.service';
 import { AuthRoutingModule } from './account.routing';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -14,6 +15,6 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule, FormsModule, AuthRoutingModule, SharedModule
   ],
   declarations: [RegistrationFormComponent, LoginFormComponent],
-  providers:    [ UserService ]
+  providers:    [ UserService, HttpClientModule ]
 })
 export class AccountModule { }

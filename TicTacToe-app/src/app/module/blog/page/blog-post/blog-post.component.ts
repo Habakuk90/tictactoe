@@ -3,8 +3,8 @@ import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 import { Posts } from 'src/app/shared/http/endpoints';
-import { ApiService } from 'src/app/shared/http/api.service';
 import { PostResponseParams, PostResponse } from 'src/app/shared/http/response';
+import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
   selector: 'app-blog-post',

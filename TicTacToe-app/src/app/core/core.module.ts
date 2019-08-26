@@ -13,7 +13,10 @@ import { throwIfAlreadyLoaded } from './guard/module-import.guard';
         HttpClientModule,
         // NgxSpinnerModule
     ],
+    exports: [
+    ],
     providers: [
+        HttpClientModule
         // AuthGuard,
         // NoAuthGuard,
 

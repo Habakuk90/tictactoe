@@ -95,11 +95,112 @@ export class GhostPageComponent implements OnInit {
 
   @ViewChild('container', { static: false }) container: ElementRef;
 
+  private _pageElements: IGhostElement[]
+  constructor(private ghostService: GhostService) {
+    // this._pageElements = ghostService.getPageElements();
+  }
   ngOnInit() {
     // TODOANDI use the root component to implement innerHTML
     this.ghostPage.subscribe(page => {
-      this.container.nativeElement.innerHTML = page.pages[0].html;
+
+      const html = page.pages[0].html;
+      this._pageElements = this.ghostService.getPageElements(html);
+      this.container.nativeElement.innerHTML = html;
     });
 
   }
 }
+
+// class GhostDOMParser extends DOMParser {
+//   constructor(private html: string) {
+//     super();
+//   }
+// }
+
+abstract class GhostElement {
+  abstract beginstring: string;
+  abstract endstring: string;
+
+  constructor() {
+
+  }
+}
+
+export interface IGhostElement {
+  html: Document;
+}
+
+// class GhostElementFactory {
+//   private elements: IGhostElement[];
+//   private readonly _html: string;
+
+
+//   constructor(private document: Document) {
+//     this.elements = this.getElements(document);
+//   }
+
+//   createElements(element: IGhostElement) {
+//     this.getElement(this.document.querySelector('body').innerHTML, element);
+
+//     return this.document.querySelectorAll(':not(body):not(html):not(head)');
+//   }
+
+//   getAll<T extends IGhostElement>(): GhostImageElement[] {
+//     const imageFigues: GhostImageElement[] = [];
+
+
+
+//     return imageFigues;
+//   }
+
+//   getImage() {
+
+//   }
+
+//   createByString() {
+
+//   }
+
+//   private getElement(html: string, element: IGhostElement) {
+//     const beginOf = html.indexOf(element.beginstring);
+//     const endOf = html.indexOf(element.endstring);
+//     html = html.substring(beginOf + element.beginstring.length, endOf);
+
+//     const parser = new DOMParser();
+//     element.html = parser.parseFromString(html, 'text/html');
+
+//     console.log(element);
+
+//     return element;
+//   }
+
+//   createElement() {
+
+//   }
+//   private getElements(document: Document): IGhostElement[] {
+//     let first: number = this.document.querySelector('body').innerHTML.indexOf('<!--kg-card-begin: ') + '<!--kg-card-begin: '.length;
+
+//     let element: IGhostElement = new GhostElement();
+
+//     // let elements: I = new DOMParser().parseFromString(this.document.querySelector('body').innerHTML, 'text/html');
+
+//     return elements;
+//   }
+// }
+
+
+// class GhostElement implements IGhostElement {
+//   private beginstring: string;
+//   private endstring: string;
+//   private html: Document;
+
+//   constructor(document: Document) {
+//     this
+//   }
+// }
+
+// class GhostImageElement extends GhostElement {
+//   private beginstring = '<!--kg-card-begin: image-->';
+//   private endstring = '<!--kg-card-end: image-->';
+// }
+// }

@@ -1,0 +1,11 @@
+.kg-image, .kg-gallery-image > img {
+  @extend .a-image;
+}
+
+ghost-page {
+
+}
+.a-image {
+  width: 100%;
+  height: 100%;
+}

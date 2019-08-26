@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { PostResponseParams, PostResponse, BrowseParams } from 'src/app/shared/http/response';
-import { ApiService } from 'src/app/shared/http/api.service';
 import { PostParams, Posts } from 'src/app/shared/http/endpoints';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ApiService } from 'src/app/shared/services/api.service';
 
 @Component({
   selector: 'app-blog',
@@ -28,7 +28,7 @@ export class BlogComponent implements OnInit {
     };
 
     const x = new Posts(p);
-    //TODOANDI implement ghost.service here and move business logic to there
+    // TODOANDI implement ghost.service here and move business logic to there
     this.apiService.browse<PostResponse>(x).subscribe(response => {
       this.posts = response.posts;
       this.posts.forEach((element) => {
