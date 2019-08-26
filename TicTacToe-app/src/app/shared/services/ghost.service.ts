@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BrowseParams, PageResponse, PostResponse } from 'src/app/shared/http/response';
 import { Pages, Posts } from '../http/endpoints';
-import { take, map } from 'rxjs/operators';
+import { take, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { IGhostElement } from 'src/app/module/home/page/home.component';
 import { parse } from 'querystring';
 import { Observable } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GhostService {
   homePage: PageResponse;
-  constructor(private route: ActivatedRoute, private apiService: ApiService) { }
+  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
 
   /**
    * get any page by given parameters
@@ -38,5 +39,17 @@ export class GhostService {
     const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
     return this.apiService.browse<PostResponse>(singlePost).pipe(map(x =>
       x.posts.filter(y => y.primary_author.slug === 'ghost')));
+  }
+
+  public getBlogPages(params: BrowseParams) {
+    const posts = new Posts(params);
+
+    return this.apiService.browse<PostResponse>(posts).pipe(catchError((error: HttpErrorResponse) => {
+      if (error.status === 0) {
+        console.log('Unknown error occured please try again later');
+        this.router.navigate(['']);
+        return new Observable<HttpErrorResponse>();
+      }
+    }));
   }
 }

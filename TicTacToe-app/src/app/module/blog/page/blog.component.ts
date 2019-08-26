@@ -5,6 +5,7 @@ import { PostParams, Posts } from 'src/app/shared/http/endpoints';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { GhostService } from 'src/app/shared/services/ghost.service';
 
 @Component({
   selector: 'app-blog',
@@ -15,30 +16,24 @@ export class BlogComponent implements OnInit {
 
   posts: Array<PostResponseParams> = [];
 
-  constructor(private apiService: ApiService, protected location: Location, private router: Router) {
+  constructor(private ghostService: GhostService, protected location: Location, private router: Router) {
   }
 
   get() {
     const that = this;
     // TODOANDI: extend params for activated route
-    const p: BrowseParams = {
+    const params: BrowseParams = {
       include: 'authors',
       limit: 3,
       page: 1
     };
 
-    const x = new Posts(p);
     // TODOANDI implement ghost.service here and move business logic to there
-    this.apiService.browse<PostResponse>(x).subscribe(response => {
+    this.ghostService.getBlogPages(params).subscribe((response: PostResponse) => {
       this.posts = response.posts;
       this.posts.forEach((element) => {
         element.url = this.location.path() + '/' + element.slug;
       });
-    }, (error: HttpErrorResponse) => {
-      if (error.status === 0) {
-        console.log('Unknown error occured please try again later');
-        this.router.navigate(['']);
-      }
     });
   }
 
