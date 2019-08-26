@@ -2,13 +2,4 @@
   &__title {
     text-decoration: black;
   }
-
-  &__image {
-    height: 300px;
-    overflow: hidden;
-
-    .a-image {
-      transform: translateY(-50%);
-    }
-  }
 }

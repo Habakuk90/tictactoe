@@ -6,6 +6,7 @@ import { Posts } from 'src/app/shared/http/endpoints';
 import { PostResponseParams, PostResponse } from 'src/app/shared/http/response';
 import { ApiService } from 'src/app/shared/services/api.service';
 import { GhostService } from 'src/app/shared/services/ghost.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-blog-post',
@@ -18,7 +19,10 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   protected slug$: Observable<string>;
   public post: PostResponseParams;
 
-  constructor(private ghostService: GhostService, protected route: ActivatedRoute) { }
+  constructor(
+    private titleService: Title,
+    private ghostService: GhostService,
+    protected route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -37,6 +41,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
           throw Error('no post found plx fix');
         }
         this.post = posts[0];
+        this.titleService.setTitle(this.post.title);
         this.container.nativeElement.innerHTML = this.post.html;
       });
   }

@@ -16,7 +16,7 @@ export class BlogComponent implements OnInit {
 
   posts: Array<PostResponseParams> = [];
 
-  constructor(private ghostService: GhostService, protected location: Location, private router: Router) {
+  constructor(private ghostService: GhostService, protected location: Location) {
   }
 
   get() {

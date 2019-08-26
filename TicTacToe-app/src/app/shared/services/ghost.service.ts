@@ -27,7 +27,7 @@ export class GhostService {
   public getHomePage(): Observable<PageResponse> {
     const browseParams: BrowseParams = {
       filter: 'tag:home',
-      formats: 'html,plaintext,mobiledoc'
+      formats: 'html,plaintext'
     };
 
     const homePage = new Pages(browseParams);
