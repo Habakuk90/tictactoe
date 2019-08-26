@@ -80,37 +80,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   }
 }
 
-
-
-@Component({
-  selector: 'ghost-page',
-  template: `
-    <div #container>
-
-    </div>
-  `
-})
-export class GhostPageComponent implements OnInit {
-  @Input() ghostPage: Observable<PageResponse>;
-
-  @ViewChild('container', { static: false }) container: ElementRef;
-
-  private _pageElements: IGhostElement[]
-  constructor(private ghostService: GhostService) {
-    // this._pageElements = ghostService.getPageElements();
-  }
-  ngOnInit() {
-    // TODOANDI use the root component to implement innerHTML
-    this.ghostPage.subscribe(page => {
-
-      const html = page.pages[0].html;
-      this._pageElements = this.ghostService.getPageElements(html);
-      this.container.nativeElement.innerHTML = html;
-    });
-
-  }
-}
-
 // class GhostDOMParser extends DOMParser {
 //   constructor(private html: string) {
 //     super();

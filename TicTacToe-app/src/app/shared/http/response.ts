@@ -40,6 +40,7 @@ interface Pagination {
 
 export interface PagesResponeParams {
   html: string;
+  title: string;
 }
 
 export interface PostResponseParams {

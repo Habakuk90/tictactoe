@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { IGhostElement } from 'src/app/module/home/page/home.component';
 import { parse } from 'querystring';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -22,46 +23,13 @@ export class GhostService {
     const paramMap = this.route.snapshot.paramMap;
   }
 
-  public getHomePage() {
+  public getHomePage(): Observable<PageResponse> {
     const browseParams: BrowseParams = {
-      filter: 'tag:test',
+      filter: 'tag:home',
       formats: 'html,plaintext,mobiledoc'
     };
 
     const homePage = new Pages(browseParams);
-    return this.apiService.browse<PageResponse>(homePage).pipe(take(1))
-  }
-
-  public getPageElements(html: string): IGhostElement[] {
-    let element: IGhostElement[];
-    let factory: GhostElementFactory = new GhostElementFactory();
-
-    const element2 = factory.createFromHtml(html);
-    return element;
-  }
-}
-
-
-class GhostElementFactory {
-  constructor() {
-
-  }
-
-  createFromHtml(html: string): NodeListOf<ChildNode> {
-    // let start: number = html.indexOf('<!--kg-card-begin: html-->');
-    // let end: number = html.indexOf('<!--kg-card-end: html-->');
-    let parser = new DOMParser();
-    let parsed = parser.parseFromString(html, 'text/html');
-
-    let body = parsed.querySelector('body');
-
-    body.childNodes.forEach(x => {
-      console.log(x);
-    });
-    return body.childNodes;
-  }
-
-  createGhostElements() {
-
+    return this.apiService.browse<PageResponse>(homePage).pipe(take(1));
   }
 }

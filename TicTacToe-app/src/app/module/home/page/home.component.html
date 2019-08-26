@@ -1,13 +1,14 @@
 <section class="home">
   <div class="home__container">
-    <h2>Welcome</h2>
+    <!-- <h2>Welcome</h2>
     <ul class="o-grid">
       <li class="o-grid__element m-card" routerLink="/game">Games</li>
       <li class="o-grid__element m-card" routerLink="/blog">Blog</li>
-    </ul>
+    </ul> -->
+    <app-ghost-page [ghostPage]="ghostPage">
+
+    </app-ghost-page>
   </div>
 
-  <ghost-page [ghostPage]="ghostPage">
 
-  </ghost-page>
 </section>
