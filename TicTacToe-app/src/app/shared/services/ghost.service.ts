@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BrowseParams, PageResponse } from 'src/app/shared/http/response';
-import { Pages } from '../http/endpoints';
-import { take } from 'rxjs/operators';
+import { BrowseParams, PageResponse, PostResponse } from 'src/app/shared/http/response';
+import { Pages, Posts } from '../http/endpoints';
+import { take, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { IGhostElement } from 'src/app/module/home/page/home.component';
 import { parse } from 'querystring';
@@ -31,5 +31,12 @@ export class GhostService {
 
     const homePage = new Pages(browseParams);
     return this.apiService.browse<PageResponse>(homePage).pipe(take(1));
+  }
+
+  public getBlogPage(slug: string) {
+    const filter = 'slug:' + slug;
+    const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
+    return this.apiService.browse<PostResponse>(singlePost).pipe(map(x =>
+      x.posts.filter(y => y.primary_author.slug === 'ghost')));
   }
 }

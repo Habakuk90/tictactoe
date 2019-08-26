@@ -5,6 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { Posts } from 'src/app/shared/http/endpoints';
 import { PostResponseParams, PostResponse } from 'src/app/shared/http/response';
 import { ApiService } from 'src/app/shared/services/api.service';
+import { GhostService } from 'src/app/shared/services/ghost.service';
 
 @Component({
   selector: 'app-blog-post',
@@ -17,7 +18,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   protected slug$: Observable<string>;
   public post: PostResponseParams;
 
-  constructor(private apiService: ApiService, protected route: ActivatedRoute) { }
+  constructor(private ghostService: GhostService, protected route: ActivatedRoute) { }
 
   ngOnInit() {
 
@@ -27,10 +28,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     this.slug$.pipe(take(1)).subscribe(slug => this.get(slug));
   }
   get(slug: string) {
-    const filter = 'slug:' + slug;
-    const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
-    this.apiService.browse<PostResponse>(singlePost).pipe(map(x =>
-      x.posts.filter(y => y.primary_author.slug === 'ghost')))
+    this.ghostService.getBlogPage(slug)
       .subscribe(posts => {
         if (!posts || !posts.length) {
           // array or array.length are falsy
