@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BrowseParams, PageResponse, PostResponse } from 'src/app/shared/http/response';
+import { BrowseParams, PageResponse, PostResponse, PagesResponeParams } from 'src/app/shared/http/response';
 import { Pages, Posts } from '../http/endpoints';
 import { take, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
@@ -20,14 +20,16 @@ export class GhostService {
   public getPage() {
   }
 
-  public getHomePage(): Observable<PageResponse> {
+  public getHomePage(): Observable<PagesResponeParams> {
     const browseParams: BrowseParams = {
       filter: 'tag:home',
       formats: 'html,plaintext'
     };
 
     const homePage = new Pages(browseParams);
-    return this.apiService.browse<PageResponse>(homePage).pipe(take(1));
+    return this.apiService.browse<PageResponse>(homePage).pipe(take(1), map(response => {
+      return response.pages[0];
+    }));
   }
 
   public getBlogPage(slug: string) {
