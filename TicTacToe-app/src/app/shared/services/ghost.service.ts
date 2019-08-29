@@ -4,8 +4,6 @@ import { BrowseParams, PageResponse, PostResponse } from 'src/app/shared/http/re
 import { Pages, Posts } from '../http/endpoints';
 import { take, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { IGhostElement } from 'src/app/module/home/page/home.component';
-import { parse } from 'querystring';
 import { Observable } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -20,8 +18,6 @@ export class GhostService {
    * get any page by given parameters
    */
   public getPage() {
-    const that = this;
-    const paramMap = this.route.snapshot.paramMap;
   }
 
   public getHomePage(): Observable<PageResponse> {
@@ -53,14 +49,25 @@ export class GhostService {
   }
 
   public getBlogPages(params: BrowseParams) {
-    const posts = new Posts(params);
+    const postEndpoint = new Posts(params);
 
-    return this.apiService.browse<PostResponse>(posts).pipe(catchError((error: HttpErrorResponse) => {
-      if (error.status === 0) {
-        console.log('Unknown error occured please try again later');
-        this.router.navigate(['']);
-        return new Observable<HttpErrorResponse>();
-      }
-    }));
+    return this.apiService.browse<PostResponse>(postEndpoint)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 0) {
+            console.log('Unknown error occured please try again later');
+            this.router.navigate(['']);
+            return new Observable<HttpErrorResponse>();
+          }
+        }),
+        map((response: PostResponse) => {
+          const posts = response.posts;
+          posts.forEach((element) => {
+            element.url = this.route.url + '/' + element.slug;
+          });
+
+          return posts;
+        })
+      );
   }
 }
