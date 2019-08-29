@@ -16,4 +16,4 @@ TicTacToe-app/src/styles/materialize-src/sass/components/forms/_radio-buttons.sc
 TicTacToe-app/src/styles/materialize-src/
 *.WebApi.csproj.user
 TicTacToe-app/backup/
-TicTacToe-app/npm-debug.log.1152903929
+TicTacToe-app/npm-debug.log*

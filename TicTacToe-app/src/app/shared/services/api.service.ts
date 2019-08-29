@@ -14,21 +14,9 @@ export class ApiService extends BaseService {
   constructor(private http: HttpClient) {
     super();
   }
-  //  item = response type
+
   browse<T extends BaseResponse>(item: IApiEndpoint, responeType: Response = null, count: number = 15, page: number = 0): Observable<T> {
     return this.http.get<T>(item.fullUrl)
       .pipe(take(count), skip(page * count), catchError(this.handleError));
-  }
-
-  add<T>() {
-
-  }
-
-  edit<T>() {
-
-  }
-
-  destory<T>() {
-
   }
 }

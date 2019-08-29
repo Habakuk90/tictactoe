@@ -7,7 +7,6 @@ import { Component, EventEmitter, OnInit, Output, ElementRef, HostListener } fro
     styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  @Output() changeTheme: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() footerHeight: EventEmitter<number> = new EventEmitter<number>();
 
   constructor(private elementRef: ElementRef) { }
@@ -20,10 +19,5 @@ export class FooterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.isDarkTheme = this.themeService.isDarkTheme;
-  }
-
-  toggleDarkTheme(checked: boolean) {
-    this.changeTheme.emit(checked);
   }
 }
