@@ -18,6 +18,13 @@ nav,
 footer {
   max-width: $content-max-width;
   margin: 0 auto;
+
+  @media #{$medium-only} {
+  }
+
+  @media #{$small-only} {
+
+  }
 }
 
 .hide {

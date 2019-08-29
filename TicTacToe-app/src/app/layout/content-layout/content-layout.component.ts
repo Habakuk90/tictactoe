@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -7,32 +7,16 @@ import { Observable } from 'rxjs';
   styleUrls: ['./content-layout.component.scss']
 })
 export class ContentLayoutComponent implements OnInit {
-  // private overlayContainer: OverlayContainer;
-  theme = 'my-light-theme';
-  isDarkTheme: Observable<boolean>;
 
-  // constructor(private themeService: ThemeService) {}
+  constructor(private elementRef: ElementRef) {}
 
-  ngOnInit() {
-    // this.isDarkTheme = this.themeService.isDarkTheme;
-
-    // if (this.overlayContainer) {
-    //   this.overlayContainer.getContainerElement().classList.add(this.theme);
-    // }
+  setBodyHeight(footerHeight) {
+    const nativeElement: HTMLElement = this.elementRef.nativeElement;
+    const container: HTMLElement = nativeElement.querySelector('.container');
+    container.style.paddingBottom = footerHeight + 'px';
   }
 
-  // onThemeChange(theme: boolean) {
-  //   this.themeService.setDarkTheme(theme);
-  //   this.theme = (theme) ? 'my-dark-theme' : 'my-light-theme';
-  //   console.log(theme);
-  //   if (this.overlayContainer) {
-  //     const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
-  //     const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
-  //     if (themeClassesToRemove.length) {
-  //       overlayContainerClasses.remove(...themeClassesToRemove);
-  //     }
-  //     overlayContainerClasses.add(this.theme);
-  //   }
-  // }
+  ngOnInit() {
 
+  }
 }

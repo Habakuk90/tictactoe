@@ -2,9 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs/operators';
-import { Posts } from 'src/app/shared/http/endpoints';
-import { PostResponseParams, PostResponse } from 'src/app/shared/http/response';
-import { ApiService } from 'src/app/shared/services/api.service';
+import { PostResponseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
 
@@ -33,14 +31,8 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
   get(slug: string) {
     this.ghostService.getBlogPage(slug)
-      .subscribe(posts => {
-        if (!posts || !posts.length) {
-          // array or array.length are falsy
-          // ⇒ do not attempt to process array
-          // return here or go to main page or 404 or whatever
-          throw Error('no post found plx fix');
-        }
-        this.post = posts[0];
+      .subscribe(post => {
+        this.post = post;
         this.titleService.setTitle(this.post.title);
         this.container.nativeElement.innerHTML = this.post.html;
       });

@@ -17,11 +17,23 @@ $border-tictactoe: 5px solid black;
   }
 }
 
+// actual angular bug where the scoped css isnt apllied to innerHTML dom changes
+.blog-post {
+  &__content {
+    > :first-child {
+      margin: 0;
+    }
 
+    > p + p {
+      margin: 20px 0 0;
+    }
 
-section {
-  // fixnaming content-no-gap
-  > *:not(.content-no-gap) {
-    margin-top: $section-margin;
+    > * {
+      margin: 20px 0 0;
+    }
+
+    > h2 {
+      line-height: 38px;
+    }
   }
 }

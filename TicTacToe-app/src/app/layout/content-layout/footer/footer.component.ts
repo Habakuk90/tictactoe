@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { Component, EventEmitter, OnInit, Output, ElementRef, HostListener } from '@angular/core';
+
 
 @Component({
     selector: 'app-footer',
@@ -9,13 +8,16 @@ import { environment } from 'src/environments/environment';
 })
 export class FooterComponent implements OnInit {
   @Output() changeTheme: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() footerHeight: EventEmitter<number> = new EventEmitter<number>();
 
-  year = new Date().getFullYear();
-  version = 2;
-  envName = environment;
-  isDarkTheme: Observable<boolean>;
+  constructor(private elementRef: ElementRef) { }
 
-    constructor() { }
+  @HostListener('window:resize')
+  onResize() {
+    const nativeElement: HTMLElement = this.elementRef.nativeElement;
+
+    this.footerHeight.emit(nativeElement.getBoundingClientRect().height);
+  }
 
   ngOnInit(): void {
     // this.isDarkTheme = this.themeService.isDarkTheme;

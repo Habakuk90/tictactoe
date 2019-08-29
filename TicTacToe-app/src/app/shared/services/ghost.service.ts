@@ -37,8 +37,19 @@ export class GhostService {
   public getBlogPage(slug: string) {
     const filter = 'slug:' + slug;
     const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
-    return this.apiService.browse<PostResponse>(singlePost).pipe(map(x =>
-      x.posts.filter(y => y.primary_author.slug === 'ghost')));
+    return this.apiService.browse<PostResponse>(singlePost)
+      .pipe(map(response => {
+        const posts = response.posts;
+
+        if (!posts || !posts.length) {
+          // array or array.length are falsy
+          // ⇒ do not attempt to process array
+          // return here or go to main page or 404 or whatever
+          throw Error('no post found plx fix');
+        }
+
+        return response.posts[0];
+      }));
   }
 
   public getBlogPages(params: BrowseParams) {
