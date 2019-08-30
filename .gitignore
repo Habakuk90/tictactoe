@@ -17,3 +17,4 @@ TicTacToe-app/src/styles/materialize-src/
 *.WebApi.csproj.user
 TicTacToe-app/backup/
 TicTacToe-app/npm-debug.log*
+TicTacToe-app/coverage/

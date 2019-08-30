@@ -5,14 +5,16 @@ import { Pages, Posts } from '../http/endpoints';
 import { take, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GhostService {
+export class GhostService extends ApiService {
   homePage: PageResponse;
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private router: Router) { }
+  constructor(public http: HttpClient, private route: ActivatedRoute) {
+    super(http);
+   }
 
   /**
    * get any page by given parameters
@@ -27,7 +29,7 @@ export class GhostService {
     };
 
     const homePage = new Pages(browseParams);
-    return this.apiService.browse<PageResponse>(homePage).pipe(take(1), map(response => {
+    return super.browse<PageResponse>(homePage).pipe(take(1), map(response => {
       return response.pages[0];
     }));
   }
@@ -35,7 +37,7 @@ export class GhostService {
   public getBlogPage(slug: string) {
     const filter = 'slug:' + slug;
     const singlePost = new Posts({ filter: filter, include: 'authors,tags' });
-    return this.apiService.browse<PostResponse>(singlePost)
+    return super.browse<PostResponse>(singlePost)
       .pipe(map(response => {
         const posts = response.posts;
 
@@ -53,19 +55,13 @@ export class GhostService {
   public getBlogPages(params: BrowseParams) {
     const postEndpoint = new Posts(params);
 
-    return this.apiService.browse<PostResponse>(postEndpoint)
+    return super.browse<PostResponse>(postEndpoint)
       .pipe(
-        catchError((error: HttpErrorResponse) => {
-          if (error.status === 0) {
-            console.log('Unknown error occured please try again later');
-            this.router.navigate(['']);
-            return new Observable<HttpErrorResponse>();
-          }
-        }),
+        catchError(super.handleError.bind(this, ['hi'])),
         map((response: PostResponse) => {
           const posts = response.posts;
           posts.forEach((element) => {
-            element.url = this.route.url + '/' + element.slug;
+            element.url = this.route.snapshot.url + '/' + element.slug;
           });
 
           return posts;

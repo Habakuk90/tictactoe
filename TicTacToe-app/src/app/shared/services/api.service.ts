@@ -6,12 +6,9 @@ import { BaseService } from 'src/app/core/services/base.service';
 import { BaseResponse } from '../http/response';
 import { IApiEndpoint } from '../http/endpoints';
 
-@Injectable({
-  providedIn: 'root'
-})
 export class ApiService extends BaseService {
 
-  constructor(private http: HttpClient) {
+  constructor(public http: HttpClient) {
     super();
   }
 

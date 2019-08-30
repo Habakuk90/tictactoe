@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { map, catchError, switchMap } from 'rxjs/operators';
-import { BaseService } from './base.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { BaseService } from 'src/app/core/services/base.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,6 @@ export class UserService extends BaseService {
 
   isAnonymous = true;
   userOnline = [];
-
   public get currentUserName() {
     return this.userName.value;
   }
@@ -83,7 +82,7 @@ export class UserService extends BaseService {
 
               return res;
             }),
-            catchError(this.handleError));
+            catchError(super.handleError));
       }
     }));
   }
