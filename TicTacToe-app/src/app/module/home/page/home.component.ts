@@ -4,7 +4,7 @@ import { IUser } from 'src/app/data/user.interface';
 import { UserService } from 'src/app/shared/services/user.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
 import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
-import { PageResponse, PagesResponeParams } from 'src/app/shared/http/response';
+import { IPageResponseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Observable } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   selectedPlayer: IUser;
 
   hub: HomeHubConnection;
-  ghostPage: Observable<PagesResponeParams>;
+  ghostPage: Observable<IPageResponseParams>;
   constructor(
     private userService: UserService,
     private ghost: GhostService) {

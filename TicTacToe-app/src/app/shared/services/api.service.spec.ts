@@ -1,16 +1,14 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { ApiService } from './api.service';
 
 describe('ApiService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ApiService]
+      providers: []
     });
   });
-
-  it('should be initialized', inject([ApiService], (apiService: ApiService) => {
-    expect(apiService).toBeTruthy();
+  it('should be initialized', inject([HttpClientTestingModule], (http: HttpClientTestingModule) => {
+    expect(http).toBeTruthy();
   }));
 });

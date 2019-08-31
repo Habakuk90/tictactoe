@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs';
-import { PagesResponeParams } from 'src/app/shared/http/response';
+import { IPageResponseParams } from 'src/app/shared/http/response';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -8,7 +8,7 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './ghost-page.component.html'
 })
 export class GhostPageComponent implements OnInit {
-  @Input() ghostPage: Observable<PagesResponeParams>;
+  @Input() ghostPage: Observable<IPageResponseParams>;
 
   @ViewChild('container', { static: false }) container: ElementRef;
 

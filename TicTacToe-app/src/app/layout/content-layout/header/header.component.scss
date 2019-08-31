@@ -3,10 +3,26 @@
 // TODOANDI: double declaration of o-nav styles. global and scoped angular.
 // @import '../../styles/3organism/o-nav';
 
+:host {
+  header {
+    visibility: hidden;
+  }
+
+  &.active {
+    header {
+      visibility: visible;
+
+    }
+  }
+}
+
 header {
   background-color: $color-main-prim;
   box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
   height: $nav-height;
+  position: fixed;
+  width: 100%;
+
   > * {
     max-width: 1440px;
     margin: 0 auto;

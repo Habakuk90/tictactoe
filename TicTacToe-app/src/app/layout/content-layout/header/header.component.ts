@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -12,9 +12,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLoggedIn: boolean;
   homeState: number;
   homeStateSubscription: Subscription;
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private element: ElementRef) {}
 
-  back() {
+  @HostListener('window:scroll', ['$event'])
+  onScroll(event: ScrollEvent) {
+    const header = this.element.nativeElement as HTMLElement;
+
+    const headerHeight = header.getBoundingClientRect().height;
+    if (event.pageY > headerHeight + 100) {
+      header.classList.add('active');
+    }
+    else {
+      header.classList.remove('active');
+    }
+
   }
 
   get isAnonymous(): boolean {
@@ -32,4 +43,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout() {
     this.userService.logout();
   }
+}
+
+
+interface ScrollEvent extends Event {
+  pageY: number; pageX: number;
 }

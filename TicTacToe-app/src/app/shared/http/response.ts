@@ -1,35 +1,35 @@
 // TODOANDI cleanup Response Types
-export interface BaseResponse {
-  meta: MetaResponse;
+export interface IBaseResponse {
+  meta: IMetaResponse;
 }
 
 
-export interface PostResponse extends BaseResponse {
-  posts: Array<PostResponseParams>;
+export interface IPostResponse extends IBaseResponse {
+  posts: Array<IPostResponseParams>;
 }
 
-export interface PageResponse extends BaseResponse {
-  pages: Array<PagesResponeParams>;
+export interface IPageResponse extends IBaseResponse {
+  pages: Array<IPageResponseParams>;
 }
 
-export interface TagResponse extends BaseResponse {
-  tags: Array<TagsResponseParams>;
+export interface ITagResponse extends IBaseResponse {
+  tags: Array<ITagsResponseParams>;
 }
 
-export interface AuthorsResponse extends BaseResponse {
-  authors: Array<AuthorsResponseParams>;
+export interface IAuthorsResponse extends IBaseResponse {
+  authors: Array<IAuthorsResponseParams>;
 }
 
 
-export interface SettingsResponse extends BaseResponse {
-  settings: SettingsResponseParams;
+export interface ISettingsResponse extends IBaseResponse {
+  settings: ISettingsResponseParams;
 }
 
-export interface MetaResponse {
-  pagination: Pagination;
+export interface IMetaResponse {
+  pagination: IPagination;
 }
 
-interface Pagination {
+interface IPagination {
   limit: number;
   next: number;
   page: number;
@@ -38,45 +38,45 @@ interface Pagination {
   total: number;
 }
 
-export interface PagesResponeParams {
+export interface IPageResponseParams {
   html: string;
   title: string;
 }
 
-export interface PostResponseParams {
-  id: string;
-  uuid: string;
-  title: string;
-  slug: string;
-  html: string;
-  comment_id: string;
-  feature_image: string; // FIXME: Image?
-  featured: boolean;
-  page: boolean;
-  meta_title: string;
-  meta_description: string;
-  created_at: Date;
-  updated_at: Date;
-  published_at: Date;
-  custom_excerpt: string;
-  codeinjection_head: string;
-  codeinjection_foot: string;
-  og_image: string;
-  og_title: string;
-  og_description: string;
-  twitter_image: string;
-  twitter_title: string;
-  twitter_description: string;
-  custom_template: string;
-  authors: Array<AuthorsResponseParams>;
-  primary_author: AuthorsResponseParams;
-  tags: Array<TagsResponseParams>;
-  primary_tag: TagsResponseParams;
-  url: string;
-  excerpt: string;
+export interface IPostResponseParams {
+  id?: string;
+  uuid?: string;
+  title?: string;
+  slug?: string;
+  html?: string;
+  comment_id?: string;
+  feature_image?: string; // FIXME: Image?
+  featured?: boolean;
+  page?: boolean;
+  meta_title?: string;
+  meta_description?: string;
+  created_at?: Date;
+  updated_at?: Date;
+  published_at?: Date;
+  custom_excerpt?: string;
+  codeinjection_head?: string;
+  codeinjection_foot?: string;
+  og_image?: string;
+  og_title?: string;
+  og_description?: string;
+  twitter_image?: string;
+  twitter_title?: string;
+  twitter_description?: string;
+  custom_template?: string;
+  authors?: Array<IAuthorsResponseParams>;
+  primary_author?: IAuthorsResponseParams;
+  tags?: Array<ITagsResponseParams>;
+  primary_tag?: ITagsResponseParams;
+  url?: string;
+  excerpt?: string;
 }
 
-interface TagsResponseParams {
+interface ITagsResponseParams {
   description: string;
   feature_image: string;
   id: string;
@@ -88,7 +88,7 @@ interface TagsResponseParams {
   visibility: string;
 }
 
-interface AuthorsResponseParams {
+interface IAuthorsResponseParams {
   bio: string;
   cover_image: string;
   facebook: string;
@@ -104,7 +104,7 @@ interface AuthorsResponseParams {
   website: string;
 }
 
-interface SettingsResponseParams {
+interface ISettingsResponseParams {
   codeinjection_foot: string;
   codeinjection_head: string;
   cover_image: string;
@@ -115,18 +115,18 @@ interface SettingsResponseParams {
   icon: string;
   lang: string;
   logo: string;
-  navigation: Array<Navigation>;
+  navigation: Array<INavigation>;
   timezone: string;
   title: string;
   twitter: string;
 }
 
-export interface Navigation {
+export interface INavigation {
   label: string;
   url: string;
 }
 
-export interface BaseParams {
+export interface IBaseParams {
   include?: string;
   fields?: string;
   debug?: boolean;
@@ -134,7 +134,7 @@ export interface BaseParams {
   formats?: string;
 }
 
-export interface BrowseParams extends BaseParams {
+export interface IBrowseParams extends IBaseParams {
   filter?: string;
   limit?: number;
   page?: number;

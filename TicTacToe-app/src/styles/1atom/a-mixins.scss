@@ -19,3 +19,25 @@
     @content;
   }
 }
+
+/// sets aspect ratio for the given container.
+/// @param {Number} $width sets the width ratio.
+/// @param {Number} $height sets the height ratio.
+@mixin aspect-ratio-container($width, $height, $objectFit: contain, $objectPosition: center)
+{
+    position: relative;
+    padding-top: ($height / $width) * 100%;
+
+    > img
+    {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        height: 100%;
+
+        object-fit: $objectFit;
+        object-position: $objectPosition;
+    }
+}

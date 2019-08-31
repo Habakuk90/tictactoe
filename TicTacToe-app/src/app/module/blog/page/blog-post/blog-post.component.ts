@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs/operators';
-import { PostResponseParams } from 'src/app/shared/http/response';
+import { IPostResponseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
 
@@ -15,7 +15,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   @ViewChild('container', { static: false }) container: ElementRef;
   protected slug$: Observable<string>;
-  public post: PostResponseParams;
+  public post: IPostResponseParams;
 
   constructor(
     private titleService: Title,

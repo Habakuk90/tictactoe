@@ -35,5 +35,17 @@ $border-tictactoe: 5px solid black;
     > h2 {
       line-height: 38px;
     }
+
+    > ul {
+      @extend .m-list !optional;
+
+      > li {
+        @extend .m-list__item !optional;
+      }
+    }
+
+    > pre {
+      @extend .m-code !optional;
+    }
   }
 }

@@ -1,9 +1,13 @@
-.blog-post {
-  padding: 0 45px 0;
+@import '1atom/a-mixins';
 
+.blog-post {
   &__title {
     text-decoration: black;
     margin-bottom: 20px;
+  }
+
+  &__image {
+    @include aspect-ratio-container(6, 1, cover, top);
   }
 }
 

@@ -16,9 +16,16 @@ body {
 section,
 nav,
 footer {
-  max-width: $content-max-width;
-  margin: 0 auto;
+  > * {
+    max-width: $content-max-width;
+    margin: 0 auto;
+    padding: 0 45px 0;
 
+    &.l--outbreak {
+      max-width: none;
+      padding: 0;
+    }
+  }
   @media #{$medium-only} {
   }
 
