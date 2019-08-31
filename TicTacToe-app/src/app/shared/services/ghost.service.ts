@@ -50,7 +50,7 @@ export class GhostService extends ApiService {
 
     return super.browse<IPostResponse>(postEndpoint)
       .pipe(
-        catchError(super.handleError.bind(this, ['hi'])),
+        catchError(super.handleError),
         map((response: IPostResponse) => {
           const posts = response.posts;
 
