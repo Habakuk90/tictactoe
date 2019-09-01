@@ -34,7 +34,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       .subscribe(post => {
         this.post = post;
         this.titleService.setTitle(this.post.title);
-        this.container.nativeElement.innerHTML = this.post.html;
+        (<HTMLElement>this.container.nativeElement).outerHTML = this.post.html;
       });
   }
 }

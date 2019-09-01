@@ -1,5 +1,17 @@
 .kg-image, .kg-gallery-image > img {
   @extend .a-image;
+
+
+}
+
+.kg-image-card {
+  &.kg-width-full {
+    @extend .l-outbreak !optional;
+  }
+
+  &.kg-width-wide {
+
+  }
 }
 
 .a-image {
