@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IPostResponseParams, IBrowseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Location } from '@angular/common';
@@ -11,7 +11,7 @@ import { Location } from '@angular/common';
 export class BlogComponent implements OnInit {
 
   posts: Array<IPostResponseParams> = [];
-
+  @ViewChild('styleguide', { static: false }) container: ElementRef;
   constructor(private ghostService: GhostService, private location: Location) {
   }
 
@@ -30,6 +30,10 @@ export class BlogComponent implements OnInit {
       });
 
       this.posts = posts;
+    });
+
+    this.ghostService.getPage('styleguide', 1).subscribe(pages => {
+      (this.container.nativeElement as HTMLElement).outerHTML = pages[0].html;
     });
   }
 

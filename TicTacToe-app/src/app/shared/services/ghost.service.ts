@@ -15,15 +15,20 @@ export class GhostService extends ApiService {
     super(http);
    }
 
-  public getHomePage(): Observable<IPageResponseParams> {
+  public getPage(tag: string, count: number = 1): Observable<IPageResponseParams[]> {
     const params: IBrowseParams = {
-      filter: 'tag:home',
+      filter: `tag:${tag}`,
       formats: 'html,plaintext'
     };
-
-    const homePage = new Pages(params);
-    return super.browse<IPageResponse>(homePage).pipe(take(1), map(response => {
-      return response.pages[0];
+    const page = new Pages(params);
+    return super.browse<IPageResponse>(page)
+      .pipe(catchError(super.handleError), take(count), map(response => {
+        // if (count > 1 || response.pages.length > 1) {
+        //   return response.pages;
+        // } else {
+        console.log(response);
+        return response.pages;
+        // }
     }));
   }
 

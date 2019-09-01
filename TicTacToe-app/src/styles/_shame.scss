@@ -18,11 +18,11 @@ $border-tictactoe: 5px solid black;
 }
 
 // actual angular bug where the scoped css isnt apllied to innerHTML dom changes
-.blog-post {
-  &__content {
-    > :first-child {
-      margin: 0;
-    }
+.ghost-html {
+  // &__content {
+    // > :first-child {
+    //   margin: 0;
+    // }
 
     > p + p {
       margin: 20px 0 0;
@@ -47,5 +47,5 @@ $border-tictactoe: 5px solid black;
     > pre {
       @extend .m-code !optional;
     }
-  }
+  // }
 }
