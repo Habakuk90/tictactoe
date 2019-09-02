@@ -23,12 +23,7 @@ export class GhostService extends ApiService {
     const page = new Pages(params);
     return super.browse<IPageResponse>(page)
       .pipe(catchError(super.handleError), take(count), map(response => {
-        // if (count > 1 || response.pages.length > 1) {
-        //   return response.pages;
-        // } else {
-        console.log(response);
         return response.pages;
-        // }
     }));
   }
 
@@ -45,7 +40,6 @@ export class GhostService extends ApiService {
           // return here or go to main page or 404 or whatever
           throw Error('no post found plx fix');
         }
-        console.log(posts[0]);
         return posts[0];
       }));
   }

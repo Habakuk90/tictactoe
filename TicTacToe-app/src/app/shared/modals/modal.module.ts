@@ -6,8 +6,6 @@ import { DeclinedModalComponent } from './declined/modal.declined.component';
 import { GameOverModalComponent } from './gameOver/modal.gameover.component';
 import { SharedModule } from '../shared.module';
 
-
-
 @NgModule({
   imports: [SharedModule],
   declarations: [ModalComponent,

@@ -10,22 +10,13 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() userName: string;
   isLoggedIn: boolean;
-  homeState: number;
-  homeStateSubscription: Subscription;
   constructor(private userService: UserService, private element: ElementRef) {}
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: ScrollEvent) {
     const header = this.element.nativeElement as HTMLElement;
-
-    const headerHeight = header.getBoundingClientRect().height;
-    if (event.pageY > headerHeight + 100) {
-      header.classList.add('active');
-    }
-    else {
-      header.classList.remove('active');
-    }
-
+    const document = event.target as HTMLDocument;
+    this.toggleHeader(header, event.pageY, document);
   }
 
   get isAnonymous(): boolean {
@@ -42,6 +33,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.userService.logout();
+  }
+
+  private toggleHeader(header: HTMLElement, scrollY: number, window: HTMLDocument) {
+    const height = header.getBoundingClientRect().height;
+    if (scrollY > height + 100 || window.querySelector('body').getBoundingClientRect().height < 200) {
+      header.classList.add('active');
+    } else {
+      header.classList.remove('active');
+    }
   }
 }
 
