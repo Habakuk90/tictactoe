@@ -1,0 +1,8 @@
+.o-grid__element {
+  display: flex;
+  flex-flow: column nowrap;
+
+  .m-card__teaser-text {
+    flex-grow: 1;
+  }
+}

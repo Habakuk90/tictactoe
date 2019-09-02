@@ -1,0 +1,25 @@
+<section>
+  <div>
+    <ul class="o-grid">
+      <li class="o-grid__element m-card" *ngFor="let post of posts; let i = index, trackBy:i;">
+        <h2 class="m-card__title">{{ post.title }}</h2>
+        <div class="m-card__image">
+          <img [src]="post.feature_image" alt="">
+        </div>
+        <div class="m-card__teaser-text">
+          {{post.excerpt}}
+        </div>
+        <div class="m-card__date">
+          {{post.created_at | date: 'medium' }}
+        </div>
+        <button class="a-button" [routerLink]="post.url">to the page!</button>
+      </li>
+    </ul>
+  </div>
+
+  <div class="ghost-html">
+    <div #styleguide>
+
+    </div>
+  </div>
+</section>

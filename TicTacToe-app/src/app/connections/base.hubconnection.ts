@@ -75,7 +75,7 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
   }
 
   private buildConnection(route: string): signalR.HubConnection {
-    const url = environment.baseUrl + route + this.getToken('auth_token');
+    const url = environment.signalR.baseUrl + route + this.getToken('auth_token');
 
     return new signalR.HubConnectionBuilder()
       .withUrl(url)

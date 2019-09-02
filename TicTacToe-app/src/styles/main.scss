@@ -1,10 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import '_base';
-@import '_buttons';
-@import '_variables';
-
-@import '_auth';
-
 /* Atomic try */
 @import '0base/base.scss';
 @import '1atom/atoms.scss';
@@ -13,3 +7,9 @@
 @import '4template/templates.scss';
 @import '5page/pages.scss';
 
+
+@import '_variables';
+@import '_base';
+@import '_buttons';
+@import '_auth';
+@import 'shame.scss';
