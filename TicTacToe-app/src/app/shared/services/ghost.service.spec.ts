@@ -44,11 +44,8 @@ describe('GhostService', () => {
           limit: 3,
           page: 1
         };
-        expect(ghostService.getHomePage()).toBeTruthy();
         expect(ghostService.getBlogPage('testSlug')).toBeTruthy();
         expect(ghostService.getBlogPages(params)).toBeTruthy();
-
-
       }));
 
   it('shoudl resolve data', fakeAsync(() => {
