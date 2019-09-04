@@ -1,19 +1,10 @@
 import { environment } from 'src/environments/environment';
-import { IBaseParams, IBrowseParams } from './response';
+import { IBaseParams, IBrowseParams } from './browseParams';
 
 export interface IApiEndpoint {
   params: IBaseParams;
   url: string;
   fullUrl: string;
-}
-
-// TODOANDI cleanup Params
-export interface PostParams extends IBaseParams {
-  filter?: string;
-}
-
-export interface PagesParams extends IBaseParams {
-  include?: string;
 }
 
 export abstract class Endpoint implements IApiEndpoint {
@@ -22,6 +13,7 @@ export abstract class Endpoint implements IApiEndpoint {
    *
    */
   constructor(public params: IBaseParams = null, public url = 'notfound') {
+    if (params)  { params.debug = true; }
     this.fullUrl = this.buildUrl(url, params);
   }
 
@@ -45,7 +37,7 @@ export abstract class Endpoint implements IApiEndpoint {
 }
 
 export class Posts extends Endpoint {
-  constructor(public params: PostParams = null, public endpoint = 'posts') {
+  constructor(public params: IBrowseParams = null, public endpoint = 'posts') {
     super(params, endpoint);
   }
 }

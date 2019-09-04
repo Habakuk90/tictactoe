@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { UserService } from 'src/app/shared/services/user.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
 import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
-import { IPageResponseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
+import { IResponse } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ import { GhostService } from 'src/app/shared/services/ghost.service';
 })
 export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   hub: HomeHubConnection;
-  ghostPage: IPageResponseParams;
+  ghostPage: IResponse;
   title: string;
   @ViewChild('home', {static: false}) home: ElementRef;
   constructor(
@@ -25,8 +25,10 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   ngOnInit() {
     const that = this;
     this.ghost.getPage('home').subscribe(pages => {
-      (this.home.nativeElement as HTMLElement).outerHTML = pages[0].html;
-      this.title = pages[0].title;
+      const page = pages[0];
+
+      (that.home.nativeElement as HTMLElement).outerHTML = page.html;
+      that.title = page.title;
     });
   }
 

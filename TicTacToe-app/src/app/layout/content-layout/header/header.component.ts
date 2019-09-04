@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, HostListener, ElementRef } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
+import { INavigation } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-header',
@@ -8,8 +8,9 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  @Input() userName: string;
+  @Input() navigation: INavigation;
   isLoggedIn: boolean;
+
   constructor(private userService: UserService, private element: ElementRef) {}
 
   @HostListener('window:scroll', ['$event'])

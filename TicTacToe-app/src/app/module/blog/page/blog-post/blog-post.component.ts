@@ -2,9 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angula
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs/operators';
-import { IPostResponseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
+import { IResponse } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-blog-post',
@@ -15,7 +15,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
 
   @ViewChild('container', { static: false }) container: ElementRef;
   protected slug$: Observable<string>;
-  public post: IPostResponseParams;
+  public post: IResponse;
 
   constructor(
     private titleService: Title,
@@ -30,11 +30,12 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
     this.slug$.pipe(take(1)).subscribe(slug => this.get(slug));
   }
   get(slug: string) {
+    const that = this;
     this.ghostService.getBlogPage(slug)
       .subscribe(post => {
-        this.post = post;
-        this.titleService.setTitle(this.post.title);
-        (<HTMLElement>this.container.nativeElement).outerHTML = this.post.html;
+        that.post = post;
+        that.titleService.setTitle(that.post.title);
+        (that.container.nativeElement as HTMLElement).outerHTML = this.post.html;
       });
   }
 }

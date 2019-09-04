@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IPostResponseParams, IBrowseParams } from 'src/app/shared/http/response';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Location } from '@angular/common';
+import { IResponse } from 'src/app/shared/http/responseParams';
+import { IBrowseParams } from 'src/app/shared/http/browseParams';
 
 @Component({
   selector: 'app-blog',
@@ -10,7 +11,8 @@ import { Location } from '@angular/common';
 })
 export class BlogComponent implements OnInit {
 
-  posts: Array<IPostResponseParams> = [];
+  // TODO make use of PostResponse work?
+  posts: Array<IResponse> = [];
   @ViewChild('styleguide', { static: false }) container: ElementRef;
   constructor(private ghostService: GhostService, private location: Location) {
   }
