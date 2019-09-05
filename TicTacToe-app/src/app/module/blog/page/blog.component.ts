@@ -11,6 +11,7 @@ import { IBrowseParams } from 'src/app/shared/http/browseParams';
 })
 export class BlogComponent implements OnInit {
 
+  featureImageUrl: string;
   // TODO make use of PostResponse work?
   posts: Array<IResponse> = [];
   @ViewChild('styleguide', { static: false }) container: ElementRef;
@@ -35,7 +36,10 @@ export class BlogComponent implements OnInit {
     });
 
     this.ghostService.getPage('styleguide', 1).subscribe(pages => {
-      (this.container.nativeElement as HTMLElement).outerHTML = pages[0].html;
+      console.log(pages[0]);
+      const page = pages[0];
+      (this.container.nativeElement as HTMLElement).outerHTML = page.html;
+      this.featureImageUrl = page.feature_image;
     });
   }
 

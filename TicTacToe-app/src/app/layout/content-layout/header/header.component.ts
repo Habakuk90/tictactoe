@@ -13,12 +13,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(private userService: UserService, private element: ElementRef) {}
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: ScrollEvent) {
-    const header = this.element.nativeElement as HTMLElement;
-    const document = event.target as HTMLDocument;
-    this.toggleHeader(header, event.pageY, document);
-  }
+  // FIXME: this just doesnt work well with little content.
+  // @HostListener('window:scroll', ['$event'])
+  // onScroll(event: ScrollEvent) {
+  //   const header = this.element.nativeElement as HTMLElement;
+  //   const document = event.target as HTMLDocument;
+
+  //   this.toggleHeader(header, event.pageY, document);
+  // }
 
   get isAnonymous(): boolean {
     return this.userService.isAnonymous;
