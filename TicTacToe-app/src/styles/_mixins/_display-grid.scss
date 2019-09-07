@@ -1,0 +1,17 @@
+@mixin display-grid() {
+  display: grid;
+  grid-template-rows: auto;
+  gap: 1.5rem;
+}
+
+%grid-base {
+  @include display-grid;
+  grid-template-columns: 1fr;
+}
+
+@for $i from 1 through 12 {
+  .cols-#{$i} {
+    @extend %grid-base;
+    grid-template-columns: repeat($i, 1fr);
+  }
+}
