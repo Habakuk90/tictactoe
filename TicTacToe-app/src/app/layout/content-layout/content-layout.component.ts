@@ -1,6 +1,6 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { GhostService } from 'src/app/shared/services/ghost.service';
-import { ISettingsResponseParams } from 'src/app/shared/http/responseParams';
+import { INavigation } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-content-layout',
@@ -8,7 +8,7 @@ import { ISettingsResponseParams } from 'src/app/shared/http/responseParams';
   styleUrls: ['./content-layout.component.scss']
 })
 export class ContentLayoutComponent implements OnInit {
-  public settings: ISettingsResponseParams;
+  public navigation: INavigation[];
   constructor(private elementRef: ElementRef, private ghostService: GhostService) {}
 
   setBodyHeight(footerHeight) {
@@ -20,7 +20,7 @@ export class ContentLayoutComponent implements OnInit {
   ngOnInit() {
     this.ghostService.getSettings().subscribe(settings => {
 
-      this.settings = settings;
+      this.navigation = settings.navigation;
     });
   }
 }

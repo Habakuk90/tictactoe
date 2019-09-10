@@ -8,7 +8,7 @@ import { INavigation } from 'src/app/shared/http/responseParams';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  @Input() navigation: INavigation;
+  @Input() navigation: INavigation[];
   isLoggedIn: boolean;
 
   constructor(private userService: UserService, private element: ElementRef) {}
