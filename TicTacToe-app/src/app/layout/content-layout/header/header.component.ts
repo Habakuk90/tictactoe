@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, HostListener, ElementRef } from '@angular/core';
 import { UserService } from 'src/app/shared/services/user.service';
-import { INavigation } from 'src/app/shared/http/responseParams';
+import { INavigation, ITagsResponseParams } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-header',
@@ -9,6 +9,7 @@ import { INavigation } from 'src/app/shared/http/responseParams';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() navigation: INavigation[];
+  @Input() tags: ITagsResponseParams[];
   isLoggedIn: boolean;
 
   constructor(private userService: UserService, private element: ElementRef) {}

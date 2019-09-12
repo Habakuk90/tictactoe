@@ -23,7 +23,7 @@ export interface IResponse extends IMetaResponse, ISocialMediaResponse {
 
   featured?: boolean;
 
-  feature_image?: string; // FIXME: Image?
+  feature_image?: string;
   page?: boolean;
 
   created_at?: Date;
@@ -44,12 +44,11 @@ export interface IResponse extends IMetaResponse, ISocialMediaResponse {
 }
 
 interface ICodeInjectionResponse {
-
   codeinjection_head?: string;
   codeinjection_foot?: string;
 }
 
-export interface ITagsResponseParams extends IMetaResponse {
+export interface ITagsResponseParams {
   id: string;
   description: string;
   feature_image: string;
@@ -57,6 +56,9 @@ export interface ITagsResponseParams extends IMetaResponse {
   slug: string;
   url: string;
   visibility: string;
+  count: {
+    posts: number;
+  };
 }
 
 export interface IAuthorsResponseParams extends IMetaResponse {

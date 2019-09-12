@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Pages, Posts, Settings } from '../http/endpoints';
+import { Pages, Posts, Settings, Tags } from '../http/endpoints';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { ISettingsResponseParams, IResponse } from '../http/responseParams';
-import { IPageResponse, IPostResponse, ISettingsResponse } from '../http/response';
+import { ISettingsResponseParams, IResponse, ITagsResponseParams } from '../http/responseParams';
+import { IPageResponse, IPostResponse, ISettingsResponse, ITagResponse } from '../http/response';
 import { IBrowseParams } from '../http/browseParams';
+import { environment } from 'src/environments/environment.docker';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ import { IBrowseParams } from '../http/browseParams';
 export class GhostService extends ApiService {
   constructor(public http: HttpClient) {
     super(http);
-   }
+  }
 
   public getPage(tag: string, count: number = 1): Observable<IResponse[]> {
     const params: IBrowseParams = {
@@ -51,7 +52,7 @@ export class GhostService extends ApiService {
             throw Error('no post found plx fix');
           }
           return posts[0];
-      }));
+        }));
   }
 
   public getBlogPages(params: IBrowseParams, count: number = 1): Observable<IResponse[]> {
@@ -61,9 +62,13 @@ export class GhostService extends ApiService {
       .pipe(
         map((response: IPostResponse) => {
           const posts = response.posts;
+
+          posts.forEach(element => {
+            element.url = this.replaceBaseUrl(element, '/blog/');
+          });
           return posts;
         })
-    );
+      );
   }
 
   public getSettings(): Observable<ISettingsResponseParams> {
@@ -73,5 +78,23 @@ export class GhostService extends ApiService {
           return response.settings;
         })
       ));
+  }
+
+  public getTags(params: IBrowseParams): Observable<ITagsResponseParams[]> {
+    const tagEndpoint = new Tags(params);
+
+    return super.browse<ITagResponse>(tagEndpoint)
+      .pipe(
+        map(response => {
+          console.log(response);
+          return response.tags;
+        })
+      );
+  }
+
+  private replaceBaseUrl(element: IResponse, replaceWith: string) {
+    const baseUrl = environment.ghost.baseUrl;
+
+    return element.url.replace(baseUrl, replaceWith);
   }
 }

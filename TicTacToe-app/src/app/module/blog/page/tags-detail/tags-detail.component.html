@@ -1,0 +1,20 @@
+<section>
+  <div>
+    <!-- FIXME move code to own template since reused from blog-componet.html -->
+    <ul class="o-grid cols-3">
+      <li class="o-grid__element m-card" *ngFor="let post of posts; let i = index, trackById">
+        <h2 class="m-card__title">{{ post.title }}</h2>
+        <div class="m-card__image">
+          <img [src]="post.feature_image" alt="">
+        </div>
+        <div class="m-card__teaser-text">
+          {{post.excerpt}}
+        </div>
+        <div class="m-card__date">
+          {{post.created_at | date: 'medium' }}
+        </div>
+        <button class="a-button" [routerLink]="post.url">to the page!</button>
+      </li>
+    </ul>
+  </div>
+</section>

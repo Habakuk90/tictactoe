@@ -1,11 +1,13 @@
 <header>
   <nav class="o-nav">
     <ul class="o-nav__list m-list">
-      <li *ngFor="let item of navigation; trackById"
-        class="m-list__item"
-        routerLink="{{item.url}}">
+      <li *ngFor="let item of navigation; trackById" class="m-list__item" routerLink="{{item.url}}">
         <span>{{item.label}}</span>
       </li>
+      <li *ngFor="let tag of tags; trackById" class="m-list__item" routerLink="/blog/tags/{{tag.slug}}">
+        <span>{{tag.name}}</span><span> ({{tag.count.posts}})</span>
+      </li>
+
     </ul>
   </nav>
 </header>

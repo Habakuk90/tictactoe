@@ -1,6 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { GhostService } from 'src/app/shared/services/ghost.service';
-import { INavigation } from 'src/app/shared/http/responseParams';
+import { INavigation, ITagsResponseParams } from 'src/app/shared/http/responseParams';
+import { IBrowseParams } from 'src/app/shared/http/browseParams';
 
 @Component({
   selector: 'app-content-layout',
@@ -9,7 +10,8 @@ import { INavigation } from 'src/app/shared/http/responseParams';
 })
 export class ContentLayoutComponent implements OnInit {
   public navigation: INavigation[];
-  constructor(private elementRef: ElementRef, private ghostService: GhostService) {}
+  public tags: ITagsResponseParams[]; // FIXME use ITagResponse instead of "params"
+  constructor(private elementRef: ElementRef, private ghostService: GhostService) { }
 
   setBodyHeight(footerHeight) {
     const nativeElement: HTMLElement = this.elementRef.nativeElement;
@@ -19,8 +21,14 @@ export class ContentLayoutComponent implements OnInit {
 
   ngOnInit() {
     this.ghostService.getSettings().subscribe(settings => {
-
       this.navigation = settings.navigation;
+    });
+
+    const params: IBrowseParams = {
+      include: 'count.posts'
+    };
+    this.ghostService.getTags(params).subscribe(tags => {
+      this.tags = tags;
     });
   }
 }

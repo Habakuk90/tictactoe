@@ -27,16 +27,10 @@ export class BlogComponent implements OnInit {
     };
 
     this.ghostService.getBlogPages(params).subscribe(posts => {
-      // add correct url to each element
-      posts.forEach((element) => {
-        element.url = this.location.path() + '/' + element.slug;
-      });
-
       this.posts = posts;
     });
 
     this.ghostService.getPage('styleguide', 1).subscribe(pages => {
-      console.log(pages[0]);
       const page = pages[0];
       (this.container.nativeElement as HTMLElement).outerHTML = page.html;
       this.featureImageUrl = page.feature_image;

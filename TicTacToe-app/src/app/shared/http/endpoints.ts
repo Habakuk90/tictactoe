@@ -13,7 +13,7 @@ export abstract class Endpoint implements IApiEndpoint {
    *
    */
   constructor(public params: IBaseParams = null, public url = 'notfound') {
-    if (params)  { params.debug = true; }
+    if (params) { params.debug = true; }
     this.fullUrl = this.buildUrl(url, params);
   }
 
@@ -49,7 +49,7 @@ export class Pages extends Endpoint {
 }
 
 export class Tags extends Endpoint {
-  constructor(public params: IBaseParams = null, public endpoint = 'tags') {
+  constructor(public params: IBrowseParams = null, public endpoint = 'tags') {
     super(params, endpoint);
   }
 }
