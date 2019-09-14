@@ -1,0 +1,6 @@
+@import '1atom/a-mixins';
+
+
+.feature-image {
+  @include aspect-ratio-container(3, 1, cover, top);
+}

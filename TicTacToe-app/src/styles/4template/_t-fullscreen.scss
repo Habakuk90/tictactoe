@@ -1,21 +1,26 @@
 @import "_variables.scss";
 
 .t-fullscreen {
+  $this: &;
   max-width: 100vw;
 
   &__content {
-    display: flex;
-    width: 100%;
+    max-width: $content-max-width;
+    margin: 0 auto;
   }
 
   &.-vertical {
     height: calc(100vh - #{$nav-height});
 
+    #{$this}__content {
+      height: 100%;
+    }
+
     &.-centered {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

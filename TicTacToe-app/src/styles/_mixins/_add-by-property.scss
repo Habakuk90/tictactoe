@@ -63,7 +63,6 @@
         }
         @else
         {
-          @debug $values;
             // if $values is type-of [MAP] then get by breakpoint
             @if type-of($values) == map
             {
@@ -119,6 +118,5 @@
 /// @param {Number} $value sets the font-size value preferred in rem.
 @mixin add-font-size($value)
 {
-  @debug 'hi';
     @include add-by-property($value, font-size)
 }

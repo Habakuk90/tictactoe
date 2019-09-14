@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { GhostService } from 'src/app/shared/services/ghost.service';
+import { INavigation, ITagsResponseParams } from 'src/app/shared/http/responseParams';
+import { IBrowseParams } from 'src/app/shared/http/browseParams';
 
 @Component({
   selector: 'app-content-layout',
@@ -7,32 +9,26 @@ import { Observable } from 'rxjs';
   styleUrls: ['./content-layout.component.scss']
 })
 export class ContentLayoutComponent implements OnInit {
-  // private overlayContainer: OverlayContainer;
-  theme = 'my-light-theme';
-  isDarkTheme: Observable<boolean>;
+  public navigation: INavigation[];
+  public tags: ITagsResponseParams[]; // FIXME use ITagResponse instead of "params"
+  constructor(private elementRef: ElementRef, private ghostService: GhostService) { }
 
-  // constructor(private themeService: ThemeService) {}
-
-  ngOnInit() {
-    // this.isDarkTheme = this.themeService.isDarkTheme;
-
-    // if (this.overlayContainer) {
-    //   this.overlayContainer.getContainerElement().classList.add(this.theme);
-    // }
+  setBodyHeight(footerHeight) {
+    const nativeElement: HTMLElement = this.elementRef.nativeElement;
+    const container: HTMLElement = nativeElement.querySelector('.container');
+    container.style.paddingBottom = footerHeight + 'px';
   }
 
-  // onThemeChange(theme: boolean) {
-  //   this.themeService.setDarkTheme(theme);
-  //   this.theme = (theme) ? 'my-dark-theme' : 'my-light-theme';
-  //   console.log(theme);
-  //   if (this.overlayContainer) {
-  //     const overlayContainerClasses = this.overlayContainer.getContainerElement().classList;
-  //     const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
-  //     if (themeClassesToRemove.length) {
-  //       overlayContainerClasses.remove(...themeClassesToRemove);
-  //     }
-  //     overlayContainerClasses.add(this.theme);
-  //   }
-  // }
+  ngOnInit() {
+    this.ghostService.getSettings().subscribe(settings => {
+      this.navigation = settings.navigation;
+    });
 
+    const params: IBrowseParams = {
+      include: 'count.posts'
+    };
+    this.ghostService.getTags(params).subscribe(tags => {
+      this.tags = tags;
+    });
+  }
 }
