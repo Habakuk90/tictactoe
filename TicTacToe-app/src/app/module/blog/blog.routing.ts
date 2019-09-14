@@ -7,7 +7,7 @@ import { TagsDetailComponent } from './page/tags-detail/tags-detail.component';
 const routes: Routes = [
   { path: '', component: BlogComponent },
   { path: ':slug', component: BlogPostComponent },
-  { path: 'tags/:slug', component: TagsDetailComponent }
+  { path: 'tags/:tagSlug', component: TagsDetailComponent}
 ];
 
 @NgModule({

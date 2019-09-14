@@ -56,3 +56,33 @@ $border-tictactoe: 5px solid black;
     }
   // }
 }
+
+
+// workaround for full-width images to work; dont know how to fix yet
+section {
+  > * {
+    &.ghost-html {
+      max-width: none;
+      padding: 0;
+
+      > *:not(.kg-width-full) {
+        max-width: $content-max-width;
+        margin: 0 auto;
+      }
+
+      .kg-width-full {
+        @include aspect-ratio-container(16, 7, cover, top) {
+          img {padding-bottom: 20px;}
+
+          figcaption { position: relative; text-align: center; }
+        }
+      }
+    }
+  }
+  @media #{$medium-only} {
+  }
+
+  @media #{$small-only} {
+
+  }
+}
