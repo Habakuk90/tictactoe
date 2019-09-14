@@ -1,6 +1,9 @@
 <header>
   <nav class="o-nav">
     <ul class="o-nav__list m-list">
+      <li class="m-list__item" routerLink="/">
+        <span>Home/Logo</span>
+      </li>
       <li *ngFor="let item of navigation; trackById" class="m-list__item" routerLink="{{item.url}}">
         <span>{{item.label}}</span>
       </li>
