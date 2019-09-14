@@ -44,11 +44,8 @@ describe('GhostService', () => {
           limit: 3,
           page: 1
         };
-        expect(ghostService.getHomePage()).toBeTruthy();
         expect(ghostService.getBlogPage('testSlug')).toBeTruthy();
         expect(ghostService.getBlogPages(params)).toBeTruthy();
-
-
       }));
 
   it('shoudl resolve data', fakeAsync(() => {
@@ -70,7 +67,7 @@ describe('GhostService', () => {
   }));
 
   it('should throw error', fakeAsync(() => {
-    var ghostStub: GhostPageStub = new GhostPageStub();
+    const ghostStub: GhostPageStub = new GhostPageStub();
     const spy = spyOn(ghostStub, 'getBlogPages');
     expect(spy.and.throwError('error')).toThrowError('error');
   }));
@@ -86,7 +83,7 @@ describe('GhostService', () => {
   });
 });
 
-
+// TODO get a actual testing mock class which doesnt really is different to th actual ghost.service
 class GhostPageStub extends BaseService{
 /**
  *

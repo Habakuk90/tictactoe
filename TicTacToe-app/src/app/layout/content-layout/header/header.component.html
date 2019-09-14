@@ -2,22 +2,15 @@
   <nav class="o-nav">
     <ul class="o-nav__list m-list">
       <li class="m-list__item" routerLink="/">
-        Home
+        <span>Home/Logo</span>
       </li>
-      <li class="m-list__item" routerLink="/game">
-        Game
+      <li *ngFor="let item of navigation; trackById" class="m-list__item" routerLink="{{item.url}}">
+        <span>{{item.label}}</span>
       </li>
-      <li *ngIf="isLoggedIn; else auth" [class.anonymous]="isAnonymous" class="m-list__item" (click)="logout()">
-        Logout {{userName}}
+      <li *ngFor="let tag of tags; trackById" class="m-list__item" routerLink="/blog/tags/{{tag.slug}}">
+        <span>{{tag.name}}</span><span> ({{tag.count.posts}})</span>
       </li>
-      <ng-template #auth>
-        <li class="m-list__item" routerLink="/login">
-          Login
-        </li>
-        <li class="m-list__item" routerLink="/register">
-          Register
-        </li>
-      </ng-template>
+
     </ul>
   </nav>
 </header>

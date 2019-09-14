@@ -1,8 +1,6 @@
-.o-grid__element {
-  display: flex;
-  flex-flow: column nowrap;
+@import '1atom/a-mixins';
 
-  .m-card__teaser-text {
-    flex-grow: 1;
-  }
+
+.feature-image {
+  @include aspect-ratio-container(3, 1, cover, top);
 }

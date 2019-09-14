@@ -1,19 +1,10 @@
 import { environment } from 'src/environments/environment';
-import { IBaseParams, IBrowseParams } from './response';
+import { IBaseParams, IBrowseParams } from './browseParams';
 
 export interface IApiEndpoint {
   params: IBaseParams;
   url: string;
   fullUrl: string;
-}
-
-// TODOANDI cleanup Params
-export interface PostParams extends IBaseParams {
-  filter?: string;
-}
-
-export interface PagesParams extends IBaseParams {
-  include?: string;
 }
 
 export abstract class Endpoint implements IApiEndpoint {
@@ -22,10 +13,11 @@ export abstract class Endpoint implements IApiEndpoint {
    *
    */
   constructor(public params: IBaseParams = null, public url = 'notfound') {
+    if (params) { params.debug = true; }
     this.fullUrl = this.buildUrl(url, params);
   }
 
-  // TODOANDI, get parameters from query in url and build url in ghost/api .service
+  // FIXME, get parameters from query in url and build url in ghost/api .service
   private buildUrl(endpoint: string, params?: IBaseParams) {
     let urlParams = '';
 
@@ -44,47 +36,38 @@ export abstract class Endpoint implements IApiEndpoint {
   }
 }
 
-export class Posts extends Endpoint {
-  constructor(public params: PostParams = null, public endpoint = 'posts') {
+export class PostsEndpoint extends Endpoint {
+  constructor(public params: IBrowseParams = null, public endpoint = 'posts') {
     super(params, endpoint);
   }
 }
 
-export class Pages extends Endpoint {
+export class PagesEndpoint extends Endpoint {
   constructor(public params: IBrowseParams = null, public endpoint = 'pages') {
     super(params, endpoint);
   }
 }
 
-export class Tags extends Endpoint {
-  constructor(public params: IBaseParams = null, public endpoint = 'tags') {
+export class TagsEndpoint extends Endpoint {
+  constructor(public params: IBrowseParams = null, public endpoint = 'tags') {
     super(params, endpoint);
   }
 }
 
-export class Authors extends Endpoint {
+export class AuthorsEndpoint extends Endpoint {
   /**
    *
    */
-  constructor(public params: IBaseParams = null, public endpoint = 'authors') {
+  constructor(public params: IBrowseParams = null, public endpoint = 'authors') {
     super(params, endpoint);
   }
 }
 
-export class Settings extends Endpoint {
+export class SettingsEndpoint extends Endpoint {
   /**
    *
    */
-  constructor(public params: IBaseParams = null, public endpoint = 'settings') {
+  constructor(public params: IBrowseParams = null, public endpoint = 'settings') {
     super(params, endpoint);
   }
-}
-
-
-enum Endpoints {
-  Posts,
-  Pages,
-  Tags,
-  Authors,
-  Settings
 }

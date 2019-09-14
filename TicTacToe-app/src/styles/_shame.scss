@@ -23,6 +23,13 @@ $border-tictactoe: 5px solid black;
     // > :first-child {
     //   margin: 0;
     // }
+    position: relative;
+    background-color: $white;
+    top: -70px;
+
+    > :first-child {
+      padding-top: 20px;
+    }
 
     > p + p {
       margin: 20px 0 0;
@@ -36,11 +43,11 @@ $border-tictactoe: 5px solid black;
       line-height: 38px;
     }
 
-    > ul {
+    > ul, ol {
       @extend .m-list !optional;
 
       > li {
-        @extend .m-list__item !optional;
+        // @extend .m-list__item !optional;
       }
     }
 
@@ -48,4 +55,34 @@ $border-tictactoe: 5px solid black;
       @extend .m-code !optional;
     }
   // }
+}
+
+
+// workaround for full-width images to work; dont know how to fix yet
+section {
+  > * {
+    &.ghost-html {
+      max-width: none;
+      padding: 0;
+
+      > *:not(.kg-width-full) {
+        max-width: $content-max-width;
+        margin: 0 auto;
+      }
+
+      .kg-width-full {
+        @include aspect-ratio-container(16, 7, cover, top) {
+          img {padding-bottom: 20px;}
+
+          figcaption { position: relative; text-align: center; }
+        }
+      }
+    }
+  }
+  @media #{$medium-only} {
+  }
+
+  @media #{$small-only} {
+
+  }
 }

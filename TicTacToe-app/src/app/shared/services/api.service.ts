@@ -11,8 +11,9 @@ export class ApiService extends BaseService {
     super();
   }
 
-  browse<T extends IBaseResponse>(item: IApiEndpoint, responeType: Response = null, count: number = 15, page: number = 0): Observable<T> {
+  protected browse<T extends IBaseResponse>(item: IApiEndpoint, count: number = 15, page: number = 0): Observable<T> {
+
     return this.http.get<T>(item.fullUrl)
-      .pipe(take(count), skip(page * count), catchError(this.handleError));
+      .pipe(take(count), skip(page * count), catchError(super.handleError));
   }
 }

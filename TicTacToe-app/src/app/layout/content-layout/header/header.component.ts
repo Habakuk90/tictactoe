@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, HostListener, ElementRef } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/shared/services/user.service';
+import { INavigation, ITagsResponseParams } from 'src/app/shared/http/responseParams';
 
 @Component({
   selector: 'app-header',
@@ -8,16 +8,20 @@ import { UserService } from 'src/app/shared/services/user.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {
-  @Input() userName: string;
+  @Input() navigation: INavigation[];
+  @Input() tags: ITagsResponseParams[];
   isLoggedIn: boolean;
+
   constructor(private userService: UserService, private element: ElementRef) {}
 
-  @HostListener('window:scroll', ['$event'])
-  onScroll(event: ScrollEvent) {
-    const header = this.element.nativeElement as HTMLElement;
-    const document = event.target as HTMLDocument;
-    this.toggleHeader(header, event.pageY, document);
-  }
+  // FIXME: this just doesnt work well with little content.
+  // @HostListener('window:scroll', ['$event'])
+  // onScroll(event: ScrollEvent) {
+  //   const header = this.element.nativeElement as HTMLElement;
+  //   const document = event.target as HTMLDocument;
+
+  //   this.toggleHeader(header, event.pageY, document);
+  // }
 
   get isAnonymous(): boolean {
     return this.userService.isAnonymous;

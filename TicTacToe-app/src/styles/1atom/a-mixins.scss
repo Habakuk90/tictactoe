@@ -40,4 +40,6 @@
         object-fit: $objectFit;
         object-position: $objectPosition;
     }
+
+    @content;
 }
