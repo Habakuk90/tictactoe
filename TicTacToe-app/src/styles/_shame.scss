@@ -31,13 +31,7 @@ $border-tictactoe: 5px solid black;
       padding-top: 20px;
     }
 
-    > p + p {
-      margin: 20px 0 0;
-    }
 
-    > * {
-      margin: 20px 0 0;
-    }
 
     > h2 {
       line-height: 38px;
@@ -67,11 +61,11 @@ section {
 
       > *:not(.kg-width-full) {
         max-width: $content-max-width;
-        margin: 0 auto;
+        margin: 20px auto 0;
       }
 
       .kg-width-full {
-        @include aspect-ratio-container(16, 7, cover, top) {
+        @include aspect-ratio-container(16, 7, cover) {
           img { padding-bottom: 20px; }
 
           figcaption { position: relative; text-align: center; }
@@ -84,6 +78,10 @@ section {
 
       figure {
         margin: 1.5em 0 3em;
+      }
+
+      .kg-image-card:not(.kg-width-full):not(.kg-width-wide) {
+        max-width: $content-inner-width;
       }
     }
   }

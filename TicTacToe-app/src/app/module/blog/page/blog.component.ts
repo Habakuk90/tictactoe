@@ -14,7 +14,7 @@ export class BlogComponent implements OnInit {
   featureImageUrl: string;
   // TODO make use of PostResponse work?
   posts: Array<IResponse> = [];
-  @ViewChild('styleguide', { static: false }) container: ElementRef;
+  @ViewChild('ghosthtml', { static: false }) ghosthtml: ElementRef;
   constructor(private ghostService: GhostService, private location: Location) {
   }
 
@@ -32,7 +32,7 @@ export class BlogComponent implements OnInit {
 
     this.ghostService.getPage('styleguide', 1).subscribe(pages => {
       const page = pages[0];
-      (this.container.nativeElement as HTMLElement).outerHTML = page.html;
+      (this.ghosthtml.nativeElement as HTMLElement).outerHTML = page.html;
       this.featureImageUrl = page.feature_image;
     });
   }

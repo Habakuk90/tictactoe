@@ -13,7 +13,7 @@ import { IResponse } from 'src/app/shared/http/responseParams';
 })
 export class BlogPostComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('container', { static: false }) container: ElementRef;
+  @ViewChild('ghosthtml', { static: false }) ghosthtml: ElementRef;
   protected slug$: Observable<string>;
   public post: IResponse;
 
@@ -35,7 +35,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       .subscribe(post => {
         that.post = post;
         that.titleService.setTitle(that.post.title);
-        (that.container.nativeElement as HTMLElement).outerHTML = this.post.html;
+        (that.ghosthtml.nativeElement as HTMLElement).outerHTML = this.post.html;
       });
   }
 }
