@@ -72,10 +72,18 @@ section {
 
       .kg-width-full {
         @include aspect-ratio-container(16, 7, cover, top) {
-          img {padding-bottom: 20px;}
+          img { padding-bottom: 20px; }
 
           figcaption { position: relative; text-align: center; }
         }
+      }
+
+      .kg-width-wide {
+        @include aspect-ratio-container(16, 7, cover);
+      }
+
+      figure {
+        margin: 1.5em 0 3em;
       }
     }
   }
