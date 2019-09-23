@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { map, take } from 'rxjs/operators';
 import { GhostService } from 'src/app/shared/services/ghost.service';
@@ -16,6 +16,7 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   @ViewChild('ghosthtml', { static: false }) ghosthtml: ElementRef;
   protected slug$: Observable<string>;
   public post: IResponse;
+  public dings: Subscription;
 
   constructor(
     private titleService: Title,
@@ -35,7 +36,8 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
       .subscribe(post => {
         that.post = post;
         that.titleService.setTitle(that.post.title);
-        (that.ghosthtml.nativeElement as HTMLElement).outerHTML = this.post.html;
+
+        // (that.ghosthtml.nativeElement as HTMLElement).outerHTML = this.post.html;
       });
   }
 }

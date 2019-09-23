@@ -17,6 +17,7 @@ $border-tictactoe: 5px solid black;
   }
 }
 
+
 // actual angular bug where the scoped css isnt apllied to innerHTML dom changes
 .ghost-html {
   // &__content {
@@ -92,3 +93,4 @@ section {
 
   }
 }
+
