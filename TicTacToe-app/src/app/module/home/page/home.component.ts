@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   hub: HomeHubConnection;
   ghostPage: IResponse;
   title: string;
-  @ViewChild('home', {static: false}) home: ElementRef;
+  @ViewChild('ghosthtml', {static: false}) ghosthtml: ElementRef;
   constructor(
     private userService: UserService,
     private ghost: GhostService) {
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.ghost.getPage('home').subscribe(pages => {
       const page = pages[0];
 
-      (that.home.nativeElement as HTMLElement).outerHTML = page.html;
+      (that.ghosthtml.nativeElement as HTMLElement).outerHTML = page.html;
       that.title = page.title;
     });
   }

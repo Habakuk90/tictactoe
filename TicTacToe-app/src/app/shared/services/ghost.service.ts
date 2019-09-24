@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import { ISettingsResponseParams, IResponse, ITagsResponseParams } from '../http/responseParams';
 import { IPageResponse, IPostResponse, ISettingsResponse, ITagResponse } from '../http/response';
 import { IBrowseParams } from '../http/browseParams';
-import { environment } from 'src/environments/environment.docker';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +86,6 @@ export class GhostService extends ApiService {
     return super.browse<ITagResponse>(tagEndpoint)
       .pipe(
         map(response => {
-          console.log(response);
           return response.tags;
         })
       );
@@ -94,7 +93,6 @@ export class GhostService extends ApiService {
 
   private replaceBaseUrl(element: IResponse, replaceWith: string) {
     const baseUrl = environment.ghost.baseUrl;
-
     return element.url.replace(baseUrl, replaceWith);
   }
 }
