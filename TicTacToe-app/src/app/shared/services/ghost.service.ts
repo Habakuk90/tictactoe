@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ISettingsResponseParams, IResponse, ITagsResponseParams } from '../http/responseParams';
 import { IPageResponse, IPostResponse, ISettingsResponse, ITagResponse } from '../http/response';
-import { IBrowseParams } from '../http/browseParams';
+import { IBrowseOptions, BrowseHttpParams } from '../http/browseParams';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -17,15 +17,10 @@ export class GhostService extends ApiService {
     super(http);
   }
 
-  public getPage(tag: string, count: number = 1): Observable<IResponse[]> {
-    const params: IBrowseParams = {
-      filter: `tag:${tag}`,
-      formats: 'html,plaintext'
-    };
+  public getPage(options: IBrowseOptions): Observable<IResponse[]> {
+    const endpoint = new PagesEndpoint(options);
 
-    const page = new PagesEndpoint(params);
-
-    return super.browse<IPageResponse>(page, count)
+    return super.browse<IPageResponse>(endpoint)
       .pipe(
         map(response => {
           return response.pages;
@@ -33,15 +28,10 @@ export class GhostService extends ApiService {
       );
   }
 
-  public getBlogPage(slug: string): Observable<IResponse> {
-    const params: IBrowseParams = {
-      filter: 'slug:' + slug,
-      include: 'authors,tags'
-    };
+  public getBlogPage(options: IBrowseOptions): Observable<IResponse> {
+    const endpoint = new PostsEndpoint(options);
 
-    const singlePost = new PostsEndpoint(params);
-
-    return super.browse<IPostResponse>(singlePost)
+    return super.browse<IPostResponse>(endpoint)
       .pipe(
         map(response => {
           const posts = response.posts;
@@ -55,10 +45,10 @@ export class GhostService extends ApiService {
         }));
   }
 
-  public getBlogPages(params: IBrowseParams, count: number = 1): Observable<IResponse[]> {
-    const postEndpoint = new PostsEndpoint(params);
+  public getBlogPages(options: IBrowseOptions): Observable<IResponse[]> {
+    const endpoint = new PostsEndpoint(options);
 
-    return super.browse<IPostResponse>(postEndpoint, count)
+    return super.browse<IPostResponse>(endpoint)
       .pipe(
         map((response: IPostResponse) => {
           const posts = response.posts;
@@ -72,7 +62,9 @@ export class GhostService extends ApiService {
   }
 
   public getSettings(): Observable<ISettingsResponseParams> {
-    return super.browse<ISettingsResponse>(new SettingsEndpoint())
+    const endpoint = new SettingsEndpoint();
+
+    return super.browse<ISettingsResponse>(endpoint)
       .pipe((
         map((response: ISettingsResponse) => {
           return response.settings;
@@ -80,10 +72,10 @@ export class GhostService extends ApiService {
       ));
   }
 
-  public getTags(params: IBrowseParams): Observable<ITagsResponseParams[]> {
-    const tagEndpoint = new TagsEndpoint(params);
+  public getTags(options: IBrowseOptions): Observable<ITagsResponseParams[]> {
+    const endpoint = new TagsEndpoint(options);
 
-    return super.browse<ITagResponse>(tagEndpoint)
+    return super.browse<ITagResponse>(endpoint)
       .pipe(
         map(response => {
           return response.tags;

@@ -1,9 +1,5 @@
-import { Directive, Input, ViewContainerRef, ComponentFactory, ComponentFactoryResolver, ElementRef } from '@angular/core';
+import { Directive, Input, ViewContainerRef, ComponentFactoryResolver, TemplateRef, EmbeddedViewRef } from '@angular/core';
 import { IResponse } from 'src/app/shared/http/responseParams';
-import { GhostService } from 'src/app/shared/services/ghost.service';
-import { Location } from '@angular/common';
-import { GhostHtmlComponent } from '../components/ghosthtml.component';
-import { HtmlParser } from '@angular/compiler';
 
 
 
@@ -11,22 +7,20 @@ import { HtmlParser } from '@angular/compiler';
   selector: '[appGhostHtml]'
 })
 export class GhostHtmlDirective {
-  constructor(public g: GhostService, public l: Location,
-    private viewContainer: ViewContainerRef, private componentFactoryResolver: ComponentFactoryResolver) { }
+  constructor(public templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef) { }
 
   @Input('appGhostHtml') set html(post: IResponse) {
-    let compFactory: ComponentFactory<GhostHtmlComponent>;
-
-    compFactory = this.componentFactoryResolver.resolveComponentFactory(GhostHtmlComponent);
+    let embeddedRef: EmbeddedViewRef<any>;
     this.viewContainer.clear();
 
     if (post) {
-      const componentRef = this.viewContainer.createComponent(compFactory);
-      (<GhostHtmlComponent>componentRef.instance).html = post.html;
+      embeddedRef = this.viewContainer.createEmbeddedView(this.templateRef);
+      embeddedRef.rootNodes[0].outerHTML = post.html;
 
       const parser = new DOMParser();
-      const document = parser.parseFromString(post.html, 'text/html');
-      componentRef.changeDetectorRef.markForCheck();
+      parser.parseFromString(post.html, 'text/html');
+      embeddedRef.markForCheck();
     }
   };
 }

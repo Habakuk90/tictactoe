@@ -1,7 +1,7 @@
 import { TestBed, inject, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { GhostService } from './ghost.service';
-import { IBrowseParams, IPostResponseParams, IPageResponseParams } from 'src/app/shared/http/response';
+import { IBrowseOptions, IPostResponseParams, IPageResponseParams } from 'src/app/shared/http/response';
 import { of, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/core/services/base.service';
@@ -39,7 +39,7 @@ describe('GhostService', () => {
   it('ghost methods should be truthy',
     inject([GhostService],
       (ghostService: GhostService) => {
-        const params: IBrowseParams = {
+        const params: IBrowseOptions = {
           include: 'authors',
           limit: 3,
           page: 1
