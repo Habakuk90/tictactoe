@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { GhostHtmlComponent } from '../module/blog/component/ghost-html.component';
 
 // import { MaterialModule } from './material.module';
 
@@ -79,12 +80,15 @@ import { RouterModule } from '@angular/router';
     // NgbModule,
     // FontAwesomeModule
   ],
-  declarations: [],
+  declarations: [
+    GhostHtmlComponent
+  ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
+    GhostHtmlComponent
     // MaterialModule,
 
     // NgbModule,

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { UserService } from 'src/app/shared/services/user.service';
 import { HubComponent } from 'src/app/connections/base.hubconnection';
 import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
@@ -13,9 +13,9 @@ import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 })
 export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   hub: HomeHubConnection;
-  ghostPage: IResponse;
+  page: IResponse;
   title: string;
-  @ViewChild('ghosthtml', { static: false }) ghosthtml: ElementRef;
+
 
   constructor(
     private userService: UserService,
@@ -28,15 +28,14 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     const that = this;
 
     const options: IBrowseOptions = {
-      filter: `tag:${'home'}`,
+      filter: `tag:${'styleguide'}`,
       formats: 'html,plaintext'
     };
 
     this.ghost.getPage(options).subscribe(pages => {
-      const page = pages[0];
+      that.page = pages[0];
 
-      (that.ghosthtml.nativeElement as HTMLElement).outerHTML = page.html;
-      that.title = page.title;
+      that.title = that.page.title;
     });
   }
 

@@ -1,10 +1,12 @@
+@import '1atom/a-mixins';
+
 .home {
-  &__container {
-    .o-grid {
-      list-style-type: none;
-    }
-    .ghost-html {
-      top: 0;
-    }
+  &__title {
+    text-decoration: black;
+    margin-bottom: 20px;
+  }
+
+  &__image {
+    @include aspect-ratio-container(6, 1, cover);
   }
 }

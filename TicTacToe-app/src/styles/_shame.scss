@@ -18,6 +18,10 @@ $border-tictactoe: 5px solid black;
 }
 
 
+
+@import '0base/colors';
+@import '1atom/a-mixins';
+@import 'variables';
 // actual angular bug where the scoped css isnt apllied to innerHTML dom changes
 .ghost-html {
   // &__content {
@@ -55,7 +59,7 @@ $border-tictactoe: 5px solid black;
 
 // workaround for full-width images to work; dont know how to fix yet
 section {
-  > * {
+  * {
     &.ghost-html {
       max-width: none;
       padding: 0;
@@ -95,12 +99,6 @@ section {
         max-width: $content-inner-width;
       }
     }
-  }
-  @media #{$medium-only} {
-  }
-
-  @media #{$small-only} {
-
   }
 }
 
