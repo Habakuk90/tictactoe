@@ -1,19 +1,22 @@
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { take, catchError, skip } from 'rxjs/operators';
 import { BaseService } from 'src/app/core/services/base.service';
 import { IBaseResponse } from '../http/response';
-import { IApiEndpoint } from '../http/endpoints';
+import { IEndpoint } from '../http/endpoints';
+import { environment } from 'src/environments/environment';
 
 export class ApiService extends BaseService {
 
+  public get apiUrl() {
+    return environment.ghost.baseUrl +
+      environment.ghost.contentApiUrl;
+  }
   constructor(public http: HttpClient) {
     super();
   }
 
-  protected browse<T extends IBaseResponse>(item: IApiEndpoint, count: number = 15, page: number = 0): Observable<T> {
+  protected browse<T extends IBaseResponse>(obj: IEndpoint) {
+    const url = this.apiUrl + obj.endpoint;
 
-    return this.http.get<T>(item.fullUrl)
-      .pipe(take(count), skip(page * count), catchError(super.handleError));
+    return this.http.get<T>(url, { params: obj.params });
   }
 }

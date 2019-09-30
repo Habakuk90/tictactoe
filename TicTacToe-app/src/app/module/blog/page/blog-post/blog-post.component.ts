@@ -5,6 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
 import { IResponse } from 'src/app/shared/http/responseParams';
+import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 
 @Component({
   selector: 'app-blog-post',
@@ -32,7 +33,13 @@ export class BlogPostComponent implements OnInit, AfterViewInit {
   }
   get(slug: string) {
     const that = this;
-    this.ghostService.getBlogPage(slug)
+
+    const options: IBrowseOptions = {
+      filter: 'slug:' + slug,
+      include: 'authors,tags'
+    };
+
+    this.ghostService.getBlogPage(options)
       .subscribe(post => {
         that.post = post;
         that.titleService.setTitle(that.post.title);

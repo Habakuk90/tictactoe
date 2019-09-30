@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef } from '@angular/core';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { INavigation, ITagsResponseParams } from 'src/app/shared/http/responseParams';
-import { IBrowseParams } from 'src/app/shared/http/browseParams';
+import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 
 @Component({
   selector: 'app-content-layout',
@@ -24,7 +24,7 @@ export class ContentLayoutComponent implements OnInit {
       this.navigation = settings.navigation;
     });
 
-    const params: IBrowseParams = {
+    const params: IBrowseOptions = {
       include: 'count.posts'
     };
     this.ghostService.getTags(params).subscribe(tags => {
