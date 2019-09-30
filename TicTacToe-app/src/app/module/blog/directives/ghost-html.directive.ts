@@ -18,8 +18,6 @@ export class GhostHtmlDirective {
       embeddedRef = this.viewContainer.createEmbeddedView(this.templateRef);
       embeddedRef.rootNodes[0].outerHTML = post.html;
 
-      const parser = new DOMParser();
-      parser.parseFromString(post.html, 'text/html');
       embeddedRef.markForCheck();
     }
   };
