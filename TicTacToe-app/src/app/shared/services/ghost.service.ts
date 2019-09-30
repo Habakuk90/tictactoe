@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ISettingsResponseParams, IResponse, ITagsResponseParams } from '../http/responseParams';
 import { IPageResponse, IPostResponse, ISettingsResponse, ITagResponse } from '../http/response';
-import { IBrowseOptions, BrowseHttpParams } from '../http/browseParams';
+import { IBrowseOptions } from '../http/browseParams';
 import { environment } from 'src/environments/environment';
 
 @Injectable({

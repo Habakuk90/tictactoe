@@ -1,5 +1,4 @@
-import { environment } from 'src/environments/environment';
-import { IBaseParams, IBrowseOptions, BrowseHttpParams } from './browseParams';
+import { IBrowseOptions, BrowseHttpParams } from './browseParams';
 
 export interface IEndpoint {
   params: BrowseHttpParams;

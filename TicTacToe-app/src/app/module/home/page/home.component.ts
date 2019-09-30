@@ -15,7 +15,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   hub: HomeHubConnection;
   ghostPage: IResponse;
   title: string;
-  @ViewChild('ghosthtml', {static: false}) ghosthtml: ElementRef;
+  @ViewChild('ghosthtml', { static: false }) ghosthtml: ElementRef;
+
   constructor(
     private userService: UserService,
     private ghost: GhostService) {
@@ -28,8 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
     const options: IBrowseOptions = {
       filter: `tag:${'home'}`,
-        formats: 'html,plaintext'
-    }
+      formats: 'html,plaintext'
+    };
 
     this.ghost.getPage(options).subscribe(pages => {
       const page = pages[0];

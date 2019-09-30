@@ -12,7 +12,6 @@ import { LoaderInterceptor } from '../shared/http/loader.interceptor';
   exports: [
   ],
   providers: [
-    // HttpClientModule,
     { provide: HTTP_INTERCEPTORS, useClass: GhostInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
   ]

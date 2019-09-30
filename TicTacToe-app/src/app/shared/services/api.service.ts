@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { BaseService } from 'src/app/core/services/base.service';
 import { IBaseResponse } from '../http/response';
 import { IEndpoint } from '../http/endpoints';

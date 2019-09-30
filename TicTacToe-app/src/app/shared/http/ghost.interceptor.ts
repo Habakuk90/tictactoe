@@ -1,14 +1,13 @@
 import { environment } from 'src/environments/environment';
-import { Injectable, Injector } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpParams } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GhostService } from '../services/ghost.service';
-import { tap, map, catchError } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { BaseService } from 'src/app/core/services/base.service';
 
 @Injectable()
 export class GhostInterceptor extends BaseService implements HttpInterceptor {
-  constructor(private injector: Injector) { super(); }
+  constructor() { super(); }
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
