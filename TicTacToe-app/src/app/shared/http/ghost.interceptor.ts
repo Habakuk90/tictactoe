@@ -14,12 +14,12 @@ export class GhostInterceptor extends BaseService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const key = environment.ghost.apiKey;
 
-    // clone instance of request to manipulate data for params.. dont know why
+    // clone instance of request to manipulate data for params.. HttpRequest is immutable
     req = req.clone({
-      headers: req.headers.set("Content-Type", "application/json"),
+      headers: req.headers.set('Content-Type', 'application/json'),
       params: req.params.set('key', key)
     });
 
-    return next.handle(req).pipe(catchError(super.handleError), map(x => { return x }));
+    return next.handle(req).pipe(catchError(super.handleError), map(x => x));
   }
 }

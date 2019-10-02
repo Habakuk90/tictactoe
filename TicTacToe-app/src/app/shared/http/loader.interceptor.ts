@@ -20,7 +20,6 @@ export class LoaderInterceptor implements HttpInterceptor {
     console.warn('LoaderInterceptor');
     const loaderService = this.injector.get(LoaderService);
     loaderService.show();
-    console.log(loaderService.showLoaderSubject.value);
     return next.handle(req).pipe(finalize(() => loaderService.hide())
     );
   }
