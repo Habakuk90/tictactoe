@@ -28,7 +28,9 @@ export class ContentLayoutComponent implements OnInit {
       include: 'count.posts'
     };
     this.ghostService.getTags(params).subscribe(tags => {
-      this.tags = tags;
+      this.tags = tags.filter(tag => {
+        return tag.count.posts > 0;
+      });
     });
   }
 }

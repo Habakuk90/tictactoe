@@ -13,7 +13,7 @@ import { IResponse } from 'src/app/shared/http/responseParams';
     </div>
     <div [innerHTML]="post.html" class="ghost-html"></div>
   `,
-  styleUrls: ['ghost-html-component.scss']
+  styleUrls: ['ghost-html.component.scss']
 })
 export class GhostHtmlComponent {
   @Input() post: IResponse = null;
