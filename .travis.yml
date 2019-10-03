@@ -1,7 +1,9 @@
 language: node_js
 node_js:
  - 11
-before_script: cd TicTacToe-app
-script: 
+before_script: 
+  - cd TicTacToe-app
   - npm install
+script: 
   - npm run test
+  - npm run lint
