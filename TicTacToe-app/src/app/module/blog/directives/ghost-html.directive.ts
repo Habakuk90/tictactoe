@@ -1,10 +1,11 @@
 import { Directive, Input, ViewContainerRef, TemplateRef, EmbeddedViewRef } from '@angular/core';
 import { IResponse } from 'src/app/shared/http/responseParams';
 
-
+// deprecated: THIS IS ONLY LEFT HERE FOR REFERENCE PURPOSE
 
 @Directive({
-  selector: '[appGhostHtml]'
+  selector: '[appGhostHtml]',
+
 })
 export class GhostHtmlDirective {
   constructor(public templateRef: TemplateRef<any>,

@@ -6,13 +6,16 @@
 @import '../4template/t-mixins';
 @import '../5page/p-mixins';
 
-@mixin icon($icon) {
-  font-style: normal;
-  font-variant: normal;
-  text-rendering: auto;
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  content: $icon;
+@mixin icon($icon, $pseudo: before) {
+  &::#{$pseudo} {
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: $icon;
+    @content;
+  }
 }
 
 @mixin tablet {

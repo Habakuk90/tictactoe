@@ -10,6 +10,7 @@ $link-hover-color: $black !default;
   cursor: pointer;
   // needed everywhere? fixes underline hover
   display: inline-block;
+  position: relative;
 
   > a {
     display: block;
@@ -27,16 +28,18 @@ $link-hover-color: $black !default;
     color: inherit;
   }
 
-  &:after {
+  &::before {
     content: "";
     width: 0px;
     height: 1px;
     display: block;
     background: $link-hover-color;
     transition: 300ms;
+    position: absolute;
+    bottom: 0;
   }
 
-  &:hover:after {
+  &:hover:before {
     width: 100%;
   }
 }

@@ -30,7 +30,7 @@ export class TagsDetailComponent implements OnInit {
     const params: IBrowseOptions = {
       include: 'tags',
     };
-    // console.log(slug);
+
     this.ghostService.getBlogPages(params)
       .subscribe(posts => {
         that.posts = posts.filter(x => x.tags.find(y => y.slug === slug));
