@@ -67,7 +67,7 @@ export class TicTacToeComponent implements OnInit, OnDestroy, HubComponent {
 
   ngOnDestroy() {
     const that = this;
-    let leaveGroup: Promise<void>;
+    // const leaveGroup: Promise<void>;
 
     // if (this.groupService.groupName) {
     //   leaveGroup = this.hub.leaveGroup(this.groupService.groupName);

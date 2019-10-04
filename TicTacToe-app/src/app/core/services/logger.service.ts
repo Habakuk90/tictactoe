@@ -83,7 +83,7 @@ export enum LogLevel {
      * Works the same as console.log().
      */
     info(...objects: any[]) {
-      this.log(console.info, LogLevel.Info, objects);
+      this.log(console.log, LogLevel.Info, objects);
     }
 
     /**
