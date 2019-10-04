@@ -1,0 +1,13 @@
+language: node_js
+node_js:
+  - 11
+sudo: false
+services:
+  - docker
+script:
+  - echo "241431d855024406f312c5c90065fa88" | docker login -u "wahnsinnshub" --password-stdin
+
+after_success:
+  if: $TRAVIS_BRANCH = master
+    - docker build -t wahnsinnshub/ttt-repo:latest .
+    - docker push wahnsinnshub/ttt-repo:latest
