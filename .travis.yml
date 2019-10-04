@@ -8,4 +8,5 @@ before_script:
 script:
   - npm run test
   - npm run lint
+  - sed -i 's/GHOST_API_KEY/('"$GHOST_API_REPLACE"')/g' src/environments/environment.prod.ts
   - .././docker-deploy.sh
