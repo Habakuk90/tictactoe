@@ -9,5 +9,3 @@ script:
   - npm run test
   - npm run lint
   - .././docker-deploy.sh
-  - cd ..
-  - ./docker-deploy.sh

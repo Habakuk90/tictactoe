@@ -8,11 +8,12 @@ export const environment = {
     baseUrl: 'http://localhost:8081/api',
   },
   ghost: {
-    baseUrl: 'http://localhost:2368/',
+    baseUrl: 'http://blog.andkra.eu/',
     contentApiUrl: 'ghost/api/v2/content/',
-    apiKey: '13a1a657ee4a8bfd891d99089a'
+    apiKey: '8a6a1a7b88abd518d6e578517f'
   }
 };
+
 
 /*
  * In development mode, to ignore zone related error stack frames such as
