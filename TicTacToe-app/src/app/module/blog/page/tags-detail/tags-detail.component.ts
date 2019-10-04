@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GhostService } from 'src/app/shared/services/ghost.service';
-import { IBrowseParams } from 'src/app/shared/http/browseParams';
+import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 import { IResponse } from 'src/app/shared/http/responseParams';
 
 @Component({
@@ -27,10 +27,10 @@ export class TagsDetailComponent implements OnInit {
 
   get(slug: string) {
     const that = this;
-    const params: IBrowseParams = {
+    const params: IBrowseOptions = {
       include: 'tags',
     };
-    // console.log(slug);
+
     this.ghostService.getBlogPages(params)
       .subscribe(posts => {
         that.posts = posts.filter(x => x.tags.find(y => y.slug === slug));

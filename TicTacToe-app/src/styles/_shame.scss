@@ -17,7 +17,13 @@ $border-tictactoe: 5px solid black;
   }
 }
 
+
+
+@import '0base/colors';
+@import '1atom/a-mixins';
+@import 'variables';
 // actual angular bug where the scoped css isnt apllied to innerHTML dom changes
+// https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling
 .ghost-html {
   // &__content {
     // > :first-child {
@@ -31,13 +37,7 @@ $border-tictactoe: 5px solid black;
       padding-top: 20px;
     }
 
-    > p + p {
-      margin: 20px 0 0;
-    }
 
-    > * {
-      margin: 20px 0 0;
-    }
 
     > h2 {
       line-height: 38px;
@@ -60,29 +60,42 @@ $border-tictactoe: 5px solid black;
 
 // workaround for full-width images to work; dont know how to fix yet
 section {
-  > * {
+  * {
     &.ghost-html {
       max-width: none;
       padding: 0;
 
       > *:not(.kg-width-full) {
         max-width: $content-max-width;
-        margin: 0 auto;
+        margin: 20px auto 0;
       }
 
       .kg-width-full {
-        @include aspect-ratio-container(16, 7, cover, top) {
-          img {padding-bottom: 20px;}
+        @include aspect-ratio-container(16, 7, cover) {
+          img { padding-bottom: 20px; }
 
           figcaption { position: relative; text-align: center; }
         }
       }
+
+      .kg-image-card {
+        @include aspect-ratio-container(16, 7, cover);
+      }
+
+      .kg-gallery-image {
+        @include aspect-ratio-container(16, 7, cover) {
+          margin-bottom: 20px;
+        };
+      }
+
+      figure {
+        margin: 1.5em 0 3em;
+      }
+
+      .kg-image-card:not(.kg-width-full):not(.kg-width-wide) {
+        max-width: $content-inner-width;
+      }
     }
   }
-  @media #{$medium-only} {
-  }
-
-  @media #{$small-only} {
-
-  }
 }
+

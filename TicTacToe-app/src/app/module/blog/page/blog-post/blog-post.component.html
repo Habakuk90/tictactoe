@@ -1,11 +1,3 @@
 <section class="blog-post">
-  <div *ngIf="post?.feature_image" class="blog-post__image l-outbreak">
-      <img class="a-image" [src]="post?.feature_image" alt="">
-  </div>
-  <div *ngIf="post?.title" class="blog-post__title">
-    <h2>{{post?.title}}</h2>
-  </div>
-  <div class="blog-post__content ghost-html">
-    <div #container></div>
-  </div>
+  <app-ghost-html [post]="post"></app-ghost-html>
 </section>
