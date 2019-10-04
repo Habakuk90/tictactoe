@@ -1,11 +1,14 @@
 language: node_js
 node_js:
- - 11
-before_script: 
+  - 11
+before_script:
   - chmod +x docker-deploy.sh
   - cd TicTacToe-app
   - npm install
-script: 
+script:
   - npm run test
   - npm run lint
+  - if [ -n "$GHOST_API_KEY" ]; then
+      sed -i "s#GHOST_API_KEY_REPLACE" src/environments/environment.prod.ts
+    fi
   - .././docker-deploy.sh
