@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z "$GHOST_API_REPLACE" ]; then
+if [ -z $GHOST_API_REPLACE ]; then
     sed -i 's/GHOST_API_KEY/('"$GHOST_API_REPLACE"')/g' src/environments/environment.prod.ts
 fi
 
