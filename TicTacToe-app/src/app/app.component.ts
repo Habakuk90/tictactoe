@@ -17,8 +17,6 @@ export class AppComponent {
     userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
-    // environmentLoader.then(x => console.log(x));
-    console.log(environment.ghost.apiKey, environment.ghost.apiKey2);
   }
 }
 

@@ -2,10 +2,10 @@ const webpack = require('webpack');
 
 module.exports = {
   plugins: [
+    // new webpack.EnvironmentPlugin(['KEY', 'SQLSERVER']),
     new webpack.DefinePlugin({
       'process.env': {
-        KEY: JSON.stringify(process.env.KEY),
-        KEY2: JSON.stringify(process.env.KEY2)
+        GHOST_API_KEY: JSON.stringify(process.env.GHOST_API_KEY),
       }
     })
   ]
