@@ -15,8 +15,12 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/custom-webpack:browser",
+          // "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "customWebpackConfig": {
+              "includePaths": "extra-webpack.config.js"
+            },
             "outputPath": "dist/TicTacToe-app",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -53,7 +57,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
             }
           }
         },

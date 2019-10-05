@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { UserService } from './shared/services/user.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class AppComponent {
     userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
+    // environmentLoader.then(x => console.log(x));
+    console.log(environment.ghost.apiKey, environment.ghost.apiKey2);
   }
 }
 
