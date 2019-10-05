@@ -1,13 +1,3 @@
-declare var process: Process;
-
-interface Process {
-  env: Env;
-}
-
-interface Env {
-  GHOST_API_KEY: string;
-}
-
 
 export const environment = {
   production: true,
