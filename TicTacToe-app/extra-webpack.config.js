@@ -5,7 +5,7 @@ module.exports = {
     // new webpack.EnvironmentPlugin(['KEY', 'SQLSERVER']),
     new webpack.DefinePlugin({
       'process.env': {
-        GHOST_API_KEY: JSON.stringify(process.env.GHOST_API_KEY.toString()),
+        GHOST_API_KEY: process.env.GHOST_API_KEY,
       }
     })
   ]
