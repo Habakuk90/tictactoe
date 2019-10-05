@@ -17,6 +17,9 @@ export class AppComponent {
     userService._isLoggedInSubject.subscribe(isLoggedIn => {
       this.isLoggedIn = isLoggedIn;
     });
+    console.log(process.env);
+
   }
+
 }
 
