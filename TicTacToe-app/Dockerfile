@@ -15,7 +15,8 @@ WORKDIR /ng-app
 COPY . .
 
 RUN npm install
-# ENV GHOST_KEY=${GHOST_KEY}
+ENV GHOST_API_KEY=$GHOST_API_KEY
+ENV GHOST_KEY=8a6a1a7b88abd518d6e578517f
 ## Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/ng build --aot --prod
 
