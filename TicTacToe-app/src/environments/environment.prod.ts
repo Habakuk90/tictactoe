@@ -7,7 +7,7 @@ export const environment = {
   ghost: {
     baseUrl: 'http://blog.andkra.eu/',
     contentApiUrl: 'ghost/api/v2/content/',
-    apiKey: process.env.GHOST_API_KEY
+    apiKey: 'process.env.GHOST_API_KEY'
   }
 };
 
