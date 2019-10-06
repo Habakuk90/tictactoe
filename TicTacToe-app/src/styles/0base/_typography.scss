@@ -1,7 +1,7 @@
 /** BODY vars */
-$font-size-body-lg: 1em;
-$font-size-body-md: 1em;
-$font-size-body-sm: 1em;
+$font-size-body-lg: 1rem;
+$font-size-body-md: 1rem;
+$font-size-body-sm: 1rem;
 
 $font-size-body: (
   lg: $font-size-body-lg,
@@ -10,18 +10,18 @@ $font-size-body: (
 );
 
 /** H1 vars */
-$font-size-h1-lg: 3em;
-$font-size-h1-md: 2.5em;
-$font-size-h1-sm: 2em;
+$font-size-h1-lg: 3rem;
+$font-size-h1-md: 2.5rem;
+$font-size-h1-sm: 2rem;
 $font-size-h1: (
   lg: $font-size-h1-lg,
   md: $font-size-h1-md,
   sm: $font-size-h1-sm
 );
 
-$line-height-h1-lg: 1.05em;
-$line-height-h1-md: 1.125em;
-$line-height-h1-sm: 1.25em;
+$line-height-h1-lg: 1.05rem;
+$line-height-h1-md: 1.125rem;
+$line-height-h1-sm: 1.25rem;
 $line-height-h1: (
   lg: $line-height-h1-lg,
   md: $line-height-h1-md,
@@ -29,18 +29,18 @@ $line-height-h1: (
 );
 
 /** H2 vars */
-$font-size-h2-lg: 2.25em;
-$font-size-h2-md: 2em;
-$font-size-h2-sm: 1.625em;
+$font-size-h2-lg: 2.4rem;
+$font-size-h2-md: 2.1rem;
+$font-size-h2-sm: 1.625rem;
 $font-size-h2: (
   lg: $font-size-h2-lg,
   md: $font-size-h2-md,
   sm: $font-size-h2-sm
 );
 
-$line-height-h2-lg: 1.25em;
-$line-height-h2-md: 1.25em;
-$line-height-h2-sm: 1.5384615em;
+$line-height-h2-lg: 1.25rem;
+$line-height-h2-md: 1.25rem;
+$line-height-h2-sm: 1.5384615rem;
 $line-height-h2: (
   lg: $line-height-h2-lg,
   md: $line-height-h2-md,
@@ -48,9 +48,9 @@ $line-height-h2: (
 );
 
 /** H3 vars */
-$font-size-h3-lg: 1.75em;
-$font-size-h3-md: 1.5em;
-$font-size-h3-sm: 1.375em;
+$font-size-h3-lg: 2.1rem;
+$font-size-h3-md: 1.8rem;
+$font-size-h3-sm: 1.375rem;
 
 $font-size-h3: (
   lg: $font-size-h3-lg,
@@ -58,9 +58,9 @@ $font-size-h3: (
   sm: $font-size-h3-sm
 );
 
-$line-height-h3-lg: 1.25em;
-$line-height-h3-md: 1.25em;
-$line-height-h3-sm: 1.13636364em;
+$line-height-h3-lg: 1.25rem;
+$line-height-h3-md: 1.25rem;
+$line-height-h3-sm: 1.13636364rem;
 $line-height-h3: (
   lg: $line-height-h3-lg,
   md: $line-height-h3-md,
@@ -68,9 +68,9 @@ $line-height-h3: (
 );
 
 /** H4 vars */
-$font-size-h4-lg: 1.125em;
-$font-size-h4-md: 1.125em;
-$font-size-h4-sm: 1.125em;
+$font-size-h4-lg: 1.125rem;
+$font-size-h4-md: 1.125rem;
+$font-size-h4-sm: 1.125rem;
 
 $font-size-h4: (
   lg: $font-size-h4-lg,
@@ -78,9 +78,9 @@ $font-size-h4: (
   sm: $font-size-h4-sm
 );
 
-$line-height-h4-lg: 1.222222222em;
-$line-height-h4-md: 1.222222222em;
-$line-height-h4-sm: 1.111111111em;
+$line-height-h4-lg: 1.222222222rem;
+$line-height-h4-md: 1.222222222rem;
+$line-height-h4-sm: 1.111111111rem;
 $line-height-h4: (
   lg: $line-height-h4-lg,
   md: $line-height-h4-md,
@@ -88,9 +88,9 @@ $line-height-h4: (
 );
 
 // /** H5 vars */
-// $font-size-h5-lg: 3em;
-// $font-size-h5-md: 2.5em;
-// $font-size-h5-sm: 2em;
+// $font-size-h5-lg: 3rem;
+// $font-size-h5-md: 2.5rem;
+// $font-size-h5-sm: 2rem;
 
 // $font-size-h5: (
 //   lg: $font-size-h5-lg,
@@ -98,9 +98,9 @@ $line-height-h4: (
 //   sm: $font-size-h5-sm
 // );
 
-// $line-height-h5-lg: 1.05em;
-// $line-height-h5-md: 1.125em;
-// $line-height-h5-sm: 1.25em;
+// $line-height-h5-lg: 1.05rem;
+// $line-height-h5-md: 1.125rem;
+// $line-height-h5-sm: 1.25rem;
 // $line-height-h5: (
 //   lg: $line-height-h5-lg,
 //   md: $line-height-h5-md,
@@ -108,9 +108,9 @@ $line-height-h4: (
 // );
 
 // /** H6 vars */
-// $font-size-h6-lg: 3em;
-// $font-size-h6-md: 2.5em;
-// $font-size-h6-sm: 2em;
+// $font-size-h6-lg: 3rem;
+// $font-size-h6-md: 2.5rem;
+// $font-size-h6-sm: 2rem;
 
 // $font-size-h6: (
 //   lg: $font-size-h6-lg,
@@ -118,9 +118,18 @@ $line-height-h4: (
 //   sm: $font-size-h6-sm
 // );
 
-// $line-height-h6-lg: 1.05em;
-// $line-height-h6-md: 1.125em;
-// $line-height-h6-sm: 1.25em;
+$font-size-p-lg: 22px;
+$font-size-p-md: 22px;
+$font-size-p-sm: 22px;
+
+$font-size-p: (
+  lg: $font-size-p-lg,
+  md: $font-size-p-md,
+  sm: $font-size-p-sm,
+);
+// $line-height-h6-lg: 1.05rem;
+// $line-height-h6-md: 1.125rem;
+// $line-height-h6-sm: 1.25rem;
 // $line-height-h6: (
 //   lg: $line-height-h6-lg,
 //   md: $line-height-h6-md,
@@ -163,6 +172,7 @@ h6 a {
 }
 h1 {
   @include add-font-size($font-size-h1);
+  font-weight: bold;
   // @include add-by-property($line-height-h1, line-height);
 }
 h2 {
@@ -187,7 +197,7 @@ h4 {
 // }
 
 // Text Styles
-em {
+rem {
   font-style: italic;
 }
 strong {
@@ -196,6 +206,8 @@ strong {
 small {
   font-size: 75%;
 }
+
+
 .light {
   font-weight: 300;
 }
