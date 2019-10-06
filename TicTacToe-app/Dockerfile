@@ -15,8 +15,11 @@ WORKDIR /ng-app
 COPY . .
 
 RUN npm install
+
+# setting TravisCI environment variable via docker build --build-args key=${GHOST_API_KEY}
 ARG key
 ENV GHOST_API_KEY=$key
+
 ## Build the angular app in production mode and store the artifacts in dist folder
 RUN $(npm bin)/ng build --aot --prod
 
