@@ -18,3 +18,4 @@ TicTacToe-app/src/styles/materialize-src/
 TicTacToe-app/backup/
 TicTacToe-app/npm-debug.log*
 TicTacToe-app/coverage/
+*.log
