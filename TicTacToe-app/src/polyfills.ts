@@ -80,5 +80,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 (window as any).process = {
-  env: { GHOST_API_KEY: undefined },
+  env: { GHOST_API_KEY: undefined, NODE_ENV: undefined },
 };
