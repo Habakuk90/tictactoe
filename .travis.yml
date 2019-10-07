@@ -10,3 +10,10 @@ script:
   - npm run lint
   - npm run build
   - ../Scripts/docker-deploy.sh
+
+
+deploy:
+  provider: script
+  script: bash Scripts/docker-deploy.sh
+  on:
+    branch: develop
