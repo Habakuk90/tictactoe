@@ -2,10 +2,12 @@ language: node_js
 node_js:
   - 11
 before_script:
-  - chmod +x Scripts/docker-deploy.sh
   - cd TicTacToe-app
   - npm install
 script:
   - npm run test
   - npm run lint
+  - npm run build
+  if: branch = master
+  - chmod +x Scripts/docker-deploy.sh
   - ../Scripts/docker-deploy.sh
