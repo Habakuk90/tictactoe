@@ -27,7 +27,6 @@ export class GhostHtmlComponent implements DoCheck {
       let array: NodeListOf<ChildNode>;
       const document = parser.parseFromString(this.post.html, 'text/html');
       array = document.querySelector('body').childNodes;
-      console.log(...([].slice.call(array)));
     }
   }
 }
