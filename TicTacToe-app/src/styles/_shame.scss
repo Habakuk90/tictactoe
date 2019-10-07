@@ -1,4 +1,3 @@
-
 // scoped styles on tictactoe aren't working
 $grid-columns: 3;
 $grid-rows: 3;
@@ -6,27 +5,23 @@ $border-tictactoe: 5px solid black;
 /*#\31 -2*/
 @for $i from 1 through $grid-columns {
   @for $j from 1 through $grid-rows {
-      #\3#{$i}-#{$j} {
-          @if $i == 1 or $i == 2 {
-              border-bottom: $border-tictactoe;
-          }
-          @if $j == 1 or $j == 2{
-              border-right: $border-tictactoe;
-          }
-
+    #\3#{$i}-#{$j} {
+      @if $i == 1 or $i == 2 {
+        border-bottom: $border-tictactoe;
       }
+      @if $j == 1 or $j == 2 {
+        border-right: $border-tictactoe;
+      }
+    }
   }
 }
 
-
-
-@import '0base/colors';
-@import '1atom/a-mixins';
-@import 'variables';
+@import "0base/colors";
+@import "1atom/a-mixins";
+@import "variables";
 // actual angular bug where the scoped css isnt apllied to innerHTML dom changes
 // https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling
 .ghost-html {
-
   display: flex;
   flex-flow: column wrap;
   align-items: center;
@@ -37,95 +32,78 @@ $border-tictactoe: 5px solid black;
     width: 100%;
     margin-top: 20px;
   }
-  // &__content {
-    // > :first-child {
-    //   margin: 0;
-    // }
-    position: relative;
-    background-color: $white;
 
-    > :first-child {
-      padding-top: 20px;
+  position: relative;
+  background-color: $white;
+
+  > :first-child {
+    padding-top: 20px;
+  }
+
+  > h2 {
+    line-height: 38px;
+  }
+
+  > ul,
+  ol {
+    @extend .m-list !optional;
+
+    > li {
+      @extend .m-list__item !optional;
     }
+  }
 
+  > pre {
+    @extend .m-codeblock !optional;
+  }
 
+  p {
+    @include add-font-size($font-size-p);
+  }
 
-    > h2 {
-      line-height: 38px;
-    }
+  :not(pre) > code {
+    background-color: #e5eff5;
+    padding: 1px 3px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+  }
 
-    > ul, ol {
-      @extend .m-list !optional;
+  .kg-width-full {
+    @include aspect-ratio-container(4, 3, cover) {
+      max-width: 100vw;
+      width: 100vw;
 
-      > li {
-        @extend .m-list__item !optional;
+      img {
+        padding-bottom: 20px;
+      }
+
+      figcaption {
+        position: relative;
+        text-align: center;
       }
     }
+  }
 
-    > pre {
-      @extend .m-codeblock !optional;
-    }
-
-    p  {
-      @include add-font-size($font-size-p);
-
-    }
-
-    :not(pre) > code {
-      background-color: #e5eff5;
-      padding: 1px 3px;
-      border-radius: 5px;
-    }
-
-    // > *:not(.kg-width-full) {
-    //   max-width: $content-inner-width;
-    //   margin: 20px auto 0;
-    //   padding: 0 25px;
-    // }
-
-    .kg-width-full {
-      @include aspect-ratio-container(16, 7, cover) {
-        max-width: 100vw;
-        width: 100vw;
-
-        img { padding-bottom: 20px;  }
-
-        figcaption { position: relative; text-align: center; }
+  .kg-image-card {
+    @include aspect-ratio-container(4, 3, cover) {
+      img {
+        padding: inherit;
+        padding-top: 0;
       }
     }
+  }
 
-    .kg-image-card {
-      @include aspect-ratio-container(16, 7, cover) {
-        img {padding: inherit; padding-top: 0;}
-      };
-
+  .kg-gallery-image {
+    @include aspect-ratio-container(16, 7, cover) {
+      margin-bottom: 20px;
     }
+  }
 
-    .kg-gallery-image {
-      @include aspect-ratio-container(16, 7, cover) {
-        margin-bottom: 20px;
-      };
-    }
+  figure {
+    margin: 1.5em 0 3em;
+  }
 
-    figure {
-      margin: 1.5em 0 3em;
-    }
-
-    .kg-image-card:not(.kg-width-full):not(.kg-width-wide) {
-      max-width: $content-inner-width;
-    }
-  // }
-}
-
-
-// workaround for full-width images to work; dont know how to fix yet
-section {
-  * {
-    &.ghost-html {
-
-    }
-
-
+  .kg-image-card:not(.kg-width-full):not(.kg-width-wide) {
+    max-width: $content-inner-width;
   }
 }
-
