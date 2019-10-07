@@ -1,3 +1,4 @@
+
 export const environment = {
   production: true,
   signalR: {
@@ -6,6 +7,6 @@ export const environment = {
   ghost: {
     baseUrl: 'http://blog.andkra.eu/',
     contentApiUrl: 'ghost/api/v2/content/',
-    apiKey: 'GHOST_API_KEY'
+    apiKey: process.env.GHOST_API_KEY
   }
 };

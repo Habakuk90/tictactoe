@@ -8,9 +8,9 @@ export const environment = {
     baseUrl: 'http://localhost:8081/api',
   },
   ghost: {
-    baseUrl: 'http://localhost:2368/',
+    baseUrl: 'http://blog.andkra.eu/',
     contentApiUrl: 'ghost/api/v2/content/',
-    apiKey: '13a1a657ee4a8bfd891d99089a'
+    apiKey: process.env.GHOST_API_KEY,
   }
 };
 

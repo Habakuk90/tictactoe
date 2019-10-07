@@ -1,14 +1,20 @@
 @import '0base/colors';
 @import '1atom/a-mixins';
 @import 'variables';
+@import '0base/settings';
 
 .ghost-html {
   &__title {
+    font: inherit;
     text-decoration: black;
     margin-bottom: 20px;
+    text-align: center;
   }
 
   &__image {
+    @media #{$medium-only} {
+      @include aspect-ratio-container(3, 2, cover);
+    }
     @include aspect-ratio-container(6, 1, cover);
   }
 }

@@ -1,5 +1,4 @@
 @import '1atom/a-mixins';
-
 .home {
   &__title {
     text-decoration: black;
@@ -10,3 +9,4 @@
     @include aspect-ratio-container(6, 1, cover);
   }
 }
+
