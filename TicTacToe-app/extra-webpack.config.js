@@ -1,7 +1,6 @@
 const webpack = require('webpack');
 require('dotenv').config()
 
-console.log(process.env);
 module.exports = {
   plugins: [
     // new webpack.EnvironmentPlugin(['GHOST_API_KEY']),

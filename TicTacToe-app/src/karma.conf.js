@@ -27,6 +27,6 @@ module.exports = function (config) {
     autoWatch: true,
     browsers: ['ChromeHeadless'],
     // browsers: ['Chrome'],
-    singleRun: true
+    singleRun: false
   });
 };

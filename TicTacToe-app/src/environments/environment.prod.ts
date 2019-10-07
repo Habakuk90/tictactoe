@@ -10,5 +10,3 @@ export const environment = {
     apiKey: process.env.GHOST_API_KEY
   }
 };
-
-// '8a6a1a7b88abd518d6e578517f'
