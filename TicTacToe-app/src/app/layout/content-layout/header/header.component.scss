@@ -1,5 +1,9 @@
-@import '0base/colors';
-@import 'variables';
+@import "0base/colors";
+@import "0base/mixins";
+@import "variables";
+
+@import "burger.scss";
+
 // TODOANDI: double declaration of o-nav styles. global and scoped angular.
 // @import '../../styles/3organism/o-nav';
 $nav-box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
@@ -25,7 +29,7 @@ $nav-box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
     &__item {
       padding: 10px;
       text-align: center;
-      transition: color .25s linear;
+      transition: color 0.25s linear;
       color: $black;
       position: relative;
       top: 1px;
@@ -55,4 +59,21 @@ $nav-box-shadow: 0px 4px 8px -3px rgba(17, 17, 17, 0.16);
   border: 1px solid white;
   border-radius: 25px;
   padding: 3px;
+}
+
+.burger {
+  $this: &;
+  &__icon {
+    @include burger(25px, 3px, 5px, #fff);
+
+    @include burger-top {
+      content: "\f00d";
+    }
+  }
+
+  &.isOpened {
+    #{$this}__icon {
+      @include burger-to-cross;
+    }
+  }
 }
