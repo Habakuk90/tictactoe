@@ -15,7 +15,7 @@ export class GameHubConnection extends BaseHubConnection {
   }
 
   public hello(...args:any[]): Promise<any> {
-    return this.getConnection().invoke('Hello');
+    return this.getConnection().invoke('Hello', ...args);
   }
 
   public onHello(method: (...args: any[]) => void) {

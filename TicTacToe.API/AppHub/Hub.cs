@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -13,6 +14,11 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
     /// </typeparam>
     public abstract class AppHub<T> : Hub<T> where T : class, IAppClient
     {
+        private readonly ILogger _logger;
+
+        public AppHub()
+        {
+        }
         #region public abstract
 
         /// <summary>
@@ -52,6 +58,8 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
+            //this.Clients.All.LogClient(this.Context.ConnectionId);
+            //this._logger.LogClient(this.Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
@@ -72,7 +80,7 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 /// <summary>
 /// Represents Base Hub methods for <see cref="Hub{T}"/>.
 /// </summary>
-public interface IAppClient
+public interface IAppClient : IAppLogger
 {
     void Hello(string message);
     /// <summary>
@@ -83,4 +91,18 @@ public interface IAppClient
     /// </param>
     /// <returns></returns>
     //Task UpdateUserList(IEnumerable<string> onlineUsers);
+}
+
+public interface IAppLogger
+{
+    string LogClient(string message);
+}
+
+public static class AppLoggerExtensions
+{
+    public static void LogClient(this ILogger logger, IHubCallerClients<IAppClient> clients, string message)
+    {
+        logger.LogDebug(message);
+        clients.All.LogClient(message);
+    }
 }

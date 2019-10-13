@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
     this.slug$.pipe(take(1)).subscribe(slug => this.get(slug));
     this.hub = this.hubService.createConnection('gameh', 'gamehub', GameHubConnection);
     var that = this;
-
+    this.registerOnMethods();
   }
   get(slug: string): void {
     const that = this;
@@ -58,7 +58,9 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
 
   registerOnMethods() {
     this.hub.isConnected.subscribe(x => {
-      this.hub.hello('eh joaaa').then(x => console.log(x));
+      if (x) {
+        this.hub.hello('eh joaaa').then(y => console.log(y));
+      }
     });
 
   }
