@@ -14,25 +14,36 @@ export class GameHubConnection extends BaseHubConnection {
     super(connection, name);
   }
 
+  public hello(...args:any[]): Promise<any> {
+    return this.getConnection().invoke('Hello');
+  }
+
+  public onHello(method: (...args: any[]) => void) {
+    this.isConnected.subscribe(x => {
+      if (x) {
+        this.getConnection().on('Hello', method);
+      }
+    });
+  }
   // game method
-  public onGameOver(method: (...args: any[]) => void) {
-    this.getConnection().on(TTTConnMethods.GameOver, method);
-  }
+  // public onGameOver(method: (...args: any[]) => void) {
+  //   this.getConnection().on(TTTConnMethods.GameOver, method);
+  // }
 
-  public gameOver(...args: any[]) {
-    return this.getConnection().invoke(TTTConnMethods.GameOver, ...args);
-  }
+  // public gameOver(...args: any[]) {
+  //   return this.getConnection().invoke(TTTConnMethods.GameOver, ...args);
+  // }
 
-  // TTT methods maybe auslagern
-  public tileClicked(...args: any[]): Promise<any> {
-    return this.getConnection().invoke(TTTConnMethods.TileClicked, ...args);
-  }
+  // // TTT methods maybe auslagern
+  // public tileClicked(...args: any[]): Promise<any> {
+  //   return this.getConnection().invoke(TTTConnMethods.TileClicked, ...args);
+  // }
 
-  public onTileChange(method: (...args: any[]) => void) {
-    return this.getConnection().on(TTTConnMethods.TileChange, method);
-  }
+  // public onTileChange(method: (...args: any[]) => void) {
+  //   return this.getConnection().on(TTTConnMethods.TileChange, method);
+  // }
 
-  public onSwitchTurn(method: (...args: any[]) => void) {
-    this.getConnection().on(TTTConnMethods.SwitchTurn, method);
-  }
+  // public onSwitchTurn(method: (...args: any[]) => void) {
+  //   this.getConnection().on(TTTConnMethods.SwitchTurn, method);
+  // }
 }

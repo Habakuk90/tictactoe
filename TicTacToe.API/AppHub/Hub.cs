@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
-using TicTacToe.WebApi.TicTacToe.Hubs.Interfaces;
 
 namespace TicTacToe.WebApi.TicTacToe.Hubs
 {
@@ -68,4 +67,20 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 
         #endregion
     }
+}
+
+/// <summary>
+/// Represents Base Hub methods for <see cref="Hub{T}"/>.
+/// </summary>
+public interface IAppClient
+{
+    void Hello(string message);
+    /// <summary>
+    /// Invokes the UpdateUserList method to Clients.
+    /// </summary>
+    /// <param name="onlineUsers">
+    /// List of current online Users.
+    /// </param>
+    /// <returns></returns>
+    //Task UpdateUserList(IEnumerable<string> onlineUsers);
 }

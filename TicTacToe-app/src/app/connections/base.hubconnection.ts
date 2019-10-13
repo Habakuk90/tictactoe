@@ -2,7 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HubConnection } from '@aspnet/signalr';
 import * as signalR from '@aspnet/signalr';
 import { debuglog } from 'util';
-import { environment } from 'src/environments/environment.docker';
+import { environment } from 'src/environments/environment';
 
 export interface IBaseHubConnection {
   name: string;
@@ -67,7 +67,7 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
   }
 
   public addCurrentUser(...args: any[]): Promise<any> {
-      return this.getConnection().invoke(BaseConnMethods.AddCurrentUser, ...args);
+    return this.getConnection().invoke(BaseConnMethods.AddCurrentUser, ...args);
   }
 
   public off(methodName: string): void {
@@ -75,8 +75,8 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
   }
 
   private buildConnection(route: string): signalR.HubConnection {
-    const url = environment.signalR.baseUrl + route + this.getToken('auth_token');
-
+    // const url = environment.signalR.baseUrl + route + this.getToken('auth_token');
+    const url = environment.signalR.baseUrl + route;
     return new signalR.HubConnectionBuilder()
       .withUrl(url)
       .configureLogging(signalR.LogLevel.Information)
@@ -87,8 +87,8 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
     let tokenValue = '';
     const token = localStorage.getItem(tokenName);
 
-      if (token !== '') {
-        tokenValue = '?token=' + token;
+    if (token !== '') {
+      tokenValue = '?token=' + token;
     }
 
     return tokenValue;

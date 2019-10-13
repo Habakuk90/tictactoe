@@ -1,11 +1,11 @@
 TicTacToe.API/packages/
 TicTacToe.API/TicTacToe.WebApi/bin/Debug/
 TicTacToe.API/ConsoleApp1/
-TicTacToe.API/TicTacToe.WebApi/obj/
+TicTacToe.API/**/obj/
 TicTacToe-app/node_modules/
 docu/
 TicTacToe-app/dist/
-TicTacToe.API/TicTacToe.WebApi/bin/
+TicTacToe.API/**/bin/
 TicTacToe.API/.vs/
 .env
 TicTacToe-app/.vscode/
@@ -13,3 +13,4 @@ TicTacToe-app/.vscode/
 TicTacToe-app/npm-debug.log*
 TicTacToe-app/coverage/
 *.log
+*.user

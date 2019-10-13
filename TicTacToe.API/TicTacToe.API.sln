@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2010
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TicTacToe.WebApi", "TicTacToe.WebApi\TicTacToe.WebApi.csproj", "{AF3065BC-34E1-49A2-B63D-5682D750AFFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{93C5BC3B-95A3-4BEA-9EE5-DBECA89AD3F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameHub", "GameHub\GameHub.csproj", "{BE2AE212-FA36-426F-ADE3-D4EFE4BBA668}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHub", "AppHub\AppHub.csproj", "{5F9D8AAD-2F6B-4E83-8918-C59A59791026}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,14 @@ Global
 		{AF3065BC-34E1-49A2-B63D-5682D750AFFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF3065BC-34E1-49A2-B63D-5682D750AFFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF3065BC-34E1-49A2-B63D-5682D750AFFE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{93C5BC3B-95A3-4BEA-9EE5-DBECA89AD3F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{93C5BC3B-95A3-4BEA-9EE5-DBECA89AD3F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{93C5BC3B-95A3-4BEA-9EE5-DBECA89AD3F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{93C5BC3B-95A3-4BEA-9EE5-DBECA89AD3F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE2AE212-FA36-426F-ADE3-D4EFE4BBA668}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE2AE212-FA36-426F-ADE3-D4EFE4BBA668}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE2AE212-FA36-426F-ADE3-D4EFE4BBA668}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE2AE212-FA36-426F-ADE3-D4EFE4BBA668}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F9D8AAD-2F6B-4E83-8918-C59A59791026}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F9D8AAD-2F6B-4E83-8918-C59A59791026}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F9D8AAD-2F6B-4E83-8918-C59A59791026}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F9D8AAD-2F6B-4E83-8918-C59A59791026}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@ import { ISettingsResponseParams, IResponse, ITagsResponseParams } from '../http
 import { IPageResponse, IPostResponse, ISettingsResponse, ITagResponse } from '../http/response';
 import { IBrowseOptions } from '../http/browseParams';
 import { environment } from 'src/environments/environment';
+import { basename } from 'path';
 
 @Injectable({
   providedIn: 'root'
@@ -86,5 +87,10 @@ export class GhostService extends ApiService {
   private replaceBaseUrl(element: IResponse, replaceWith: string) {
     const baseUrl = environment.ghost.baseUrl;
     return element.url.replace(baseUrl, replaceWith);
+  }
+
+
+  private toBeDefined() {
+    super.http.get(environment.signalR.baseUrl)
   }
 }
