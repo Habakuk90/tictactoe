@@ -24,38 +24,43 @@ enum BaseConnMethods {
 export abstract class BaseHubConnection implements IBaseHubConnection {
   private connection: HubConnection;
   public name: string;
-  abstract connectionMethods: object;
+  abstract invokeMethdos: object;
+  abstract onMethods: object;
 
   isConnected = new BehaviorSubject<boolean>(false);
 
   constructor(name: string, protected route = 'base') {
     this.name = name;
     this.connection = this.buildConnection();
-    if (this.connection.state === signalR.HubConnectionState.Disconnected) {
-      this.startConnection();
-    } else {
-      debuglog('already connected!');
-    }
+    this.startConnection();
   }
 
   protected getConnection(): HubConnection {
     return this.connection;
   }
 
-  protected startConnection(): Promise<void> {
-    return this.connection.start().then(() => {
+  public async startConnection(): Promise<void> {
+    try {
+      await this.connection.start();
       this.isConnected.next(true);
-    }, err => {
+    } catch (err) {
       this.isConnected.next(false);
       // error handling disconnect / reconnect / logout
       throw new Error(err);
-    });
+    }
   }
 
   public stopConnection(): Promise<void> {
-    Object.keys(this.connectionMethods).forEach(x => {
+    Object.keys(this.invokeMethdos).forEach(x => {
       this.off(x);
     });
+
+    Object.keys(this.onMethods).forEach(x => {
+      this.off(x);
+    });
+
+    this.isConnected.unsubscribe();
+
     return this.connection.stop();
   }
 

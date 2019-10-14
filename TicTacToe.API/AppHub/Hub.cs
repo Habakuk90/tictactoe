@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
 
-namespace TicTacToe.WebApi.TicTacToe.Hubs
+namespace AppHub
 {
     /// <summary>
     /// Represents an abstract BaseHub with all User relevant connection Methods
@@ -72,35 +71,5 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         }
 
         #endregion
-    }
-}
-
-/// <summary>
-/// Represents Base Hub methods for <see cref="Hub{T}"/>.
-/// </summary>
-public interface IAppClient : IAppLogger, IClientProxy
-{
-    Task<string> Hello(string message);
-    /// <summary>
-    /// Invokes the UpdateUserList method to Clients.
-    /// </summary>
-    /// <param name="onlineUsers">
-    /// List of current online Users.
-    /// </param>
-    /// <returns></returns>
-    //Task UpdateUserList(IEnumerable<string> onlineUsers);
-}
-
-public interface IAppLogger
-{
-    string LogClient(string message);
-}
-
-public static class AppLoggerExtensions
-{
-    public static void LogClient(this ILogger logger, IHubCallerClients<IAppClient> clients, string message)
-    {
-        logger.LogDebug(message);
-        clients.All.LogClient(message);
     }
 }

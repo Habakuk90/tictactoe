@@ -1,24 +1,16 @@
-﻿
-
-namespace GameHub
+﻿namespace GameHub
 {
     using System.Threading.Tasks;
-    using Microsoft.AspNetCore.SignalR;
-    using TicTacToe.WebApi.TicTacToe.Hubs;
+    using AppHub;
 
-    public class GameHub : AppHub<ITicTacToeClient>
+    public class GameHub : AppHub<IGameClient>
     {
-        public ITicTacToeClient GameClient { get; private set; }
+        public IGameClient GameClient { get; private set; }
 
 
         public GameHub()
         {
            
-        }
-
-        public string Hello(string message)
-        {
-            return message;
         }
 
         //public override Task AddCurrentUser(string userName, bool isAnonymous = true)
@@ -36,9 +28,9 @@ namespace GameHub
         //    throw new System.NotImplementedException();
         //}
     }
-    public interface ITicTacToeClient : IAppClient
+    public interface IGameClient : IAppClient
     {
-        Task Hello(string message);
+        //Task Hello(string message);
         //Task SwitchTurn();
 
         //Task TileChange(string tileId);

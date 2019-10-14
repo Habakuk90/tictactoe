@@ -1,14 +1,17 @@
 import { BaseHubConnection } from './base.hubconnection';
 
-enum TTTConnMethods {
-  TileClicked = 'TileClicked',
-  TileChange = 'TileChange',
-  SwitchTurn = 'SwitchTurn',
-  GameOver = 'GameOver'
+enum GameConnectionInvoke {
 }
 
+enum GameConnectionOn {
+}
+
+
 export class GameHubConnection extends BaseHubConnection {
-  connectionMethods = TTTConnMethods;
+
+  invokeMethdos = GameConnectionInvoke;
+
+  onMethods = GameConnectionOn;
 
   constructor(name: string, public readonly route = 'gameh') {
     super(name, route);
