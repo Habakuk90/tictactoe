@@ -12,16 +12,11 @@ namespace ChatHub
         public async Task BroadcastMessage(string message)
         {
             await this.Clients.All.SendMessage(message);
-            //this.Clients.Clients()
-            //return message;
         }
     }
 
     public interface IChatClient : IAppClient
     {
         Task SendMessage(string message);
-
-
-
     }
 }

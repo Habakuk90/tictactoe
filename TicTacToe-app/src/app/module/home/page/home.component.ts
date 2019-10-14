@@ -8,8 +8,7 @@ import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 import { Observable } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { GameHubConnection } from 'src/app/connections/game.hubconnection';
-import { HubService } from 'src/app/connections/hub.service';
+import { HubFactory } from 'src/app/connections/hub.factory';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +16,7 @@ import { HubService } from 'src/app/connections/hub.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit, OnDestroy, HubComponent {
-  hub: GameHubConnection;
+  hub: HomeHubConnection;
   page: IResponse;
   title: string;
   protected slug$: Observable<string>;
@@ -25,7 +24,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   constructor(
     private userService: UserService,
     private ghost: GhostService,
-    private hubService: HubService,
     private route: ActivatedRoute) {
   }
 
@@ -34,8 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   ngOnInit() {
     this.slug$ = this.route.paramMap.pipe(map(params => (params.get('slug'))));
     this.slug$.pipe(take(1)).subscribe(slug => this.get(slug));
-    this.hub = this.hubService.createConnection('gameh', 'gamehub', GameHubConnection);
-    var that = this;
+    this.hub = new HubFactory('name').createConnection(HomeHubConnection);
+
     this.registerOnMethods();
   }
   get(slug: string): void {
@@ -59,7 +57,6 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   registerOnMethods() {
     this.hub.isConnected.subscribe(x => {
       if (x) {
-        this.hub.hello('eh joaaa').then(y => console.log(y));
       }
     });
 
