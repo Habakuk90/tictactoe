@@ -21,20 +21,20 @@ namespace GameHub
             return message;
         }
 
-        public override Task AddCurrentUser(string userName, bool isAnonymous = true)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override Task AddCurrentUser(string userName, bool isAnonymous = true)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public override Task<string> JoinGroup(string groupName)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override Task<string> JoinGroup(string groupName)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
 
-        public override Task<string> LeaveGroup(string groupName)
-        {
-            throw new System.NotImplementedException();
-        }
+        //public override Task<string> LeaveGroup(string groupName)
+        //{
+        //    throw new System.NotImplementedException();
+        //}
     }
     public interface ITicTacToeClient : IAppClient
     {

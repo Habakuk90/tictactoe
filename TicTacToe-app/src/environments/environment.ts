@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   signalR: {
-    baseUrl: 'https://localhost:44304/',
+    baseUrl: 'http://localhost:56787/',
   },
   ghost: {
     baseUrl: 'http://blog.andkra.eu/',

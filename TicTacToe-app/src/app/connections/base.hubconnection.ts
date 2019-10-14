@@ -7,8 +7,6 @@ import { environment } from 'src/environments/environment';
 export interface IBaseHubConnection {
   name: string;
   isConnected: BehaviorSubject<boolean>;
-  addCurrentUser(...args: any[]): void;
-  getConnection(): HubConnection;
   stopConnection(): Promise<void>;
 }
 
@@ -30,25 +28,28 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
 
   isConnected = new BehaviorSubject<boolean>(false);
 
-  constructor(route: string, name: string) {
+  constructor(name: string, protected route = 'base') {
     this.name = name;
-    this.connection = this.buildConnection(route);
+    this.connection = this.buildConnection();
     if (this.connection.state === signalR.HubConnectionState.Disconnected) {
-      this.connection.start().then(() => {
-        this.isConnected.next(true);
-      }, err => {
-        this.isConnected.next(false);
-        // error handling disconnect / reconnect / logout
-        throw new Error(err);
-      });
+      this.startConnection();
     } else {
       debuglog('already connected!');
     }
-
   }
 
-  public getConnection(): HubConnection {
+  protected getConnection(): HubConnection {
     return this.connection;
+  }
+
+  protected startConnection(): Promise<void> {
+    return this.connection.start().then(() => {
+      this.isConnected.next(true);
+    }, err => {
+      this.isConnected.next(false);
+      // error handling disconnect / reconnect / logout
+      throw new Error(err);
+    });
   }
 
   public stopConnection(): Promise<void> {
@@ -70,13 +71,13 @@ export abstract class BaseHubConnection implements IBaseHubConnection {
     return this.getConnection().invoke(BaseConnMethods.AddCurrentUser, ...args);
   }
 
-  public off(methodName: string): void {
+  protected off(methodName: string): void {
     this.getConnection().off(methodName);
   }
 
-  private buildConnection(route: string): signalR.HubConnection {
+  private buildConnection(): signalR.HubConnection {
     // const url = environment.signalR.baseUrl + route + this.getToken('auth_token');
-    const url = environment.signalR.baseUrl + route;
+    const url = environment.signalR.baseUrl + this.route;
     return new signalR.HubConnectionBuilder()
       .withUrl(url)
       .configureLogging(signalR.LogLevel.Information)

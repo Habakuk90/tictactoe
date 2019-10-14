@@ -34,7 +34,7 @@ export class ModalComponent implements OnInit {
       new ChallengeResponse(this.activeModal.args.enemyUserName, 'tictactoe', status);
 
     if (hub.isConnected.value) {
-      hub.challengeResponse(resp);
+      // hub.challengeResponse(resp);
       this.modalService.closeModal();
     }
   }

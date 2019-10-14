@@ -30,23 +30,23 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns>
         /// Same groupname
         /// </returns>
-        public abstract Task<string> JoinGroup(string groupName);
+        //public abstract Task<string> JoinGroup(string groupName);
 
-        /// <summary>
-        /// Leave Group Hub method.
-        /// </summary>
-        /// <param name="groupName">
-        /// Given name for group from frontend.
-        /// </param>
-        public abstract Task<string> LeaveGroup(string groupName);
+        ///// <summary>
+        ///// Leave Group Hub method.
+        ///// </summary>
+        ///// <param name="groupName">
+        ///// Given name for group from frontend.
+        ///// </param>
+        //public abstract Task<string> LeaveGroup(string groupName);
 
-        /// <summary>
-        /// Marks Current user as online, if new user, add to DB
-        /// </summary>
-        /// <param name="userName">
-        /// userName of current User.
-        /// </param>
-        public abstract Task AddCurrentUser(string userName, bool isAnonymous = true);
+        ///// <summary>
+        ///// Marks Current user as online, if new user, add to DB
+        ///// </summary>
+        ///// <param name="userName">
+        ///// userName of current User.
+        ///// </param>
+        //public abstract Task AddCurrentUser(string userName, bool isAnonymous = true);
 
         #endregion
 
@@ -58,8 +58,6 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
         /// <returns></returns>
         public override async Task OnConnectedAsync()
         {
-            //this.Clients.All.LogClient(this.Context.ConnectionId);
-            //this._logger.LogClient(this.Context.ConnectionId);
             await base.OnConnectedAsync();
         }
 
@@ -80,9 +78,9 @@ namespace TicTacToe.WebApi.TicTacToe.Hubs
 /// <summary>
 /// Represents Base Hub methods for <see cref="Hub{T}"/>.
 /// </summary>
-public interface IAppClient : IAppLogger
+public interface IAppClient : IAppLogger, IClientProxy
 {
-    void Hello(string message);
+    Task<string> Hello(string message);
     /// <summary>
     /// Invokes the UpdateUserList method to Clients.
     /// </summary>

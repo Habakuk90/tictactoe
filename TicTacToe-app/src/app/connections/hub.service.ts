@@ -3,12 +3,12 @@ import { Injectable } from '@angular/core';
 import { debuglog } from 'util';
 
 
-class HubFactory {
-  constructor(private route: string, private name: string) { }
+export class HubFactory {
+  constructor(private name: string) { }
 
-  createConnection<T extends BaseHubConnection>(type: new (route: string, name: string) => T): T {
+  createConnection<T extends BaseHubConnection>(type: new (name: string, route?: string) => T): T {
     if (type != null && typeof type === typeof BaseHubConnection) {
-      const conn = new type(this.route, this.name);
+      const conn = new type(this.name);
       return conn;
     } else {
       throw new Error('Error with given type');
@@ -34,20 +34,6 @@ export class HubService {
 
   public getByType<T extends BaseHubConnection>(type: T): T {
     return <T>this.hubs.filter(x => typeof type === typeof x)[0] || null;
-  }
-
-  public createConnection<T extends BaseHubConnection>(
-    route: string, name: string,
-    type: new (route: string, name: string) => T): T {
-
-    if (route.length > 0 && name.length > 0) {
-      const hubConnection = new HubFactory(route, name).createConnection(type);
-      this.add(hubConnection);
-
-      return hubConnection;
-    } else {
-      throw new Error(`could not create connection. route: ${route}; name: ${name}`);
-    }
   }
 
   public stopConnection(hub: BaseHubConnection): void {
