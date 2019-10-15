@@ -5,6 +5,9 @@ import { HomeHubConnection } from 'src/app/connections/home.hubconnection';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { IResponse } from 'src/app/shared/http/responseParams';
 import { IBrowseOptions } from 'src/app/shared/http/browseParams';
+import { Observable } from 'rxjs';
+import { take, map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -15,16 +18,21 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
   hub: HomeHubConnection;
   page: IResponse;
   title: string;
-
+  protected slug$: Observable<string>;
 
   constructor(
     private userService: UserService,
-    private ghost: GhostService) {
+    private ghost: GhostService,
+    private route: ActivatedRoute) {
   }
 
   public get userName() { return this.userService.currentUserName; }
 
   ngOnInit() {
+    this.slug$ = this.route.paramMap.pipe(map(params => (params.get('slug'))));
+    this.slug$.pipe(take(1)).subscribe(slug => this.get(slug));
+  }
+  get(slug: string): void {
     const that = this;
 
     const options: IBrowseOptions = {
