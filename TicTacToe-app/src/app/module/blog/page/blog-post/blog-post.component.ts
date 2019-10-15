@@ -15,7 +15,6 @@ import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 export class BlogPostComponent implements OnInit {
   protected slug$: Observable<string>;
   public post: IResponse;
-  public dings: Subscription;
 
   constructor(
     private titleService: Title,

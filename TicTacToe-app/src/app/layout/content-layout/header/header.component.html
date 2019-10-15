@@ -1,16 +1,35 @@
 <header>
   <nav class="o-nav">
-    <ul class="o-nav__list m-list">
+    <ul class="o-nav__list m-list" [class.isOpened]="isOpened">
       <li class="m-list__item" routerLink="/">
         <span>Home/Logo</span>
       </li>
-      <li *ngFor="let item of navigation; trackById" class="m-list__item" routerLink="{{item.url}}">
-        <span>{{item.label}}</span>
-      </li>
-      <li *ngFor="let tag of tags; trackById" class="m-list__item" routerLink="/blog/tags/{{tag.slug}}">
+      <ng-container *ngIf="!isMobile">
+        <li *ngFor="let item of navigation; trackById" class="m-list__item"
+          routerLink="{{item.url}}">
+          <span>{{item.label}}</span>
+        </li>
+      </ng-container>      <!-- <li *ngFor="let tag of tags; trackById" class="m-list__item" >
         <span>{{tag.name}}</span><span> ({{tag.count.posts}})</span>
-      </li>
+      </li> -->
+      <li class="m-list__item burger" (click)="isOpened=!isOpened" [class.isOpened]="isOpened">
+        <div class="burger__icon"></div>
 
+        <div class="o-nav burger__menu" *ngIf="isOpened">
+          <ul class="o-nav__list--burger">
+            <li *ngFor="let tag of tags; trackById" class="m-list__item">
+              <span>{{tag.name}}</span><span> ({{tag.count.posts}})</span>
+            </li>
+            <ng-container *ngIf="isMobile">
+              <li *ngFor="let item of navigation; trackById" class="m-list__item"
+                routerLink="{{item.url}}">
+                <span>{{item.label}}</span>
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </li>
     </ul>
+
   </nav>
 </header>
