@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
+import { map, take } from 'rxjs/operators';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
 import { IResponse } from 'src/app/shared/http/responseParams';
 import { IBrowseOptions } from 'src/app/shared/http/browseParams';
 
 @Component({
-  selector: 'app-blog-post',
-  templateUrl: './blog-post.component.html',
-  styleUrls: ['./blog-post.component.scss']
+  selector: 'app-blog-page',
+  templateUrl: './blog-page.component.html',
+  styleUrls: ['./blog-page.component.scss']
 })
-export class BlogPostComponent implements OnInit {
-  public post: IResponse;
+export class BlogPageComponent implements OnInit {
+  public page: IResponse;
 
   constructor(
     private titleService: Title,
@@ -21,7 +23,7 @@ export class BlogPostComponent implements OnInit {
   ngOnInit() {
     // MAGICSTRING see blog.routing.ts
     this.route.paramMap.subscribe(x => {
-      return this.get(x.get('slug'));
+      return this.get(x.get('pageSlug'));
     });
   }
 
@@ -32,10 +34,10 @@ export class BlogPostComponent implements OnInit {
       filter: 'slug:' + slug,
       include: 'authors,tags'
     };
-    this.ghostService.getBlogPage(options)
-      .subscribe(post => {
-        that.post = post;
-        that.titleService.setTitle(that.post.title);
+    this.ghostService.getPages(options)
+      .subscribe(pages => {
+        that.page = pages[0];
+        that.titleService.setTitle(that.page.title);
       });
   }
 }

@@ -19,7 +19,6 @@ export class GhostInterceptor extends BaseService implements HttpInterceptor {
       headers: req.headers.set('Content-Type', 'application/json'),
       params: req.params.set('key', key)
     });
-
     return next.handle(req).pipe(catchError(super.handleError), map(x => x));
   }
 }

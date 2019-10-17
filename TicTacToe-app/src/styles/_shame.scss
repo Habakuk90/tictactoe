@@ -23,10 +23,11 @@ $border-tictactoe: 5px solid black;
 // https://stackoverflow.com/questions/36265026/angular-2-innerhtml-styling
 .ghost-html {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   align-items: center;
 
   max-width: $content-inner-width;
+  margin: 0 auto;
 
   > * {
     width: 100%;

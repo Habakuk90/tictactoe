@@ -16,7 +16,6 @@ export class ApiService extends BaseService {
 
   protected browse<T extends IBaseResponse>(obj: IEndpoint) {
     const url = this.apiUrl + obj.endpoint;
-
     return this.http.get<T>(url, { params: obj.params });
   }
 }
