@@ -6,6 +6,6 @@ export const environment = {
   ghost: {
     baseUrl: 'http://blog.andkra.eu/',
     contentApiUrl: 'ghost/api/v2/content/',
-    apiKey: '8a6a1a7b88abd518d6e578517f',
+    apiKey: 'ADD_KEY_HERE',
   }
 };
