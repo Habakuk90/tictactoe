@@ -1,19 +1,21 @@
 import { TestBed, inject, fakeAsync } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { GhostService } from './ghost.service';
 
 describe('GhostService', () => {
+  let ghostService: GhostService;
+  let httpTestingControler: HttpTestingController;
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [
-        HttpClientTestingModule,
+        GhostService
       ]
     });
-  });
 
-  beforeEach(() => {
-
+    ghostService = TestBed.get(GhostService);
+    httpTestingControler = TestBed.get(HttpTestingController);
   });
 
   it('should be initialized',
@@ -22,4 +24,8 @@ describe('GhostService', () => {
         expect(ghostService).toBeTruthy();
         expect(http).toBeTruthy();
       }));
+
+  it('Should return and IResponse array', done => {
+    // const obs$ = new GhostService()
+  });
 });

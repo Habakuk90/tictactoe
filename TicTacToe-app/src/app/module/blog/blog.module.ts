@@ -5,13 +5,15 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { BlogRoutingModule } from './blog.routing';
 import { TagsDetailComponent } from './page/tags-detail/tags-detail.component';
 import { BlogTeaserComponent } from './component/blog-teaser/blog-teaser.component';
+import { BlogPageComponent } from './page/blog-page/blog-page.component';
 
 @NgModule({
   declarations: [
     BlogComponent,
     BlogPostComponent,
     TagsDetailComponent,
-    BlogTeaserComponent
+    BlogTeaserComponent,
+    BlogPageComponent
   ],
   imports: [
     SharedModule,

@@ -13,3 +13,6 @@ TicTacToe-app/.vscode/
 TicTacToe-app/npm-debug.log*
 TicTacToe-app/coverage/
 *.log
+**/obj
+**/bin
+*.user
