@@ -28,7 +28,7 @@ describe('GhostService', () => {
 
   it('should be initialized',
     inject([GhostService, HttpClientTestingModule],
-      (ghostService: GhostService, http: HttpClientTestingModule) => {
+      (http: HttpClientTestingModule) => {
         expect(ghostService).toBeTruthy();
         expect(http).toBeTruthy();
       }));
@@ -41,9 +41,8 @@ describe('GhostService', () => {
     const getPages$ = ghostService.getPages(options);
     getPages$.subscribe(response => {
       expect(instanceOfIResponse(response)).toBe(true);
-      done();
     });
-
+    done();
   });
 
 
