@@ -6,11 +6,13 @@ import { HomeRoutingModule } from './home.routing';
 
 import { SharedModule } from '../../shared/shared.module';
 import { SelectPlayerComponent } from './page/select-player/select-player.component';
+import { BlogPageComponent } from '../blog/page/blog-page/blog-page.component';
 
 @NgModule({
     declarations: [
         HomeComponent,
-        SelectPlayerComponent
+        SelectPlayerComponent,
+        BlogPageComponent
     ],
     imports: [
         SharedModule,

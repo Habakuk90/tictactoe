@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { map, take } from 'rxjs/operators';
 import { GhostService } from 'src/app/shared/services/ghost.service';
 import { Title } from '@angular/platform-browser';
 import { IResponse } from 'src/app/shared/http/responseParams';
