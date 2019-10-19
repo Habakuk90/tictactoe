@@ -20,6 +20,7 @@ export class TagsDetailComponent implements OnInit {
   }
 
   ngOnInit() {
+    // MAGICSTRING see blog.routing.ts
     this.route.paramMap.subscribe(x => {
       return this.get(x.get('tagSlug'));
     });

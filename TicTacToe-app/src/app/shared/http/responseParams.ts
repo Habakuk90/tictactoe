@@ -15,11 +15,11 @@ interface ISocialMediaResponse {
 export interface IResponse extends IMetaResponse, ISocialMediaResponse {
   id?: string;
   uuid?: string;
-  comment_id?: string;
 
   title?: string;
   html?: string;
   slug?: string;
+  url?: string;
 
   featured?: boolean;
 
@@ -39,7 +39,7 @@ export interface IResponse extends IMetaResponse, ISocialMediaResponse {
   tags?: Array<ITagsResponseParams>;
   primary_tag?: ITagsResponseParams;
 
-  url?: string;
+  comment_id?: string;
   excerpt?: string;
 }
 

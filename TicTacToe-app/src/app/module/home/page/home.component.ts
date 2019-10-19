@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit, OnDestroy, HubComponent {
       formats: 'html,plaintext'
     };
 
-    this.ghost.getPage(options).subscribe(pages => {
+    this.ghost.getPages(options).subscribe(pages => {
       that.page = pages[0];
 
       that.title = that.page.title;

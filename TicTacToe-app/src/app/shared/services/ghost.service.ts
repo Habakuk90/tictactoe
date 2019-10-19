@@ -18,7 +18,7 @@ export class GhostService extends ApiService {
     super(http);
   }
 
-  public getPage(options: IBrowseOptions): Observable<IResponse[]> {
+  public getPages(options: IBrowseOptions): Observable<IResponse[]> {
     const endpoint = new PagesEndpoint(options);
 
     return super.browse<IPageResponse>(endpoint)
