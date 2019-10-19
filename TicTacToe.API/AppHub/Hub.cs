@@ -70,6 +70,11 @@ namespace AppHub
             await base.OnDisconnectedAsync(exception);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+
         #endregion
     }
 }
