@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - 11
+cache: 
+  - npm
+  - node_modules
 before_script:
   - cd TicTacToe-app
   - npm install
