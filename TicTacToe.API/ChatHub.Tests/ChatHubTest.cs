@@ -26,7 +26,7 @@ namespace ChatHub.Tests
             };
 
             // act
-            await chatHub.BroadcastMessage("test works");
+            await chatHub.Clients.All.SendMessage("test works");
 
 
             // assert
