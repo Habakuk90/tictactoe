@@ -1,5 +1,6 @@
-"# tictactoe" 
+Just a reference project. The code "monolith" is broke up into 
+(The angular app)[https://github.com/Habakuk90/app.andkra.eu]
 
-This a application which uses Angular 6, ASP.NET Core with EF Core and SignalR Core
+(SignalR Hubs)[https://github.com/Habakuk90/hub.andkra.eu]
 
-Web Socket based game platform
+This project will probably still be used for a docker-compose / envoy proxy kind of way.
