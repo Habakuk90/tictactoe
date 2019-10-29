@@ -1,2 +1,4 @@
 TicTacToe.API/
 TicTacToe-app/
+*.log
+.env

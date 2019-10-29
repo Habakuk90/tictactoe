@@ -1,0 +1,59 @@
+CMS dotnet core
+
+	- Orchard Core CMS 
+		+ Working CMS
+			- defined and customizable workflows
+		
+		
+		- Alpha stage (got their whole core backend on my Solution == no dll reference)
+			+ everything is still work in progress for cutomization (community driven)
+		
+		- Views 
+			- handlebars
+		
+		progress:
+			- installed - worked good
+			- tried to customize stuff
+			- reminded me of Sitecore in a bit
+			
+	- Cofoundry
+		+ Open Source
+		+ Build and run 
+		+ Own Web to customize
+		+ good code
+		+ Page Editor
+		
+		
+		- no contributing (yet)
+		- 
+		
+		
+		
+		
+1100-1115 PR cchekc
+
+account management ng-cloak auf die tabelle
+
+
+
+
+Delete Item Stuff
+
+parameters["lang"] = context.Items.FirstOrDefault().Language.Name;
+string lang = args.Parameters["lang"];
+
+
+var parentTemp = obj.Parent;
+            while (!parentTemp.HasTemplate(new ID("{4CBADF5A-1DDE-4EEA-ADDF-497DD41723B5}")))
+            {
+                parentTemp = parentTemp.Parent;
+            }
+
+            string sourceItemPath = obj.Paths.Path;
+            string pagePath = parentTemp.Paths.Path;
+
+            var dataSourceToCompare = sourceItemPath.Substring(pagePath.Length);
+
+            IEnumerable<RenderingDefinition> renderings = parentTemp.GetRenderingDefinitions();
+
+            var renderingIds = renderings.Select(x => x.GetDataSourceIdFromRendering()).Distinct();

@@ -1,0 +1,76 @@
+Todo
+SignalR als eigenständige Api verwenden (Shared, auch API Login etc.)
+
+[Server]
+- Add Migration
+
+[API]
+- Loading SignalR verbindung
+- SignalR.connection erst wenn LoggedIn / home für alle? oder sofort LoginPage wenn nicht logged in
+
+"Doku"
+[Server API]
+	SignalR
+		GameHub
+			_connections : ConnectionMapping<GameUserModel>
+			_userOnline : HashSet<GameUserModel>
+			GetAllUser() : IEnumerable<GameUserModel>
+			ChallengePlayer(selectedPlayer) : void
+			ChallengeResponse(enemy, response) : void
+			SetUpGame(enemy) : void
+			TileClicked(room, id1, id2, tileId)
+			
+			override OnConnectedAsync() : Task
+			override OnDisconnectedAsync(exception) : Task
+		
+		
+	UserManagement : IUserManagement
+		Login
+		Logout
+		Register
+
+
+[Client APP]
+	Components
+		App
+			
+		Home
+			SelectGame
+			SelectEnemy
+		GameContainer
+			Game
+				GameModal
+				
+				TicTacToe
+			
+	Services
+		GameHubConnection
+			connection: HubConnection
+			enemyUser: IGameUser
+			currentUser: IGameUser
+			ctor()
+			getConnection() : HubConnection
+			startConnection() : Promise<void>
+			
+	Interfaces
+		IBox
+		IGameUser
+		
+	SignalR Client Methods
+		SwitchTurn
+		TileChange(ileId)
+		OpenChallengedModal(enemyUser)
+		OpenWaitingModal(enemyUser)
+		SetConnectedUser
+		GoToGame
+		ChallengeAccepted
+		
+		
+[MVP]
+
+User can register and Login
+User can select a game
+	user can be challenged
+	user can challenge an enemy
+User and enemy can play a game against each other, without interfering with other user
+	
